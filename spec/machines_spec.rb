@@ -4,6 +4,7 @@ describe 'Machines' do
   before(:each) do
     @commands = []
     @log = []
+    @password = 'default'
   end
 
   def log message
@@ -59,14 +60,27 @@ describe 'Machines' do
   end
 
   describe 'configure' do
-    it 'should set various instance variables' do
+    before(:each) do
       should_receive(:discover_users)
-      configure 'name', 'host', 'dbmaster', 'machine', 'user', 'password'
+    end
+
+    it 'should set various instance variables' do
+      configure %w(name host password dbmaster machine user)
       @config_name.should == 'name'
       @host.should == 'host'
       @dbmaster.should == 'dbmaster'
       @machinename.should == 'machine'
       @username.should == 'user'
+      @password.should == 'password'
+    end
+
+    it 'should set defaults' do
+      configure %w(name host password)
+      @config_name.should == 'name'
+      @host.should == 'host'
+      @dbmaster.should == 'host'
+      @machinename.should == 'name'
+      @username.should == DEFAULT_USERNAME
       @password.should == 'password'
     end
   end
@@ -82,6 +96,7 @@ describe 'Machines' do
       should_receive(:enable_root_login)
       mock_ssh = mock 'Ssh'
       Net::SSH.should_receive(:start).with('host', 'root', :password => TEMP_PASSWORD).and_yield mock_ssh
+      should_receive(:create_user).with mock_ssh
       should_receive(:run_commands).with mock_ssh
       should_receive(:disable_root_login)
 
@@ -89,6 +104,7 @@ describe 'Machines' do
     end
 
     it 'should not do anything when unknown command is specified' do
+      Net::SSH.should_not_receive(:start)
       should_not_receive(:run_commands)
       start 'something'
     end
@@ -156,6 +172,24 @@ describe 'Machines' do
       Net::SSH.should_receive(:start).with('host', 'root', :password => 'ubuntu').and_yield(mock_ssh)
       mock_ssh.should_receive(:exec!).with 'passwd -d root'
       disable_root_login
+    end
+  end
+
+  describe 'create_user' do
+    it 'should create a user on the remote machine and add it as an admin' do
+      mock_ssh = mock('Ssh')
+      mock_ssh.should_receive(:exec!).with 'useradd -p encrypted_password -G admin user'
+      @username = 'user'
+      @password = 'encrypted_password'
+      create_user mock_ssh
+    end
+
+    it 'should create a user without password if not supplied' do
+      mock_ssh = mock('Ssh')
+      mock_ssh.should_receive(:exec!).with 'useradd -G admin user'
+      @username = 'user'
+      @password = nil
+      create_user mock_ssh
     end
   end
 

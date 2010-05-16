@@ -12,12 +12,10 @@ include Machines::Installation
 include Machines::Services
 include Machines::Helpers
 
-# @private
 DEFAULT_IDENTITY = 'ubuntu'
-# @private
 TEMP_PASSWORD = 'ubuntu'
-# @private
 TEMP_PASSWORD_ENCRYPTED = "tvXbD6sWjb4mE"
+DEFAULT_USERNAME = 'www'
 
 def machine name, environment, options = {:apps => [], :role => nil}
   if name == @config_name
@@ -36,20 +34,15 @@ def password application, password
   @passwords[application] = password
 end
 
-# @param [String] config Configuration to use from machines.yml
-# @param [String] host
-# @param [String] username
-# @param [String] machinename Name to give the computer (set in computername)
-# @param [String] dbmaster URL to the master database
-def configure config_name, host, dbmaster, machinename, username, password
+# Takes the arguments given on the commandline except the <command>. Set defaults.
+def configure args
   @commands = []
   @passwords = {}
-  @config_name = config_name
-  @host = host
-  @dbmaster = dbmaster
-  @machinename = machinename
-  @username = username
-  @password = password
+  @config_name, @host, @password, @dbmaster, @machinename, @username = args
+  @dbmaster ||= @host
+  @machinename ||= @config_name
+  @username ||= DEFAULT_USERNAME
+  raise 'Password not set' unless @password
   discover_users
 end
 
@@ -61,7 +54,7 @@ def start command
   elsif command == 'install'
     enable_root_login
     Net::SSH.start @host, 'root', :password => TEMP_PASSWORD do |ssh|
-      create_user
+      create_user ssh
       run_commands ssh
     end
     disable_root_login
@@ -91,8 +84,9 @@ def run_commands net_ssh = nil
 end
 
 # Create the user with credentials specified on the commandline
-def create_user
-
+def create_user net_ssh
+  password = "-p #{@password} " if @password
+  net_ssh.exec! "useradd #{password}-G admin #{@username}"
 end
 
 # Set a root password so ssh can login

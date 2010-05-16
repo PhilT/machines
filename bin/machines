@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
 
-if ARGV.size > 2 && %w(install test).include?(ARGV[0])
-  test = ARGV[0].downcase == 'test'
+if ARGV.size >= 4 && %w(install test).include?(ARGV[0])
+  command = ARGV.shift
+  test = command.downcase == 'test'
   puts "#{test ? 'Testing' : 'Beginning'} install..."
   require File.join(File.dirname(__FILE__), '..', 'lib', 'machines')
-  configure ARGV[1], ARGV[2], ARGV[3] || ARGV[2], ARGV[4], ARGV[5], ARGV[6]
+  configure ARGV
   begin
     load File.join(Dir.pwd, 'Machinesfile')
   rescue LoadError
@@ -15,20 +16,20 @@ if ARGV.size > 2 && %w(install test).include?(ARGV[0])
     raise
   end
 
-  start ARGV[0]
+  start command
   puts "#{test ? 'Test' : 'Install'} completed."
 else
 puts <<END
 Machines allows simple configuration of development, staging and production computers or images for ec2
-Usage: machines <command> <machine> <host> [dbmaster] [machinename] [username] [password]
+Usage: machines <command> <machine> <host> <password> [dbmaster] [machinename] [username]
 
   command       one of 'test', 'install'
   machine       one of the configurations specified in Machinesfile
   host          the url of the remote machine
-  dbmaster      url to the master database server (defaults to host)
-  machinename   name to give the computer for dev installs
-  username      the username for development installs
-  password      the password for development installs
+  password      the password. Must be encrypted. Use 'openssl passwd <password>'.
+  dbmaster      url to the master database server. Defaults to host.
+  machinename   name to give the computer. Defaults to <machine>.
+  username      the username. Defaults to '#{DEFAULT_USERNAME}'.
 
   Commands:
     test      lists the commands that would be run but

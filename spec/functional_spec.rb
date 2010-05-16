@@ -3,7 +3,7 @@ require 'spec/spec_helper'
 
 describe 'Functional Specs' do
   before(:each) do
-    configure 'selected', nil, nil, nil, nil, nil
+    configure ['selected', nil, 'password']
     @log = []
   end
 

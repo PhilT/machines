@@ -3,6 +3,11 @@ Simple configuration of development, staging and production computers or images 
 
 Ubuntu build script for development and server machines.
 
+== Status
+Under development.
+
+First cut is almost ready. It's a bit lax with password security. I need to look at this.
+
 == Note on Patches/Pull Requests
 
 * Fork the project.
