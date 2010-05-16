@@ -10,6 +10,7 @@ include Machines::Database
 include Machines::FileOperations
 include Machines::Installation
 include Machines::Services
+include Machines::Helpers
 
 # @private
 DEFAULT_IDENTITY = 'ubuntu'
@@ -40,14 +41,15 @@ end
 # @param [String] username
 # @param [String] machinename Name to give the computer (set in computername)
 # @param [String] dbmaster URL to the master database
-def configure config_name, host, username, machinename, dbmaster
+def configure config_name, host, dbmaster, machinename, username, password
   @commands = []
   @passwords = {}
   @config_name = config_name
   @host = host
-  @username = username
-  @machinename = machinename
   @dbmaster = dbmaster
+  @machinename = machinename
+  @username = username
+  @password = password
   discover_users
 end
 
@@ -59,6 +61,7 @@ def start command
   elsif command == 'install'
     enable_root_login
     Net::SSH.start @host, 'root', :password => TEMP_PASSWORD do |ssh|
+      create_user
       run_commands ssh
     end
     disable_root_login
@@ -87,40 +90,22 @@ def run_commands net_ssh = nil
   end
 end
 
-def log message
-  puts message
+# Create the user with credentials specified on the commandline
+def create_user
+
 end
 
-# sets a root password so ssh can login and removes password from existing user account
+# Set a root password so ssh can login
 def enable_root_login
   Net::SSH.start @host, DEFAULT_IDENTITY, :password => DEFAULT_IDENTITY do |ssh|
     ssh.exec! "echo #{DEFAULT_IDENTITY} | sudo -S usermod -p #{TEMP_PASSWORD_ENCRYPTED} root"
-    ssh.exec! "passwd #{DEFAULT_IDENTITY} -d"
   end
 end
 
-# disables root login from SSH by removing the root password
+# Disable root login from SSH by removing the root password
 def disable_root_login
   Net::SSH.start @host, 'root', :password => TEMP_PASSWORD do |ssh|
     ssh.exec! "passwd -d root"
   end
-end
-
-# Utility method to tidy up commands before being logged
-def display command
-  command = command.to_a.join(' ').gsub("\n ", "\\")
-  command.gsub!(/(#{(@passwords.values).join('|')})/, "***") if @passwords.values.any?
-  command
-end
-
-def required_options options, required
-  required.each do |option|
-    raise ArgumentError, "Missing #{option}" unless options[option]
-  end
-end
-
-# Queues up a command on the command list. Includes the calling method name for logging
-def add command
-  @commands << [caller[0][/`([^']*)'/, 1], command]
 end
 
