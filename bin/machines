@@ -1,26 +1,20 @@
 #!/usr/bin/env ruby
-require 'rubygems'
 
 if ARGV.size > 2 && %w(install test).include?(ARGV[0])
-  TEST = ARGV[0] == 'test'
-  CONFIG = ARGV[1]
-  HOST = ARGV[2]
-  USERNAME = ARGV[3]
-  MACHINENAME = ARGV[4]
-  DBMASTER = ARGV[5] || HOST
-
-  puts "#{TEST ? 'Testing' : 'Beginning'} install..."
+  test = ARGS[0].downcase == 'test'
+  puts "#{test ? 'Testing' : 'Beginning'} install..."
   require 'lib/machines'
+  configure ARGV[1], ARGV[2], ARGV[3], ARG[4], ARGV[5] || ARGV[2]
   load 'Machinesfile'
 
-  start
-  puts "#{TEST ? 'Test' : 'Install'} completed."
+  start ARGV[0]
+  puts "#{test ? 'Test' : 'Install'} completed."
 else
 puts <<END
 Machines allows simple configuration of development, staging and production computers or images for ec2
 Usage: machines <command> machine host username password dbmaster'
 
-  command       one of 'generate', 'test', 'install'
+  command       one of 'test', 'install'
   machine       one of the configurations specified in machines.yml
   host          the url of the remote machine
   username      the username for development installs
@@ -28,9 +22,6 @@ Usage: machines <command> machine host username password dbmaster'
   dbmaster      url to the master database server
 
   Commands:
-    generate  generates the files needed for configuration
-              (machines.yml, passwords.yml, Machinesfile)
-
     test      lists the commands that would be run but
               does not execute them on the remote machine
 
