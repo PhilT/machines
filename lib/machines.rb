@@ -48,13 +48,12 @@ def configure config_name, host, username, machinename, dbmaster
   @username = username
   @machinename = machinename
   @dbmaster = dbmaster
+  discover_users
 end
 
 # Called from `bin/machines` startup script.
 # @param [Boolean] test If true just outputs the commands that would be run but does not run them
 def start command
-  validate_configuration
-  discover_users
   if command == 'test'
     run_commands
   elsif command == 'install'
@@ -63,12 +62,6 @@ def start command
       run_commands ssh
     end
     disable_root_login
-  end
-end
-
-def validate_configuration
-  if @environment.nil?
-    raise ArgumentError, "#{@config_name} configuration does not exist. Check machine configurations in your Machinesfile."
   end
 end
 

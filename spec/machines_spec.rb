@@ -60,6 +60,7 @@ describe 'Machines' do
 
   describe 'configure' do
     it 'should set various instance variables' do
+      should_receive(:discover_users)
       configure 'name', 'host', 'user', 'machine', 'dbmaster'
       @config_name.should == 'name'
       @host.should == 'host'
@@ -69,11 +70,6 @@ describe 'Machines' do
   end
 
   describe 'start' do
-    before(:each) do
-      should_receive(:validate_configuration)
-      should_receive(:discover_users)
-    end
-
     it 'should run commands in test mode' do
       should_receive(:run_commands)
       start 'test'
@@ -93,17 +89,6 @@ describe 'Machines' do
     it 'should not do anything when unknown command is specified' do
       should_not_receive(:run_commands)
       start 'something'
-    end
-  end
-
-  describe 'validate_configuration' do
-    it 'should not raise when valid' do
-      @environment = :test
-      lambda{validate_configuration}.should_not raise_error
-    end
-    it 'should log an error when configuration could not be selected' do
-      @config_name = 'selected'
-      lambda{validate_configuration}.should raise_error(ArgumentError, /selected.*does not exist/)
     end
   end
 
