@@ -1,21 +1,26 @@
 #!/usr/bin/env ruby
 
 if ARGV.size > 2 && %w(install test).include?(ARGV[0])
-  test = ARGS[0].downcase == 'test'
+  test = ARGV[0].downcase == 'test'
   puts "#{test ? 'Testing' : 'Beginning'} install..."
-  require 'lib/machines'
-  configure ARGV[1], ARGV[2], ARGV[3], ARG[4], ARGV[5] || ARGV[2]
-  load 'Machinesfile'
+  require File.join(File.dirname(__FILE__), '..', 'lib', 'machines')
+  configure ARGV[1], ARGV[2], ARGV[3], ARGV[4], ARGV[5] || ARGV[2]
+  begin
+    load File.join(Dir.pwd, 'Machinesfile')
+  rescue LoadError
+    puts "Machinesfile does not exist. Please create one."
+    exit 1
+  end
 
   start ARGV[0]
   puts "#{test ? 'Test' : 'Install'} completed."
 else
 puts <<END
 Machines allows simple configuration of development, staging and production computers or images for ec2
-Usage: machines <command> machine host username password dbmaster'
+Usage: machines <command> <machine> <host> [username] [password] [dbmaster]
 
   command       one of 'test', 'install'
-  machine       one of the configurations specified in machines.yml
+  machine       one of the configurations specified in Machinesfile
   host          the url of the remote machine
   username      the username for development installs
   machinename   name to give the computer for dev installs

@@ -1,7 +1,6 @@
 require 'spec/spec_helper'
 
 describe 'FileOperations' do
-  include Machines::FileOperations
   def add to_add
     @added << to_add
   end

@@ -1,7 +1,6 @@
 require 'spec/spec_helper'
 
 describe 'Configuration' do
-  include Machines::Configuration
   def add to_add
     @added << to_add
   end

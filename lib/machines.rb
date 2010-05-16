@@ -32,7 +32,6 @@ end
 
 # Set a database password for an application (Used to communicate between application and db server)
 def password application, password
-  @passwords ||= {}
   @passwords[application] = password
 end
 
@@ -42,6 +41,8 @@ end
 # @param [String] machinename Name to give the computer (set in computername)
 # @param [String] dbmaster URL to the master database
 def configure config_name, host, username, machinename, dbmaster
+  @commands = []
+  @passwords = {}
   @config_name = config_name
   @host = host
   @username = username
@@ -52,7 +53,6 @@ end
 # Called from `bin/machines` startup script.
 # @param [Boolean] test If true just outputs the commands that would be run but does not run them
 def start command
-  @commands = []
   validate_configuration
   discover_users
   if command == 'test'
@@ -67,8 +67,8 @@ def start command
 end
 
 def validate_configuration
-  if @apps.nil?
-    raise ArgumentError, "#{@config_name} does not exist. Check machine configurations in your Machinesfile."
+  if @environment.nil?
+    raise ArgumentError, "#{@config_name} configuration does not exist. Check machine configurations in your Machinesfile."
   end
 end
 

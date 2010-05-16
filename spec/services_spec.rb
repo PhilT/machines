@@ -1,7 +1,6 @@
 require 'spec/spec_helper'
 
 describe 'Installation' do
-  include Machines::Services
   def add to_add
     @added << to_add
   end

@@ -1,7 +1,6 @@
 require 'spec/spec_helper'
 
 describe 'Database' do
-  include Machines::Database
   def add to_add
     @added << to_add
   end

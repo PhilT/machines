@@ -19,6 +19,12 @@ describe 'Machines' do
       @role.should == 'role'
     end
 
+    it 'should set environment when it matches specified configuration but no apps or role specified' do
+      @config_name = 'config'
+      machine 'config', :test
+      @environment.should == :test
+    end
+
     it 'should not set anything when it does not match specified configuration' do
       machine 'config', :test, {:apps => ['app', 'another'], :role => 'role'}
       @environment.should be_nil
@@ -46,6 +52,7 @@ describe 'Machines' do
     end
 
     it 'should add a password to empty passwords' do
+      @passwords = {}
       password 'app', 'newpass'
       @passwords.should == {'app' => 'newpass'}
     end
@@ -90,13 +97,13 @@ describe 'Machines' do
   end
 
   describe 'validate_configuration' do
-    it 'should return true when valid' do
-      @apps = 'app'
+    it 'should not raise when valid' do
+      @environment = :test
       lambda{validate_configuration}.should_not raise_error
     end
     it 'should log an error when configuration could not be selected' do
-      @config_name = 'config'
-      lambda{validate_configuration}.should raise_error(ArgumentError, "config does not exist. Check machine configurations in your Machinesfile.")
+      @config_name = 'selected'
+      lambda{validate_configuration}.should raise_error(ArgumentError, /selected.*does not exist/)
     end
   end
 
