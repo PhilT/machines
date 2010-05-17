@@ -26,7 +26,7 @@ module Machines
         if packages.scan(/^git/).any?
           required_options options, [:to]
           #TODO: will this work?
-          add "sudo -u #{options[:owner]} su"
+          add "sudo -u #{options[:owner]} su" if options[:owner]
           git_clone packages, options
           add "cd #{options[:to]}"
           add "find . -maxdepth 1 -name install* | xargs #{options[:options]}'"

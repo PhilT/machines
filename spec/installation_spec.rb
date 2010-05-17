@@ -18,9 +18,15 @@ describe 'Installation' do
 
   describe 'install' do
     it 'should add a command to install from an install script' do
-      should_receive(:required_options).with({:in => '~/installer'}, [:in])
-      install :sh, :in => '~/installer'
-      @added.should == ['cd ~/installer && ./install.sh -y']
+      should_receive(:required_options).with({:to => '~/installer'}, [:to])
+      install 'git://url', :to => '~/installer'
+      @added.should == ["git clone git://url ~/installer", "cd ~/installer", "find . -maxdepth 1 -name install* | xargs '"]
+    end
+
+    it 'should add a command to install from an install script with owner' do
+      should_receive(:required_options).with({:to => '~/installer', :owner => 'user'}, [:to])
+      install 'git://url', :to => '~/installer', :owner => 'user'
+      @added.should == ["sudo -u user su", "git clone git://url ~/installer", "cd ~/installer", "find . -maxdepth 1 -name install* | xargs '"]
     end
 
     it 'should add a command to install apt packages' do
