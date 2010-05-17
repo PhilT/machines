@@ -7,29 +7,36 @@ module Machines
 
     # Installs one or more packages using apt, deb or it's install.sh file
     # @param [Symbol, String, Array] packages can be:
-    #   :sh::
-    #     Run `./install.sh`
+    #   Git URL::
+    #     Git clone URL and run `./install.sh`
     #   Array::
     #     Run `apt` to install specified packages in the array
     #   URL::
     #     Download from the specified URL and run `dpkg`
     # @param [Hash] options
-    # @option options [String] :in Switch to specified directory to install. Used by `sh`
+    # @option options [String] :to Switch to specified directory to install. Used by Git installer
+    # @option options [String] :as Run as specified user
+    # @option options [String] :options Add extra options to `./install.sh`
     # @example
-    #     install :sh, :in => '~/installer' #=> Runs install.sh -y in ~/installer folder
+    #     install 'git://github.com/wayneeseguin/rvm.git', :to => '/home/ubuntu/installer', :as => 'ubuntu', :options => '--auto' #=> Runs install.sh --auto in /home/ubuntu/installer folder
     #     install %w(build-essential libssl-dev mysql-server) #=> Installs apt packages
     #     install 'http://example.com/my_package.deb', :cleanup => true #=> Installs a deb using dpkg then removes the deb
     def install packages, options = {}
-      if packages.is_a?(Symbol) && packages == :sh
-        required_options options, [:in]
-        command = "cd #{options[:in]} && ./install.sh -y"
-      elsif packages.is_a?(String) && packages.scan(/^http:\/\//).any?
-        name = File.basename(packages)
-        command = "cd /tmp && wget #{packages} && dpkg -i #{name} && rm #{name} && cd -"
+      if packages.is_a?(String)
+        if packages.scan(/^git/).any?
+          required_options options, [:to]
+          #TODO: will this work?
+          add "sudo -u #{options[:owner]} su"
+          git_clone packages, options
+          add "cd #{options[:to]}"
+          add "find . -maxdepth 1 -name install* | xargs #{options[:options]}'"
+        elsif packages.scan(/^http:\/\//).any?
+          name = File.basename(packages)
+          add "cd /tmp && wget #{packages} && dpkg -i #{name} && rm #{name} && cd -"
+        end
       else
-        command = "apt-get install -q -y #{packages.join(' ')}"
+        add "apt-get install -q -y #{packages.join(' ')}"
       end
-      add command
     end
 
     # Install a gem
