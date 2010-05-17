@@ -6,10 +6,6 @@ describe 'Helpers' do
     @log = []
   end
 
-  def log message
-    @log << message
-  end
-
   describe 'display' do
     before(:each) do
       @passwords = {:some_app => 'password'}

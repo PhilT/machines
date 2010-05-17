@@ -25,17 +25,29 @@ module Machines
       if packages.is_a?(String)
         if packages.scan(/^git/).any?
           required_options options, [:to]
-          #TODO: will this work?
-          add "sudo -u #{options[:owner]} su" if options[:owner]
-          git_clone packages, options
-          add "cd #{options[:to]}"
-          add "find . -maxdepth 1 -name install* | xargs #{options[:options]}'"
+          commands = ["git clone #{packages} #{options[:to]}",
+            "cd #{options[:to]}",
+            "find . -maxdepth 1 -name install* | xargs -I xxx xxx #{options[:args]}"]
+          run commands, options
         elsif packages.scan(/^http:\/\//).any?
           name = File.basename(packages)
           add "cd /tmp && wget #{packages} && dpkg -i #{name} && rm #{name} && cd -"
         end
       else
         add "apt-get install -q -y #{packages.join(' ')}"
+      end
+    end
+
+    # Run an arbitary command remotely
+    # @param [String, Array] command Command to run
+    # @param [Hash] options
+    # @option options [String] :as Run as specified user
+    def run command, options = {}
+      command = command.to_a.join(' && ')
+      if options[:as]
+        add "sudo -u #{options[:as]} sh -c '#{command}'"
+      else
+        add command
       end
     end
 
