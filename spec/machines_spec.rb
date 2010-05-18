@@ -96,6 +96,7 @@ describe 'Machines' do
       should_receive(:enable_root_login)
       mock_ssh = mock 'Ssh'
       Net::SSH.should_receive(:start).with('host', 'root', :password => TEMP_PASSWORD).and_yield mock_ssh
+      should_receive(:set_machine_name_and_hosts)
       should_receive(:create_user).with mock_ssh
       should_receive(:run_commands).with mock_ssh
       should_receive(:disable_root_login)
@@ -172,6 +173,12 @@ describe 'Machines' do
       Net::SSH.should_receive(:start).with('host', 'root', :password => 'ubuntu').and_yield(mock_ssh)
       mock_ssh.should_receive(:exec!).with 'passwd -d root'
       disable_root_login
+    end
+  end
+
+  describe 'set_machine_name_and_hosts' do
+    it 'should set_machine_name_and_hosts' do
+      pending
     end
   end
 

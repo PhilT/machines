@@ -11,6 +11,7 @@ include Machines::FileOperations
 include Machines::Installation
 include Machines::Services
 include Machines::Helpers
+include Machines::Checks
 
 DEFAULT_IDENTITY = 'ubuntu'
 TEMP_PASSWORD = 'ubuntu'

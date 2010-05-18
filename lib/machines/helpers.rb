@@ -19,8 +19,8 @@ module Machines
       puts message
     end
 
-    def log_output
-      ">> /var/log/install.log 2>&1"
+    def log_output log_file = '/var/log/install.log'
+      ">> #{log_file} 2>&1"
     end
 
     # Queues up a command on the command list. Includes the calling method name for logging

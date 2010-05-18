@@ -43,7 +43,8 @@ module Machines
     # @param [Hash] options
     # @option options [String] :as Run as specified user
     def run commands, options = {}
-      command = commands.map{|command| "#{command} #{log_output}"}.to_a.join(' && ')
+      log_file = "/home/#{options[:as]}/install.log" if options[:as]
+      command = commands.map{|command| "#{command} #{log_output(log_file)}"}.to_a.join(' && ')
       if options[:as]
         add "sudo -u #{options[:as]} sh -c '#{command}'", options[:check]
       else
@@ -72,7 +73,8 @@ module Machines
     def extract package
       name = File.basename(package)
       cmd = package[/.zip/] ? 'unzip' : 'tar -zxvf'
-      run ["cd /tmp", "wget #{package}", "#{cmd} #{name}", "rm #{name}", "cd -"], :check => check_dir(cmd == 'unzip' ? File.basename(name, 'zip') : File.basename(name, 'tar.gz'))
+      dir = cmd == 'unzip' ? File.basename(name, 'zip') : File.basename(name, 'tar.gz')
+      run ["cd /tmp", "wget #{package}", "#{cmd} #{name}", "rm #{name}", "cd -"], :check => check_dir(dir)
     end
 
     # Clone a project from a Git repository
