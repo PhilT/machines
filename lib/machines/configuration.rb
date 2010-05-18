@@ -6,7 +6,7 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to File to append to
     def append line, options
-      add "echo '#{line}' >> #{options[:to]}"
+      add "echo '#{line}' >> #{options[:to]}", check_string(line, options[:to])
     end
 
     # Export key/value pairs and optionally write to a file
@@ -17,23 +17,22 @@ module Machines
       options.each do |key, value|
         unless key == :to
           command = "export #{key}=#{value}"
-          commands << command
-          commands << "echo '#{command}' >> #{options[:to]}" if options[:to]
+          add command, check_env(key, value)
+          add "echo '#{command}' >> #{options[:to]}", check_string(command, options[:to]) if options[:to]
         end
       end
-      add commands.join(' && ')
     end
 
     # Add a new user (uses a lowlevel add so doesn't set a password. Used to handle authorized_keys files)
     # @param [String] login User name to create
     def add_user login
-      add "useradd #{login}"
+      add "useradd #{login}", check_file('/home/login')
     end
 
     # Removes a user, home and any other related files
     # @param [String] login User name to remove
     def del_user login
-      add "deluser #{login} --remove-all-files"
+      add "deluser #{login} --remove-all-files", check_file('/home/login', false)
     end
 
   end

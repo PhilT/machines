@@ -3,6 +3,12 @@ Simple configuration of development, staging and production computers or images 
 
 Ubuntu build script for development and server machines.
 
+
+* Use filenames in destination paths (e.g. `copy path/filename newpath/filename`)
+* Uploads hosts file if it exists in etc/
+* Sets hostname
+
+
 == Status
 Under development.
 

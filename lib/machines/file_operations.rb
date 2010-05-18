@@ -5,7 +5,7 @@ module Machines
     # @option options [Optional String] :perms chmod permissions to set
     # @option options [Optional String] :owner Name of owner to change to
     def upload local_source, remote_dest, options = {}
-      add [local_source, remote_dest]
+      add [local_source, remote_dest], check_file(remote_dest)
       chmod options[:perms], remote_dest if options[:perms]
       chown options[:owner], remote_dest if options[:owner]
     end
@@ -14,20 +14,20 @@ module Machines
     # @param [String] oldname Existing filename
     # @param [String] newname Rename to this =
     def rename oldname, newname
-      add "mv #{oldname} #{newname}"
+      add "mv #{oldname} #{newname} #{log_output}", check_file(newname)
     end
 
     # Copy a remote file
     # @param [String] from Existing filename
     # @param [String] to Filename to copy to
     def copy from, to
-      add "cp #{from} #{to}"
+      add "cp #{from} #{to} #{log_output}", check_file(to)
     end
 
     # Take off the version numbers from a path name
     # @param [String] name Name of the path to rename
     def remove_version_info name
-      add "find . -maxdepth 1 -name '#{name}*' -a -type d | xargs -I xxx mv xxx #{name}"
+      add "find . -maxdepth 1 -name '#{name}*' -a -type d | xargs -I xxx mv xxx #{name} #{log_output}", check_file(name)
     end
 
     # Add a symlink
@@ -35,7 +35,7 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to Name of the symlink
     def link from, options
-      add "ln -sf #{options[:to]} #{from}"
+      add "ln -sf #{options[:to]} #{from} #{log_output}", check_link(from)
     end
 
     # Replace some text in a file
@@ -45,7 +45,7 @@ module Machines
     # @option options [String] :in Filename to replace text in
     def replace regex, options
       required_options options, [:with, :in]
-      add "sed -i 's/#{regex}/#{options[:with]}/' #{options[:in]}"
+      add "sed -i 's/#{regex}/#{options[:with]}/' #{options[:in]}", check_string(options[:with], options[:in])
     end
 
     # Create a path on the remote host
@@ -53,7 +53,7 @@ module Machines
     # @option options [Optional String] :perms chmod permissions to set
     # @option options [Optional String] :owner Name of owner to change to
     def mkdir dir, options = {}
-      add "mkdir -p #{dir}"
+      add "mkdir -p #{dir}", check_dir(dir)
       chmod options[:perms], dir if options[:perms]
       chown options[:owner], dir if options[:owner]
     end
@@ -62,14 +62,14 @@ module Machines
     # @param [String] mod chmod permissions to set
     # @param [String] path Path to set
     def chmod mod, path
-      add "chmod #{mod} #{path}"
+      add "chmod #{mod} #{path} #{log_output}", check_perms(mod, path)
     end
 
     # Change ownership of a path
     # @param [String] user Owner to set
     # @param [String] path Path to set
     def chown user, path
-      add "chown #{user}:#{user} #{path}"
+      add "chown #{user}:#{user} #{path} #{log_output}", check_owner(user, path)
     end
 
     # Create directories for the application (releases, shared/config and shared/system)

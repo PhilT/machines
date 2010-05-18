@@ -54,6 +54,7 @@ def start command
   elsif command == 'install'
     enable_root_login
     Net::SSH.start @host, 'root', :password => TEMP_PASSWORD do |ssh|
+      set_machine_name_and_hosts
       create_user ssh
       run_commands ssh
     end
@@ -68,7 +69,7 @@ end
 # Loops through all commands calling with either Net::SSH::exec! or Net::SCP::upload!
 # @param [Optional #exec!] ssh Net::SSH connection to send the commands to. Only output them if ssh is nil
 def run_commands net_ssh = nil
-  @commands.each do |name, command|
+  @commands.each do |name, command, check|
     raise ArgumentError, "MISSING name or command in: [#{name}, #{display(command)}]" unless name && command
     log "%-15s %s" % [name, display(command)]
     if net_ssh
@@ -79,8 +80,15 @@ def run_commands net_ssh = nil
       else
         net_ssh.exec! command
       end
+      add_check check
     end
   end
+end
+
+# copy etc/hosts file and set machine name
+def set_machine_name_and_hosts
+  upload 'etc/hosts', '/etc/hosts' if development? && File.exist?('etc/hosts')
+  replace 'ubuntu', :with => @machinename, :in => '/etc/{hosts,hostname}'
 end
 
 # Create the user with credentials specified on the commandline

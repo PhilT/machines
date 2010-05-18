@@ -29,7 +29,7 @@ Usage: machines <command> <machine> <host> <password> [dbmaster] [machinename] [
   password      the password. Must be encrypted. Use 'openssl passwd <password>'.
   dbmaster      url to the master database server. Defaults to host.
   machinename   name to give the computer. Defaults to <machine>.
-  username      the username. Defaults to '#{DEFAULT_USERNAME}'.
+  username      the username. Defaults to 'www'.
 
   Commands:
     test      lists the commands that would be run but
