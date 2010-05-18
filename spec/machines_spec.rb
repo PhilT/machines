@@ -122,6 +122,7 @@ describe 'Machines' do
   describe 'run_commands' do
     before(:each) do
       @passwords = {}
+      @output = ''
     end
 
     it 'should display all commands queued in the @commands array' do
@@ -131,17 +132,20 @@ describe 'Machines' do
     end
 
     it 'should run all commands queued in the @commands array' do
-      @commands = [['cmd1', 'command 1'], ['cmd2', 'command 2']]
+      @commands = [['cmd1', 'command 1', 'check1'], ['cmd2', 'command 2', 'check2']]
       mock_ssh = mock('Ssh')
-      mock_ssh.should_receive(:exec!).with 'command 1'
-      mock_ssh.should_receive(:exec!).with 'command 2'
+      mock_ssh.should_receive(:exec!).with('command 1').and_return ''
+      mock_ssh.should_receive(:exec!).with('check1').and_return ''
+      mock_ssh.should_receive(:exec!).with('command 2').and_return ''
+      mock_ssh.should_receive(:exec!).with('check2').and_return ''
       run_commands mock_ssh
     end
 
     it 'should run upload command' do
-      @commands = [['cmd1', ['from', 'to']]]
+      @commands = [['cmd1', ['from', 'to'], 'check1']]
       @host = 'host'
       mock_ssh = mock('Ssh')
+      mock_ssh.should_receive(:exec!).with('check1').and_return ''
       mock_scp = mock('Scp')
       Net::SCP.should_receive(:start).with('host', 'root', :password => TEMP_PASSWORD).and_yield mock_scp
       mock_scp.should_receive(:upload!).with 'from', 'to'

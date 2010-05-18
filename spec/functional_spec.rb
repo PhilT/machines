@@ -20,8 +20,8 @@ describe 'Functional Specs' do
     upload 'etc/hosts', '/etc/hosts'
 
     start 'test'
-    @log.should == ['add             etc/hosts /etc/hosts']
-    @commands.should == [["add", ["etc/hosts", "/etc/hosts"], nil]]
+    @log.should == ['Line :          etc/hosts /etc/hosts']
+    @commands.should == [["Line :", ["etc/hosts", "/etc/hosts"], '']]
   end
 end
 

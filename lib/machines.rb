@@ -53,6 +53,7 @@ def start command
   if command == 'test'
     run_commands
   elsif command == 'install'
+    @output = ''
     enable_root_login
     Net::SSH.start @host, 'root', :password => TEMP_PASSWORD do |ssh|
       set_machine_name_and_hosts
@@ -71,7 +72,6 @@ end
 # Loops through all commands calling with either Net::SSH::exec! or Net::SCP::upload!
 # @param [Optional #exec!] ssh Net::SSH connection to send the commands to. Only output them if ssh is nil
 def run_commands net_ssh = nil
-  @output = ''
   @commands.each do |name, command, check|
     raise ArgumentError, "MISSING name or command in: [#{name}, #{display(command)}]" unless name && command
     log "%-15s %s" % [name, display(command)]
