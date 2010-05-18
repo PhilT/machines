@@ -8,13 +8,13 @@ module Machines
     # @option options [String] :password The mysql root password
     def mysql(sql, options)
       required_options options, [:on, :password]
-      add "echo \"#{sql}\" | mysql -u root -p#{options[:password]} -h #{options[:on]} #{log_output}", check_output
+      add "echo \"#{sql}\" | mysql -u root -p#{options[:password]} -h #{options[:on]}", nil
     end
 
     # Set a MySQL root password
     # @param [String] password Root password to set
     def mysql_pass password
-      add "mysqladmin -u root password #{password} #{log_output}", check_output
+      add "mysqladmin -u root password #{password}", nil
     end
 
     # Write the database.yml file

@@ -1,14 +1,6 @@
 require 'spec/spec_helper'
 
 describe 'Configuration' do
-  def add to_add
-    @added << to_add
-  end
-
-  before(:each) do
-    @added = []
-  end
-
   describe 'append' do
     it 'should echo a string to a file' do
       append 'some string', :to => 'a_file'
@@ -24,7 +16,7 @@ describe 'Configuration' do
 
     it 'should export a key/value pair and write to a file' do
       export :key => :value, :key => :value, :to => 'to_file'
-      @added.should == ["export key=value && echo 'export key=value' >> to_file"]
+      @added.should == ["export key=value", "echo 'export key=value' >> to_file"]
     end
   end
 

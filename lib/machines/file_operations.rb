@@ -14,20 +14,20 @@ module Machines
     # @param [String] oldname Existing filename
     # @param [String] newname Rename to this =
     def rename oldname, newname
-      add "mv #{oldname} #{newname} #{log_output}", check_file(newname)
+      add "mv #{oldname} #{newname}", check_file(newname)
     end
 
     # Copy a remote file
     # @param [String] from Existing filename
     # @param [String] to Filename to copy to
     def copy from, to
-      add "cp #{from} #{to} #{log_output}", check_file(to)
+      add "cp #{from} #{to}", check_file(to)
     end
 
     # Take off the version numbers from a path name
     # @param [String] name Name of the path to rename
     def remove_version_info name
-      add "find . -maxdepth 1 -name '#{name}*' -a -type d | xargs -I xxx mv xxx #{name} #{log_output}", check_file(name)
+      add "find . -maxdepth 1 -name '#{name}*' -a -type d | xargs -I xxx mv xxx #{name}", check_file(name)
     end
 
     # Add a symlink
@@ -35,7 +35,7 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to Name of the symlink
     def link from, options
-      add "ln -sf #{options[:to]} #{from} #{log_output}", check_link(from)
+      add "ln -sf #{options[:to]} #{from}", check_link(from)
     end
 
     # Replace some text in a file
@@ -62,14 +62,14 @@ module Machines
     # @param [String] mod chmod permissions to set
     # @param [String] path Path to set
     def chmod mod, path
-      add "chmod #{mod} #{path} #{log_output}", check_perms(mod, path)
+      add "chmod #{mod} #{path}", check_perms(mod, path)
     end
 
     # Change ownership of a path
     # @param [String] user Owner to set
     # @param [String] path Path to set
     def chown user, path
-      add "chown #{user}:#{user} #{path} #{log_output}", check_owner(user, path)
+      add "chown #{user}:#{user} #{path}", check_owner(user, path)
     end
 
     # Create directories for the application (releases, shared/config and shared/system)

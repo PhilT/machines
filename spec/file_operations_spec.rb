@@ -1,13 +1,6 @@
 require 'spec/spec_helper'
 
 describe 'FileOperations' do
-  def add to_add
-    @added << to_add
-  end
-
-  before(:each) do
-    @added = []
-  end
 
   describe 'upload' do
     it 'should add an upload command' do

@@ -41,11 +41,11 @@ describe 'Helpers' do
 
   describe 'add' do
     it 'should add a command to the commands array and include the caller method name' do
-      add_command.should == [['add_command', 'command']]
+      add_command.should == [['add_command', 'command', nil]]
     end
 
     def add_command
-      add 'command'
+      real_add 'command', nil
       @commands
     end
   end

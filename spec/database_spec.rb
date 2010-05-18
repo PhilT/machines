@@ -1,19 +1,11 @@
 require 'spec/spec_helper'
 
 describe 'Database' do
-  def add to_add
-    @added << to_add
-  end
-
-  before(:each) do
-    @added = []
-  end
-
   describe 'mysql' do
     it 'should run a SQL statement as root' do
       should_receive(:required_options).with({:on => 'host', :password => 'password'}, [:on, :password])
       mysql 'sql statement', :on => 'host', :password => 'password'
-      @added.should == ['sql statement | mysql -u root -ppassword -h host']
+      @added.should == ['echo "sql statement" | mysql -u root -ppassword -h host']
     end
   end
 

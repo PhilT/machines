@@ -11,13 +11,17 @@ describe 'Functional Specs' do
     @log << message
   end
 
+  def add command, check
+    real_add command, check
+  end
+
   it 'should build a minimal script' do
     machine 'selected', :development
     upload 'etc/hosts', '/etc/hosts'
 
     start 'test'
-    @log.should == ['upload          etc/hosts /etc/hosts']
-    @commands.should == [["upload", ["etc/hosts", "/etc/hosts"]]]
+    @log.should == ['add             etc/hosts /etc/hosts']
+    @commands.should == [["add", ["etc/hosts", "/etc/hosts"], nil]]
   end
 end
 

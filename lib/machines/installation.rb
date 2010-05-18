@@ -2,7 +2,7 @@ module Machines
   module Installation
     # Upgrade apt packages
     def update
-      add "apt-get update && apt-get upgrade"
+      add "apt-get update && apt-get upgrade", nil
     end
 
     # Installs one or more packages using apt, deb or it's install.sh file
@@ -34,7 +34,7 @@ module Machines
           run ["cd /tmp && wget #{packages}", "dpkg -i #{name}", "rm #{name}", "cd -"]
         end
       else
-        add "apt-get install -q -y #{packages.join(' ')} #{log_output}", check_packages(packages)
+        add "apt-get install -q -y #{packages.join(' ')}", check_packages(packages)
       end
     end
 
@@ -44,7 +44,7 @@ module Machines
     # @option options [String] :as Run as specified user
     def run commands, options = {}
       log_file = "/home/#{options[:as]}/install.log" if options[:as]
-      command = commands.map{|command| "#{command} #{log_output(log_file)}"}.to_a.join(' && ')
+      command = commands.map{|command| "#{command}"}.to_a.join(' && ')
       if options[:as]
         add "sudo -u #{options[:as]} sh -c '#{command}'", options[:check]
       else
@@ -58,14 +58,14 @@ module Machines
     # @option options [String] :version Optional version number
     def gem package, options = {}
       version =  " -v '#{options[:version]}'" if options[:version]
-      add "gem install #{package}#{version} #{log_output}", check_gem(package, options[:version])
+      add "gem install #{package}#{version}", check_gem(package, options[:version])
     end
 
     # Update gems
     # @example Update Rubygems
     #     gem_update '--system'
     def gem_update options = ''
-      add "gem update #{options} #{log_output}", check_log("Updating installed gems")
+      add "gem update #{options}", check_log("Updating installed gems")
     end
 
     # Download, extract, and remove an archive. Currently supports `zip` or `tar.gz`
@@ -82,7 +82,7 @@ module Machines
     # @param [Hash] options
     # @option options [Optional String] :to directory to clone to
     def git_clone url, options = {}
-      add "git clone #{url} #{options[:to]} #{log_output}", check_dir(options[:to])
+      add "git clone #{url} #{options[:to]}", check_dir(options[:to])
     end
 
     # Download and extract nginx source and install passenger module
@@ -93,7 +93,7 @@ module Machines
       extract url
       flags = " --extra-configure-flags=--with-http_ssl_module" if options[:with].to_s == 'ssl'
       name = File.basename(url, '.tar.gz') #TODO check this
-      add ["cd /tmp", "passenger-install-nginx-module --auto --nginx-source-dir=/tmp/#{name}#{flags}", "rm -rf #{name}", "cd -"], :check => check_dir(name)
+      run ["cd /tmp", "passenger-install-nginx-module --auto --nginx-source-dir=/tmp/#{name}#{flags}", "rm -rf #{name}", "cd -"], :check => check_dir(name)
     end
   end
 end

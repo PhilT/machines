@@ -19,13 +19,9 @@ module Machines
       puts message
     end
 
-    def log_output log_file = '/var/log/install.log'
-      ">> #{log_file} 2>&1"
-    end
-
     # Queues up a command on the command list. Includes the calling method name for logging
-    def add command
-      @commands << ["#{caller[0][/`([^']*)'/, 1]}", command] # interpolated to stop hilight bug in gedit
+    def add command, check
+      @commands << ["#{caller[0][/`([^']*)'/, 1]}", command, check] # interpolated to stop hilight bug in gedit
     end
   end
 end

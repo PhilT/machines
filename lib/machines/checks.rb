@@ -9,10 +9,19 @@ module Machines
 
     end
 
+    def check_gem gem, version
+
+    end
+
     # Checks the existence of a file
     def check_file file, exists = true
 
     end
+
+    def check_link link
+
+    end
+
 
     def check_dir dir, exists = true
 
@@ -36,8 +45,16 @@ module Machines
 
     end
 
-    def check_log(string)
+    def check_log string
 
+    end
+
+    def check_daemon daemon
+
+    end
+
+    def check_init_d name
+      "ls /etc/rc?.d | grep #{name}"
     end
   end
 end

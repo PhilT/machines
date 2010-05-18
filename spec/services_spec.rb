@@ -1,14 +1,6 @@
 require 'spec/spec_helper'
 
 describe 'Installation' do
-  def add to_add
-    @added << to_add
-  end
-
-  before(:each) do
-    @added = []
-  end
-
   describe 'add_init_d' do
     it 'should add a command to register a init.d startup script' do
       add_init_d 'script_name'
