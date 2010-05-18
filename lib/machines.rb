@@ -60,6 +60,7 @@ def start command
       run_commands ssh
     end
     disable_root_login
+    File.open("output.log","w") {|f| f.write @output} if @output.size > 0
   end
 end
 
@@ -70,18 +71,21 @@ end
 # Loops through all commands calling with either Net::SSH::exec! or Net::SCP::upload!
 # @param [Optional #exec!] ssh Net::SSH connection to send the commands to. Only output them if ssh is nil
 def run_commands net_ssh = nil
+  @output = ''
   @commands.each do |name, command, check|
     raise ArgumentError, "MISSING name or command in: [#{name}, #{display(command)}]" unless name && command
     log "%-15s %s" % [name, display(command)]
     if net_ssh
+      @output << "Running Command on line #{name}: #{display(command)}"
       if command.is_a?(Array)
         Net::SCP.start @host, 'root', :password => TEMP_PASSWORD do |scp|
           scp.upload! command[0], command[1]
         end
       else
-        net_ssh.exec! command
+        @output << net_ssh.exec!(command)
       end
-      add_check check
+      @output << net_ssh.exec!(check)
+      @output << "\n"
     end
   end
 end

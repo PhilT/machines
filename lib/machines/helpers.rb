@@ -21,7 +21,12 @@ module Machines
 
     # Queues up a command on the command list. Includes the calling method name for logging
     def add command, check
-      @commands << ["#{caller[0][/`([^']*)'/, 1]}", command, check] # interpolated to stop hilight bug in gedit
+      line = ''
+      caller.each do |methods|
+        line = methods.scan(/Machinesfile:([0-9]+)/)
+        break if line.any?
+      end
+      @commands << ["Line #{line}:", command, check] # interpolated to stop hilight bug in gedit
     end
   end
 end
