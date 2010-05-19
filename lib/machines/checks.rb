@@ -9,7 +9,7 @@ module Machines
     end
 
     def check_packages packages
-      "dpkg --get-selections | grep -F #{packages.join("\n")} #{pass_fail}"
+      "dpkg --get-selections | grep -F '#{packages.join("\n")}' #{pass_fail}"
     end
 
     def check_gem gem, version = nil

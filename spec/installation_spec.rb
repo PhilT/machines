@@ -4,7 +4,7 @@ describe 'Installation' do
   describe 'update' do
     it 'should add a command to upgrade apt' do
       update
-      @added.should == ['apt-get update && apt-get upgrade']
+      @added.should == ['apt-get update && apt-get upgrade -y']
     end
   end
 

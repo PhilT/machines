@@ -33,7 +33,7 @@ module Machines
         if passed
           f.puts "CHECK PASSED".green
         else
-          f.puts "CHECK '#{check}' failed...".red
+          f.puts check.gsub("\n", '\n ').red
           f.puts message.red
         end
         f.puts "\n\n"

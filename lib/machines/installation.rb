@@ -2,7 +2,7 @@ module Machines
   module Installation
     # Upgrade apt packages
     def update
-      add "apt-get update && apt-get upgrade", nil
+      add "apt-get update && apt-get upgrade -y", nil
     end
 
     # Installs one or more packages using apt, deb or it's install.sh file
