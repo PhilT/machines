@@ -58,6 +58,7 @@ describe 'Machines' do
     before(:each) do
       should_receive(:set_machine_name_and_hosts)
       should_receive(:discover_users)
+      should_receive(:add_user)
     end
 
     it 'should set various instance variables' do
@@ -92,7 +93,6 @@ describe 'Machines' do
       should_receive(:enable_root_login)
       mock_ssh = mock 'Ssh'
       Net::SSH.should_receive(:start).with('host', 'root', :password => TEMP_PASSWORD).and_yield mock_ssh
-      should_receive(:create_user).with mock_ssh
       should_receive(:run_commands).with mock_ssh
       should_receive(:disable_root_login)
 
@@ -198,24 +198,6 @@ describe 'Machines' do
       @machinename = 'machine'
       set_machine_name_and_hosts
       @added.should == [["etc/hosts", "/etc/hosts"], "sed -i 's/ubuntu/machine/' /etc/{hosts,hostname}", 'hostname machine']
-    end
-  end
-
-  describe 'create_user' do
-    it 'should create a user on the remote machine and add it as an admin' do
-      mock_ssh = mock('Ssh')
-      mock_ssh.should_receive(:exec!).with 'useradd -p encrypted_password -G admin user'
-      @username = 'user'
-      @password = 'encrypted_password'
-      create_user mock_ssh
-    end
-
-    it 'should create a user without password if not supplied' do
-      mock_ssh = mock('Ssh')
-      mock_ssh.should_receive(:exec!).with 'useradd -G admin user'
-      @username = 'user'
-      @password = nil
-      create_user mock_ssh
     end
   end
 

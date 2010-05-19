@@ -25,8 +25,10 @@ module Machines
 
     # Add a new user (uses a lowlevel add so doesn't set a password. Used to handle authorized_keys files)
     # @param [String] login User name to create
-    def add_user login
-      add "useradd #{login}", check_file('/home/login')
+    def add_user login, options = {}
+      password = "-p #{options[:password]} " if options[:password]
+      admin = "-G admin " if options[:admin]
+      add "useradd -d /home/#{login} -m #{password}#{admin}#{login}", check_file("/home/#{login}")
     end
 
     # Removes a user, home and any other related files

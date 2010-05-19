@@ -46,6 +46,7 @@ def configure args
   raise 'Password not set' unless @password
   discover_users
   set_machine_name_and_hosts # TODO: Is this the right place?
+  add_user @username, :password => @password, :admin => true
 end
 
 # Called from `bin/machines` startup script.
@@ -57,7 +58,6 @@ def start command
     prepare_log_file
     enable_root_login
     Net::SSH.start @host, 'root', :password => TEMP_PASSWORD do |ssh|
-      create_user ssh
       run_commands ssh
     end
     disable_root_login
@@ -105,12 +105,6 @@ def set_machine_name_and_hosts
   upload 'etc/hosts', '/etc/hosts' if development? && File.exist?('etc/hosts')
   replace 'ubuntu', :with => @machinename, :in => '/etc/{hosts,hostname}'
   add "hostname #{@machinename}", "hostname | grep '#{@machinename}' #{pass_fail}"
-end
-
-# Create the user with credentials specified on the commandline
-def create_user net_ssh
-  password = "-p #{@password} " if @password
-  log_to :file, net_ssh.exec!("useradd #{password}-G admin #{@username}")
 end
 
 # Set a root password so ssh can login

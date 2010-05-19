@@ -20,9 +20,14 @@ describe 'Configuration' do
   end
 
   describe 'add_user' do
-    it 'should call useradd' do
+    it do
       add_user 'login'
-      @added.should == ['useradd login']
+      @added.should == ['useradd -d /home/login -m login']
+    end
+
+    it do
+      add_user 'a_user', :password => 'password', :admin => true
+      @added.should == ['useradd -d /home/a_user -m -p password -G admin a_user']
     end
   end
 
