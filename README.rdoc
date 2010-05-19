@@ -8,9 +8,30 @@ Ubuntu build script for development and server machines.
 * Uploads hosts file if it exists in etc/
 * Sets hostname
 
+== Installation and Configuration
+
+* Install the gem
+    gem install machines
+* Build your machines script `Machinesfile`, e.g.
+    machine 'desktop', :development, :apps => %w(app1 app2)
+    machine 'main-db', :production, :apps => %w(app1), :role => 'dbmaster'
+
+* Install Ubuntu
+* Install SSH Server
+    sudo apt-get install openssh-server
+* Test the Machinesfile
+    machines test <configuration> <>
+
+== VirtualBox installation
+* Make sure you have Bridged Networking
+* Make a note of the IP address
+
 
 == Status
 Under development.
+
+== Future Plans
+Add asynchronous ssh so output can piped live
 
 First cut is almost ready. It's a bit lax with password security. I need to look at this.
 

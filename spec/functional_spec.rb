@@ -21,8 +21,8 @@ describe 'Functional Specs' do
     upload 'etc/hosts', '/etc/hosts'
 
     start 'test'
-    @log.should == [")    sed -i 's/ubuntu/selected/' /etc/{hosts,hostname}", ')    etc/hosts /etc/hosts']
-    @commands.should == [['', "sed -i 's/ubuntu/selected/' /etc/{hosts,hostname}", "grep 'selected' /etc/{hosts,hostname} && echo CHECK PASSED || echo CHECK FAILED"], ['', ["etc/hosts", "/etc/hosts"], 'test -f /etc/hosts && echo CHECK PASSED || echo CHECK FAILED']]
+    @log.should == [")    sed -i 's/ubuntu/selected/' /etc/{hosts,hostname}", ')    hostname selected', ')    etc/hosts to /etc/hosts']
+    @commands.should == [['', "sed -i 's/ubuntu/selected/' /etc/{hosts,hostname}", "grep 'selected' /etc/{hosts,hostname} && echo CHECK PASSED || echo CHECK FAILED"], ["", "hostname selected", "hostname | grep 'selected' && echo CHECK PASSED || echo CHECK FAILED"], ['', ["etc/hosts", "/etc/hosts"], 'test -f /etc/hosts && echo CHECK PASSED || echo CHECK FAILED']]
   end
 
   it 'should install a minimal script' do

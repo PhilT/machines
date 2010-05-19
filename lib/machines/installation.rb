@@ -1,8 +1,10 @@
 module Machines
   module Installation
-    # Upgrade apt packages
+    # Update, upgrade, autoremove, autoclean apt packages
     def update
-      add "apt-get update && apt-get upgrade -y", nil
+      %w(update upgrade autoremove autoclean).each do |command|
+        add "apt-get #{command} -qq -y", nil
+      end
     end
 
     # Installs one or more packages using apt, deb or it's install.sh file
@@ -72,8 +74,8 @@ module Machines
     # @param [String] package Package name to extract
     def extract package
       name = File.basename(package)
-      cmd = package[/.zip/] ? 'unzip' : 'tar -zxvf'
-      dir = cmd == 'unzip' ? File.basename(name, 'zip') : File.basename(name, 'tar.gz')
+      cmd = package[/.zip/] ? 'unzip -qq' : 'tar -zxf'
+      dir = cmd =~ /unzip/ ? File.basename(name, 'zip') : File.basename(name, 'tar.gz')
       run ["cd /tmp", "wget #{package}", "#{cmd} #{name}", "rm #{name}", "cd -"], :check => check_dir(dir)
     end
 
@@ -93,7 +95,7 @@ module Machines
       extract url
       flags = " --extra-configure-flags=--with-http_ssl_module" if options[:with].to_s == 'ssl'
       name = File.basename(url, '.tar.gz')
-      run ["cd /tmp", "passenger-install-nginx-module --auto --nginx-source-dir=/tmp/#{name}#{flags}", "rm -rf #{name}", "cd -"], :check => check_dir(name)
+      run ["cd /tmp", "passenger-install-nginx-module --auto --nginx-source-dir=/tmp/#{name}#{flags}", "rm -rf #{name}", "cd -"], :check => check_dir("/opt/nginx")
     end
   end
 end

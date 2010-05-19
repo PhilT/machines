@@ -80,8 +80,8 @@ def run_commands net_ssh = nil
     i += 1
     if net_ssh
       print "#{"%-4s" % (progress.round.to_s + '%')} [#{'=' * progress}#{' ' * (100 - progress)}]\r"
-      log_to :file, "#{name})".yellow
-      log_to :file, "Running: #{display(command).yellow}"
+      log_to :file, "#{name})".orange
+      log_to :file, "#{command.is_a?(Array) ? 'Uploading' : 'Running'} #{display(command).orange}"
       if command.is_a?(Array)
         Net::SCP.start @host, 'root', :password => TEMP_PASSWORD do |scp|
           scp.upload! command[0], command[1]
@@ -100,6 +100,7 @@ end
 def set_machine_name_and_hosts
   upload 'etc/hosts', '/etc/hosts' if development? && File.exist?('etc/hosts')
   replace 'ubuntu', :with => @machinename, :in => '/etc/{hosts,hostname}'
+  add "hostname #{@machinename}", "hostname | grep '#{@machinename}' #{pass_fail}"
 end
 
 # Create the user with credentials specified on the commandline

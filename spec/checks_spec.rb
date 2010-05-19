@@ -15,7 +15,7 @@ describe 'Checks' do
 
   describe 'check_packages' do
     it do
-      check_packages(%w(package1 package2)).should == "dpkg --get-selections | grep -F package1\npackage2 && echo CHECK PASSED || echo CHECK FAILED"
+      check_packages(%w(package1 package2)).should == "dpkg --get-selections | grep -F 'package1\npackage2' && echo CHECK PASSED || echo CHECK FAILED"
     end
   end
 

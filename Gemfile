@@ -8,5 +8,7 @@ gem 'jeweler'
 group :development do
   gem 'rspec'
   gem 'yard'
+  gem 'ZenTest', :require => 'zentest'
+  gem 'rcov'
 end
 

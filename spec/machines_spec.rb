@@ -152,6 +152,7 @@ describe 'Machines' do
     end
 
     it 'should raise errors when command or name is missing' do
+      stub!(:display)
       @commands = [[nil, 'command']]
       lambda{run_commands}.should raise_error(ArgumentError)
       @commands = [['cmd', nil]]
@@ -185,7 +186,7 @@ describe 'Machines' do
       File.stub!(:exist?).and_return(true)
       @machinename = 'machine'
       set_machine_name_and_hosts
-      @added.should == [["etc/hosts", "/etc/hosts"], "sed -i 's/ubuntu/machine/' /etc/{hosts,hostname}"]
+      @added.should == [["etc/hosts", "/etc/hosts"], "sed -i 's/ubuntu/machine/' /etc/{hosts,hostname}", 'hostname machine']
     end
   end
 
