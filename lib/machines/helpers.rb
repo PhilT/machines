@@ -28,8 +28,11 @@ module Machines
     end
 
     def log_result_to_file check, message
-      return unless message
       File.open("output.log", 'a') do |f|
+        if check.nil? || message.nil?
+          f.puts 'NOT CHECKED'.yellow
+          break
+        end
         passed = message.split("\n").last.scan(/CHECK PASSED/).any?
         if passed
           f.puts "CHECK PASSED".green

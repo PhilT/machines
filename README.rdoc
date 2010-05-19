@@ -7,6 +7,7 @@ Ubuntu build script for development and server machines.
 * Use filenames in destination paths (e.g. `copy path/filename newpath/filename`)
 * Uploads hosts file if it exists in etc/
 * Sets hostname
+* Will try to continue execution even if something fails (so you can fix the issues all at once if they're not dependent)
 
 == Installation and Configuration
 
@@ -30,10 +31,18 @@ Ubuntu build script for development and server machines.
 == Status
 Under development.
 
+First cut is almost ready. It's a bit lax with password security. I need to look at this.
+
 == Future Plans
 Add asynchronous ssh so output can piped live
 
-First cut is almost ready. It's a bit lax with password security. I need to look at this.
+== Warnings
+You might see something one of the following while upgrading/installing packages:
+    debconf: Unable to initialise frontend: Dialog
+    WARNING: Failed to parse default value
+    update-rc.d: warning: unattended-upgrades start runlevel arguments
+
+These are all known issues and nothing to worry about
 
 == Note on Patches/Pull Requests
 

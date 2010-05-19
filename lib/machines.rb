@@ -74,24 +74,28 @@ def run_commands net_ssh = nil
   count = @commands.size.to_f
   i = 1
   STDOUT.sync = true
-  @commands.each do |name, command, check|
-    raise ArgumentError, "MISSING name or command in: [#{name}, #{display(command)}]" unless name && command
+  @commands.each do |line, command, check|
+    raise ArgumentError, "MISSING name or command in: [#{line}, #{display(command)}]" unless line && command
     progress = i / count * 100
     i += 1
     if net_ssh
       print "#{"%-4s" % (progress.round.to_s + '%')} [#{'=' * progress}#{' ' * (100 - progress)}]\r"
-      log_to :file, "#{name})".orange
+      log_to :file, "#{line})".orange
       log_to :file, "#{command.is_a?(Array) ? 'Uploading' : 'Running'} #{display(command).orange}"
       if command.is_a?(Array)
-        Net::SCP.start @host, 'root', :password => TEMP_PASSWORD do |scp|
-          scp.upload! command[0], command[1]
+        begin
+          Net::SCP.start @host, 'root', :password => TEMP_PASSWORD do |scp|
+            scp.upload! command[0], command[1]
+          end
+        rescue
+          log_to :screen, "Upload from #{command[0].blue} to #{command[1].blue} on line #{line} FAILED".red
         end
       else
         log_to :file, net_ssh.exec!(command)
       end
       log_result_to_file check, net_ssh.exec!(check)
     else
-      log_to :screen, "#{"%-4s" % (name + ')')} #{display(command)}"
+      log_to :screen, "#{"%-4s" % (line + ')')} #{display(command)}"
     end
   end
 end

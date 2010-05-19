@@ -158,6 +158,17 @@ describe 'Machines' do
       @commands = [['cmd', nil]]
       lambda{run_commands}.should raise_error(ArgumentError)
     end
+
+    it "should catch SCP errors and display message" do
+      @commands = [['1', ['from/path', 'to/path'], 'check1']]
+      @host = 'host'
+      mock_ssh = mock('Ssh', :exec! => nil)
+      mock_scp = mock('Scp')
+      mock_scp.should_receive(:upload!).and_raise 'an error'
+      Net::SCP.should_receive(:start).with('host', 'root', :password => TEMP_PASSWORD).and_yield mock_scp
+      should_receive(:log_to).with(:screen, 'Upload from from/path to to/path on line 1 FAILED')
+      run_commands mock_ssh
+    end
   end
 
   describe 'enable_root_login' do

@@ -15,3 +15,7 @@ def add to_add, check
   @added << to_add
 end
 
+class String
+  def colorize(text, color_code); text; end
+end
+

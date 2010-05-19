@@ -5,10 +5,6 @@ describe 'Helpers' do
     @commands = []
   end
 
-  class String
-    def green; self; end
-  end
-
   describe 'display' do
     before(:each) do
       @passwords = {:some_app => 'password'}
@@ -55,8 +51,11 @@ describe 'Helpers' do
 
     end
 
-    it "should not test when nil check" do
-
+    it "should warn when nil check" do
+      mock_file = mock(File)
+      File.stub!(:open).and_yield mock_file
+      mock_file.should_receive(:puts).with('NOT CHECKED')
+      log_result_to_file nil, nil
     end
   end
 
