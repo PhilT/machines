@@ -29,14 +29,14 @@ module Machines
           required_options options, [:to]
           commands = ["git clone #{packages} #{options[:to]}",
             "cd #{options[:to]}",
-            "find . -maxdepth 1 -name install* | xargs -I xxx xxx #{options[:args]}"]
+            "find . -maxdepth 1 -name install* | xargs -I xxx bash xxx #{options[:args]}"]
           run commands, options
         elsif packages.scan(/^http:\/\//).any?
           name = File.basename(packages)
           run ["cd /tmp && wget #{packages}", "dpkg -i #{name}", "rm #{name}", "cd -"]
         end
       else
-        add "export DEBIAN_FRONTEND=noninteractive && apt-get install -q -y #{packages.join(' ')}", check_packages(packages)
+        add "export DEBIAN_FRONTEND=noninteractive && apt-get install -qq -y #{packages.join(' ')}", check_packages(packages)
       end
     end
 
@@ -45,10 +45,9 @@ module Machines
     # @param [Hash] options
     # @option options [String] :as Run as specified user
     def run commands, options = {}
-      log_file = "/home/#{options[:as]}/install.log" if options[:as]
       command = commands.map{|command| "#{command}"}.to_a.join(' && ')
       if options[:as]
-        add "sudo -u #{options[:as]} sh -c '#{command}'", options[:check]
+        add "su - #{options[:as]} -c '#{command}'", options[:check]
       else
         add command, options[:check]
       end

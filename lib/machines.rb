@@ -18,6 +18,10 @@ TEMP_PASSWORD = 'ubuntu'
 TEMP_PASSWORD_ENCRYPTED = "tvXbD6sWjb4mE"
 DEFAULT_USERNAME = 'www'
 
+def ssh_options(options)
+  {:user_known_hosts_file => %w(/dev/null), :paranoid => false}.merge(options)
+end
+
 def machine name, environment, options = {:apps => [], :role => nil}
   if name == @config_name
     @environment = environment
@@ -45,8 +49,6 @@ def configure args
   @username ||= DEFAULT_USERNAME
   raise 'Password not set' unless @password
   discover_users
-  set_machine_name_and_hosts # TODO: Is this the right place?
-  add_user @username, :password => @password, :admin => true
 end
 
 # Called from `bin/machines` startup script.
@@ -57,7 +59,7 @@ def start command
   elsif command == 'install'
     prepare_log_file
     enable_root_login
-    Net::SSH.start @host, 'root', :password => TEMP_PASSWORD do |ssh|
+    Net::SSH.start @host, 'root', ssh_options(:password => TEMP_PASSWORD) do |ssh|
       run_commands ssh
     end
     disable_root_login
@@ -74,50 +76,48 @@ def run_commands net_ssh = nil
   count = @commands.size.to_f
   i = 1
   STDOUT.sync = true
+  @failed = false
   @commands.each do |line, command, check|
     raise ArgumentError, "MISSING name or command in: [#{line}, #{display(command)}]" unless line && command
     progress = i / count * 100
     i += 1
     if net_ssh
-      print "#{"%-4s" % (progress.round.to_s + '%')} [#{'=' * progress}#{' ' * (100 - progress)}]\r"
-      log_to :file, "#{line})".orange
+      bar = "#{"%-4s" % (progress.to_i.to_s + '%')} " + ("[#{"%-100s" % ('=' * progress)}]\r")
+      print @failed ? bar.red : bar.green
+      log_to :file, "Machinesfile line #{line})".blue
       log_to :file, "#{command.is_a?(Array) ? 'Uploading' : 'Running'} #{display(command).orange}"
       if command.is_a?(Array)
         begin
-          Net::SCP.start @host, 'root', :password => TEMP_PASSWORD do |scp|
+          Net::SCP.start @host, 'root', ssh_options(:password => TEMP_PASSWORD) do |scp|
             scp.upload! command[0], command[1]
           end
         rescue
-          log_to :screen, "Upload from #{command[0].blue} to #{command[1].blue} on line #{line} FAILED".red
+          log_to :file, "Upload from #{command[0].blue} to #{command[1].blue} on line #{line} FAILED".red
+          @failed = true
         end
       else
         log_to :file, net_ssh.exec!(command)
       end
-      log_result_to_file check, net_ssh.exec!(check)
+      success = log_result_to_file check, net_ssh.exec!(check)
+      @failed = true if !success
     else
       log_to :screen, "#{"%-4s" % (line + ')')} #{display(command)}"
     end
   end
-end
-
-# copy etc/hosts file and set machine name
-def set_machine_name_and_hosts
-  upload 'etc/hosts', '/etc/hosts' if development? && File.exist?('etc/hosts')
-  replace 'ubuntu', :with => @machinename, :in => '/etc/{hosts,hostname}'
-  add "hostname #{@machinename}", "hostname | grep '#{@machinename}' #{pass_fail}"
+  puts
 end
 
 # Set a root password so ssh can login
 def enable_root_login
-  Net::SSH.start @host, DEFAULT_IDENTITY, :password => DEFAULT_IDENTITY do |ssh|
+  Net::SSH.start @host, DEFAULT_IDENTITY, ssh_options(:password => DEFAULT_IDENTITY) do |ssh|
     log_to :file, ssh.exec!("echo #{DEFAULT_IDENTITY} | sudo -S usermod -p #{TEMP_PASSWORD_ENCRYPTED} root")
   end
 end
 
-# Disable root login from SSH by removing the root password
+# Disable root login
 def disable_root_login
-  Net::SSH.start @host, 'root', :password => TEMP_PASSWORD do |ssh|
-    log_to :file, ssh.exec!("passwd -d root")
+  Net::SSH.start @host, 'root', ssh_options(:password => TEMP_PASSWORD) do |ssh|
+    log_to :file, ssh.exec!("passwd -l root")
   end
 end
 

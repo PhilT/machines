@@ -19,6 +19,16 @@ describe 'Configuration' do
     end
   end
 
+  describe 'set_machine_name_and_hosts' do
+    it 'should upload /etc/hosts and set hostname' do
+      stub!(:development?).and_return(true)
+      File.stub!(:exist?).and_return(true)
+      @machinename = 'machine'
+      set_machine_name_and_hosts
+      @added.should == [["etc/hosts", "/etc/hosts"], "sed -i 's/ubuntu/machine/' /etc/{hosts,hostname}", 'hostname machine']
+    end
+  end
+
   describe 'add_user' do
     it do
       add_user 'login'

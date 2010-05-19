@@ -55,6 +55,7 @@ describe 'Helpers' do
       mock_file = mock(File)
       File.stub!(:open).and_yield mock_file
       mock_file.should_receive(:puts).with('NOT CHECKED')
+      mock_file.should_receive(:puts).with("\n\n")
       log_result_to_file nil, nil
     end
   end

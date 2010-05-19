@@ -23,12 +23,19 @@ module Machines
       end
     end
 
+    # Copy etc/hosts file and set machine name
+    def set_machine_name_and_hosts
+      upload 'etc/hosts', '/etc/hosts' if development? && File.exist?('etc/hosts')
+      replace 'ubuntu', :with => @machinename, :in => '/etc/{hosts,hostname}'
+      add "hostname #{@machinename}", "hostname | grep '#{@machinename}' #{pass_fail}"
+    end
+
     # Add a new user (uses a lowlevel add so doesn't set a password. Used to handle authorized_keys files)
     # @param [String] login User name to create
     def add_user login, options = {}
       password = "-p #{options[:password]} " if options[:password]
       admin = "-G admin " if options[:admin]
-      add "useradd -d /home/#{login} -m #{password}#{admin}#{login}", check_file("/home/#{login}")
+      add "useradd -d /home/#{login} -m #{password}#{admin}#{login}", check_dir("/home/#{login}")
     end
 
     # Removes a user, home and any other related files

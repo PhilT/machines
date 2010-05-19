@@ -7,6 +7,8 @@ require 'spec/autorun'
 Spec::Runner.configure do |config|
   config.before(:each) do
     @added = []
+    stub!(:prepare_log_file)
+    stub!(:puts)
   end
 end
 

@@ -28,9 +28,11 @@ module Machines
     end
 
     def log_result_to_file check, message
+      success = true
       File.open("output.log", 'a') do |f|
         if check.nil? || message.nil?
           f.puts 'NOT CHECKED'.yellow
+          f.puts "\n\n"
           break
         end
         passed = message.split("\n").last.scan(/CHECK PASSED/).any?
@@ -39,9 +41,11 @@ module Machines
         else
           f.puts check.gsub("\n", '\n ').red
           f.puts message.red
+          success = false
         end
         f.puts "\n\n"
       end
+      success
     end
 
     # Queues up a command on the command list. Includes the calling method name for logging

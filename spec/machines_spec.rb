@@ -56,9 +56,7 @@ describe 'Machines' do
 
   describe 'configure' do
     before(:each) do
-      should_receive(:set_machine_name_and_hosts)
       should_receive(:discover_users)
-      should_receive(:add_user)
     end
 
     it 'should set various instance variables' do
@@ -92,7 +90,7 @@ describe 'Machines' do
       @host = 'host'
       should_receive(:enable_root_login)
       mock_ssh = mock 'Ssh'
-      Net::SSH.should_receive(:start).with('host', 'root', :password => TEMP_PASSWORD).and_yield mock_ssh
+      Net::SSH.should_receive(:start).with('host', 'root', {:password => TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield mock_ssh
       should_receive(:run_commands).with mock_ssh
       should_receive(:disable_root_login)
 
@@ -146,7 +144,7 @@ describe 'Machines' do
       mock_ssh = mock('Ssh')
       mock_ssh.should_receive(:exec!).with('check1').and_return ''
       mock_scp = mock('Scp')
-      Net::SCP.should_receive(:start).with('host', 'root', :password => TEMP_PASSWORD).and_yield mock_scp
+      Net::SCP.should_receive(:start).with('host', 'root', {:password => TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield mock_scp
       mock_scp.should_receive(:upload!).with 'from', 'to'
       run_commands mock_ssh
     end
@@ -165,8 +163,8 @@ describe 'Machines' do
       mock_ssh = mock('Ssh', :exec! => nil)
       mock_scp = mock('Scp')
       mock_scp.should_receive(:upload!).and_raise 'an error'
-      Net::SCP.should_receive(:start).with('host', 'root', :password => TEMP_PASSWORD).and_yield mock_scp
-      should_receive(:log_to).with(:screen, 'Upload from from/path to to/path on line 1 FAILED')
+      Net::SCP.should_receive(:start).with('host', 'root', {:password => TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield mock_scp
+      should_receive(:log_to).with(:file, 'Upload from from/path to to/path on line 1 FAILED')
       run_commands mock_ssh
     end
   end
@@ -175,7 +173,7 @@ describe 'Machines' do
     it 'should set the root password ' do
       mock_ssh = mock('Ssh')
       @host = 'host'
-      Net::SSH.should_receive(:start).with('host', DEFAULT_IDENTITY, :password => DEFAULT_IDENTITY).and_yield(mock_ssh)
+      Net::SSH.should_receive(:start).with('host', DEFAULT_IDENTITY, {:password => DEFAULT_IDENTITY, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield(mock_ssh)
       mock_ssh.should_receive(:exec!).with "echo #{TEMP_PASSWORD} | sudo -S usermod -p #{TEMP_PASSWORD_ENCRYPTED} root"
       enable_root_login
     end
@@ -185,19 +183,9 @@ describe 'Machines' do
     it 'should remove the root password on the remote machine' do
       mock_ssh = mock('Ssh')
       @host = 'host'
-      Net::SSH.should_receive(:start).with('host', 'root', :password => 'ubuntu').and_yield(mock_ssh)
-      mock_ssh.should_receive(:exec!).with 'passwd -d root'
+      Net::SSH.should_receive(:start).with('host', 'root', {:password => 'ubuntu', :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield(mock_ssh)
+      mock_ssh.should_receive(:exec!).with 'passwd -l root'
       disable_root_login
-    end
-  end
-
-  describe 'set_machine_name_and_hosts' do
-    it 'should upload /etc/hosts and set hostname' do
-      stub!(:development?).and_return(true)
-      File.stub!(:exist?).and_return(true)
-      @machinename = 'machine'
-      set_machine_name_and_hosts
-      @added.should == [["etc/hosts", "/etc/hosts"], "sed -i 's/ubuntu/machine/' /etc/{hosts,hostname}", 'hostname machine']
     end
   end
 

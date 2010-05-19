@@ -7,6 +7,8 @@ Ubuntu build script for development and server machines.
 * Use filenames in destination paths (e.g. `copy path/filename newpath/filename`)
 * Uploads hosts file if it exists in etc/
 * Sets hostname
+* Green/red output progress indicating success/failure
+* All command output logged to `output.log`
 * Will try to continue execution even if something fails (so you can fix the issues all at once if they're not dependent)
 
 == Installation and Configuration
@@ -29,12 +31,12 @@ Ubuntu build script for development and server machines.
 
 
 == Status
-Under development.
-
-First cut is almost ready. It's a bit lax with password security. I need to look at this.
+Almost ready for a 0.1.0 release.
 
 == Future Plans
-Add asynchronous ssh so output can piped live
+* Add asynchronous ssh so output can piped live
+* Remove old SSH keys when installing multiple times on the same IP
+* Add timer
 
 == Warnings
 You might see something one of the following while upgrading/installing packages:
