@@ -1,56 +1,54 @@
 module Machines
   module Checks
+    def pass_fail
+      '&& echo CHECK PASSED || echo CHECK FAILED'
+    end
+
+    def fail_pass
+      '&& echo CHECK FAILED || echo CHECK PASSED'
+    end
+
     def check_packages packages
-      packages.map{|package| "dpkg --get-selections | grep #{package}; echo #{package} installed? $?"}
+      "dpkg --get-selections | grep -F #{packages.join("\n")} #{pass_fail}"
     end
 
-    def check_gem gem, version
+    def check_gem gem, version = nil
       version = " -v #{version}" if version
-      "gem search #{gem}#{version} --installed"
+      "gem search #{gem}#{version} --installed #{pass_fail}"
     end
 
-    # Checks the existence of a file
     def check_file file, exists = true
-      ""
+      "test -f #{file} #{exists ? pass_fail : fail_pass}"
     end
 
     def check_link link
-      ""
+      "test -L #{link} #{pass_fail}"
     end
 
 
     def check_dir dir, exists = true
-      ""
+      "test -d #{dir} #{exists ? pass_fail : fail_pass}"
     end
 
     def check_perms perms, path
-      ""
+      mods = %w(--- --x -w- -wx r-- r-x rw- rwx)
+      "ls -la #{path} | grep #{mods[perms[0..0].to_i]}#{mods[perms[1..1].to_i]}#{mods[perms[2..2].to_i]} #{pass_fail}"
     end
 
     def check_owner user, path
-      ""
+      "ls -la #{path} | grep '#{user} #{user}' #{pass_fail}"
     end
 
-    # Checks a string exists in a file
     def check_string string, file
-      ""
-    end
-
-    # Checks an export exists
-    def check_env key, value
-      ""
-    end
-
-    def check_log string
-      ""
+      "grep '#{string}' #{file} #{pass_fail}"
     end
 
     def check_daemon daemon
-      ""
+      "ps aux | grep #{daemon} #{pass_fail}"
     end
 
     def check_init_d name
-      "ls /etc/rc?.d | grep #{name}"
+      "test -L /etc/rc0.d/K20#{name} #{pass_fail}"
     end
   end
 end

@@ -23,7 +23,7 @@ describe 'Installation' do
 
     it 'should add a command to install apt packages' do
       install %w(package1 package2)
-      @added.should == ['apt-get install -q -y package1 package2']
+      @added.should == ['export DEBIAN_FRONTEND=noninteractive && apt-get install -q -y package1 package2']
     end
 
     it 'should add commands to download, install and remove a package ' do

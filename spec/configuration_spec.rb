@@ -9,14 +9,13 @@ describe 'Configuration' do
   end
 
   describe 'export' do
-    it 'should export a key/value pair' do
-      export :key => :value, :key => :value
-      @added.should == ["export key=value"]
+    it 'should fail when not given a file' do
+      lambda{export :key => :value}.should raise_error(ArgumentError)
     end
 
-    it 'should export a key/value pair and write to a file' do
-      export :key => :value, :key => :value, :to => 'to_file'
-      @added.should == ["export key=value", "echo 'export key=value' >> to_file"]
+    it 'should export a key/value to a file' do
+      export :key => :value, :to => 'to_file'
+      @added.should == ["echo 'export key=value' >> to_file"]
     end
   end
 

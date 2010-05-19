@@ -3,7 +3,6 @@ require 'spec/spec_helper'
 describe 'Helpers' do
   before(:each) do
     @commands = []
-    @log = []
   end
 
   describe 'display' do
@@ -39,19 +38,21 @@ describe 'Helpers' do
     end
   end
 
+  describe 'log_result_to_file' do
+    it 'should only output passed when check passed' do
+    end
+
+    it 'should output whole check output when failed' do
+
+    end
+  end
+
   describe 'add' do
     it 'should add a command to the commands array and include the caller method name' do
       stub!(:caller).and_return ['Machinesfile:13']
       real_add 'command', nil
-      @commands.should == [['Line 13:', 'command', nil]]
+      @commands.should == [['13', 'command', nil]]
     end
-  end
-end
-
-describe 'log' do
-  it 'should output messages to the console' do
-    should_receive(:puts).with 'message'
-    log 'message'
   end
 end
 

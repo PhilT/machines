@@ -13,12 +13,12 @@ module Machines
     # @param [Hash] options Keys to be exported
     # @option options [String] :to File to export key(s) to
     def export options
+      required_options options, [:to]
       commands = []
       options.each do |key, value|
         unless key == :to
           command = "export #{key}=#{value}"
-          add command, check_env(key, value)
-          add "echo '#{command}' >> #{options[:to]}", check_string(command, options[:to]) if options[:to]
+          add "echo '#{command}' >> #{options[:to]}", check_string(command, options[:to])
         end
       end
     end

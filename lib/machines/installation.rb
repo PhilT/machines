@@ -34,7 +34,7 @@ module Machines
           run ["cd /tmp && wget #{packages}", "dpkg -i #{name}", "rm #{name}", "cd -"]
         end
       else
-        add "apt-get install -q -y #{packages.join(' ')}", check_packages(packages)
+        add "export DEBIAN_FRONTEND=noninteractive && apt-get install -q -y #{packages.join(' ')}", check_packages(packages)
       end
     end
 
@@ -65,7 +65,7 @@ module Machines
     # @example Update Rubygems
     #     gem_update '--system'
     def gem_update options = ''
-      add "gem update #{options}", check_log("Updating installed gems")
+      add "gem update #{options}", nil
     end
 
     # Download, extract, and remove an archive. Currently supports `zip` or `tar.gz`
@@ -92,7 +92,7 @@ module Machines
     def install_nginx url, options = {}
       extract url
       flags = " --extra-configure-flags=--with-http_ssl_module" if options[:with].to_s == 'ssl'
-      name = File.basename(url, '.tar.gz') #TODO check this
+      name = File.basename(url, '.tar.gz')
       run ["cd /tmp", "passenger-install-nginx-module --auto --nginx-source-dir=/tmp/#{name}#{flags}", "rm -rf #{name}", "cd -"], :check => check_dir(name)
     end
   end

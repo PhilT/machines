@@ -3,7 +3,7 @@
 if ARGV.size >= 4 && %w(install test).include?(ARGV[0])
   command = ARGV.shift
   test = command.downcase == 'test'
-  puts "#{test ? 'Testing' : 'Beginning'} install..."
+  puts "#{test ? 'Testing' : 'Beginning'} install... (tail -f output.log)"
   require File.join(File.dirname(__FILE__), '..', 'lib', 'machines')
   configure ARGV
   begin

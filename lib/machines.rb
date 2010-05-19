@@ -45,6 +45,7 @@ def configure args
   @username ||= DEFAULT_USERNAME
   raise 'Password not set' unless @password
   discover_users
+  set_machine_name_and_hosts # TODO: Is this the right place?
 end
 
 # Called from `bin/machines` startup script.
@@ -53,15 +54,13 @@ def start command
   if command == 'test'
     run_commands
   elsif command == 'install'
-    @output = ''
+    prepare_log_file
     enable_root_login
     Net::SSH.start @host, 'root', :password => TEMP_PASSWORD do |ssh|
-      set_machine_name_and_hosts
       create_user ssh
       run_commands ssh
     end
     disable_root_login
-    File.open("output.log","w") {|f| f.write @output} if @output.size > 0
   end
 end
 
@@ -72,21 +71,28 @@ end
 # Loops through all commands calling with either Net::SSH::exec! or Net::SCP::upload!
 # @param [Optional #exec!] ssh Net::SSH connection to send the commands to. Only output them if ssh is nil
 def run_commands net_ssh = nil
+  count = @commands.size.to_f
+  i = 1
   @commands.each do |name, command, check|
     raise ArgumentError, "MISSING name or command in: [#{name}, #{display(command)}]" unless name && command
-    log "%-15s %s" % [name, display(command)]
+    progress = i / count * 100
+    i += 1
+    print "#{"%-4s" % progress.round}% [#{'=' * progress}#{' ' * (100 - progress)}]\r"
     if net_ssh
-      @output << "Running Command on line #{name}: #{display(command)}"
+      log_to :file, "#{name})".yellow
+      log_to :file, "Running: #{display(command).yellow}"
       if command.is_a?(Array)
         Net::SCP.start @host, 'root', :password => TEMP_PASSWORD do |scp|
           scp.upload! command[0], command[1]
         end
       else
-        @output << net_ssh.exec!(command)
+        log_to :file, net_ssh.exec!(command)
       end
-      @output << net_ssh.exec!(check)
-      @output << "\n"
+      log_result_to_file check, net_ssh.exec!(check)
+    else
+      log_to :screen, "#{"%-4s" % (name + ')')} #{display(command)}"
     end
+    puts
   end
 end
 
@@ -99,20 +105,20 @@ end
 # Create the user with credentials specified on the commandline
 def create_user net_ssh
   password = "-p #{@password} " if @password
-  net_ssh.exec! "useradd #{password}-G admin #{@username}"
+  log_to :file, net_ssh.exec!("useradd #{password}-G admin #{@username}")
 end
 
 # Set a root password so ssh can login
 def enable_root_login
   Net::SSH.start @host, DEFAULT_IDENTITY, :password => DEFAULT_IDENTITY do |ssh|
-    ssh.exec! "echo #{DEFAULT_IDENTITY} | sudo -S usermod -p #{TEMP_PASSWORD_ENCRYPTED} root"
+    log_to :file, ssh.exec!("echo #{DEFAULT_IDENTITY} | sudo -S usermod -p #{TEMP_PASSWORD_ENCRYPTED} root")
   end
 end
 
 # Disable root login from SSH by removing the root password
 def disable_root_login
   Net::SSH.start @host, 'root', :password => TEMP_PASSWORD do |ssh|
-    ssh.exec! "passwd -d root"
+    log_to :file, ssh.exec!("passwd -d root")
   end
 end
 
