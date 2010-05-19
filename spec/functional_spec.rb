@@ -6,7 +6,6 @@ describe 'Functional Specs' do
     configure ['selected', nil, 'password']
     @log = []
     stub!(:print)
-    stub!(:puts)
   end
 
   def log_to file, message

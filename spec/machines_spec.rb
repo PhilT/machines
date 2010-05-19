@@ -121,7 +121,6 @@ describe 'Machines' do
       stub!(:print)
       stub!(:log_to)
       stub!(:log_result_to_file)
-      stub!(:puts)
     end
 
     it 'should display all commands queued in the @commands array' do

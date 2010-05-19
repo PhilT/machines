@@ -73,12 +73,13 @@ end
 def run_commands net_ssh = nil
   count = @commands.size.to_f
   i = 1
+  STDOUT.sync = true
   @commands.each do |name, command, check|
     raise ArgumentError, "MISSING name or command in: [#{name}, #{display(command)}]" unless name && command
     progress = i / count * 100
     i += 1
-    print "#{"%-4s" % progress.round}% [#{'=' * progress}#{' ' * (100 - progress)}]\r"
     if net_ssh
+      print "#{"%-4s" % (progress.round.to_s + '%')} [#{'=' * progress}#{' ' * (100 - progress)}]\r"
       log_to :file, "#{name})".yellow
       log_to :file, "Running: #{display(command).yellow}"
       if command.is_a?(Array)
@@ -92,7 +93,6 @@ def run_commands net_ssh = nil
     else
       log_to :screen, "#{"%-4s" % (name + ')')} #{display(command)}"
     end
-    puts
   end
 end
 

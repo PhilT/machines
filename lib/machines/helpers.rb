@@ -28,7 +28,6 @@ module Machines
 
     def log_result_to_file check, message
       return unless message
-      puts message
       File.open("output.log", 'a') do |f|
         passed = message.split("\n").last.scan(/CHECK PASSED/).any?
         if passed
@@ -36,8 +35,8 @@ module Machines
         else
           f.puts "CHECK '#{check}' failed...".red
           f.puts message.red
-          f.puts ''
         end
+        f.puts "\n\n"
       end
     end
 
