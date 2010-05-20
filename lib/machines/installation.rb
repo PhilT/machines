@@ -76,7 +76,7 @@ module Machines
       name = File.basename(package)
       cmd = package[/.zip/] ? 'unzip -qq' : 'tar -zxf'
       dir = cmd =~ /unzip/ ? File.basename(name, '.zip') : File.basename(name, '.tar.gz')
-      run ["cd /tmp", "wget #{package}", "#{cmd} #{name}", "rm #{name}", "cd -"], :check => check_dir(dir)
+      run ["cd /tmp", "wget #{package}", "#{cmd} #{name}", "rm #{name}", "cd -"], :check => check_dir("/tmp/#{dir}")
     end
 
     # Clone a project from a Git repository
