@@ -78,12 +78,17 @@ describe 'Installation' do
   describe 'install_nginx' do
     it 'should add commands to download and extract nginx and install passenger' do
       install_nginx 'http://url_to_nginx.tar.gz'
-      @added.should == ['cd /tmp && wget http://url_to_nginx.tar.gz && tar -zxf url_to_nginx.tar.gz && rm url_to_nginx.tar.gz && cd -', 'cd /tmp && passenger-install-nginx-module --auto --nginx-source-dir=/tmp/url_to_nginx && rm -rf url_to_nginx && cd -']
+      @added.should == [
+        'cd /tmp && wget http://url_to_nginx.tar.gz && tar -zxf url_to_nginx.tar.gz && rm url_to_nginx.tar.gz && cd -',
+        'cd /tmp && rvmsudo passenger-install-nginx-module --auto --nginx-source-dir=/tmp/url_to_nginx && rm -rf url_to_nginx && cd -'
+      ]
     end
 
     it 'should add commands to download and extract nginx and install passenger with ssl module' do
       install_nginx 'http://url_to_nginx.tar.gz', :with => :ssl
-      @added.should == ['cd /tmp && wget http://url_to_nginx.tar.gz && tar -zxf url_to_nginx.tar.gz && rm url_to_nginx.tar.gz && cd -', 'cd /tmp && passenger-install-nginx-module --auto --nginx-source-dir=/tmp/url_to_nginx --extra-configure-flags=--with-http_ssl_module && rm -rf url_to_nginx && cd -']
+      @added.should == [
+        'cd /tmp && wget http://url_to_nginx.tar.gz && tar -zxf url_to_nginx.tar.gz && rm url_to_nginx.tar.gz && cd -',
+        'cd /tmp && rvmsudo passenger-install-nginx-module --auto --nginx-source-dir=/tmp/url_to_nginx --extra-configure-flags=--with-http_ssl_module && rm -rf url_to_nginx && cd -']
     end
   end
 end
