@@ -37,7 +37,7 @@ describe 'Configuration' do
 
     it do
       add_user 'a_user', :password => 'password', :admin => true
-      @added.should == ['useradd -s /bin/bash -d /home/a_user -m -p password -G admin a_user']
+      @added.should == ['useradd -s /bin/bash -d /home/a_user -m -p password -G admin a_user', "echo 'a_user ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"]
     end
   end
 

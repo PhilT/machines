@@ -36,6 +36,7 @@ module Machines
       password = "-p #{options[:password]} " if options[:password]
       admin = "-G admin " if options[:admin]
       add "useradd -s /bin/bash -d /home/#{login} -m #{password}#{admin}#{login}", check_dir("/home/#{login}")
+      append "#{login} ALL=(ALL) NOPASSWD: ALL", :to => '/etc/sudoers' if options[:admin]
     end
 
     # Removes a user, home and any other related files
