@@ -3,7 +3,7 @@ module Machines
     # Update, upgrade, autoremove, autoclean apt packages
     def update
       %w(update upgrade autoremove autoclean).each do |command|
-        add "apt-get #{command} -qq -y", nil
+        add "apt-get -qq -y #{command}", nil
       end
     end
 
@@ -37,7 +37,7 @@ module Machines
           run ["cd /tmp && wget #{packages}", "dpkg -i #{name}", "rm #{name}", "cd -"]
         end
       else
-        add "export DEBIAN_FRONTEND=noninteractive && apt-get install -qq -y #{packages.join(' ')}", check_packages(packages)
+        add "export DEBIAN_FRONTEND=noninteractive && apt-get -qq -y install #{packages.join(' ')}", check_packages(packages)
       end
     end
 
@@ -48,7 +48,7 @@ module Machines
     def run commands, options = {}
       command = commands.map{|command| "#{command}"}.to_a.join(' && ')
       if options[:as]
-        add "su - #{options[:as]} -c '#{command}'", options[:check]
+        add "su - #{options[:as]} -c '#{command}'", "su - #{options[:as]} -c '#{options[:check]}'"
       else
         add command, options[:check]
       end
@@ -60,7 +60,7 @@ module Machines
     # @option options [String] :version Optional version number
     def gem package, options = {}
       version =  " -v '#{options[:version]}'" if options[:version]
-      add "gem install #{package}#{version}", check_gem(package, options[:version])
+      run "gem install #{package}#{version}", options.merge(:check => check_gem(package, options[:version]))
     end
 
     # Update gems

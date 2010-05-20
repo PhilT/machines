@@ -4,7 +4,7 @@ describe 'Installation' do
   describe 'update' do
     it 'should add a command to upgrade apt' do
       update
-      @added.should == ['apt-get update -qq -y', 'apt-get upgrade -qq -y', 'apt-get autoremove -qq -y', 'apt-get autoclean -qq -y']
+      @added.should == ['apt-get -qq -y update', 'apt-get -qq -y upgrade', 'apt-get -qq -y autoremove', 'apt-get -qq -y autoclean']
     end
   end
 
@@ -23,7 +23,7 @@ describe 'Installation' do
 
     it 'should add a command to install apt packages' do
       install %w(package1 package2)
-      @added.should == ['export DEBIAN_FRONTEND=noninteractive && apt-get install -qq -y package1 package2']
+      @added.should == ['export DEBIAN_FRONTEND=noninteractive && apt-get -qq -y install package1 package2']
     end
 
     it 'should add commands to download, install and remove a package ' do

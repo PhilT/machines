@@ -32,12 +32,12 @@ describe 'Configuration' do
   describe 'add_user' do
     it do
       add_user 'login'
-      @added.should == ['useradd -d /home/login -m login']
+      @added.should == ['useradd -s /bin/bash -d /home/login -m login']
     end
 
     it do
       add_user 'a_user', :password => 'password', :admin => true
-      @added.should == ['useradd -d /home/a_user -m -p password -G admin a_user']
+      @added.should == ['useradd -s /bin/bash -d /home/a_user -m -p password -G admin a_user']
     end
   end
 

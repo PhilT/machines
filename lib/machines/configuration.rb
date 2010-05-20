@@ -35,7 +35,7 @@ module Machines
     def add_user login, options = {}
       password = "-p #{options[:password]} " if options[:password]
       admin = "-G admin " if options[:admin]
-      add "useradd -d /home/#{login} -m #{password}#{admin}#{login}", check_dir("/home/#{login}")
+      add "useradd -s /bin/bash -d /home/#{login} -m #{password}#{admin}#{login}", check_dir("/home/#{login}")
     end
 
     # Removes a user, home and any other related files
