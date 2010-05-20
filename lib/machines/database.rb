@@ -14,7 +14,7 @@ module Machines
     # Set a MySQL root password
     # @param [String] password Root password to set
     def mysql_pass password
-      add "mysqladmin -u root password #{password}", nil
+      add "mysqladmin -u root password #{password}", "mysqladmin -u root -p#{password} ping | grep alive #{pass_fail}"
     end
 
     # Write the database.yml file

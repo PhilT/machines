@@ -27,10 +27,11 @@ module Machines
       if packages.is_a?(String)
         if packages.scan(/^git/).any?
           required_options options, [:to]
-          commands = ["git clone #{packages} #{options[:to]}",
+          commands = ["rm -rf #{options[:to]}",
+            "git clone #{packages} #{options[:to]}",
             "cd #{options[:to]}",
             "find . -maxdepth 1 -name install* | xargs -I xxx bash xxx #{options[:args]}"]
-          run commands, options.merge(:check => "find . -maxdepth 1 -name install* | grep install #{pass_fail}")
+          run commands, options.merge(:check => "find #{options[:to]} -maxdepth 1 -name install* | grep install #{pass_fail}")
         elsif packages.scan(/^http:\/\//).any?
           name = File.basename(packages)
           run ["cd /tmp && wget #{packages}", "dpkg -i #{name}", "rm #{name}", "cd -"]
@@ -74,7 +75,7 @@ module Machines
     def extract package
       name = File.basename(package)
       cmd = package[/.zip/] ? 'unzip -qq' : 'tar -zxf'
-      dir = cmd =~ /unzip/ ? File.basename(name, 'zip') : File.basename(name, 'tar.gz')
+      dir = cmd =~ /unzip/ ? File.basename(name, '.zip') : File.basename(name, '.tar.gz')
       run ["cd /tmp", "wget #{package}", "#{cmd} #{name}", "rm #{name}", "cd -"], :check => check_dir(dir)
     end
 
@@ -83,7 +84,7 @@ module Machines
     # @param [Hash] options
     # @option options [Optional String] :to directory to clone to
     def git_clone url, options = {}
-      add "git clone #{url} #{options[:to]}", check_dir(options[:to])
+      add "git clone -q #{url} #{options[:to]}", check_dir(options[:to])
     end
 
     # Download and extract nginx source and install passenger module

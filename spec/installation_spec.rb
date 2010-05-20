@@ -12,13 +12,13 @@ describe 'Installation' do
     it 'should add a command to install from an install script' do
       should_receive(:required_options).with({:to => '~/installer'}, [:to])
       install 'git://url', :to => '~/installer'
-      @added.should == ['git clone git://url ~/installer && cd ~/installer && find . -maxdepth 1 -name install* | xargs -I xxx bash xxx ']
+      @added.should == ['rm -rf ~/installer && git clone git://url ~/installer && cd ~/installer && find . -maxdepth 1 -name install* | xargs -I xxx bash xxx ']
     end
 
     it 'should add a command to install from an install script as a specified user' do
       should_receive(:required_options).with({:to => '~/installer', :as => 'user', :args => 'args'}, [:to])
       install 'git://url', :to => '~/installer', :as => 'user', :args => 'args'
-      @added.should == ["su - user -c 'git clone git://url ~/installer && cd ~/installer && find . -maxdepth 1 -name install* | xargs -I xxx bash xxx args'"]
+      @added.should == ["su - user -c 'rm -rf ~/installer && git clone git://url ~/installer && cd ~/installer && find . -maxdepth 1 -name install* | xargs -I xxx bash xxx args'"]
     end
 
     it 'should add a command to install apt packages' do
@@ -66,12 +66,12 @@ describe 'Installation' do
   describe 'git_clone' do
     it 'should add a command to clone a git repository' do
       git_clone 'http://git_url.git'
-      @added.should == ['git clone http://git_url.git ']
+      @added.should == ['git clone -q http://git_url.git ']
     end
 
     it 'should add a command to clone a git repository to a specified folder' do
       git_clone 'http://git_url.git', :to => 'dir'
-      @added.should == ['git clone http://git_url.git dir']
+      @added.should == ['git clone -q http://git_url.git dir']
     end
   end
 
