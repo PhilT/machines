@@ -82,24 +82,24 @@ def run_commands net_ssh = nil
     progress = i / count * 100
     i += 1
     if net_ssh
-      bar = "#{"%-4s" % (progress.to_i.to_s + '%')} " + ("[#{"%-100s" % ('=' * progress)}]\r")
+      bar = "\r#{" %-4s" % (progress.to_i.to_s + '%')} " + ("[#{"%-100s" % ('=' * progress)}]")
       print @failed ? bar.red : bar.green
       log_to :file, "Machinesfile line #{line})".blue
       log_to :file, "#{command.is_a?(Array) ? 'Uploading' : 'Running'} #{display(command).orange}"
+      upload_successful = true
       if command.is_a?(Array)
         begin
           Net::SCP.start @host, 'root', ssh_options(:password => TEMP_PASSWORD) do |scp|
             scp.upload! command[0], command[1]
           end
         rescue
-          log_to :file, "Upload from #{command[0].blue} to #{command[1].blue} on line #{line} FAILED".red
-          @failed = true
+          log_to :file, "FAILED\n\n".red
+          upload_failed = true
         end
       else
         log_to :file, net_ssh.exec!(command)
       end
-      success = log_result_to_file check, net_ssh.exec!(check)
-      @failed = true if !success
+      @failed = upload_failed || !log_result_to_file(check, net_ssh.exec!(check))
     else
       log_to :screen, "#{"%-4s" % (line + ')')} #{display(command)}"
     end

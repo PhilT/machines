@@ -10,7 +10,7 @@ module Machines
     # Restart a daemon
     # @param [String] daemon Name of the init.d daemon to restart
     def restart daemon
-      add "/etc/init.d/#{daemon} restart", check_daemon(daemon)
+      add "service #{daemon} restart", check_daemon(daemon)
     end
   end
 end

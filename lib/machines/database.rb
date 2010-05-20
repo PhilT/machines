@@ -26,7 +26,7 @@ module Machines
       app = options[:for]
       yml = {@environment => {'adapter' => 'mysql', 'database' => app, 'username' => app, 'password' => @passwords[app], 'host' => @dbmaster}}.to_yaml
       path = File.join(options[:to], 'database.yml')
-      add "echo #{yml} > #{path}", check_file(path)
+      add "echo '#{yml}' > #{path}", check_file(path)
     end
   end
 end

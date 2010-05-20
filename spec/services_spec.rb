@@ -11,7 +11,7 @@ describe 'Installation' do
   describe 'restart' do
     it 'should add a command to restart a daemon' do
       restart 'daemon'
-      @added.should == ['/etc/init.d/daemon restart']
+      @added.should == ['service daemon restart']
     end
   end
 end

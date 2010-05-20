@@ -18,7 +18,7 @@ module Machines
     end
 
     def check_file file, exists = true
-      "test -f #{file} #{exists ? pass_fail : fail_pass}"
+      "test -s #{file} #{exists ? pass_fail : fail_pass}"
     end
 
     def check_link link

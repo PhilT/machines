@@ -21,7 +21,7 @@ describe 'Functional Specs' do
 
     start 'test'
     @log.should == [')    etc/hosts to /etc/hosts']
-    @commands.should == [['', ["etc/hosts", "/etc/hosts"], 'test -f /etc/hosts && echo CHECK PASSED || echo CHECK FAILED']]
+    @commands.should == [['', ["etc/hosts", "/etc/hosts"], 'test -s /etc/hosts && echo CHECK PASSED || echo CHECK FAILED']]
   end
 
   it 'should install a minimal script' do

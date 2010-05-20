@@ -31,11 +31,11 @@ describe 'Checks' do
 
   describe 'check_file' do
     it do
-      check_file('file').should == 'test -f file && echo CHECK PASSED || echo CHECK FAILED'
+      check_file('file').should == 'test -s file && echo CHECK PASSED || echo CHECK FAILED'
     end
 
     it do
-      check_file('file', false).should == 'test -f file && echo CHECK FAILED || echo CHECK PASSED'
+      check_file('file', false).should == 'test -s file && echo CHECK FAILED || echo CHECK PASSED'
     end
   end
 

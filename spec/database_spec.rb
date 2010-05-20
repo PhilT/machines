@@ -24,7 +24,7 @@ describe 'Database' do
       @dbmaster = 'dbmaster'
       @passwords = {'app' => 'password'}
       write_yaml :for => 'app', :to => 'dir'
-      @added.should == ["echo --- \ntest: \n  username: app\n  adapter: mysql\n  database: app\n  host: dbmaster\n  password: password\n > dir/database.yml"]
+      @added.should == ["echo '--- \ntest: \n  username: app\n  adapter: mysql\n  database: app\n  host: dbmaster\n  password: password\n' > dir/database.yml"]
     end
   end
 end

@@ -48,6 +48,18 @@ describe 'FileOperations' do
       replace 'something', {:with => 'else', :in => 'file'}
       @added.should == ["sed -i 's/something/else/' file"]
     end
+
+    it 'should replace text with / in a file' do
+      stub!(:required_options)
+      replace 'something', {:with => 'some/path', :in => 'file'}
+      @added.should == ["sed -i 's/something/some\\/path/' file"]
+    end
+
+    it 'should replace symbols' do
+      stub!(:required_options)
+      replace 'something', {:with => :else, :in => 'file'}
+      @added.should == ["sed -i 's/something/else/' file"]
+    end
   end
 
   describe 'mkdir' do

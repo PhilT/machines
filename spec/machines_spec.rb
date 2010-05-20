@@ -164,7 +164,7 @@ describe 'Machines' do
       mock_scp = mock('Scp')
       mock_scp.should_receive(:upload!).and_raise 'an error'
       Net::SCP.should_receive(:start).with('host', 'root', {:password => TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield mock_scp
-      should_receive(:log_to).with(:file, 'Upload from from/path to to/path on line 1 FAILED')
+      should_receive(:log_to).with(:file, "FAILED\n\n")
       run_commands mock_ssh
     end
   end
