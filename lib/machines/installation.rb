@@ -30,7 +30,7 @@ module Machines
           commands = ["git clone #{packages} #{options[:to]}",
             "cd #{options[:to]}",
             "find . -maxdepth 1 -name install* | xargs -I xxx bash xxx #{options[:args]}"]
-          run commands, options
+          run commands, options.merge(:check => "find . -maxdepth 1 -name install* | grep install #{pass_fail}")
         elsif packages.scan(/^http:\/\//).any?
           name = File.basename(packages)
           run ["cd /tmp && wget #{packages}", "dpkg -i #{name}", "rm #{name}", "cd -"]

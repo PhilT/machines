@@ -99,7 +99,8 @@ def run_commands net_ssh = nil
       else
         log_to :file, net_ssh.exec!(command)
       end
-      @failed = upload_failed || !log_result_to_file(check, net_ssh.exec!(check))
+      failed = upload_failed || !log_result_to_file(check, net_ssh.exec!(check))
+      @failed = true if failed
     else
       log_to :screen, "#{"%-4s" % (line + ')')} #{display(command)}"
     end
