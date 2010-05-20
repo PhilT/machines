@@ -39,6 +39,10 @@ module Machines
       append "#{login} ALL=(ALL) NOPASSWD: ALL", :to => '/etc/sudoers' if options[:admin]
     end
 
+    def reenable_sudoer_password user
+      replace "#{user} ALL=(ALL) NOPASSWD: ALL", :with => '', :in => '/etc/sudoers'
+    end
+
     # Removes a user, home and any other related files
     # @param [String] login User name to remove
     def del_user login
