@@ -6,77 +6,13 @@ describe 'Machines' do
     @password = 'default'
   end
 
-  describe 'machine' do
-    it 'should set environment, apps and role when it matches the configuration specified' do
-      @config_name = 'config'
-      machine 'config', :test, {:apps => ['app', 'another'], :role => 'role'}
-      @environment.should == :test
-      @apps.should == ['app', 'another']
-      @role.should == 'role'
-    end
-
-    it 'should set environment when it matches specified configuration but no apps or role specified' do
-      @config_name = 'config'
-      machine 'config', :test
-      @environment.should == :test
-    end
-
-    it 'should not set anything when it does not match specified configuration' do
-      machine 'config', :test, {:apps => ['app', 'another'], :role => 'role'}
-      @environment.should be_nil
-      @apps.should be_nil
-      @role.should be_nil
-    end
-  end
-
-  describe 'development?' do
-    it do
-      @environment = :development
-      development?.should be_true
-    end
-
-    it do
-      development?.should be_false
-    end
-  end
-
-  describe 'password' do
-    it 'should add a password to existing passwords' do
-      @passwords = {'app' => 'password'}
-      password 'another', 'anotherpass'
-      @passwords.should == {'app' => 'password', 'another' => 'anotherpass'}
-    end
-
-    it 'should add a password to empty passwords' do
-      @passwords = {}
-      password 'app', 'newpass'
-      @passwords.should == {'app' => 'newpass'}
-    end
-  end
-
-  describe 'configure' do
+  describe 'new' do
     before(:each) do
       should_receive(:discover_users)
     end
 
-    it 'should set various instance variables' do
-      configure %w(name host password dbmaster machine user)
-      @config_name.should == 'name'
-      @host.should == 'host'
-      @dbmaster.should == 'dbmaster'
-      @machinename.should == 'machine'
-      @username.should == 'user'
-      @password.should == 'password'
-    end
-
-    it 'should set defaults' do
-      configure %w(name host password)
-      @config_name.should == 'name'
-      @host.should == 'host'
-      @dbmaster.should == 'host'
-      @machinename.should == 'name'
-      @username.should == DEFAULT_USERNAME
-      @password.should == 'password'
+    it 'should raise errors' do
+      lambda{Machines::Base.new {}}.should raise_error 'Password not set'
     end
   end
 
@@ -90,7 +26,7 @@ describe 'Machines' do
       @host = 'host'
       should_receive(:enable_root_login)
       mock_ssh = mock 'Ssh'
-      Net::SSH.should_receive(:start).with('host', 'root', {:password => TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield mock_ssh
+      Net::SSH.should_receive(:start).with('host', 'root', {:password => Machines::TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield mock_ssh
       should_receive(:run_commands).with mock_ssh
       should_receive(:disable_root_login)
 
@@ -144,7 +80,7 @@ describe 'Machines' do
       mock_ssh = mock('Ssh')
       mock_ssh.should_receive(:exec!).with('check1').and_return ''
       mock_scp = mock('Scp')
-      Net::SCP.should_receive(:start).with('host', 'root', {:password => TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield mock_scp
+      Net::SCP.should_receive(:start).with('host', 'root', {:password => Machines::TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield mock_scp
       mock_scp.should_receive(:upload!).with 'from', 'to'
       run_commands mock_ssh
     end
@@ -163,7 +99,7 @@ describe 'Machines' do
       mock_ssh = mock('Ssh', :exec! => nil)
       mock_scp = mock('Scp')
       mock_scp.should_receive(:upload!).and_raise 'an error'
-      Net::SCP.should_receive(:start).with('host', 'root', {:password => TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield mock_scp
+      Net::SCP.should_receive(:start).with('host', 'root', {:password => Machines::TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield mock_scp
       should_receive(:log_to).with(:file, "FAILED\n\n")
       run_commands mock_ssh
     end
@@ -173,8 +109,8 @@ describe 'Machines' do
     it 'should set the root password ' do
       mock_ssh = mock('Ssh')
       @host = 'host'
-      Net::SSH.should_receive(:start).with('host', DEFAULT_IDENTITY, {:password => DEFAULT_IDENTITY, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield(mock_ssh)
-      mock_ssh.should_receive(:exec!).with "echo #{TEMP_PASSWORD} | sudo -S usermod -p #{TEMP_PASSWORD_ENCRYPTED} root"
+      Net::SSH.should_receive(:start).with('host', Machines::DEFAULT_IDENTITY, {:password => Machines::DEFAULT_IDENTITY, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield(mock_ssh)
+      mock_ssh.should_receive(:exec!).with "echo #{Machines::TEMP_PASSWORD} | sudo -S usermod -p #{Machines::TEMP_PASSWORD_ENCRYPTED} root"
       enable_root_login
     end
   end

@@ -1,6 +1,7 @@
 require 'spec/spec_helper'
 
 describe 'Installation' do
+
   describe 'update' do
     it 'should add a command to upgrade apt' do
       update
@@ -80,7 +81,7 @@ describe 'Installation' do
       install_nginx 'http://url_to_nginx.tar.gz'
       @added.should == [
         'cd /tmp && wget http://url_to_nginx.tar.gz && tar -zxf url_to_nginx.tar.gz && rm url_to_nginx.tar.gz && cd -',
-        'cd /tmp && rvmsudo passenger-install-nginx-module --auto --nginx-source-dir=/tmp/url_to_nginx && rm -rf url_to_nginx && cd -'
+        'rvmsudo passenger-install-nginx-module --auto --nginx-source-dir=/tmp/url_to_nginx'
       ]
     end
 
@@ -88,7 +89,7 @@ describe 'Installation' do
       install_nginx 'http://url_to_nginx.tar.gz', :with => :ssl
       @added.should == [
         'cd /tmp && wget http://url_to_nginx.tar.gz && tar -zxf url_to_nginx.tar.gz && rm url_to_nginx.tar.gz && cd -',
-        'cd /tmp && rvmsudo passenger-install-nginx-module --auto --nginx-source-dir=/tmp/url_to_nginx --extra-configure-flags=--with-http_ssl_module && rm -rf url_to_nginx && cd -']
+        'rvmsudo passenger-install-nginx-module --auto --nginx-source-dir=/tmp/url_to_nginx --extra-configure-flags=--with-http_ssl_module']
     end
   end
 end

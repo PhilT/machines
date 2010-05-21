@@ -1,6 +1,55 @@
 require 'spec/spec_helper'
 
 describe 'Configuration' do
+
+  describe 'machine' do
+    it 'should set environment, apps and role when it matches the configuration specified' do
+      @config_name = 'config'
+      machine 'config', :test, {:apps => ['app', 'another'], :role => 'role'}
+      @environment.should == :test
+      @apps.should == ['app', 'another']
+      @role.should == 'role'
+    end
+
+    it 'should set environment when it matches specified configuration but no apps or role specified' do
+      @config_name = 'config'
+      machine 'config', :test
+      @environment.should == :test
+    end
+
+    it 'should not set anything when it does not match specified configuration' do
+      machine 'config', :test, {:apps => ['app', 'another'], :role => 'role'}
+      @environment.should be_nil
+      @apps.should be_nil
+      @role.should be_nil
+    end
+  end
+
+  describe 'development?' do
+    it do
+      @environment = :development
+      development?.should be_true
+    end
+
+    it do
+      development?.should be_false
+    end
+  end
+
+  describe 'password' do
+    it 'should add a password to existing passwords' do
+      @passwords = {'app' => 'password'}
+      password 'another', 'anotherpass'
+      @passwords.should == {'app' => 'password', 'another' => 'anotherpass'}
+    end
+
+    it 'should add a password to empty passwords' do
+      @passwords = {}
+      password 'app', 'newpass'
+      @passwords.should == {'app' => 'newpass'}
+    end
+  end
+
   describe 'append' do
     it 'should echo a string to a file' do
       append 'some string', :to => 'a_file'

@@ -57,7 +57,6 @@ module Machines
       end
       @commands << [line, command, check]
     end
-
   end
 end
 

@@ -1,6 +1,7 @@
 require 'spec/spec_helper'
 
-describe 'Installation' do
+describe 'Services' do
+
   describe 'add_init_d' do
     it 'should add a command to register a init.d startup script' do
       add_init_d 'script_name'

@@ -1,6 +1,7 @@
 require 'spec/spec_helper'
 
 describe 'Database' do
+
   describe 'mysql' do
     it 'should run a SQL statement as root' do
       should_receive(:required_options).with({:on => 'host', :password => 'password'}, [:on, :password])

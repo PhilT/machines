@@ -1,6 +1,7 @@
 require 'spec/spec_helper'
 
 describe 'Checks' do
+
   describe 'pass_fail' do
     it do
       pass_fail.should == '&& echo CHECK PASSED || echo CHECK FAILED'

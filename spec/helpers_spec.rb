@@ -1,6 +1,7 @@
 require 'spec/spec_helper'
 
 describe 'Helpers' do
+
   before(:each) do
     @commands = []
   end
@@ -63,7 +64,7 @@ describe 'Helpers' do
   describe 'add' do
     it 'should add a command to the commands array and include the caller method name' do
       stub!(:caller).and_return ['Machinesfile:13']
-      real_add 'command', nil
+      add 'command', nil
       @commands.should == [['13', 'command', nil]]
     end
   end

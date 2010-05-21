@@ -1,6 +1,5 @@
 module Machines
   module Database
-
     # Run a SQL statement
     # @param [String] sql SQL statement to execute
     # @param [Hash] options

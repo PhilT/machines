@@ -7,15 +7,6 @@ if ARGV.size >= 4 && %w(install test).include?(ARGV[0])
 
   require File.join(File.dirname(__FILE__), '..', 'lib', 'machines')
   configure ARGV
-  begin
-    load File.join(Dir.pwd, 'Machinesfile')
-  rescue LoadError
-    puts "Machinesfile does not exist. Please create one."
-    exit 1
-  rescue NoMethodError
-    puts "Have you selected the correct machine configuration?"
-    raise
-  end
 
   start command
   puts "#{test ? 'Test' : 'Install'} completed."
