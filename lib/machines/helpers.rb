@@ -53,8 +53,9 @@ module Machines
       line = ''
       caller.each do |methods|
         line = methods.scan(/Machinesfile:([0-9]+)/).join
-        break if line.any?
+        break unless line.empty?
       end
+      raise ArgumentError, "MISSING line or command in: [#{line}, #{display(command)}]" unless line && command
       @commands << [line, command, check]
     end
   end

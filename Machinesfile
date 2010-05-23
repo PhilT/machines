@@ -1,0 +1,5 @@
+machine 'machine', :development
+
+set_machine_name_and_hosts
+add_user @username, :password => userpass, :admin => true
+

@@ -2,7 +2,7 @@ module Machines
   module Configuration
     # Add a machine configuration
     def machine name, environment, options = {:apps => [], :role => nil}
-      if name == @config_name
+      if name == @config
         @environment = environment
         @apps = options[:apps]
         @role = options[:role]

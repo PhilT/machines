@@ -1,6 +1,8 @@
-require 'spec/spec_helper'
+require 'spec_helper'
 
 describe 'FileOperations' do
+  include Machines::FileOperations
+  include FakeAddHelper
 
   describe 'upload' do
     it 'should add an upload command' do

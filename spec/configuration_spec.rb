@@ -1,10 +1,14 @@
-require 'spec/spec_helper'
+require 'spec_helper'
 
 describe 'Configuration' do
+  include Machines::FileOperations
+  include Machines::Helpers
+  include Machines::Configuration
+  include FakeAddHelper
 
   describe 'machine' do
     it 'should set environment, apps and role when it matches the configuration specified' do
-      @config_name = 'config'
+      @config = 'config'
       machine 'config', :test, {:apps => ['app', 'another'], :role => 'role'}
       @environment.should == :test
       @apps.should == ['app', 'another']
@@ -12,7 +16,7 @@ describe 'Configuration' do
     end
 
     it 'should set environment when it matches specified configuration but no apps or role specified' do
-      @config_name = 'config'
+      @config = 'config'
       machine 'config', :test
       @environment.should == :test
     end

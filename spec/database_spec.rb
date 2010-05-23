@@ -1,6 +1,8 @@
-require 'spec/spec_helper'
+require 'spec_helper'
 
 describe 'Database' do
+  include Machines::Database
+  include FakeAddHelper
 
   describe 'mysql' do
     it 'should run a SQL statement as root' do
@@ -25,7 +27,14 @@ describe 'Database' do
       @dbmaster = 'dbmaster'
       @passwords = {'app' => 'password'}
       write_yaml :for => 'app', :to => 'dir'
-      @added.should == ["echo '--- \ntest: \n  username: app\n  adapter: mysql\n  database: app\n  host: dbmaster\n  password: password\n' > dir/database.yml"]
+      actual = @added.first
+      actual.should match /echo '.*' > dir\/database.yml/m
+      actual.should match /test:/m
+      actual.should match /adapter: mysql/m
+      actual.should match /database: app/m
+      actual.should match /host: dbmaster/m
+      actual.should match /password: password/m
+      actual.should match /username: app/m
     end
   end
 end

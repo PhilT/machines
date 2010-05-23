@@ -3,7 +3,7 @@ require 'net/ssh'
 require 'net/scp'
 require 'yaml'
 require 'active_support'
-require 'colors'
+require File.join(File.dirname(__FILE__), 'colors')
 # Machines allows simple configuration of development, staging and production computers or images for ec2
 
 module Machines
@@ -13,11 +13,15 @@ module Machines
   DEFAULT_USERNAME = 'www'
 
   class Base
-    Dir[File.join(File.dirname(__FILE__), 'machines/**/*.rb')].sort.each { |lib| require lib; include eval(File.basename(lib, '.rb').camelize) }
+    Dir[File.join(File.dirname(__FILE__), 'machines/**/*.rb')].sort.each do |lib|
+      require lib; include eval(ActiveSupport::Inflector.camelize(File.basename(lib, '.rb')))
+    end
 
     def ssh_options(options)
       {:user_known_hosts_file => %w(/dev/null), :paranoid => false}.merge(options)
     end
+
+    attr_reader :passwords, :host, :userpass, :dbmaster, :machinename, :username, :users, :passwords
 
     # Takes the arguments given on the commandline except the <command>. Set defaults.
     # @param options [Hash]
@@ -27,26 +31,27 @@ module Machines
     # @option options [String] :dbmaster url to the master database server. Defaults to host
     # @option options [String] :machinename name to give the computer. Defaults to <machine>
     # @option options [String] :username the username. Defaults to 'www'
-    def initialize options
+    def initialize(options)
       @commands = []
       @passwords = {}
-      @config_name = options[:machine]
+      @config = options[:machine]
       @host = options[:host]
-      @password = options[:password]
+      @userpass = options[:userpass]
       @dbmaster = options[:dbmaster] || @host
-      @machinename = options[:machinename] || @config_name
+      @machinename = options[:machinename] || @config
       @username = options[:username] || DEFAULT_USERNAME
-      raise 'Password not set' unless @password
-      discover_users
+      raise 'Password not set' unless @userpass
     end
 
-    def test name
-      load_machinesfile name
+    def dryrun
+      discover_users
+      load_machinesfile
       run_commands
     end
 
-    def install name
-      load_machinesfile name
+    def install
+      discover_users
+      load_machinesfile
       prepare_log_file
       enable_root_login
       Net::SSH.start @host, 'root', ssh_options(:password => TEMP_PASSWORD) do |ssh|
@@ -57,9 +62,9 @@ module Machines
 
 private
 
-    def load_machinesfile name
-      @config_name = name
-      load File.join(Dir.pwd, 'Machinesfile')
+    def load_machinesfile
+      machine 'selected', :test
+      eval File.read('Machinesfile')
     rescue LoadError
       puts "Machinesfile does not exist. Please create one."
       exit 1
@@ -67,7 +72,6 @@ private
       puts "Have you selected the correct machine configuration?"
       raise
     end
-
 
     def discover_users
       @users = Dir['users/*'].map{|file| File.basename file}
@@ -81,7 +85,6 @@ private
       STDOUT.sync = true
       @failed = false
       @commands.each do |line, command, check|
-        raise ArgumentError, "MISSING name or command in: [#{line}, #{display(command)}]" unless line && command
         progress = i / count * 100
         i += 1
         if net_ssh

@@ -1,6 +1,9 @@
-require 'spec/spec_helper'
+require 'spec_helper'
 
 describe 'Services' do
+  include Machines::FileOperations
+  include Machines::Services
+  include FakeAddHelper
 
   describe 'add_init_d' do
     it 'should add a command to register a init.d startup script' do

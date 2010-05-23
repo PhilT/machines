@@ -46,7 +46,8 @@ module Machines
     # @param [Hash] options
     # @option options [String] :as Run as specified user
     def run commands, options = {}
-      command = commands.map{|command| "#{command}"}.to_a.join(' && ')
+      commands = [commands] if commands.is_a?(String)
+      command = commands.to_a.map{|command| "#{command}"}.to_a.join(' && ')
       if options[:as]
         add "su - #{options[:as]} -c '#{command}'", "su - #{options[:as]} -c '#{options[:check]}'"
       else

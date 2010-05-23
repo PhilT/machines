@@ -1,6 +1,8 @@
-require 'spec/spec_helper'
+require 'spec_helper'
 
 describe 'Installation' do
+  include Machines::Installation
+  include FakeAddHelper
 
   describe 'update' do
     it 'should add a command to upgrade apt' do

@@ -1,105 +1,105 @@
-require 'spec/spec_helper'
+require 'spec_helper'
 
 describe 'Machines' do
   before(:each) do
     @commands = []
-    @password = 'default'
+    @machines = Machines::Base.new(:config => 'config', :userpass => 'password', :host => 'host')
+    @ssh_params = {:password => Machines::TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}
+    @mock_ssh = mock('Ssh')
   end
 
   describe 'new' do
-    before(:each) do
-      should_receive(:discover_users)
-    end
-
     it 'should raise errors' do
-      lambda{Machines::Base.new {}}.should raise_error 'Password not set'
+      lambda{Machines::Base.new({})}.should raise_error('Password not set')
     end
   end
 
-  describe 'start' do
-    it 'should run commands in test mode' do
-      should_receive(:run_commands)
-      start 'test'
+  describe 'dryrun and install' do
+    it "should output the commands to be run" do
+      @machines.should_receive(:discover_users)
+      @machines.should_receive(:load_machinesfile)
+      @machines.should_receive(:run_commands)
+      @machines.dryrun
     end
+  end
 
+  describe 'install' do
     it 'should run commands in install mode' do
-      @host = 'host'
-      should_receive(:enable_root_login)
-      mock_ssh = mock 'Ssh'
-      Net::SSH.should_receive(:start).with('host', 'root', {:password => Machines::TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield mock_ssh
-      should_receive(:run_commands).with mock_ssh
-      should_receive(:disable_root_login)
+      @machines.should_receive(:discover_users)
+      @machines.should_receive(:load_machinesfile)
+      @machines.should_receive(:enable_root_login)
+      Net::SSH.should_receive(:start).with('host', 'root', @ssh_params).and_yield @mock_ssh
+      @machines.should_receive(:run_commands).with @mock_ssh
+      @machines.should_receive(:disable_root_login)
 
-      start 'install'
-    end
-
-    it 'should not do anything when unknown command is specified' do
-      Net::SSH.should_not_receive(:start)
-      should_not_receive(:run_commands)
-      start 'something'
+      @machines.install
     end
   end
 
   describe 'discover_users' do
-    it 'should find users through folder list' do
+    before(:each) do
       Dir.stub!(:[]).and_return ['users/first', 'users/another']
-      discover_users
-      @users.should == ['first', 'another']
+      @machines.stub!(:load_machinesfile)
+    end
+
+    it 'should find users through folder list when called by test' do
+      @machines.dryrun
+      @machines.users.should == ['first', 'another']
+    end
+
+    it 'should find users through folder list when called by install' do
+      @machines.dryrun
+      @machines.users.should == ['first', 'another']
     end
   end
 
   describe 'run_commands' do
     before(:each) do
-      @passwords = {}
-      @output = ''
-      stub!(:print)
-      stub!(:log_to)
-      stub!(:log_result_to_file)
+      @machines.stub!(:log_to)
+      @machines.stub!(:log_result_to_file)
+      @machines.stub!(:load_machinesfile)
+      @machines.stub!(:enable_root_login)
+      @machines.stub!(:disable_root_login)
+
+      Net::SSH.stub!(:start).with('host', 'root', @ssh_params).and_yield @mock_ssh
     end
 
     it 'should display all commands queued in the @commands array' do
-      @commands = [['1', 'command 1'], ['2', 'command 2']]
-      should_receive(:log_to).with(:screen, '1)   command 1')
-      should_receive(:log_to).with(:screen, '2)   command 2')
-      run_commands
+      @machines.add 'command 1', nil
+      @machines.add 'command 2', nil
+      @machines.should_receive(:log_to).with(:screen, ')    command 1')
+      @machines.should_receive(:log_to).with(:screen, ')    command 2')
+      @machines.dryrun
     end
 
-    it 'should run all commands queued in the @commands array' do
-      @commands = [['1', 'command 1', 'check1'], ['2', 'command 2', 'check2']]
-      mock_ssh = mock('Ssh')
-      mock_ssh.should_receive(:exec!).with('command 1').and_return ''
-      mock_ssh.should_receive(:exec!).with('check1').and_return ''
-      mock_ssh.should_receive(:exec!).with('command 2').and_return ''
-      mock_ssh.should_receive(:exec!).with('check2').and_return ''
-      run_commands mock_ssh
+    it 'should run all commands queued in the @commands array with check' do
+      @machines.add 'command 1', 'check1'
+      @machines.add 'command 2', 'check2'
+      @mock_ssh.should_receive(:exec!).with('command 1').and_return ''
+      @mock_ssh.should_receive(:exec!).with('check1').and_return ''
+      @mock_ssh.should_receive(:exec!).with('command 2').and_return ''
+      @mock_ssh.should_receive(:exec!).with('check2').and_return ''
+      @machines.install
     end
 
     it 'should run upload command' do
-      @commands = [['1', ['from', 'to'], 'check1']]
-      @host = 'host'
-      mock_ssh = mock('Ssh')
-      mock_ssh.should_receive(:exec!).with('check1').and_return ''
+      @machines.add ['from', 'to'], 'check1'
+      @mock_ssh.should_receive(:exec!).with('check1').and_return ''
       mock_scp = mock('Scp')
-      Net::SCP.should_receive(:start).with('host', 'root', {:password => Machines::TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield mock_scp
-      mock_scp.should_receive(:upload!).with 'from', 'to'
-      run_commands mock_ssh
-    end
 
-    it 'should raise errors when command or name is missing' do
-      stub!(:display)
-      @commands = [[nil, 'command']]
-      lambda{run_commands}.should raise_error(ArgumentError)
-      @commands = [['cmd', nil]]
-      lambda{run_commands}.should raise_error(ArgumentError)
+      Net::SCP.should_receive(:start).with('host', 'root', @ssh_params).and_yield mock_scp
+      mock_scp.should_receive(:upload!).with 'from', 'to'
+      @machines.install
     end
 
     it "should catch SCP errors and display message" do
+      pending
       @commands = [['1', ['from/path', 'to/path'], 'check1']]
       @host = 'host'
       mock_ssh = mock('Ssh', :exec! => nil)
       mock_scp = mock('Scp')
       mock_scp.should_receive(:upload!).and_raise 'an error'
-      Net::SCP.should_receive(:start).with('host', 'root', {:password => Machines::TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield mock_scp
+      Net::SCP.should_receive(:start).with('host', 'root', @ssh_params).and_yield mock_scp
       should_receive(:log_to).with(:file, "FAILED\n\n")
       run_commands mock_ssh
     end
@@ -107,6 +107,7 @@ describe 'Machines' do
 
   describe 'enable_root_login' do
     it 'should set the root password ' do
+      pending
       mock_ssh = mock('Ssh')
       @host = 'host'
       Net::SSH.should_receive(:start).with('host', Machines::DEFAULT_IDENTITY, {:password => Machines::DEFAULT_IDENTITY, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield(mock_ssh)
@@ -117,9 +118,10 @@ describe 'Machines' do
 
   describe 'disable_root_login' do
     it 'should remove the root password on the remote machine' do
+      pending
       mock_ssh = mock('Ssh')
       @host = 'host'
-      Net::SSH.should_receive(:start).with('host', 'root', {:password => 'ubuntu', :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield(mock_ssh)
+      Net::SSH.should_receive(:start).with('host', 'root', @ssh_params.merge(:password => 'ubuntu')).and_yield(mock_ssh)
       mock_ssh.should_receive(:exec!).with 'passwd -l root'
       disable_root_login
     end
