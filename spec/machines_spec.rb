@@ -4,6 +4,8 @@ describe 'Machines' do
   before(:each) do
     @commands = []
     @machines = Machines::Base.new(:config => 'config', :userpass => 'password', :host => 'host')
+    @machines.stub!(:print)
+    @machines.stub!(:puts)
     @ssh_params = {:password => Machines::TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}
     @mock_ssh = mock('Ssh')
   end
@@ -93,15 +95,13 @@ describe 'Machines' do
     end
 
     it "should catch SCP errors and display message" do
-      pending
-      @commands = [['1', ['from/path', 'to/path'], 'check1']]
-      @host = 'host'
-      mock_ssh = mock('Ssh', :exec! => nil)
+      @machines.add ['from/path', 'to/path'], 'check1'
+      @mock_ssh.stub!(:exec!)
       mock_scp = mock('Scp')
       mock_scp.should_receive(:upload!).and_raise 'an error'
       Net::SCP.should_receive(:start).with('host', 'root', @ssh_params).and_yield mock_scp
-      should_receive(:log_to).with(:file, "FAILED\n\n")
-      run_commands mock_ssh
+      @machines.should_receive(:log_to).with(:file, "FAILED\n\n")
+      @machines.install
     end
   end
 
