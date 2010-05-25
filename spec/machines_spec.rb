@@ -105,25 +105,29 @@ describe 'Machines' do
     end
   end
 
-  describe 'enable_root_login' do
+  describe 'enable/disable_root_login' do
+    before(:each) do
+      @machines.should_receive(:discover_users)
+      @machines.should_receive(:load_machinesfile)
+      Net::SSH.should_receive(:start).with('host', 'root', @ssh_params).and_yield @mock_ssh
+      @machines.should_receive(:run_commands).with @mock_ssh
+
+    end
+
     it 'should set the root password ' do
-      pending
-      mock_ssh = mock('Ssh')
-      @host = 'host'
+      @machines.stub!(:disable_root_login)
+      mock_ssh = mock 'Ssh for root'
       Net::SSH.should_receive(:start).with('host', Machines::DEFAULT_IDENTITY, {:password => Machines::DEFAULT_IDENTITY, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield(mock_ssh)
       mock_ssh.should_receive(:exec!).with "echo #{Machines::TEMP_PASSWORD} | sudo -S usermod -p #{Machines::TEMP_PASSWORD_ENCRYPTED} root"
-      enable_root_login
+      @machines.install
     end
-  end
 
-  describe 'disable_root_login' do
-    it 'should remove the root password on the remote machine' do
-      pending
-      mock_ssh = mock('Ssh')
-      @host = 'host'
+    it 'should lock the root login on the remote machine' do
+      @machines.stub!(:enable_root_login)
+      mock_ssh = mock 'Ssh for root'
       Net::SSH.should_receive(:start).with('host', 'root', @ssh_params.merge(:password => 'ubuntu')).and_yield(mock_ssh)
       mock_ssh.should_receive(:exec!).with 'passwd -l root'
-      disable_root_login
+      @machines.install
     end
   end
 

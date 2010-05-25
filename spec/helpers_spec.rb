@@ -44,7 +44,7 @@ describe 'Helpers' do
 
   describe 'log_result_to_file' do
     it 'should only output passed when check passed' do
-      mock_file = mock(File)
+      mock_file = mock File
       File.stub!(:open).and_yield mock_file
       mock_file.should_receive(:puts).with('CHECK PASSED')
       mock_file.stub!(:puts)
@@ -52,7 +52,11 @@ describe 'Helpers' do
     end
 
     it 'should output whole check output when failed' do
-      pending
+      mock_file = mock File
+      File.stub!(:open).and_yield mock_file
+      mock_file.should_receive(:puts).with("something\nCHECK FAILED")
+      mock_file.stub!(:puts)
+      log_result_to_file 'check', "something\nCHECK FAILED"
     end
 
     it "should warn when nil check" do
