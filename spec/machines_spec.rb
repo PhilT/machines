@@ -6,7 +6,7 @@ describe 'Machines' do
     @machines = Machines::Base.new(:config => 'config', :userpass => 'password', :host => 'host')
     @machines.stub!(:print)
     @machines.stub!(:puts)
-    @ssh_params = {:password => Machines::TEMP_PASSWORD, :user_known_hosts_file => %w(/dev/null), :paranoid => false}
+    @ssh_params = {:keys => ['keyfile'], :user_known_hosts_file => %w(/dev/null), :paranoid => false}
     @mock_ssh = mock('Ssh')
   end
 

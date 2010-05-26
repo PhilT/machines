@@ -1,15 +1,13 @@
+# Machines allows simple configuration of development, staging and production computers or images for ec2
 require 'rubygems'
 require 'net/ssh'
 require 'net/scp'
 require 'yaml'
 require 'active_support'
 require File.join(File.dirname(__FILE__), 'colors')
-# Machines allows simple configuration of development, staging and production computers or images for ec2
 
 module Machines
   DEFAULT_IDENTITY = 'ubuntu'
-  TEMP_PASSWORD = 'ubuntu'
-  TEMP_PASSWORD_ENCRYPTED = "tvXbD6sWjb4mE"
   DEFAULT_USERNAME = 'www'
 
   class Base
@@ -18,7 +16,7 @@ module Machines
     end
 
     def ssh_options(options)
-      {:user_known_hosts_file => %w(/dev/null), :paranoid => false}.merge(options)
+      {:keys => @keys, :user_known_hosts_file => %w(/dev/null), :paranoid => false}.merge(options)
     end
 
     attr_reader :passwords, :host, :userpass, :dbmaster, :machinename, :username, :users, :passwords
@@ -54,7 +52,7 @@ module Machines
       load_machinesfile
       prepare_log_file
       enable_root_login
-      Net::SSH.start @host, 'root', ssh_options(:password => TEMP_PASSWORD) do |ssh|
+      Net::SSH.start @host, 'root', ssh_options(:keys => @keys) do |ssh|
         run_commands ssh
       end
       disable_root_login
@@ -95,7 +93,7 @@ private
           upload_successful = true
           if command.is_a?(Array)
             begin
-              Net::SCP.start @host, 'root', ssh_options(:password => TEMP_PASSWORD) do |scp|
+              Net::SCP.start @host, 'root', ssh_options(:keys => @keys) do |scp|
                 scp.upload! command[0], command[1]
               end
             rescue
@@ -114,17 +112,17 @@ private
       puts
     end
 
-    # Set a root password so ssh can login
+    # Copy authorized_keys so root login enabled
     def enable_root_login
-      Net::SSH.start @host, DEFAULT_IDENTITY, ssh_options(:password => DEFAULT_IDENTITY) do |ssh|
-        log_to :file, ssh.exec!("echo #{DEFAULT_IDENTITY} | sudo -S usermod -p #{TEMP_PASSWORD_ENCRYPTED} root")
+      Net::SSH.start @host, DEFAULT_IDENTITY, ssh_options do |ssh|
+        log_to :file, ssh.exec!("echo #{DEFAULT_IDENTITY} | sudo -S cp /home/ubuntu/.ssh/authorized_keys /root/.ssh/")
       end
     end
 
-    # Disable root login
+    # Removed authorized_keys so root login disabled
     def disable_root_login
-      Net::SSH.start @host, 'root', ssh_options(:password => TEMP_PASSWORD) do |ssh|
-        log_to :file, ssh.exec!("passwd -l root")
+      Net::SSH.start @host, 'root', ssh_options do |ssh|
+        log_to :file, ssh.exec!("rm /root/.ssh/authorized_keys")
       end
     end
   end
