@@ -15,10 +15,6 @@ module Machines
       require lib; include eval(ActiveSupport::Inflector.camelize(File.basename(lib, '.rb')))
     end
 
-    def ssh_options(options)
-      {:keys => @keys, :user_known_hosts_file => %w(/dev/null), :paranoid => false}.merge(options)
-    end
-
     attr_reader :passwords, :host, :userpass, :dbmaster, :machinename, :username, :users, :passwords
 
     # Takes the arguments given on the commandline except the <command>. Set defaults.
@@ -26,7 +22,7 @@ module Machines
     # @option options [String] :machine one of the configurations specified in Machinesfile
     # @option options [String] :host the url of the remote machine
     # @option options [Optional String] :password the password. Must be encrypted. Use 'openssl passwd <password>'
-    # @option options [Optional Array] :keys Array of ssh keys
+    # @option options [Optional String] :keyfile Path to the file containing the SSH key
     # @option options [Optional String] :dbmaster url to the master database server. Defaults to host
     # @option options [Optional String] :machinename name to give the computer. Defaults to <machine>
     # @option options [Optional String] :username the username. Defaults to 'www'
@@ -36,7 +32,7 @@ module Machines
       @config = options[:machine]
       @host = options[:host]
       @userpass = options[:userpass]
-      @keys = options[:keys]
+      @keys = [options[:keyfile]]
       @dbmaster = options[:dbmaster] || @host
       @machinename = options[:machinename] || @config
       @username = options[:username] || DEFAULT_USERNAME
@@ -54,7 +50,7 @@ module Machines
       load_machinesfile
       prepare_log_file
       enable_root_login
-      Net::SSH.start @host, 'root', ssh_options(:keys => @keys) do |ssh|
+      Net::SSH.start @host, 'root', :keys => @keys do |ssh|
         run_commands ssh
       end
       disable_root_login
@@ -95,7 +91,7 @@ private
           upload_successful = true
           if command.is_a?(Array)
             begin
-              Net::SCP.start @host, 'root', ssh_options(:keys => @keys) do |scp|
+              Net::SCP.start @host, 'root', :keys => @keys do |scp|
                 scp.upload! command[0], command[1]
               end
             rescue
@@ -114,17 +110,19 @@ private
       puts
     end
 
-    # Copy authorized_keys so root login enabled
+    # Copy authorized_keys so root login enabled (backs up authorized_keys if it exists)
     def enable_root_login
-      Net::SSH.start @host, DEFAULT_IDENTITY, ssh_options do |ssh|
-        log_to :file, ssh.exec!("echo #{DEFAULT_IDENTITY} | sudo -S cp /home/ubuntu/.ssh/authorized_keys /root/.ssh/")
+      Net::SSH.start @host, DEFAULT_IDENTITY, :keys => @keys do |ssh|
+        log_to :file, ssh.exec!("sudo sh -c 'test -f /root/.ssh/authorized_keys && mv /root/.ssh/authorized_keys /root/.ssh/authorized_keys.orig || mkdir /root/.ssh'")
+        log_to :file, ssh.exec!("sudo sh -c 'cp /home/ubuntu/.ssh/authorized_keys /root/.ssh/'")
       end
     end
 
-    # Removed authorized_keys so root login disabled
+    # Removed authorized_keys so root login disabled (restores original authorized_keys if it exists)
     def disable_root_login
-      Net::SSH.start @host, 'root', ssh_options do |ssh|
+      Net::SSH.start @host, 'root', :keys => @keys do |ssh|
         log_to :file, ssh.exec!("rm /root/.ssh/authorized_keys")
+        log_to :file, ssh.exec!("test -f /root/.ssh/authorized_keys.orig && mv /root/.ssh/authorized_keys.orig /root/.ssh/authorized_keys")
       end
     end
   end

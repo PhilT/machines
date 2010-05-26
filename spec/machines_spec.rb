@@ -3,10 +3,10 @@ require 'spec_helper'
 describe 'Machines' do
   before(:each) do
     @commands = []
-    @machines = Machines::Base.new(:config => 'config', :userpass => 'password', :host => 'host')
+    @machines = Machines::Base.new(:config => 'config', :userpass => 'password', :host => 'host', :keyfile => 'keyfile')
     @machines.stub!(:print)
     @machines.stub!(:puts)
-    @ssh_params = {:keys => ['keyfile'], :user_known_hosts_file => %w(/dev/null), :paranoid => false}
+    @machines.stub!(:prepare_log_file)
     @mock_ssh = mock('Ssh')
   end
 
@@ -30,7 +30,7 @@ describe 'Machines' do
       @machines.should_receive(:discover_users)
       @machines.should_receive(:load_machinesfile)
       @machines.should_receive(:enable_root_login)
-      Net::SSH.should_receive(:start).with('host', 'root', @ssh_params).and_yield @mock_ssh
+      Net::SSH.should_receive(:start).with('host', 'root', :keys => ['keyfile']).and_yield @mock_ssh
       @machines.should_receive(:run_commands).with @mock_ssh
       @machines.should_receive(:disable_root_login)
 
@@ -63,7 +63,7 @@ describe 'Machines' do
       @machines.stub!(:enable_root_login)
       @machines.stub!(:disable_root_login)
 
-      Net::SSH.stub!(:start).with('host', 'root', @ssh_params).and_yield @mock_ssh
+      Net::SSH.stub!(:start).with('host', 'root', :keys => ['keyfile']).and_yield @mock_ssh
     end
 
     it 'should display all commands queued in the @commands array' do
@@ -89,7 +89,7 @@ describe 'Machines' do
       @mock_ssh.should_receive(:exec!).with('check1').and_return ''
       mock_scp = mock('Scp')
 
-      Net::SCP.should_receive(:start).with('host', 'root', @ssh_params).and_yield mock_scp
+      Net::SCP.should_receive(:start).with('host', 'root', :keys => ['keyfile']).and_yield mock_scp
       mock_scp.should_receive(:upload!).with 'from', 'to'
       @machines.install
     end
@@ -99,7 +99,7 @@ describe 'Machines' do
       @mock_ssh.stub!(:exec!)
       mock_scp = mock('Scp')
       mock_scp.should_receive(:upload!).and_raise 'an error'
-      Net::SCP.should_receive(:start).with('host', 'root', @ssh_params).and_yield mock_scp
+      Net::SCP.should_receive(:start).with('host', 'root', :keys => ['keyfile']).and_yield mock_scp
       @machines.should_receive(:log_to).with(:file, "FAILED\n\n")
       @machines.install
     end
@@ -109,24 +109,26 @@ describe 'Machines' do
     before(:each) do
       @machines.should_receive(:discover_users)
       @machines.should_receive(:load_machinesfile)
-      Net::SSH.should_receive(:start).with('host', 'root', @ssh_params).and_yield @mock_ssh
+      Net::SSH.should_receive(:start).with('host', 'root', :keys => ['keyfile']).and_yield @mock_ssh
       @machines.should_receive(:run_commands).with @mock_ssh
 
     end
 
-    it 'should set the root password ' do
+    it 'should enable root login' do
       @machines.stub!(:disable_root_login)
       mock_ssh = mock 'Ssh for root'
-      Net::SSH.should_receive(:start).with('host', Machines::DEFAULT_IDENTITY, {:password => Machines::DEFAULT_IDENTITY, :user_known_hosts_file => %w(/dev/null), :paranoid => false}).and_yield(mock_ssh)
-      mock_ssh.should_receive(:exec!).with "echo #{Machines::TEMP_PASSWORD} | sudo -S usermod -p #{Machines::TEMP_PASSWORD_ENCRYPTED} root"
+      Net::SSH.should_receive(:start).with('host', Machines::DEFAULT_IDENTITY, {:keys => ['keyfile']}).and_yield(mock_ssh)
+      mock_ssh.should_receive(:exec!).with "sudo sh -c 'test -f /root/.ssh/authorized_keys && mv /root/.ssh/authorized_keys /root/.ssh/authorized_keys.orig || mkdir /root/.ssh'"
+      mock_ssh.should_receive(:exec!).with "sudo sh -c 'cp /home/ubuntu/.ssh/authorized_keys /root/.ssh/'"
       @machines.install
     end
 
     it 'should lock the root login on the remote machine' do
       @machines.stub!(:enable_root_login)
       mock_ssh = mock 'Ssh for root'
-      Net::SSH.should_receive(:start).with('host', 'root', @ssh_params.merge(:password => 'ubuntu')).and_yield(mock_ssh)
-      mock_ssh.should_receive(:exec!).with 'passwd -l root'
+      Net::SSH.should_receive(:start).with('host', 'root', :keys => ['keyfile']).and_yield(mock_ssh)
+      mock_ssh.should_receive(:exec!).with 'rm /root/.ssh/authorized_keys'
+      mock_ssh.should_receive(:exec!).with 'test -f /root/.ssh/authorized_keys.orig && mv /root/.ssh/authorized_keys.orig /root/.ssh/authorized_keys'
       @machines.install
     end
   end
