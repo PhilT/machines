@@ -25,16 +25,18 @@ module Machines
     # @param options [Hash]
     # @option options [String] :machine one of the configurations specified in Machinesfile
     # @option options [String] :host the url of the remote machine
-    # @option options [String] :password the password. Must be encrypted. Use 'openssl passwd <password>'
-    # @option options [String] :dbmaster url to the master database server. Defaults to host
-    # @option options [String] :machinename name to give the computer. Defaults to <machine>
-    # @option options [String] :username the username. Defaults to 'www'
+    # @option options [Optional String] :password the password. Must be encrypted. Use 'openssl passwd <password>'
+    # @option options [Optional Array] :keys Array of ssh keys
+    # @option options [Optional String] :dbmaster url to the master database server. Defaults to host
+    # @option options [Optional String] :machinename name to give the computer. Defaults to <machine>
+    # @option options [Optional String] :username the username. Defaults to 'www'
     def initialize(options)
       @commands = []
       @passwords = {}
       @config = options[:machine]
       @host = options[:host]
       @userpass = options[:userpass]
+      @keys = options[:keys]
       @dbmaster = options[:dbmaster] || @host
       @machinename = options[:machinename] || @config
       @username = options[:username] || DEFAULT_USERNAME
