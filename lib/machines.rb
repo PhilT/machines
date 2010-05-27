@@ -36,7 +36,6 @@ module Machines
       @dbmaster = options[:dbmaster] || @host
       @machinename = options[:machinename] || @config
       @username = options[:username] || DEFAULT_USERNAME
-      raise 'Password not set' unless @userpass
     end
 
     def dryrun
