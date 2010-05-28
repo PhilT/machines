@@ -36,6 +36,7 @@ module Machines
       @dbmaster = options[:dbmaster] || @host
       @machinename = options[:machinename] || @config
       @username = options[:username] || DEFAULT_USERNAME
+      raise ArgumentError, 'Missing options. :machine, :host and :keyfile are required' unless @config && @host && @keys.any?
     end
 
     def dryrun

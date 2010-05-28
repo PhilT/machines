@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'Machines' do
   before(:each) do
     @commands = []
-    @machines = Machines::Base.new(:config => 'config', :userpass => 'password', :host => 'host', :keyfile => 'keyfile')
+    @machines = Machines::Base.new(:machine => 'config', :userpass => 'password', :host => 'host', :keyfile => 'keyfile')
     @machines.stub!(:print)
     @machines.stub!(:puts)
     @machines.stub!(:prepare_log_file)
@@ -12,7 +12,14 @@ describe 'Machines' do
 
   describe 'new' do
     it 'should raise errors' do
-      lambda{Machines::Base.new({})}.should raise_error('Password not set')
+      lambda{Machines::Base.new({})}.should raise_error(ArgumentError)
+      lambda{Machines::Base.new({:machine => 'something', :host => 'host'})}.should raise_error(ArgumentError)
+      lambda{Machines::Base.new({:machine => 'something', :keyfile => 'keyfile'})}.should raise_error(ArgumentError)
+      lambda{Machines::Base.new({:host => 'host', :keyfile => 'keyfile'})}.should raise_error(ArgumentError)
+    end
+
+    it 'should not raise an error' do
+      lambda{Machines::Base.new({:machine => 'something', :host => 'host', :keyfile => 'keyfile'})}.should_not raise_error(ArgumentError)
     end
   end
 
