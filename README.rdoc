@@ -42,7 +42,6 @@ Almost ready for a 0.1.0 release.
 
 == TODO
 * Move nginx out into Machinesfile
-* Fix nginx conf generation not working
 * Make sure if desktop machine that ubuntu user is removed
 * Set a userpass on the created user
 * Add :abort => true to abort on failed check
