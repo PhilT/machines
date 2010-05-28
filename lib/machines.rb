@@ -88,7 +88,7 @@ private
         i += 1
         if net_ssh
           bar = "\r#{" %-4s" % (progress.to_i.to_s + '%')} " + ("[#{"%-100s" % ('=' * progress)}]")
-          print @failed ? bar.red : bar.green
+          print @failed ? bar.dark_red : bar.dark_green
           log_to :file, "Machinesfile line #{line})".blue
           log_to :file, "#{command.is_a?(Array) ? 'Uploading' : 'Running'} #{display(command).orange}"
           upload_successful = true

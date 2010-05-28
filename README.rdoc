@@ -22,14 +22,8 @@ Ubuntu build script for development and server machines.
 * Install Ubuntu
 * Install SSH Server
     sudo apt-get install openssh-server
-* Create an ssh key and copy it locally:
-    ssh-keygen -R host
-    ssh ubuntu@HOST "mkdir .ssh && ssh-keygen -f .ssh/id_rsa -N '' -q && cp .ssh/id_rsa.pub .ssh/authorized_keys"
-    scp ubuntu@HOST:~/.ssh/id_rsa KEYFILE.key && chmod 600 KEYFILE.key
-    ssh ubuntu@HOST "echo ubuntu | sudo -S sh -c 'echo ubuntu  ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers'"
-* Check it works (no password should be required)
-    ssh -i KEYFILE.key ubuntu@HOST
 * Test the Machinesfile
+    ssh-keygen -R host # remove host from known_hosts file (handy when testing)
     machines test <configuration> <>
 
 == VirtualBox installation
@@ -41,13 +35,9 @@ Ubuntu build script for development and server machines.
 Almost ready for a 0.1.0 release.
 
 == TODO
-* Move nginx out into Machinesfile
-* Make sure if desktop machine that ubuntu user is removed
-* Set a userpass on the created user
 * Add :abort => true to abort on failed check
 * Add groups of tasks to allow starting/stopping at different points in the script
 * Add asynchronous ssh so output can piped live
-* Remove old SSH keys when installing multiple times on the same IP
 * Add timer
 
 == Warnings

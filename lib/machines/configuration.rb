@@ -54,10 +54,17 @@ module Machines
       password = "-p #{options[:password]} " if options[:password]
       admin = "-G admin " if options[:admin]
       add "useradd -s /bin/bash -d /home/#{login} -m #{password}#{admin}#{login}", check_dir("/home/#{login}")
-      append "#{login} ALL=(ALL) NOPASSWD: ALL", :to => '/etc/sudoers' if options[:admin]
     end
 
-    def reenable_sudoer_password user
+    # Add a line to /etc/sudoers to allow a user to sudo with no password
+    # @param [String] user User to add
+    def set_sudo_no_password user
+      append "#{user} ALL=(ALL) NOPASSWD: ALL", :to => '/etc/sudoers'
+    end
+
+    # Removes the line in /etc/sudoers that allows a user to sudo with no password
+    # @param [String] user User to remove
+    def unset_sudo_no_password user
       replace "#{user} ALL=(ALL) NOPASSWD: ALL", :with => '', :in => '/etc/sudoers'
     end
 

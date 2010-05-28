@@ -88,16 +88,6 @@ module Machines
       add "git clone -q #{url} #{options[:to]}", check_dir(options[:to])
     end
 
-    # Download and extract nginx source and install passenger module
-    # @param [String] url URL to get nginx source from
-    # @param [Hash] options
-    # @option options [Optional String] :with => :ssl to include SSL module
-    def install_nginx url, options = {}
-      extract url
-      flags = " --extra-configure-flags=--with-http_ssl_module" if options[:with].to_s == 'ssl'
-      name = File.basename(url, '.tar.gz')
-      run "rvmsudo passenger-install-nginx-module --auto --prefix=/opt/nginx --nginx-source-dir=/tmp/#{name}#{flags}", :check => check_file("/opt/nginx/sbin/nginx"), :as => options[:as]
-    end
   end
 end
 

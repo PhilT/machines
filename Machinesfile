@@ -1,5 +1,6 @@
 machine 'machine', :development
 
 set_machine_name_and_hosts
-add_user @username, :password => userpass, :admin => true
+add_user username, :password => userpass, :admin => true
+set_sudo_no_password username
 

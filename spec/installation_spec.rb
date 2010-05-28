@@ -77,22 +77,5 @@ describe 'Installation' do
       @added.should == ['git clone -q http://git_url.git dir']
     end
   end
-
-  describe 'install_nginx' do
-    it 'should add commands to download and extract nginx and install passenger' do
-      install_nginx 'http://url_to_nginx.tar.gz'
-      @added.should == [
-        'cd /tmp && wget http://url_to_nginx.tar.gz && tar -zxf url_to_nginx.tar.gz && rm url_to_nginx.tar.gz && cd -',
-        'rvmsudo passenger-install-nginx-module --auto --prefix=/opt/nginx --nginx-source-dir=/tmp/url_to_nginx'
-      ]
-    end
-
-    it 'should add commands to download and extract nginx and install passenger with ssl module' do
-      install_nginx 'http://url_to_nginx.tar.gz', :with => :ssl
-      @added.should == [
-        'cd /tmp && wget http://url_to_nginx.tar.gz && tar -zxf url_to_nginx.tar.gz && rm url_to_nginx.tar.gz && cd -',
-        'rvmsudo passenger-install-nginx-module --auto --prefix=/opt/nginx --nginx-source-dir=/tmp/url_to_nginx --extra-configure-flags=--with-http_ssl_module']
-    end
-  end
 end
 

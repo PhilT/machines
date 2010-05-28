@@ -90,7 +90,21 @@ describe 'Configuration' do
 
     it do
       add_user 'a_user', :password => 'password', :admin => true
-      @added.should == ['useradd -s /bin/bash -d /home/a_user -m -p password -G admin a_user', "echo 'a_user ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"]
+      @added.should == ['useradd -s /bin/bash -d /home/a_user -m -p password -G admin a_user']
+    end
+  end
+
+  describe 'set_sudo_no_password' do
+    it do
+      set_sudo_no_password 'a_user'
+      @added.should == ["echo 'a_user ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"]
+    end
+  end
+
+  describe 'unset_sudo_no_password' do
+    it do
+      unset_sudo_no_password 'a_user'
+      @added.should == ["sed -i 's/a_user ALL=(ALL) NOPASSWD: ALL//' /etc/sudoers"]
     end
   end
 

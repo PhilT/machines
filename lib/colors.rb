@@ -1,5 +1,6 @@
 class String
     def red; colorize(self, "\e[1m\e[31m"); end
+    def dark_red; colorize(self, "\e[31m"); end
     def green; colorize(self, "\e[1m\e[32m"); end
     def dark_green; colorize(self, "\e[32m"); end
     def orange; colorize(self, "\e[0m\e[33m"); end
