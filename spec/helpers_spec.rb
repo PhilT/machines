@@ -66,7 +66,7 @@ describe 'Helpers' do
 
   describe 'add' do
     it 'should add a command to the commands array and include the caller method name' do
-      stub!(:caller).and_return ["Machinesfile:13\nrest of trace"]
+      stub!(:caller).and_return ["(eval):13\nrest of trace"]
       real_add 'command', nil
       @commands.should == [['13', 'command', nil]]
     end
