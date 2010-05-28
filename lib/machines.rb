@@ -21,7 +21,8 @@ module Machines
     # @param options [Hash]
     # @option options [String] :machine one of the configurations specified in Machinesfile
     # @option options [String] :host the url of the remote machine
-    # @option options [Optional String] :password the password. Must be encrypted. Use 'openssl passwd <password>'
+    # @option options [Optional String] :password Password to setup for user account. Must be encrypted. Use 'openssl passwd <password>'
+    # @option options [Optional String] :initial_password Passed used to first login to the remote machine. Defaults to 'ubuntu'
     # @option options [Optional String] :keyfile Path to the file containing the SSH key
     # @option options [Optional String] :dbmaster url to the master database server. Defaults to host
     # @option options [Optional String] :machinename name to give the computer. Defaults to <machine>
@@ -32,6 +33,7 @@ module Machines
       @config = options[:machine]
       @host = options[:host]
       @userpass = options[:userpass]
+      @initial_password = options[:initial_password] || DEFAULT_IDENTITY
       @keys = [options[:keyfile]]
       @dbmaster = options[:dbmaster] || @host
       @machinename = options[:machinename] || @config
@@ -114,9 +116,9 @@ private
     # Creates a keypair on a dev machine and allows sudo without password to lineup with Ubuntu EC2 images and run the rest of the script
     def setup_dev_machine
       @keys = ["#{host}.key"]
-      Net::SSH.start host, DEFAULT_IDENTITY, :password => userpass do |ssh|
+      Net::SSH.start host, DEFAULT_IDENTITY, :password => @initial_password do |ssh|
         log_to :file, ssh.exec!("mkdir .ssh && ssh-keygen -f .ssh/id_rsa -N '' -q && cp .ssh/id_rsa.pub .ssh/authorized_keys")
-        Net::SCP.start host, DEFAULT_IDENTITY, :password => userpass do |scp|
+        Net::SCP.start host, DEFAULT_IDENTITY, :password => @initial_password do |scp|
           scp.download! '~/.ssh/id_rsa', @keys.first
           `chmod 600 #{@keys.first}`
         end

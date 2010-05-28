@@ -96,7 +96,7 @@ module Machines
       extract url
       flags = " --extra-configure-flags=--with-http_ssl_module" if options[:with].to_s == 'ssl'
       name = File.basename(url, '.tar.gz')
-      run "rvmsudo passenger-install-nginx-module --auto --nginx-source-dir=/tmp/#{name}#{flags}", :check => check_file("/opt/nginx/sbin/nginx"), :as => options[:as]
+      run "rvmsudo passenger-install-nginx-module --auto --prefix=/opt/nginx --nginx-source-dir=/tmp/#{name}#{flags}", :check => check_file("/opt/nginx/sbin/nginx"), :as => options[:as]
     end
   end
 end

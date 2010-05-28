@@ -39,7 +39,7 @@ module Machines
         if passed
           f.puts "CHECK PASSED".green
         else
-          f.puts check.gsub("\n", '\n ').gsub(/ &&.*/, '').red
+          f.puts check.gsub("\n", '\n ').gsub(/ &&.*/, "'").red
           f.puts message.red
           success = false
         end
