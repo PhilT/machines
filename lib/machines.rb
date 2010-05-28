@@ -2,8 +2,8 @@
 require 'rubygems'
 require 'net/ssh'
 require 'net/scp'
-require 'yaml'
 require 'active_support'
+require 'yaml'
 require File.join(File.dirname(__FILE__), 'colors')
 
 module Machines
