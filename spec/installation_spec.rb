@@ -83,7 +83,7 @@ describe 'Installation' do
       install_nginx 'http://url_to_nginx.tar.gz'
       @added.should == [
         'cd /tmp && wget http://url_to_nginx.tar.gz && tar -zxf url_to_nginx.tar.gz && rm url_to_nginx.tar.gz && cd -',
-        'rvmsudo passenger-install-nginx-module --auto --nginx-source-dir=/tmp/url_to_nginx'
+        'rvmsudo passenger-install-nginx-module --auto --prefix=/opt/nginx --nginx-source-dir=/tmp/url_to_nginx'
       ]
     end
 
@@ -91,7 +91,7 @@ describe 'Installation' do
       install_nginx 'http://url_to_nginx.tar.gz', :with => :ssl
       @added.should == [
         'cd /tmp && wget http://url_to_nginx.tar.gz && tar -zxf url_to_nginx.tar.gz && rm url_to_nginx.tar.gz && cd -',
-        'rvmsudo passenger-install-nginx-module --auto --nginx-source-dir=/tmp/url_to_nginx --extra-configure-flags=--with-http_ssl_module']
+        'rvmsudo passenger-install-nginx-module --auto --prefix=/opt/nginx --nginx-source-dir=/tmp/url_to_nginx --extra-configure-flags=--with-http_ssl_module']
     end
   end
 end
