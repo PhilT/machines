@@ -13,17 +13,16 @@ describe 'Machines' do
   describe 'new' do
     it 'should raise errors' do
       lambda{Machines::Base.new({})}.should raise_error(ArgumentError)
-      lambda{Machines::Base.new({:machine => 'something', :host => 'host'})}.should raise_error(ArgumentError)
-      lambda{Machines::Base.new({:machine => 'something', :keyfile => 'keyfile'})}.should raise_error(ArgumentError)
-      lambda{Machines::Base.new({:host => 'host', :keyfile => 'keyfile'})}.should raise_error(ArgumentError)
+      lambda{Machines::Base.new({:machine => 'something'})}.should raise_error(ArgumentError)
+      lambda{Machines::Base.new({:host => 'host'})}.should raise_error(ArgumentError)
     end
 
     it 'should not raise an error' do
-      lambda{Machines::Base.new({:machine => 'something', :host => 'host', :keyfile => 'keyfile'})}.should_not raise_error(ArgumentError)
+      lambda{Machines::Base.new({:machine => 'something', :host => 'host'})}.should_not raise_error(ArgumentError)
     end
   end
 
-  describe 'dryrun and install' do
+  describe 'dryrun and setup' do
     it "should output the commands to be run" do
       @machines.should_receive(:discover_users)
       @machines.should_receive(:load_machinesfile)
@@ -32,8 +31,8 @@ describe 'Machines' do
     end
   end
 
-  describe 'install' do
-    it 'should run commands in install mode' do
+  describe 'setup' do
+    it 'should run commands in setup mode' do
       @machines.should_receive(:discover_users)
       @machines.should_receive(:load_machinesfile)
       @machines.should_receive(:enable_root_login)
@@ -41,7 +40,7 @@ describe 'Machines' do
       @machines.should_receive(:run_commands).with @mock_ssh
       @machines.should_receive(:disable_root_login)
 
-      @machines.install
+      @machines.setup
     end
   end
 
@@ -56,8 +55,12 @@ describe 'Machines' do
       @machines.users.should == ['first', 'another']
     end
 
-    it 'should find users through folder list when called by install' do
-      @machines.dryrun
+    it 'should find users through folder list when called by setup' do
+      @machines.should_receive(:enable_root_login)
+      Net::SSH.should_receive(:start).with('host', 'root', :keys => ['keyfile']).and_yield @mock_ssh
+      @machines.should_receive(:run_commands).with @mock_ssh
+      @machines.should_receive(:disable_root_login)
+      @machines.setup
       @machines.users.should == ['first', 'another']
     end
   end
@@ -88,7 +91,7 @@ describe 'Machines' do
       @mock_ssh.should_receive(:exec!).with('check1').and_return ''
       @mock_ssh.should_receive(:exec!).with('command 2').and_return ''
       @mock_ssh.should_receive(:exec!).with('check2').and_return ''
-      @machines.install
+      @machines.setup
     end
 
     it 'should run upload command' do
@@ -98,7 +101,7 @@ describe 'Machines' do
 
       Net::SCP.should_receive(:start).with('host', 'root', :keys => ['keyfile']).and_yield mock_scp
       mock_scp.should_receive(:upload!).with 'from', 'to'
-      @machines.install
+      @machines.setup
     end
 
     it "should catch SCP errors and display message" do
@@ -108,7 +111,7 @@ describe 'Machines' do
       mock_scp.should_receive(:upload!).and_raise 'an error'
       Net::SCP.should_receive(:start).with('host', 'root', :keys => ['keyfile']).and_yield mock_scp
       @machines.should_receive(:log_to).with(:file, "FAILED\n\n")
-      @machines.install
+      @machines.setup
     end
   end
 
@@ -127,7 +130,7 @@ describe 'Machines' do
       Net::SSH.should_receive(:start).with('host', Machines::DEFAULT_IDENTITY, {:keys => ['keyfile']}).and_yield(mock_ssh)
       mock_ssh.should_receive(:exec!).with "sudo sh -c 'test -f /root/.ssh/authorized_keys && mv /root/.ssh/authorized_keys /root/.ssh/authorized_keys.orig || mkdir /root/.ssh'"
       mock_ssh.should_receive(:exec!).with "sudo sh -c 'cp /home/ubuntu/.ssh/authorized_keys /root/.ssh/'"
-      @machines.install
+      @machines.setup
     end
 
     it 'should lock the root login on the remote machine' do
@@ -136,7 +139,7 @@ describe 'Machines' do
       Net::SSH.should_receive(:start).with('host', 'root', :keys => ['keyfile']).and_yield(mock_ssh)
       mock_ssh.should_receive(:exec!).with 'rm /root/.ssh/authorized_keys'
       mock_ssh.should_receive(:exec!).with 'test -f /root/.ssh/authorized_keys.orig && mv /root/.ssh/authorized_keys.orig /root/.ssh/authorized_keys'
-      @machines.install
+      @machines.setup
     end
   end
 

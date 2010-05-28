@@ -45,7 +45,7 @@ module Machines
       run_commands
     end
 
-    def build
+    def setup
       discover_users
       load_machinesfile
       prepare_log_file

@@ -18,9 +18,9 @@ describe 'Functional Specs' do
   end
 
   #Setup SSH to hit a VM. Make this an optional spec
-  it 'should install a minimal script' do
+  it 'should setup a minimal script' do
     pending
-    @machines.install
+    @machines.setup
   end
 end
 
