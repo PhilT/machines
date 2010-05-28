@@ -14,12 +14,8 @@ describe 'Helpers' do
       @passwords = {:some_app => 'password'}
     end
 
-    it 'should remove newlines' do
-      display("multi\nline\ncommand").should == 'multi\line\command'
-    end
-
     it 'should remove passwords' do
-      display("multi\nline\ncommand with password").should == 'multi\line\command with ***'
+      display("multi\nline\ncommand with password").should == "multi\nline\ncommand with ***"
     end
 
     it 'should flatten arrays' do
