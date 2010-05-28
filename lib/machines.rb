@@ -15,7 +15,7 @@ module Machines
       require lib; include eval(ActiveSupport::Inflector.camelize(File.basename(lib, '.rb')))
     end
 
-    attr_reader :passwords, :host, :userpass, :dbmaster, :machinename, :username, :users, :passwords
+    attr_reader :passwords, :host, :userpass, :dbmaster, :machinename, :username, :users, :passwords, :environment, :apps, :role
 
     # Takes the arguments given on the commandline except the <command>. Set defaults.
     # @param options [Hash]
@@ -36,7 +36,7 @@ module Machines
       @dbmaster = options[:dbmaster] || @host
       @machinename = options[:machinename] || @config
       @username = options[:username] || DEFAULT_USERNAME
-      raise ArgumentError, 'Missing options. :machine, :host and :keyfile are required' unless @config && @host && @keys.any?
+      raise ArgumentError, 'Missing options. :machine, :host and :keyfile are required' unless @config && @host
     end
 
     def dryrun
@@ -45,10 +45,11 @@ module Machines
       run_commands
     end
 
-    def install
+    def build
       discover_users
       load_machinesfile
       prepare_log_file
+      setup_dev_machine if development?
       enable_root_login
       Net::SSH.start @host, 'root', :keys => @keys do |ssh|
         run_commands ssh
@@ -110,9 +111,22 @@ private
       puts
     end
 
+    # Creates a keypair on a dev machine and allows sudo without password to lineup with Ubuntu EC2 images and run the rest of the script
+    def setup_dev_machine
+      @keys = ["#{host}.key"]
+      Net::SSH.start host, DEFAULT_IDENTITY, :password => userpass do |ssh|
+        log_to :file, ssh.exec!("mkdir .ssh && ssh-keygen -f .ssh/id_rsa -N '' -q && cp .ssh/id_rsa.pub .ssh/authorized_keys")
+        Net::SCP.start host, DEFAULT_IDENTITY, :password => userpass do |scp|
+          scp.download! '~/.ssh/id_rsa', @keys.first
+          `chmod 600 #{@keys.first}`
+        end
+        log_to :file, ssh.exec!("echo ubuntu | sudo -S sh -c 'echo ubuntu  ALL=\\(ALL\\) NOPASSWD:ALL >> /etc/sudoers'")
+      end
+    end
+
     # Copy authorized_keys so root login enabled (backs up authorized_keys if it exists)
     def enable_root_login
-      Net::SSH.start @host, DEFAULT_IDENTITY, :keys => @keys do |ssh|
+      Net::SSH.start host, DEFAULT_IDENTITY, :keys => @keys do |ssh|
         log_to :file, ssh.exec!("sudo sh -c 'test -f /root/.ssh/authorized_keys && mv /root/.ssh/authorized_keys /root/.ssh/authorized_keys.orig || mkdir /root/.ssh'")
         log_to :file, ssh.exec!("sudo sh -c 'cp /home/ubuntu/.ssh/authorized_keys /root/.ssh/'")
       end
@@ -120,7 +134,7 @@ private
 
     # Removed authorized_keys so root login disabled (restores original authorized_keys if it exists)
     def disable_root_login
-      Net::SSH.start @host, 'root', :keys => @keys do |ssh|
+      Net::SSH.start host, 'root', :keys => @keys do |ssh|
         log_to :file, ssh.exec!("rm /root/.ssh/authorized_keys")
         log_to :file, ssh.exec!("test -f /root/.ssh/authorized_keys.orig && mv /root/.ssh/authorized_keys.orig /root/.ssh/authorized_keys")
       end

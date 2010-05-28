@@ -17,6 +17,7 @@ task :default => :spec
 
 YARD::Rake::YardocTask.new
 
+desc "Build and install the gem"
 task :install do
   result = `gem build #{Dir['*.gemspec']} 2>&1`
   if result =~ /Successfully built/
