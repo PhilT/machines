@@ -37,7 +37,7 @@ module Machines
     #   Git URL::
     #     Git clone URL and run `./install.sh`
     #   Array::
-    #     Run `apt` to install specified packages in the array
+    #     Run `apt` to install specified packages in the array (installed separately to aid progress feedback)
     #   URL::
     #     Download from the specified URL and run `dpkg`
     # @param [Hash] options
@@ -62,14 +62,18 @@ module Machines
           run ["cd /tmp && wget #{packages}", "dpkg -i #{name}", "rm #{name}", "cd -"]
         end
       else
-        add "#{APTGET_QUIET} install #{packages.join(' ')}", check_packages(packages)
+        packages.each do |package|
+          add "#{APTGET_QUIET} install #{package}", check_package(package)
+        end
       end
     end
 
     # Remove one or more packages
     # @param [Array] packages Packages to remove
     def uninstall packages
-      add "#{APTGET_QUIET} remove #{packages.join(' ')}", nil
+      packages.each do |package|
+        add "#{APTGET_QUIET} remove #{package}", check_package(package, false)
+      end
     end
 
     # Run an arbitary command remotely

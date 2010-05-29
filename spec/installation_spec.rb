@@ -51,7 +51,10 @@ describe 'Installation' do
 
     it 'should add a command to install apt packages' do
       install %w(package1 package2)
-      @added.should == ['export TERM=linux && export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install package1 package2']
+      @added.should == [
+        'export TERM=linux && export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install package1',
+        'export TERM=linux && export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install package2'
+      ]
     end
 
     it 'should add commands to download, install and remove a package ' do

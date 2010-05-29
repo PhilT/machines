@@ -14,9 +14,13 @@ describe 'Checks' do
     end
   end
 
-  describe 'packages' do
+  describe 'package' do
     it 'should exist' do
-      check_packages(%w(package1 package2)).should == "dpkg --get-selections | grep -F 'package1\npackage2' && echo CHECK PASSED || echo CHECK FAILED"
+      check_package('package1').should == "dpkg --get-selections | grep package1.*install && echo CHECK PASSED || echo CHECK FAILED"
+    end
+
+    it 'should not exist' do
+      check_package('package1', false).should == "dpkg --get-selections | grep package1.*deinstall && echo CHECK PASSED || echo CHECK FAILED"
     end
   end
 

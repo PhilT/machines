@@ -107,7 +107,7 @@ private
           failed = upload_failed || !log_result_to_file(check, net_ssh.exec!(check))
           @failed = true if failed
         else
-          log_to :screen, "#{("%-4s" % (line + ':')).dark_blue} #{display(command)}"
+          log_to :screen, "#{("%-6s" % (line + ':')).dark_blue} #{display(command)}"
           log_to :screen, check ? "#{'check:'.dark_green} #{display(check)}" : 'no check'.orange
         end
       end

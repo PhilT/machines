@@ -8,8 +8,8 @@ module Machines
       '&& echo CHECK FAILED || echo CHECK PASSED'
     end
 
-    def check_packages packages
-      "dpkg --get-selections | grep -F '#{packages.join("\n")}' #{pass_fail}"
+    def check_package package, exists = true
+      "dpkg --get-selections | grep #{package}.*#{exists ? '' : 'de'}install #{pass_fail}"
     end
 
     def check_gem gem, version = nil

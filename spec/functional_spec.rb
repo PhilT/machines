@@ -9,15 +9,15 @@ describe 'Functional Specs' do
   it 'should test a minimal script' do
     @machines.stub!(:development?).and_return(true)
     File.stub!(:exist?).and_return(true)
-    @machines.should_receive(:log_to).with(:screen, "3:   etc/hosts to /etc/hosts")
+    @machines.should_receive(:log_to).with(:screen, "3:     etc/hosts to /etc/hosts")
     @machines.should_receive(:log_to).with(:screen, "check: test -s /etc/hosts && echo CHECK PASSED || echo CHECK FAILED")
-    @machines.should_receive(:log_to).with(:screen, "3:   sed -i 's/ubuntu/machine/' /etc/{hosts,hostname}")
+    @machines.should_receive(:log_to).with(:screen, "3:     sed -i 's/ubuntu/machine/' /etc/{hosts,hostname}")
     @machines.should_receive(:log_to).with(:screen, "check: grep 'machine' /etc/{hosts,hostname} && echo CHECK PASSED || echo CHECK FAILED")
-    @machines.should_receive(:log_to).with(:screen, "3:   hostname machine")
+    @machines.should_receive(:log_to).with(:screen, "3:     hostname machine")
     @machines.should_receive(:log_to).with(:screen, "check: hostname | grep 'machine' && echo CHECK PASSED || echo CHECK FAILED")
-    @machines.should_receive(:log_to).with(:screen, "4:   useradd -s /bin/bash -d /home/www -m -G admin www")
+    @machines.should_receive(:log_to).with(:screen, "4:     useradd -s /bin/bash -d /home/www -m -G admin www")
     @machines.should_receive(:log_to).with(:screen, "check: test -d /home/www && echo CHECK PASSED || echo CHECK FAILED")
-    @machines.should_receive(:log_to).with(:screen, "5:   echo 'www ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers")
+    @machines.should_receive(:log_to).with(:screen, "5:     echo 'www ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers")
     @machines.should_receive(:log_to).with(:screen, "check: grep 'www ALL=(ALL) NOPASSWD: ALL' /etc/sudoers && echo CHECK PASSED || echo CHECK FAILED")
     @machines.dryrun
   end
