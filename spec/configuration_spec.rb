@@ -69,6 +69,7 @@ describe 'Configuration' do
     it 'should export a key/value to a file' do
       export :key => :value, :to => 'to_file'
       @added.should == ["echo 'export key=value' >> to_file"]
+      @checks.should == ["grep 'export key=value' to_file #{pass_fail}"]
     end
   end
 
@@ -79,6 +80,7 @@ describe 'Configuration' do
       @machinename = 'machine'
       set_machine_name_and_hosts
       @added.should == [["etc/hosts", "/etc/hosts"], "sed -i 's/ubuntu/machine/' /etc/{hosts,hostname}", 'hostname machine']
+      @checks.should == ["test -s /etc/hosts #{pass_fail}", "grep 'machine' /etc/{hosts,hostname} #{pass_fail}", "hostname | grep 'machine' #{pass_fail}"]
     end
   end
 
@@ -86,11 +88,13 @@ describe 'Configuration' do
     it do
       add_user 'login'
       @added.should == ['useradd -s /bin/bash -d /home/login -m login']
+      @checks.should == ["test -d /home/login #{pass_fail}"]
     end
 
     it do
       add_user 'a_user', :password => 'password', :admin => true
       @added.should == ['useradd -s /bin/bash -d /home/a_user -m -p password -G admin a_user']
+      @checks.should == ["test -d /home/a_user #{pass_fail}"]
     end
   end
 
@@ -98,6 +102,7 @@ describe 'Configuration' do
     it do
       set_sudo_no_password 'a_user'
       @added.should == ["echo 'a_user ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"]
+      @checks.should == ["grep 'a_user ALL=(ALL) NOPASSWD: ALL' /etc/sudoers #{pass_fail}"]
     end
   end
 
@@ -105,13 +110,15 @@ describe 'Configuration' do
     it do
       unset_sudo_no_password 'a_user'
       @added.should == ["sed -i 's/a_user ALL=(ALL) NOPASSWD: ALL//' /etc/sudoers"]
+      @checks.should == ["grep '' /etc/sudoers #{pass_fail}"]
     end
   end
 
   describe 'del_user' do
     it 'should call deluser with remove-all-files option' do
       del_user 'login'
-      @added.should == ['deluser login --remove-all-files']
+      @added.should == ['deluser login --remove-home -q']
+      @checks.should == ["test -s /home/login #{fail_pass}"]
     end
   end
 end

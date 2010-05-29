@@ -24,6 +24,10 @@ module Machines
       add "cp #{from} #{to}", check_file(to)
     end
 
+    def remove file, options = {}
+      add "rm #{options[:force] ? '-f ' : ''}#{file}", check_file(file, false)
+    end
+
     # Take off the version numbers from a path name
     # @param [String] name Name of the path to rename
     def remove_version_info name

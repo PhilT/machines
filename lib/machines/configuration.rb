@@ -71,8 +71,7 @@ module Machines
     # Removes a user, home and any other related files
     # @param [String] login User name to remove
     def del_user login
-      add "delgroup #{login}"
-      add "deluser #{login} --remove-all-files -q", check_file('/home/login', false)
+      add "deluser #{login} --remove-home -q", check_file('/home/login', false)
     end
   end
 end

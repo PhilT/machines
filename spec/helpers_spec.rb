@@ -15,7 +15,7 @@ describe 'Helpers' do
     end
 
     it 'should remove passwords' do
-      display("multi\nline\ncommand with password").should == "multi\nline\ncommand with ***"
+      display("multi\nline\ncommand with password").should == "multi\nline\ncommand with *****"
     end
 
     it 'should flatten arrays' do
@@ -25,6 +25,12 @@ describe 'Helpers' do
     it 'should ignore empty password list' do
       @passwords = {}
       display('something nice').should == 'something nice'
+    end
+
+    it 'should not modify original' do
+      command = "multi\nline\ncommand with password"
+      display(command).should == "multi\nline\ncommand with *****"
+      command.should == "multi\nline\ncommand with password"
     end
   end
 

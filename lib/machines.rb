@@ -89,7 +89,7 @@ private
         if net_ssh
           bar = "\r#{" %-4s" % (progress.to_i.to_s + '%')} " + ("[#{"%-100s" % ('=' * progress)}]")
           print @failed ? bar.dark_red : bar.dark_green
-          log_to :file, "Machinesfile line #{line})".blue
+          log_to :file, "Machinesfile line #{line}:".blue
           log_to :file, "#{command.is_a?(Array) ? 'Uploading' : 'Running'} #{display(command).orange}"
           upload_successful = true
           if command.is_a?(Array)
@@ -107,7 +107,8 @@ private
           failed = upload_failed || !log_result_to_file(check, net_ssh.exec!(check))
           @failed = true if failed
         else
-          log_to :screen, "#{("%-4s" % (line + ')')).dark_blue} #{display(command)}"
+          log_to :screen, "#{("%-4s" % (line + ':')).dark_blue} #{display(command)}"
+          log_to :screen, check ? "#{'check:'.dark_green} #{display(check)}" : 'no check'.orange
         end
       end
       puts
@@ -126,10 +127,11 @@ private
       end
     end
 
+    AUTH_KEYS = '/root/.ssh/authorized_keys'
     # Copy authorized_keys so root login enabled (backs up authorized_keys if it exists)
     def enable_root_login
       Net::SSH.start host, DEFAULT_IDENTITY, :keys => @keys do |ssh|
-        log_to :file, ssh.exec!("sudo sh -c 'test -f /root/.ssh/authorized_keys && mv /root/.ssh/authorized_keys /root/.ssh/authorized_keys.orig || mkdir /root/.ssh'")
+        log_to :file, ssh.exec!("sudo sh -c 'test -f #{AUTH_KEYS} && mv #{AUTH_KEYS} #{AUTH_KEYS}.orig || mkdir /root/.ssh'")
         log_to :file, ssh.exec!("sudo sh -c 'cp /home/ubuntu/.ssh/authorized_keys /root/.ssh/'")
       end
     end
@@ -137,8 +139,8 @@ private
     # Removed authorized_keys so root login disabled (restores original authorized_keys if it exists)
     def disable_root_login
       Net::SSH.start host, 'root', :keys => @keys do |ssh|
-        log_to :file, ssh.exec!("rm /root/.ssh/authorized_keys")
-        log_to :file, ssh.exec!("test -f /root/.ssh/authorized_keys.orig && mv /root/.ssh/authorized_keys.orig /root/.ssh/authorized_keys")
+        log_to :file, ssh.exec!("rm #{AUTH_KEYS}")
+        log_to :file, ssh.exec!("test -f #{AUTH_KEYS}.orig && mv #{AUTH_KEYS}.orig #{AUTH_KEYS}")
       end
     end
   end

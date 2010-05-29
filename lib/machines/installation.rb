@@ -1,9 +1,34 @@
 module Machines
   module Installation
+    APTGET_QUIET = 'export TERM=linux && export DEBIAN_FRONTEND=noninteractive && apt-get -q -y'
+
+    # Adds a DEB source
+    # @param [String] name Used to name the sources.list file and what to check in apt-key list to ensure it installed
+    # @param [String] source URL of the package
+    # @param [Hash] options
+    # @option options [String] :to Overrides name of sources.list file
+    # @option options [String] :gpg URL of key
+    # @example Adding Google Chrome key
+    #   add_source 'google', 'http://dl.google.com/linux/deb/ stable main', :gpg => 'https://dl-ssl.google.com/linux/linux_signing_key.pub', :to => 'google-chrome'
+    def add_source name, source, options
+      append "deb #{source}", :to => "/etc/apt/sources.list.d/#{options[:to] || name}.list"
+      add "wget -q -O - #{options[:gpg]} | apt-key add -", "apt-key list | grep -i #{name} #{pass_fail}"
+    end
+
+    # Adds a PPA source
+    # @param [String] user The user of the PPA
+    # @param [String] name Name of the PPA
+    # @param [String] key_name What to check in apt-key list to ensure it installed
+    # @example Adding the Firefox PPA
+    #   add_ppa 'mozillateam', 'firefox-stable', 'mozilla'
+    def add_ppa user, name, key_name
+      add "add-apt-repository ppa:#{user}/#{name}", "apt-key list | grep -i #{key_name} #{pass_fail}"
+    end
+
     # Update, upgrade, autoremove, autoclean apt packages
     def update
       %w(update upgrade autoremove autoclean).each do |command|
-        add "apt-get -qq -y #{command}", nil
+        add "#{APTGET_QUIET} #{command}", nil
       end
     end
 
@@ -37,8 +62,14 @@ module Machines
           run ["cd /tmp && wget #{packages}", "dpkg -i #{name}", "rm #{name}", "cd -"]
         end
       else
-        add "export DEBIAN_FRONTEND=noninteractive && apt-get -qq -y install #{packages.join(' ')}", check_packages(packages)
+        add "#{APTGET_QUIET} install #{packages.join(' ')}", check_packages(packages)
       end
+    end
+
+    # Remove one or more packages
+    # @param [Array] packages Packages to remove
+    def uninstall packages
+      add "#{APTGET_QUIET} remove #{packages.join(' ')}", nil
     end
 
     # Run an arbitary command remotely
@@ -47,6 +78,7 @@ module Machines
     # @option options [String] :as Run as specified user
     def run commands, options = {}
       commands = [commands] if commands.is_a?(String)
+      commands = ['export TERM=linux'] + commands
       command = commands.to_a.map{|command| "#{command}"}.to_a.join(' && ')
       if options[:as]
         add "su - #{options[:as]} -c '#{command}'", "su - #{options[:as]} -c '#{options[:check]}'"
@@ -61,23 +93,23 @@ module Machines
     # @option options [String] :version Optional version number
     def gem package, options = {}
       version =  " -v '#{options[:version]}'" if options[:version]
-      run "gem install #{package}#{version}", options.merge(:check => check_gem(package, options[:version]))
+      run ["gem install #{package}#{version}"], options.merge(:check => check_gem(package, options[:version]))
     end
 
     # Update gems
     # @example Update Rubygems
     #     gem_update '--system'
     def gem_update options = ''
-      add "gem update #{options}", nil
+      add "export TERM=linux && gem update #{options}", nil
     end
 
-    # Download, extract, and remove an archive. Currently supports `zip` or `tar.gz`
+    # Download, extract, and remove an archive. Currently supports `zip` or `tar.gz`. Extracts into /tmp
     # @param [String] package Package name to extract
     def extract package
       name = File.basename(package)
       cmd = package[/.zip/] ? 'unzip -qq' : 'tar -zxf'
       dir = cmd =~ /unzip/ ? File.basename(name, '.zip') : File.basename(name, '.tar.gz')
-      run ["cd /tmp", "wget #{package}", "#{cmd} #{name}", "rm #{name}", "cd -"], :check => check_dir("/tmp/#{dir}")
+      add "cd /tmp && wget #{package} && #{cmd} #{name} && rm #{name} && cd -", check_dir("/tmp/#{dir}")
     end
 
     # Clone a project from a Git repository

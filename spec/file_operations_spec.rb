@@ -8,6 +8,7 @@ describe 'FileOperations' do
     it 'should add an upload command' do
       upload 'source', 'dest'
       @added.should == [['source', 'dest']]
+      @checks.should == ["test -s dest #{pass_fail}"]
     end
 
     it 'should add an upload command with permissions and owner' do
@@ -20,13 +21,28 @@ describe 'FileOperations' do
     it 'should rename a remote file' do
       rename 'oldname', 'newname'
       @added.should == ['mv oldname newname']
+      @checks.should == ["test -s newname #{pass_fail}"]
     end
   end
 
   describe 'copy' do
     it 'should copy a remote file' do
-      copy 'from', 'to'
-      @added.should == ['cp from to']
+      copy 'this', 'that'
+      @added.should == ['cp this that']
+      @checks.should == ["test -s that #{pass_fail}"]
+    end
+  end
+
+  describe 'remove' do
+    it 'should remove a file' do
+      remove 'file'
+      @added.should == ['rm file']
+      @checks.should == ["test -s file #{fail_pass}"]
+    end
+
+    it 'should forcefully remove a file' do
+      remove 'file', :force => true
+      @added.should == ['rm -f file']
     end
   end
 

@@ -16,6 +16,7 @@ describe 'Database' do
     it 'should set the MySQL root password' do
       mysql_pass 'password'
       @added.should == ['mysqladmin -u root password password']
+      @checks.should == ["mysqladmin -u root -ppassword ping | grep alive #{pass_fail}"]
     end
 
   end
@@ -35,6 +36,7 @@ describe 'Database' do
       actual.should match /host: dbmaster/m
       actual.should match /password: password/m
       actual.should match /username: app/m
+      @checks.should == ["test -s dir/database.yml #{pass_fail}"]
     end
   end
 end

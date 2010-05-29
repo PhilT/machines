@@ -79,8 +79,8 @@ describe 'Machines' do
     it 'should display all commands queued in the @commands array' do
       @machines.add 'command 1', nil
       @machines.add 'command 2', nil
-      @machines.should_receive(:log_to).with(:screen, ')    command 1')
-      @machines.should_receive(:log_to).with(:screen, ')    command 2')
+      @machines.should_receive(:log_to).with(:screen, ':    command 1')
+      @machines.should_receive(:log_to).with(:screen, ':    command 2')
       @machines.dryrun
     end
 
