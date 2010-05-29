@@ -1,10 +1,35 @@
 module Machines
   module FileOperations
+    # Upload a file or directory using SCP and optionally set permissions and ownership
+    # @param [String] local_source File or directory on the local machine
+    # @param [String] remote_dest Directory on the remote machine to copy to
+    # @param [Hash] options
+    # @option options [Optional String] :perms chmod permissions to set
+    # @option options [Optional String] :owner Name of owner to change to
+    #
+    # If the `local_source` is a directory it uploads every file within to the remote_dest creating every directory from local_source/ deeper
+    # @example
+    #   upload 'source_dir', '~' #=> creates source_dir/subdir as ~/subdir
+    def upload local_source, remote_dest, options = {}
+      if File.directory?(local_source)
+        Dir[File.join(local_source, '**', '*')].each do |path|
+          remote_path = File.join(remote_dest, path.gsub(/^#{local_source}/, ''))
+          if File.directory?(path)
+            mkdir remote_path
+          else
+            upload_file path, remote_path, options
+          end
+        end
+      else
+        upload_file local_source, remote_dest, options
+      end
+    end
+
     # Upload a file using SCP and optionally set permissions and ownership
     # @param [Hash] options
     # @option options [Optional String] :perms chmod permissions to set
     # @option options [Optional String] :owner Name of owner to change to
-    def upload local_source, remote_dest, options = {}
+    def upload_file local_source, remote_dest, options = {}
       add [local_source, remote_dest], check_file(remote_dest)
       chmod options[:perms], remote_dest if options[:perms]
       chown options[:owner], remote_dest if options[:owner]

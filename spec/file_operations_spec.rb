@@ -6,14 +6,58 @@ describe 'FileOperations' do
 
   describe 'upload' do
     it 'should add an upload command' do
+      File.should_receive(:directory?).with('source').and_return(false)
+      Dir.should_not_receive(:[])
       upload 'source', 'dest'
       @added.should == [['source', 'dest']]
       @checks.should == ["test -s dest #{pass_fail}"]
     end
 
     it 'should add an upload command with permissions and owner' do
+      File.should_receive(:directory?).with('source').and_return(false)
+      Dir.should_not_receive(:[])
       upload 'source', 'dest', {:perms => '123', :owner => 'owner'}
       @added.should == [['source', 'dest'], 'chmod 123 dest', 'chown owner:owner dest']
+    end
+
+    it 'should create remote directories to match local' do
+      File.should_receive(:directory?).with('source').and_return(true)
+      Dir.should_receive(:[]).with('source/**/*').and_return(%w(source/dir))
+      File.should_receive(:directory?).with('source/dir').and_return(true)
+      upload 'source', 'dest'
+      @added.should == ['mkdir -p dest/dir']
+    end
+
+    it 'should add multiple upload commands for a directory' do
+      File.should_receive(:directory?).with('source/dir/').and_return(true)
+      Dir.should_receive(:[]).with('source/dir/**/*').and_return(%w(source/dir/file1 source/dir/subdir/file2))
+      File.should_receive(:directory?).with('source/dir/file1').and_return(false)
+      File.should_receive(:directory?).with('source/dir/subdir/file2').and_return(false)
+      upload 'source/dir/', 'dest', :owner => 'owner'
+      @added.should == [
+        ['source/dir/file1', 'dest/file1'], 'chown owner:owner dest/file1',
+        ['source/dir/subdir/file2', 'dest/subdir/file2'], 'chown owner:owner dest/subdir/file2'
+      ]
+    end
+
+    it 'should work with a real example' do
+      structure = [
+        ['users/phil/gconf/apps', true],
+        ['users/phil/gconf/apps/metacity', true],
+        ['users/phil/gconf/apps/metacity/general', true],
+        ['users/phil/gconf/apps/metacity/general/%gconf.xml', false]
+      ]
+
+      File.should_receive(:directory?).with('users/phil/gconf').and_return(true)
+      Dir.should_receive(:[]).with('users/phil/gconf/**/*').and_return(structure.map{|path, dir| path})
+      structure.each {|path, dir|File.should_receive(:directory?).with(path).and_return dir}
+      upload 'users/phil/gconf', '~/.gconf', :owner => 'owner'
+      @added.should == [
+        'mkdir -p ~/.gconf/apps',
+        'mkdir -p ~/.gconf/apps/metacity',
+        'mkdir -p ~/.gconf/apps/metacity/general',
+        ['users/phil/gconf/apps/metacity/general/%gconf.xml', '~/.gconf/apps/metacity/general/%gconf.xml'], 'chown owner:owner ~/.gconf/apps/metacity/general/%gconf.xml',
+      ]
     end
   end
 
