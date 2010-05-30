@@ -88,10 +88,10 @@ private
         progress.advance
 
         if net_ssh
-          prefix = command.is_a?(Array) ? 'Upload' : 'Run'
-          bar = progress.show(line, command, prefix)
+          bar = progress.show(line, command)
           print @failed ? bar.dark_red : bar.dark_green
           log_to :file, "Machinesfile line #{line}:".blue
+          prefix = command.is_a?(Array) ? 'Upload' : 'Run'
           log_to :file, "#{prefix} #{display(command).orange}"
           upload_successful = true
           if command.is_a?(Array)
@@ -113,7 +113,8 @@ private
           log_to :screen, check ? "#{'check:'.dark_green} #{display(check)}" : 'no check'.orange
         end
       end
-      puts
+      bar = progress.complete
+      puts @failed ? bar.dark_red : bar.dark_green
     end
 
     # Creates a keypair on a dev machine and allows sudo without password to lineup with Ubuntu EC2 images and run the rest of the script

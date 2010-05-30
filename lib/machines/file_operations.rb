@@ -16,11 +16,11 @@ module Machines
           remote_path = File.join(remote_dest, path.gsub(/^#{local_source}/, ''))
           if File.directory?(path)
             mkdir remote_path
-            chown options[:owner], remote_path if options[:owner]
           else
-            upload_file path, remote_path, options
+            add [path, remote_path], check_file(remote_path)
           end
         end
+        chown options[:owner], remote_dest, :recursive => true if options[:owner]
       else
         upload_file local_source, remote_dest, options
       end
@@ -98,8 +98,11 @@ module Machines
     # Change ownership of a path
     # @param [String] user Owner to set
     # @param [String] path Path to set
-    def chown user, path
-      add "chown #{user}:#{user} #{path}", check_owner(user, path)
+    # @param [Hash] options
+    # @option options [String] :recursive Chowns recursively if true
+    def chown user, path, options = {}
+      recursive = '-R ' if options[:recursive]
+      add "chown #{recursive}#{user}:#{user} #{path}", check_owner(user, path)
     end
 
     # Create directories for the application (releases, shared/config and shared/system)

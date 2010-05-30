@@ -40,6 +40,7 @@ Almost ready for a 0.1.0 release.
 * Add asynchronous ssh so output can piped live
 * Need to allow data to be returned from server (e.g. to get install ree version)
 * Add timer
+* Add checking of return values
 
 == Warnings
 You might see something one of the following while upgrading/installing packages:

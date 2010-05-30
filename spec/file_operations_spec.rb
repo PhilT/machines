@@ -35,8 +35,9 @@ describe 'FileOperations' do
       File.should_receive(:directory?).with('source/dir/subdir/file2').and_return(false)
       upload 'source/dir/', 'dest', :owner => 'owner'
       @added.should == [
-        ['source/dir/file1', 'dest/file1'], 'chown owner:owner dest/file1',
-        ['source/dir/subdir/file2', 'dest/subdir/file2'], 'chown owner:owner dest/subdir/file2'
+        ['source/dir/file1', 'dest/file1'],
+        ['source/dir/subdir/file2', 'dest/subdir/file2'],
+        'chown -R owner:owner dest'
       ]
     end
 
@@ -53,10 +54,11 @@ describe 'FileOperations' do
       structure.each {|path, dir|File.should_receive(:directory?).with(path).and_return dir}
       upload 'users/phil/gconf', '~/.gconf', :owner => 'owner'
       @added.should == [
-        'mkdir -p ~/.gconf/apps', 'chown owner:owner ~/.gconf/apps',
-        'mkdir -p ~/.gconf/apps/metacity', 'chown owner:owner ~/.gconf/apps/metacity',
-        'mkdir -p ~/.gconf/apps/metacity/general', 'chown owner:owner ~/.gconf/apps/metacity/general',
-        ['users/phil/gconf/apps/metacity/general/%gconf.xml', '~/.gconf/apps/metacity/general/%gconf.xml'], 'chown owner:owner ~/.gconf/apps/metacity/general/%gconf.xml',
+        'mkdir -p ~/.gconf/apps',
+        'mkdir -p ~/.gconf/apps/metacity',
+        'mkdir -p ~/.gconf/apps/metacity/general',
+        ['users/phil/gconf/apps/metacity/general/%gconf.xml', '~/.gconf/apps/metacity/general/%gconf.xml'],
+        'chown -R owner:owner ~/.gconf'
       ]
     end
   end

@@ -27,7 +27,7 @@ module Machines
       add "echo '#{line}' >> #{options[:to]}", check_string(line, options[:to])
     end
 
-    # Export key/value pairs and optionally write to a file
+    # Export key/value pairs to a file
     # @param [Hash] options Keys to be exported
     # @option options [String] :to File to export key(s) to
     def export options
