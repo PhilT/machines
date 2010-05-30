@@ -16,6 +16,7 @@ module Machines
           remote_path = File.join(remote_dest, path.gsub(/^#{local_source}/, ''))
           if File.directory?(path)
             mkdir remote_path
+            chown options[:owner], remote_path if options[:owner]
           else
             upload_file path, remote_path, options
           end

@@ -38,6 +38,7 @@ Almost ready for a 0.1.0 release.
 * Add :abort => true to abort on failed check
 * Add groups of tasks to allow starting/stopping at different points in the script
 * Add asynchronous ssh so output can piped live
+* Need to allow data to be returned from server (e.g. to get install ree version)
 * Add timer
 
 == Warnings

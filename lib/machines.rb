@@ -5,6 +5,7 @@ require 'net/scp'
 require 'active_support'
 require 'yaml'
 require File.join(File.dirname(__FILE__), 'colors')
+require File.join(File.dirname(__FILE__), 'progress')
 
 module Machines
   DEFAULT_IDENTITY = 'ubuntu'
@@ -79,18 +80,19 @@ private
     # Loops through all commands calling with either Net::SSH::exec! or Net::SCP::upload!
     # @param [Optional #exec!] ssh Net::SSH connection to send the commands to. Only output them if ssh is nil
     def run_commands net_ssh = nil
-      count = @commands.size.to_f
+      progress = Progress.new(@commands.size)
       i = 1
       STDOUT.sync = true
       @failed = false
       @commands.each do |line, command, check|
-        progress = i / count * 100
-        i += 1
+        progress.advance
+
         if net_ssh
-          bar = "\r#{" %-4s" % (progress.to_i.to_s + '%')} " + ("[#{"%-100s" % ('=' * progress)}]")
+          prefix = command.is_a?(Array) ? 'Upload' : 'Run'
+          bar = progress.show(line, command, prefix)
           print @failed ? bar.dark_red : bar.dark_green
           log_to :file, "Machinesfile line #{line}:".blue
-          log_to :file, "#{command.is_a?(Array) ? 'Uploading' : 'Running'} #{display(command).orange}"
+          log_to :file, "#{prefix} #{display(command).orange}"
           upload_successful = true
           if command.is_a?(Array)
             begin

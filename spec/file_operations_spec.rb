@@ -53,9 +53,9 @@ describe 'FileOperations' do
       structure.each {|path, dir|File.should_receive(:directory?).with(path).and_return dir}
       upload 'users/phil/gconf', '~/.gconf', :owner => 'owner'
       @added.should == [
-        'mkdir -p ~/.gconf/apps',
-        'mkdir -p ~/.gconf/apps/metacity',
-        'mkdir -p ~/.gconf/apps/metacity/general',
+        'mkdir -p ~/.gconf/apps', 'chown owner:owner ~/.gconf/apps',
+        'mkdir -p ~/.gconf/apps/metacity', 'chown owner:owner ~/.gconf/apps/metacity',
+        'mkdir -p ~/.gconf/apps/metacity/general', 'chown owner:owner ~/.gconf/apps/metacity/general',
         ['users/phil/gconf/apps/metacity/general/%gconf.xml', '~/.gconf/apps/metacity/general/%gconf.xml'], 'chown owner:owner ~/.gconf/apps/metacity/general/%gconf.xml',
       ]
     end

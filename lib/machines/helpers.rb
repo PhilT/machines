@@ -5,7 +5,7 @@ module Machines
     # Utility method to tidy up commands before being logged
     def display command
       command = command.join(' to ') if command.is_a?(Array)
-      command = command.gsub(/(#{(@passwords.values).join('|')})/, "*****") if @passwords.values.any?
+      command = command.gsub(/(#{(@passwords.values).join('|')})/, "*****") if @passwords && @passwords.values.any?
       command
     end
 
