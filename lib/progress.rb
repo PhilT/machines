@@ -26,7 +26,7 @@ class Progress
   end
 
   def complete
-    "%#{ENV['COLUMNS'] || 120}s" % "#{@steps} steps complete. Done."
+    "\r%#{ENV['COLUMNS'] || 120}s" % "#{@steps} steps complete. Done."
   end
 
 private

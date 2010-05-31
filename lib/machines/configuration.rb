@@ -41,6 +41,18 @@ module Machines
       end
     end
 
+    # Sets gconf key value pairs
+    # @param [String] user User to configure
+    # @param [Hash] options One or many key/value pairs to set
+    def configure user, options
+      options.each do |key, value|
+        types = {String => 'string', Fixnum => 'int', TrueClass => 'bool', FalseClass => 'bool', Float => 'float'}
+        type = types[value.class]
+        raise 'Invalid type for configure' unless type
+        run "gconftool-2 --set '#{key}' --type #{type} #{value}", :as => user
+      end
+    end
+
     # Copy etc/hosts file and set machine name
     def set_machine_name_and_hosts
       upload 'etc/hosts', '/etc/hosts' if development? && File.exist?('etc/hosts')
