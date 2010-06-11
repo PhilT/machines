@@ -46,10 +46,10 @@ module Machines
     # @param [Hash] options One or many key/value pairs to set
     def configure user, options
       options.each do |key, value|
-        types = {String => 'string', Fixnum => 'int', TrueClass => 'bool', FalseClass => 'bool', Float => 'float'}
+        types = {String => 'string', Fixnum => 'int', TrueClass => 'bool', FalseClass => 'bool', Float => 'float', Array => 'list --list-type=string'}
         type = types[value.class]
         raise 'Invalid type for configure' unless type
-        run "gconftool-2 --set '#{key}' --type #{type} #{value}", :as => user
+        run "gconftool-2 --set '#{key}' --type #{type} #{value.to_json}", :as => user
       end
     end
 
