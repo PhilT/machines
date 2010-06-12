@@ -62,8 +62,10 @@ module Machines
 
     # Add a new user (uses a lowlevel add so doesn't set a password. Used to handle authorized_keys files)
     # @param [String] login User name to create
+    # @param [Hash] options
+    # @option options [String] :password
     def add_user login, options = {}
-      password = "-p #{options[:password]} " if options[:password]
+      password = "-p #{`openssl passwd #{options[:password]}`.gsub("\n", '')} " if options[:password]
       admin = "-G admin " if options[:admin]
       add "useradd -s /bin/bash -d /home/#{login} -m #{password}#{admin}#{login}", check_dir("/home/#{login}")
     end

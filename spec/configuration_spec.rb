@@ -93,7 +93,7 @@ describe 'Configuration' do
 
     it do
       add_user 'a_user', :password => 'password', :admin => true
-      @added.should == ['useradd -s /bin/bash -d /home/a_user -m -p password -G admin a_user']
+      @added[0].should match /useradd -s \/bin\/bash -d \/home\/a_user -m -p .* -G admin a_user/
       @checks.should == ["test -d /home/a_user #{pass_fail}"]
     end
   end

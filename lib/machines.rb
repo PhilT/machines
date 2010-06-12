@@ -22,7 +22,7 @@ module Machines
     # @param options [Hash]
     # @option options [String] :machine one of the configurations specified in Machinesfile
     # @option options [String] :host the url of the remote machine
-    # @option options [Optional String] :password Password to setup for user account. Must be encrypted. Use 'openssl passwd <password>'
+    # @option options [Optional String] :password Password to setup for user account.
     # @option options [Optional String] :initial_password Passed used to first login to the remote machine. Defaults to 'ubuntu'
     # @option options [Optional String] :keyfile Path to the file containing the SSH key
     # @option options [Optional String] :dbmaster url to the master database server. Defaults to host
