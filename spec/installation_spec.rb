@@ -19,7 +19,7 @@ describe 'Installation' do
 
   describe 'add_ppa' do
     it 'should add a ppa' do
-      add_ppa 'user', 'name', 'key'
+      add_ppa 'user/name', 'key'
       @added.should == ['add-apt-repository ppa:user/name']
     end
   end

@@ -20,9 +20,9 @@ module Machines
     # @param [String] name Name of the PPA
     # @param [String] key_name What to check in apt-key list to ensure it installed
     # @example Adding the Firefox PPA
-    #   add_ppa 'mozillateam', 'firefox-stable', 'mozilla'
-    def add_ppa user, name, key_name
-      add "add-apt-repository ppa:#{user}/#{name}", "apt-key list | grep -i #{key_name} #{pass_fail}"
+    #   add_ppa 'mozillateam/firefox-stable', 'mozilla'
+    def add_ppa name, key_name
+      add "add-apt-repository ppa:#{name}", "apt-key list | grep -i #{key_name} #{pass_fail}"
     end
 
     # Update, upgrade, autoremove, autoclean apt packages

@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/PhilT/machines"
   s.platform = Gem::Platform::RUBY
   s.summary = "Simple configuration of development, staging and production computers or images for ec2"
-    s.description = "Install and configure Ubuntu desktops, laptops, servers and ec2 instances. Install software, configure settings, preferences, keys, projects, applications, scripts, etc..."
+  s.description = "Install and configure Ubuntu desktops, laptops, servers and ec2 instances. Install software, configure settings, preferences, keys, projects, applications, scripts, etc..."
   s.require_path = "lib"
   s.rubyforge_project = ""
 

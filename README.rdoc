@@ -21,10 +21,18 @@ Ubuntu build script for development and server machines.
 
 * Install Ubuntu
 * Install SSH Server
-    sudo apt-get install openssh-server
+    sudo apt-get update
+    sudo apt-get -y install openssh-server
+* Make a note of the IP of the machine
+    ifconfig
+* Make sure network interface is loaded on startup
+    auto eth0
+    iface eth0 inet dhcp
+* Restart
+
 * Test the Machinesfile
     ssh-keygen -R host # remove host from known_hosts file (handy when testing)
-    machines test <configuration> <>
+    rake machines test <configuration> <>
 
 == VirtualBox installation
 * Make sure you have Bridged Networking

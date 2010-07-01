@@ -76,6 +76,7 @@ describe 'Configuration' do
   describe 'set_machine_name_and_hosts' do
     it 'should upload /etc/hosts and set hostname' do
       stub!(:development?).and_return(true)
+      stub!(:run)
       File.stub!(:exist?).and_return(true)
       @machinename = 'machine'
       set_machine_name_and_hosts
