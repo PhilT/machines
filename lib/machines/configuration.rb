@@ -66,10 +66,11 @@ module Machines
       if development? && File.exist?('etc/hosts')
         upload 'etc/hosts', '/etc/hosts'
       else
-        write "127.0.1.1\t#{@machinename}", :to => 'etc/hosts'
+        write "127.0.1.1\t#{@machinename}", :to => '/etc/hosts'
         append "127.0.0.1\tlocalhost", :to => '/etc/hosts'
       end
       write @machinename, :to => '/etc/hostname'
+      run "hostname #{@machinename}"
     end
 
     # Add a new user (uses a lowlevel add so doesn't set a password. Used to handle authorized_keys files)

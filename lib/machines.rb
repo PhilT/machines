@@ -133,10 +133,18 @@ private
     AUTH_KEYS = '/root/.ssh/authorized_keys'
     # Copy authorized_keys so root login enabled (backs up authorized_keys if it exists)
     def enable_root_login
-      log_to :file, "Attempt to enable root login with #{DEFAULT_IDENTITY}@#{host} using key #{@keys.inspect}"
-      Net::SSH.start host, DEFAULT_IDENTITY, :keys => @keys do |ssh|
-        log_to :file, ssh.exec!("sudo sh -c 'test -f #{AUTH_KEYS} && mv #{AUTH_KEYS} #{AUTH_KEYS}.orig || mkdir /root/.ssh'")
-        log_to :file, ssh.exec!("sudo sh -c 'cp /home/ubuntu/.ssh/authorized_keys /root/.ssh/'")
+      6.times do
+        begin
+          log_to :file, "Attempt to enable root login with #{DEFAULT_IDENTITY}@#{host} using key #{@keys.inspect}"
+          Net::SSH.start host, DEFAULT_IDENTITY, :keys => @keys do |ssh|
+            log_to :file, ssh.exec!("sudo sh -c 'test -f #{AUTH_KEYS} && mv #{AUTH_KEYS} #{AUTH_KEYS}.orig || mkdir /root/.ssh'")
+            log_to :file, ssh.exec!("sudo sh -c 'cp /home/ubuntu/.ssh/authorized_keys /root/.ssh/'")
+          end
+          break
+        rescue
+          sleep 10
+          puts 'retrying...'
+        end
       end
     end
 
