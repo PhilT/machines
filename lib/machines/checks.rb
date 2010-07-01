@@ -36,7 +36,7 @@ module Machines
     end
 
     def check_owner user, path
-      "ls -la #{path} | grep '#{user} #{user}' #{pass_fail}"
+      "ls -la #{path} | grep '#{user}.*#{user}' #{pass_fail}"
     end
 
     def check_string string, file

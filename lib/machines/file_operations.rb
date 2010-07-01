@@ -75,7 +75,7 @@ module Machines
     # @option options [String] :in Filename to replace text in
     def replace regex, options
       required_options options, [:with, :in]
-      add "sed -i 's/#{regex}/#{options[:with].to_s.gsub('/', '\/')}/' #{options[:in]}", check_string(options[:with], options[:in])
+      add "sed -i 's/#{regex}/#{options[:with].to_s.gsub('/', '\/').gsub("\n", "\\n")}/' #{options[:in]}", check_string(options[:with], options[:in])
     end
 
     # Create a path on the remote host

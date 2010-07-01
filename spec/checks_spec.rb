@@ -72,7 +72,7 @@ describe 'Checks' do
 
   describe 'check_owner' do
     it do
-      check_owner('owner', 'path').should == "ls -la path | grep 'owner owner' && echo CHECK PASSED || echo CHECK FAILED"
+      check_owner('owner', 'path').should == "ls -la path | grep 'owner.*owner' && echo CHECK PASSED || echo CHECK FAILED"
     end
   end
 
