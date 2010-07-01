@@ -79,8 +79,8 @@ describe 'Configuration' do
       File.stub!(:exist?).and_return(true)
       @machinename = 'machine'
       set_machine_name_and_hosts
-      @added.should == [["etc/hosts", "/etc/hosts"], "sed -i 's/ubuntu/machine/' /etc/{hosts,hostname}", 'hostname machine']
-      @checks.should == ["test -s /etc/hosts #{pass_fail}", "grep 'machine' /etc/{hosts,hostname} #{pass_fail}", "hostname | grep 'machine' #{pass_fail}"]
+      @added.should == [["etc/hosts", "/etc/hosts"], "echo 'machine' > /etc/hostname"]
+      @checks.should == ["test -s /etc/hosts #{pass_fail}", "grep 'machine' /etc/hostname #{pass_fail}"]
     end
   end
 

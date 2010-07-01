@@ -27,6 +27,14 @@ module Machines
       add "echo '#{line}' >> #{options[:to]}", check_string(line, options[:to])
     end
 
+    # overwrite a file with the specified content
+    # @param [String] line Line of text to add
+    # @param [Hash] options
+    # @option options [String] :to File to write to
+    def write line, options
+      add "echo '#{line}' > #{options[:to]}", check_string(line, options[:to])
+    end
+
     # Export key/value pairs to a file
     # @param [Hash] options Keys to be exported
     # @option options [String] :to File to export key(s) to
@@ -55,9 +63,13 @@ module Machines
 
     # Copy etc/hosts file and set machine name
     def set_machine_name_and_hosts
-      upload 'etc/hosts', '/etc/hosts' if development? && File.exist?('etc/hosts')
-      replace 'ubuntu', :with => @machinename, :in => '/etc/{hosts,hostname}'
-      add "hostname #{@machinename}", "hostname | grep '#{@machinename}' #{pass_fail}"
+      if development? && File.exist?('etc/hosts')
+        upload 'etc/hosts', '/etc/hosts'
+      else
+        write "127.0.1.1\t#{@machinename}", :to => 'etc/hosts'
+        append "127.0.0.1\tlocalhost", :to => '/etc/hosts'
+      end
+      write @machinename, :to => '/etc/hostname'
     end
 
     # Add a new user (uses a lowlevel add so doesn't set a password. Used to handle authorized_keys files)
