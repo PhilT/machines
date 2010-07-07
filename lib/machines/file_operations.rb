@@ -61,11 +61,10 @@ module Machines
     end
 
     # Add a symlink
-    # @param [String] from Existing filename to link
-    # @param [Hash] options
-    # @option options [String] :to Name of the symlink
-    def link from, options
-      add "ln -sf #{options[:to]} #{from}", check_link(from)
+    # @param [String] target Existing path to link
+    # @param [String] link_name path name for the link
+    def link target, link_name
+      add "ln -sf #{target} #{link_name}", check_link(link_name)
     end
 
     # Replace some text in a file

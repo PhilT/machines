@@ -101,8 +101,8 @@ describe 'FileOperations' do
 
   describe 'link' do
     it 'should add a command to symlink a path' do
-      link 'from', :to => 'to'
-      @added.should == ['ln -sf to from']
+      link 'target', 'link'
+      @added.should == ['ln -sf target link']
     end
   end
 

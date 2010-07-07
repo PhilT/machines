@@ -36,7 +36,7 @@ module Machines
       @userpass = options[:userpass]
       @initial_password = options[:initial_password] || DEFAULT_IDENTITY
       @keys = [options[:keyfile]]
-      @dbmaster = options[:dbmaster] || @host
+      @dbmaster = options[:dbmaster] || 'localhost'
       @machinename = options[:machinename] || @config
       @username = options[:username] || DEFAULT_USERNAME
       raise ArgumentError, 'Missing options. :machine, :host and :keyfile are required' unless @config && @host
