@@ -1,5 +1,7 @@
 require 'date'
 
+LOG_FILE = 'log/output.log'
+
 module Machines
   module Helpers
     # Utility method to tidy up commands before being logged
@@ -21,14 +23,14 @@ module Machines
     end
 
     def log_to where, message, mode = 'a'
-      f = where == :file ? File.open("output.log", mode) : $stdout
+      f = where == :file ? File.open(LOG_FILE, mode) : $stdout
       f.puts message if message
       f.close if where == :file
     end
 
     def log_result_to_file check, message
       success = true
-      File.open("output.log", 'a') do |f|
+      File.open(LOG_FILE, 'a') do |f|
         if check.nil? || message.nil?
           f.puts 'NOT CHECKED'.yellow
           f.puts "\n\n"

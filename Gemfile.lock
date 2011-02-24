@@ -1,0 +1,52 @@
+PATH
+  remote: .
+  specs:
+    machines (0.0.1)
+      activesupport
+      amazon-ec2
+      i18n
+      net-scp
+      net-ssh
+      s3
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    ZenTest (4.5.0)
+    activesupport (3.0.4)
+    amazon-ec2 (0.9.17)
+      xml-simple (>= 1.0.12)
+    autotest (4.4.6)
+      ZenTest (>= 4.4.1)
+    diff-lcs (1.1.2)
+    i18n (0.5.0)
+    net-scp (1.0.4)
+      net-ssh (>= 1.99.1)
+    net-ssh (2.1.0)
+    proxies (0.2.1)
+    rspec (2.5.0)
+      rspec-core (~> 2.5.0)
+      rspec-expectations (~> 2.5.0)
+      rspec-mocks (~> 2.5.0)
+    rspec-core (2.5.1)
+    rspec-expectations (2.5.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.5.0)
+    s3 (0.3.7)
+      proxies
+    simplecov (0.4.0)
+      simplecov-html (~> 0.4.0)
+    simplecov-html (0.4.3)
+    xml-simple (1.0.14)
+    yard (0.6.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ZenTest
+  autotest
+  machines!
+  rspec
+  simplecov
+  yard

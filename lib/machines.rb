@@ -1,8 +1,7 @@
 # Machines allows simple configuration of development, staging and production computers or images for ec2
-require 'rubygems'
+require 'active_support'
 require 'net/ssh'
 require 'net/scp'
-require 'active_support'
 require 'yaml'
 require File.join(File.dirname(__FILE__), 'colors')
 require File.join(File.dirname(__FILE__), 'progress')

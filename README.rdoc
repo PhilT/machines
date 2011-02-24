@@ -1,4 +1,5 @@
-= machines
+== machines
+
 Simple configuration of development, staging and production computers or images for ec2
 
 Ubuntu build script for development and server machines.
@@ -9,7 +10,7 @@ Ubuntu build script for development and server machines.
 * Sets hostname
 * Green/red output progress indicating success/failure
 * All command output logged to `output.log`
-* Will try to continue execution even if something fails (so you can fix the issues all at once if they're not dependent)
+* Will try to continue execution even if something fails (so you can fix the issues all at once if they are not dependent)
 
 == Installation and Configuration
 
@@ -40,7 +41,7 @@ Ubuntu build script for development and server machines.
 
 
 == Status
-Almost ready for a 0.1.0 release.
+Under Development. Currently simplifing the setup process and configuration.
 
 == TODO
 * Add :abort => true to abort on failed check

@@ -1,13 +1,9 @@
-.DS_Store
-*.tmproj
-tmtags
-*~
-\#*
-.\#*
-*.swp
-coverage
-rdoc
+*.gem
+.rvmrc
 .yardoc
+
 doc
-output.log
+coverage
+log
+tmp
 
