@@ -1,6 +1,34 @@
-machine 'machine', :development
+all_apps = %w(application wiki)
+machine 'desktop', :development, :apps => all_apps, :roles => [:app, :web, :db]
+machine 'staging', :staging, :apps => all_apps, :roles => [:app, :web, :db]
+machine 'server', :production, :apps => all_apps, :roles => :app
+machine 'dbmaster', :production, :apps => all_apps, :roles => :db, :dbmaster
+machine 'dbslave', :production, :apps => all_apps, :roles => :db, :dbslave
 
-set_machine_name_and_hosts
-add_user username, :password => userpass, :admin => true
-set_sudo_no_password username
+enviroments :development do
+  Config.appsroot = Config.user.appsroot
+  package :dev_extras
+  install %w(mysql-query-browser gitk meld) # can gitk be installed before git-core?
+end
+
+package :base
+install %w(ffmpeg libmagick9-dev)
+
+package :nginx
+package :rvm
+package :ruby
+package :passenger
+package :mysql, :roles => :db
+package :git
+package :ssl
+package :userfiles
+
+users 'phil' do
+  package :chrome_beta
+  package :firefox
+  package :gnome
+  package :gmate
+end
+
+package :secure_ssh
 

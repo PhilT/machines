@@ -6,7 +6,7 @@ class Progress
   def initialize steps
     @steps = steps
     @current = 0
-    truncate_at ENV['COLUMNS'] || 120
+    truncate_at `stty size`.split[1].to_i
   end
 
   def truncate_at length

@@ -1,0 +1,16 @@
+staging:
+  adapter: mysql
+  host: <%= dbserver %>
+  encoding: utf8
+  database: application
+  username: application
+  password: ki34uyt7rfd
+
+production:
+  adapter: mysql
+  host: <%= dbserver %>
+  encoding: utf8
+  database: application
+  username: application
+  password: iytgfv5546g
+

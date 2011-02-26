@@ -29,11 +29,17 @@ Ubuntu build script for development and server machines.
 * Make sure network interface is loaded on startup
     auto eth0
     iface eth0 inet dhcp
+* Make sure network connections are available to all users
 * Restart
 
 * Test the Machinesfile
-    ssh-keygen -R host # remove host from known_hosts file (handy when testing)
+    ssh-keygen -R <host ip> # remove host from known_hosts file (handy when testing)
     rake machines test <configuration> <>
+
+* Setup the machine
+    rake setup:machine MACHINE=desktop HOST=ipaddress USERNAME=phil PASSWORD=encrypted
+* While running open another terminal to view detailed output
+    tail -f output.log
 
 == VirtualBox installation
 * Make sure you have Bridged Networking
@@ -44,12 +50,24 @@ Ubuntu build script for development and server machines.
 Under Development. Currently simplifing the setup process and configuration.
 
 == TODO
+run -> remote_run
+add -> queue << thing
+
+pass_fail & fail_pass - Use pipes and result codes?
+instead add '; echo $?'
+
+format output
+--progress (rspec style ...F....)
+--pretty (full log output)
+
+
 * Add :abort => true to abort on failed check
 * Add groups of tasks to allow starting/stopping at different points in the script
-* Add asynchronous ssh so output can piped live
-* Need to allow data to be returned from server (e.g. to get install ree version)
+* Add asynchronous ssh so output can be piped live
 * Add timer
 * Add checking of return values
+* More logging needed on initialization
+* No longer add a user. Either use `ubuntu` (for EC2 instances) or specified user/pass specified on cmdline
 
 == Warnings
 You might see something one of the following while upgrading/installing packages:
@@ -62,9 +80,7 @@ These are all known issues and nothing to worry about
 == Note on Patches/Pull Requests
 
 * Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
+* Test drive your feature addition or bug fix
 * Commit, do not mess with rakefile, version, or history.
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.

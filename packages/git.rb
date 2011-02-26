@@ -1,0 +1,2 @@
+install %w(git-core)
+

@@ -22,7 +22,7 @@ module Machines
     # @option options [String] :machine one of the configurations specified in Machinesfile
     # @option options [String] :host the url of the remote machine
     # @option options [Optional String] :password Password to setup for user account.
-    # @option options [Optional String] :initial_password Passed used to first login to the remote machine. Defaults to 'ubuntu'
+    # @option options [Optional String] :initial_password Password used to first login to the remote machine. Defaults to 'ubuntu'
     # @option options [Optional String] :keyfile Path to the file containing the SSH key
     # @option options [Optional String] :dbmaster url to the master database server. Defaults to host
     # @option options [Optional String] :machinename name to give the computer. Defaults to <machine>
@@ -51,8 +51,8 @@ module Machines
       discover_users
       load_machinesfile
       prepare_log_file
-      setup_dev_machine if development?
-      enable_root_login
+      setup_dev_machine(@username, @userpass) if development?
+      enable_root_login(@username)
       Net::SSH.start @host, 'root', :keys => @keys do |ssh|
         run_commands ssh
       end
@@ -117,27 +117,27 @@ private
     end
 
     # Creates a keypair on a dev machine and allows sudo without password to lineup with Ubuntu EC2 images and run the rest of the script
-    def setup_dev_machine
+    def setup_dev_machine(username, userpass)
       @keys = ["#{host}.key"]
-      Net::SSH.start host, DEFAULT_IDENTITY, :password => @initial_password do |ssh|
+      Net::SSH.start host, username, :password => userpass do |ssh|
         log_to :file, ssh.exec!("mkdir .ssh && ssh-keygen -f .ssh/id_rsa -N '' -q && cp .ssh/id_rsa.pub .ssh/authorized_keys")
-        Net::SCP.start host, DEFAULT_IDENTITY, :password => @initial_password do |scp|
-          scp.download! '~/.ssh/id_rsa', @keys.first
+        Net::SCP.start host, username, :password => userpass do |scp|
+          scp.download! "/home/#{username}/.ssh/id_rsa", @keys.first
           `chmod 600 #{@keys.first}`
         end
-        log_to :file, ssh.exec!("echo ubuntu | sudo -S sh -c 'echo ubuntu  ALL=\\(ALL\\) NOPASSWD:ALL >> /etc/sudoers'")
+        log_to :file, ssh.exec!("echo #{userpass} | sudo -S sh -c 'echo ubuntu  ALL=\\(ALL\\) NOPASSWD:ALL >> /etc/sudoers'")
       end
     end
 
     AUTH_KEYS = '/root/.ssh/authorized_keys'
     # Copy authorized_keys so root login enabled (backs up authorized_keys if it exists)
-    def enable_root_login
+    def enable_root_login(username)
       6.times do
         begin
-          log_to :file, "Attempt to enable root login with #{DEFAULT_IDENTITY}@#{host} using key #{@keys.inspect}"
-          Net::SSH.start host, DEFAULT_IDENTITY, :keys => @keys do |ssh|
+          log_to :file, "Attempt to enable root login with #{username}@#{host} using key #{@keys.inspect}"
+          Net::SSH.start host, username, :keys => @keys do |ssh|
             log_to :file, ssh.exec!("sudo sh -c 'test -f #{AUTH_KEYS} && mv #{AUTH_KEYS} #{AUTH_KEYS}.orig || mkdir /root/.ssh'")
-            log_to :file, ssh.exec!("sudo sh -c 'cp /home/ubuntu/.ssh/authorized_keys /root/.ssh/'")
+            log_to :file, ssh.exec!("sudo sh -c 'cp /home/#{username}/.ssh/authorized_keys /root/.ssh/'")
           end
           break
         rescue

@@ -57,7 +57,8 @@ module Machines
         types = {String => 'string', Fixnum => 'int', TrueClass => 'bool', FalseClass => 'bool', Float => 'float', Array => 'list --list-type=string'}
         type = types[value.class]
         raise 'Invalid type for configure' unless type
-        run "gconftool-2 --set '#{key}' --type #{type} #{value.to_json}", :as => user
+        value = value.to_json if value.class = Array
+        run "gconftool-2 --set '#{key}' --type #{type} #{value}", :as => user
       end
     end
 
