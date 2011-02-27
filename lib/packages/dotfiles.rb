@@ -1,7 +1,7 @@
 desc 'Uploads bashrc, gitconfig, vimrc and authorized_keys files if they exist for the user'
 
-username = Config.user.name
-userhome = config.user.home
+username = AppConf.user.name
+userhome = AppConf.user.home
 
 %w(bashrc gitconfig vimrc).each do |file|
   source = File.join('users', username, file)

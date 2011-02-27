@@ -1,28 +1,39 @@
+# Machine types
+# machine 'type', :environment, :roles => [], :apps => []
 all_apps = %w(application wiki)
-machine 'desktop', :development, :apps => all_apps, :roles => [:app, :web, :db]
-machine 'staging', :staging, :apps => all_apps, :roles => [:app, :web, :db]
-machine 'server', :production, :apps => all_apps, :roles => :app
-machine 'dbmaster', :production, :apps => all_apps, :roles => :db, :dbmaster
-machine 'dbslave', :production, :apps => all_apps, :roles => :db, :dbslave
+machine 'desktop', :development, :roles => [:app, :db], :apps => all_apps
+machine 'staging', :staging, :roles => [:app, :db], :apps => all_apps
+machine 'server', :production, :roles => :app, :apps => all_apps
+machine 'dbmaster', :production, :roles => :db, :dbmaster, :apps => all_apps
+machine 'dbslave', :production, :roles => :db, :dbslave, :apps => all_apps
 
+# Will only be executed for development machines
 enviroments :development do
-  Config.appsroot = Config.user.appsroot
   package :dev_extras
   install %w(mysql-query-browser gitk meld) # can gitk be installed before git-core?
 end
 
+# Installed on all machines
 package :base
-install %w(ffmpeg libmagick9-dev)
 
-package :nginx
-package :rvm
-package :ruby
-package :passenger
-package :mysql, :roles => :db
-package :git
-package :ssl
-package :userfiles
+# Installed on machines that have the app role
+roles :app do
+  install %w(ffmpeg libmagick9-dev)
+  package :nginx
+  package :rvm
+  package :ruby
+  package :passenger
+  package :git
+  package :ssl
+  package :dotfiles
+end
 
+# Installed on machines that have the db role
+roles :db do
+  package :mysql
+end
+
+# Installed on machines when user is phil
 users 'phil' do
   package :chrome_beta
   package :firefox
@@ -30,5 +41,6 @@ users 'phil' do
   package :gmate
 end
 
+# Installed on all machines
 package :secure_ssh
 
