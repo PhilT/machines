@@ -4,10 +4,12 @@ PATH
     machines (0.0.1)
       activesupport
       amazon-ec2
+      app_conf
       i18n
       net-scp
       net-ssh
       s3
+      thor
 
 GEM
   remote: http://rubygems.org/
@@ -16,6 +18,7 @@ GEM
     activesupport (3.0.4)
     amazon-ec2 (0.9.17)
       xml-simple (>= 1.0.12)
+    app_conf (0.1.1)
     autotest (4.4.6)
       ZenTest (>= 4.4.1)
     diff-lcs (1.1.2)
@@ -37,6 +40,7 @@ GEM
     simplecov (0.4.0)
       simplecov-html (~> 0.4.0)
     simplecov-html (0.4.3)
+    thor (0.14.6)
     xml-simple (1.0.14)
     yard (0.6.4)
 

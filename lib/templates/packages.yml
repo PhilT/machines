@@ -1,0 +1,17 @@
+gmate:
+  git://github.com/PhilT/gmate.git
+
+nginx:
+  version: 0.8.54
+  url: http://nginx.org/download/nginx-#{version}.tar.gz
+  destination: /opt/nginx/
+
+passenger:
+  version: 3.0.2
+
+ruby:
+  version: 1.9.2
+
+rvm:
+  url: git://github.com/wayneeseguin/rvm.git
+
