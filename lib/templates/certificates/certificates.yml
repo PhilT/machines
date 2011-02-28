@@ -1,0 +1,9 @@
+# The following is used for the SSL package which will
+# copy from the certificates folder the .crt and .key files
+# for the selected environment
+
+certificate:
+  development: selfsigned
+  staging: example.com
+  production: example.com
+

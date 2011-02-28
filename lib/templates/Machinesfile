@@ -19,12 +19,13 @@ package :base
 # Installed on machines that have the app role
 roles :app do
   install %w(ffmpeg libmagick9-dev)
-  package :nginx
   package :rvm
   package :ruby
+  package :nginx
   package :passenger
-  package :git
+  package :passenger_nginx
   package :ssl
+  package :git
   package :dotfiles
 end
 

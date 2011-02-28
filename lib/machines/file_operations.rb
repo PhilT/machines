@@ -77,6 +77,16 @@ module Machines
       add "sed -i 's/#{regex}/#{options[:with].to_s.gsub('/', '\/').gsub("\n", "\\n")}/' #{options[:in]}", check_string(options[:with], options[:in])
     end
 
+    # Write an ERB template
+    # @param [String] erb_path Path to the ERB file to process
+    # @param [Hash] options
+    # @option options [String] :to File to write to
+    def template erb_path, options
+      erb = ERB.new(File.open(erb_path))
+      binding = options[:settings] ? options[:settings].get_binding : nil
+      write erb.result(binding), options
+    end
+
     # Create a path on the remote host
     # @param [Hash] options
     # @option options [Optional String] :perms chmod permissions to set

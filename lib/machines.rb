@@ -1,5 +1,7 @@
 # Machines allows simple configuration of development, staging and production computers or images for ec2
 require 'active_support'
+require 'erb'
+require 'app_conf'
 require 'net/ssh'
 require 'net/scp'
 require 'yaml'

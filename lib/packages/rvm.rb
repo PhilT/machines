@@ -1,7 +1,7 @@
 install %w(curl)
-dir = "#{@homepath}/.rvm/src/rvm"
+dir = "#{AppConf.user.home}/.rvm/src/rvm"
 
-install Config.rvm.url, :to => dir, :as => username
-run "source #{@homepath}/.rvm/scripts/rvm", :as => username
+install AppConf.rvm.url, :to => dir, :as => AppConf.user.name
+run "source #{AppConf.user.home}/.rvm/scripts/rvm", :as => AppConf.user.name
 #run "rvm reload", :as => username    #may not be needed
 
