@@ -10,7 +10,6 @@ machine 'dbslave', :production, :roles => :db, :dbslave, :apps => all_apps
 # Will only be executed for development machines
 enviroments :development do
   package :dev_extras
-  install %w(mysql-query-browser gitk meld) # can gitk be installed before git-core?
 end
 
 # Installed on all machines
@@ -39,6 +38,10 @@ users 'phil' do
   package :firefox
   package :gnome
   package :gmate
+end
+
+enviroments :development do
+  install %w(mysql-query-browser gitk meld) # can gitk be installed before git-core?
 end
 
 # Installed on all machines

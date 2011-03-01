@@ -38,6 +38,15 @@ server {
     rewrite  ^(.*)$  /system/maintenance.html break;
   }
 
-  include /opt/nginx/servers/optional/*.conf;
+  <% if basic_auth %>
+    auth_basic "Restricted";
+    auth_basic_user_file basic_auth_passwd;
+
+    # location ~ paths/to/bypass/auth
+    # {
+    #     passenger_enabled on;
+    #     auth_basic off;
+    # }
+  <% end %>
 }
 

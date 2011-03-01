@@ -5,6 +5,7 @@ application:
   staging:
     server_name: staging.example.com *.staging.example.com
     ssl: selfsigned
+    basic_auth: true
   production:
     server_name: example.com *.example.com
     ssl: example.com

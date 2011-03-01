@@ -21,6 +21,10 @@ yaml.each do |app_name, app_hash|
   app_hash.each do |k, v|
     app[k] = v
   end
+
+  app_hash[AppConf.environment].each do |k, v|
+    app[k] = v
+  end
 end
 ########
 
@@ -44,6 +48,8 @@ AppConf.apps.each do |app|
     upload "certificates/#{ssl_crt}", '/etc/ssl/certs/{ssl_crt}'
     upload "certificates/#{ssl_key}", '/etc/ssl/private/#{ssl_key}'
   end
+  app/optional.each do |file|
+    upload file, AppConf.nginx.path + 'app_servers/optional/'
 end
 
 
