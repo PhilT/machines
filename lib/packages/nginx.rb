@@ -3,13 +3,7 @@ extract "nginx-#{AppConf.nginx.version}.tar.gz"
 add_init_d 'nginx'
 template 'nginx/nginx.conf.erb', :to => File.join(AppConf.nginx.path, 'conf', 'nginx.conf')
 
-
-# WIP
-app 'application', :ssl => true, %w()
-app 'velocity', 'todo.local', 'todo.puresolo.com'
-app 'fountain',
-
-#Test OpenStruct with ERB
+# Belongs in a machines/lib module
 require 'erb'
 require 'ostruct'
 class AppBuilder < OpenStruct
@@ -17,39 +11,43 @@ class AppBuilder < OpenStruct
     binding
   end
 end
-app = AppBuilder.new
-app.name = 'something'
-erb = ERB.new("<%= name %>")
-erb.result(app.get_binding)
-###
+yaml = YAML.load(File.open('apps.yml'))
+yaml.each do |app_name, app_hash|
+  app = AppBuilder.new
+  AppBuilder.from(app_hash)   #1st alt
+  app.set_multiple(app_hash)  #2nd alt
+  app.ssl_key = app_hash[AppConf.environment].ssl + '.key'
+  app.ssl_crt = app_hash[AppConf.environment].ssl + '.crt'
+  app_hash.each do |k, v|
+    app[k] = v
+  end
+end
+########
 
 # Should be set at init time
 AppConf.user.home = File.join('/home', AppConf.user.name)
 
 server_name = app[AppConf.environment].server_name
 
+def generate_template_for(app, enable_ssl = false)
+  app.enable_ssl = enable_ssl
+  path = File.join(AppConf.nginx.path, 'servers', "#{app.name}_#{enable_ssl ? 'ssl' : ''}.conf"
+  template 'nginx/_app_server.conf.erb', :settings => app, :to => path)
+end
 
 mkdir File.join(AppConf.nginx.destination, 'app_servers', 'optional')
 AppConf.apps.each do |app|
   make_app_structure app.path # check this is needed for all environments
-  template 'nginx/_server.conf.erb', :settings => AppConf[app_name].app, :to => File.join(AppConf.nginx.path, 'servers', "#{app.name}.conf")
-  if app.enable_ssl
-    app.ssl = true
-    template 'nginx/_server.conf.erb', :settings => app, :to => File.join(AppConf.nginx.path, 'servers', "#{app.name}_ssl.conf")
+  generate_template_for(app)
+  if app.ssl_key
+    generate_template_for(app, true)
+    upload "certificates/#{ssl_crt}", '/etc/ssl/certs/{ssl_crt}'
+    upload "certificates/#{ssl_key}", '/etc/ssl/private/#{ssl_key}'
   end
 end
 
 
 =begin
-
-  apps.each do |app|
-    builder = ServerBuilder.new [app_config[app][environment], "#{app_root}/public", environment, 'puresolo.com.crt', 'puresolo.com.key', app]
-    result = erb.result(builder.get_binding)
-    if app == 'application'
-      builder.ssl = true
-      result += erb.result(builder.get_binding)
-    end
-    append result, :to => File.join(NGINX_INCLUDES, app + ".conf")
 
     if environment == 'staging' && app == 'application'
       upload "nginx/_application_basic_auth.conf", NGINX_INCLUDES + '/optional/_application_basic_auth.conf'

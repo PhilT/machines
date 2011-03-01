@@ -1,17 +1,21 @@
 application:
   name: application
-  ssl:
-    crt: example.com.crt
-    key: example.com.key
-  server_name:
-    development: example.local *.example.local
-    staging: staging.example.com *.staging.example.com
-    production: example.com *.example.com
+  development:
+    server_name: example.local *.example.local
+  staging:
+    server_name: staging.example.com *.staging.example.com
+    ssl: selfsigned
+  production:
+    server_name: example.com *.example.com
+    ssl: example.com
 
 wiki:
   name: wiki
-  server_name:
-    development: todo.example.local
-    staging: todo.staging.example.com
-    production: todo.example.com
+  project_name: velocity
+  development:
+    server_name: wiki.example.local
+  staging:
+    server_name: wiki.staging.example.com
+  production:
+    server_name: wiki.example.com
 

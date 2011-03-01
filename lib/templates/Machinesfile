@@ -24,7 +24,6 @@ roles :app do
   package :nginx
   package :passenger
   package :passenger_nginx
-  package :ssl
   package :git
   package :dotfiles
 end
