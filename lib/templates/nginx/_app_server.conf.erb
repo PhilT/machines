@@ -1,11 +1,11 @@
 server {
-  listen <%= =app.ssl ? 443 : 80 %>;
+  listen <%= app.ssl.crt ? 443 : 80 %>;
   server_name <%= app.server_name %>;
-  root <%= app.root.public_path %>;
+  root <%= File.join(AppConf.user.home, app.name, 'public') %>;
   rails_env <%= AppConf.environment %>;
   passenger_enabled on;
 
-  <% if app.ssl %>
+  <% if app.ssl.crt %>
     ssl on;
     ssl_certificate /etc/ssl/certs/<%= app.ssl.crt %>;
     ssl_certificate_key /etc/ssl/private/<%= app.ssl.key %>;

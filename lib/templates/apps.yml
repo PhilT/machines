@@ -1,0 +1,17 @@
+application:
+  name: application
+  ssl:
+    crt: example.com.crt
+    key: example.com.key
+  server_name:
+    development: example.local *.example.local
+    staging: staging.example.com *.staging.example.com
+    production: example.com *.example.com
+
+wiki:
+  name: wiki
+  server_name:
+    development: todo.example.local
+    staging: todo.staging.example.com
+    production: todo.example.com
+
