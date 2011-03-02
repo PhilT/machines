@@ -40,7 +40,7 @@ server {
 
   <% if basic_auth %>
     auth_basic "Restricted";
-    auth_basic_user_file basic_auth_passwd;
+    auth_basic_user_file conf/htpasswd;
 
     # location ~ paths/to/bypass/auth
     # {

@@ -4,13 +4,8 @@ all_apps = %w(application wiki)
 machine 'desktop', :development, :roles => [:app, :db], :apps => all_apps
 machine 'staging', :staging, :roles => [:app, :db], :apps => all_apps
 machine 'server', :production, :roles => :app, :apps => all_apps
-machine 'dbmaster', :production, :roles => :db, :dbmaster, :apps => all_apps
-machine 'dbslave', :production, :roles => :db, :dbslave, :apps => all_apps
-
-# Will only be executed for development machines
-enviroments :development do
-  package :dev_extras
-end
+machine 'dbmaster', :production, :roles => :db, :dbmaster
+machine 'dbslave', :production, :roles => :db, :dbslave
 
 # Installed on all machines
 package :base
@@ -40,7 +35,9 @@ users 'phil' do
   package :gmate
 end
 
+# Will only be executed for development machines
 enviroments :development do
+  package :dev_extras
   install %w(mysql-query-browser gitk meld) # can gitk be installed before git-core?
 end
 

@@ -11,3 +11,5 @@ ec2:
 time:
   zone: GB
 
+webserver: nginx
+

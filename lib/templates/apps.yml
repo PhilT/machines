@@ -1,5 +1,5 @@
 application:
-  name: application
+  path: application
   development:
     server_name: example.local *.example.local
   staging:
@@ -11,8 +11,7 @@ application:
     ssl: example.com
 
 wiki:
-  name: wiki
-  project_name: velocity
+  path: velocity
   development:
     server_name: wiki.example.local
   staging:
