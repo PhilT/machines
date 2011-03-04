@@ -4,7 +4,7 @@
 username = AppConf.user.name
 userhome = AppConf.user.home
 
-%w(bashrc).merge(AppConf.dotfiles).each do |file|
+AppConf.dotfiles.each do |file|
   source = File.join('users', username, file)
   destination = File.join(userhome, ".#{file}")
   upload source, destination, :owner => username if File.exists?(source)

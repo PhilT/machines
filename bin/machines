@@ -2,5 +2,5 @@
 
 require 'machines'
 
-Machines::Base.new.run(ARGV[0])
+Machines::Base.new.start(ARGV[0])
 

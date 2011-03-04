@@ -5,6 +5,7 @@ module Machines
 =begin
     These all need to be setup
 
+    AppConf.dotfiles
     AppConf.machinename
     AppConf.environment
     AppConf.timezone

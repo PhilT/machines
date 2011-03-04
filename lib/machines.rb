@@ -58,11 +58,7 @@ private
       i = 1
       @failed = false
       AppConf.commands.each do |line, command, check|
-        progress.advance
-
         if net_ssh
-          bar = progress.show(line, command)
-          print @failed ? bar.dark_red : bar.dark_green
           log_to :file, "Machinesfile line #{line}:".blue
           prefix = command.is_a?(Array) ? 'Upload' : 'Run'
           log_to :file, "#{prefix} #{display(command).orange}"
@@ -86,8 +82,6 @@ private
           log_to :screen, check ? "#{'check:'.dark_green} #{display(check)}" : 'no check'.orange
         end
       end
-      bar = progress.complete
-      puts @failed ? bar.dark_red : bar.dark_green
     end
 
     # Creates a keypair on a dev machine and allows sudo without password
@@ -123,6 +117,7 @@ private
         end
       end
       puts ''
+      raise "Timeout connecting to #{host}" if given_up
     end
 
     # Removed authorized_keys so root login disabled (restores original authorized_keys if it exists)

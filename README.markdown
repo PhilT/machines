@@ -116,3 +116,27 @@ Commandline Options
 * `test`     - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them'
 * `build`    - Asks some questions then builds your chosen machine'
 
+Notes
+---------------------------------------
+
+    log = Logger.new(STDOUT)
+    log.level = Logger::WARN
+
+    log.debug 'Logger created'
+    log.info 'Program started'
+    log.error 'Aaaaah!'
+
+    rescue
+      log.fatal
+    end
+
+    hi = HighLine.new
+    hi.ask("Enter your password:  " ) { |q| q.echo = '' }
+
+    require 'highline/import'
+    ask("Enter your password:  " ) { |q| q.echo = false }
+    $terminal.color('Lady in red', :red)
+
+
+    [001 / 112] This is a log message
+
