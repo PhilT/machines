@@ -44,6 +44,7 @@ module Machines
     end
 
     def generate
+      FileUtils.cp_r(File.join(AppConf.template_path, '.'), '.')
     end
 
     def test

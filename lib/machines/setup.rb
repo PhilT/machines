@@ -1,6 +1,7 @@
 module Machines
   module Setup
     AppConf.commands = []
+    AppConf.template_path = File.join(File.dirname(__FILE__), '..', 'template')
 
 =begin
     These all need to be setup
@@ -16,7 +17,7 @@ module Machines
     AppConf.user.appsroot
 
     AppConf.nginx.url
-end
+=end
   end
 end
 
