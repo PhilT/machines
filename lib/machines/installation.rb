@@ -8,8 +8,7 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to Overrides name of sources.list file
     # @option options [String] :gpg URL of key
-    # @example Adding Google Chrome key
-    #   add_source 'google', 'http://dl.google.com/linux/deb/ stable main', :gpg => 'https://dl-ssl.google.com/linux/linux_signing_key.pub', :to => 'google-chrome'
+    #     add_source 'google', 'http://dl.google.com/linux/deb/ stable main', :gpg => 'https://dl-ssl.google.com/linux/linux_signing_key.pub', :to => 'google-chrome'
     def add_source name, source, options
       append "deb #{source}", :to => "/etc/apt/sources.list.d/#{options[:to] || name}.list"
       add "wget -q -O - #{options[:gpg]} | apt-key add -", "apt-key list | grep -i #{name} #{pass_fail}"
@@ -19,8 +18,7 @@ module Machines
     # @param [String] user The user of the PPA
     # @param [String] name Name of the PPA
     # @param [String] key_name What to check in apt-key list to ensure it installed
-    # @example Adding the Firefox PPA
-    #   add_ppa 'mozillateam/firefox-stable', 'mozilla'
+    #     add_ppa 'mozillateam/firefox-stable', 'mozilla'
     def add_ppa name, key_name
       add "add-apt-repository ppa:#{name}", "apt-key list | grep -i #{key_name} #{pass_fail}"
     end
@@ -44,7 +42,6 @@ module Machines
     # @option options [String] :to Switch to specified directory to install. Used by Git installer
     # @option options [String] :as Run as specified user
     # @option options [String] :options Add extra options to `./install.sh`
-    # @example
     #     install 'git://github.com/wayneeseguin/rvm.git', :to => '/home/ubuntu/installer', :as => 'ubuntu', :options => '--auto' #=> Runs install.sh --auto in /home/ubuntu/installer folder
     #     install %w(build-essential libssl-dev mysql-server) #=> Installs apt packages
     #     install 'http://example.com/my_package.deb', :cleanup => true #=> Installs a deb using dpkg then removes the deb

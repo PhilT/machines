@@ -1,11 +1,11 @@
 # Machine types
 # machine 'type', :environment, :roles => [], :apps => []
 all_apps = %w(application wiki)
-machine 'desktop', :development, :roles => [:app, :db], :apps => all_apps
-machine 'staging', :staging, :roles => [:app, :db], :apps => all_apps
-machine 'server', :production, :roles => :app, :apps => all_apps
-machine 'dbmaster', :production, :roles => :db, :dbmaster
-machine 'dbslave', :production, :roles => :db, :dbslave
+machine 'Desktop', :development, :roles => [:app, :db], :apps => all_apps
+machine 'Staging', :staging, :roles => [:app, :db], :apps => all_apps
+machine 'Production', :production, :roles => :app, :apps => all_apps
+machine 'DBmaster', :production, :roles => :db, :dbmaster
+machine 'DBslave', :production, :roles => :db, :dbslave
 
 # Installed on all machines
 package :base
@@ -19,7 +19,7 @@ roles :app do
   package :passenger
   package :passenger_nginx
   package :git
-  package :dotfiles
+  package :dotfiles, %w(bashrc gitconfig)
 end
 
 # Installed on machines that have the db role

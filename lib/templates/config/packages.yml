@@ -8,7 +8,7 @@ nginx:
   app_servers: app_servers
 
 passenger:
-  version: 3.0.2
+  version: 3.0.4
 
 ruby:
   version: 1.9.2

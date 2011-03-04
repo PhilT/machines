@@ -1,16 +1,6 @@
 #!/usr/bin/env ruby
-require "thor"
-class Machines < Thor
-  desc "htpasswd USERNAME PASSWORD", "Generates a basic auth password and adds it to nginx/conf/htpasswd or apache/conf/htpasswd"
-  def htpasswd(username, password)
-    require 'webrick/utils'
-    crypted_pass.crypt(WEBrick::Utils.random_string(2))
-    ['nginx/conf', 'apache/conf'].each do |path|
-      if File.exist?(path)
-        File.open(File.join(path, 'htpasswd'), 'a') {|file| file.puts "#{username}:#{crypted_pass}" }
-      end
-    end
-  end
-end
-Machines.start
+
+require 'machines'
+
+Machines::Base.new.run(ARGV[0])
 

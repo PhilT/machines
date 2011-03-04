@@ -50,16 +50,6 @@ Ubuntu build script for development and server machines.
 Under Development. Currently simplifing the setup process and configuration.
 
 == TODO
-run -> remote_run
-add -> queue << thing
-
-pass_fail & fail_pass - Use pipes and result codes?
-instead add '; echo $?'
-
-format output
---progress (rspec style ...F....)
---pretty (full log output)
-
 
 * Add :abort => true to abort on failed check
 * Add groups of tasks to allow starting/stopping at different points in the script

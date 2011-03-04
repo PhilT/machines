@@ -15,11 +15,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport'
   s.add_dependency 'amazon-ec2'
   s.add_dependency 'app_conf'
+  s.add_dependency 'highline'
   s.add_dependency 'i18n'
   s.add_dependency 'net-ssh'
   s.add_dependency 'net-scp'
   s.add_dependency 's3'
-  s.add_dependency 'thor'
 
   s.add_development_dependency 'autotest'
   s.add_development_dependency 'rspec'
@@ -27,13 +27,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'yard'
   s.add_development_dependency 'ZenTest'
 
-  s.has_rdoc = true
-  s.rdoc_options.concat %W{--main README.rdoc -S -N --title #{s.name}}
-  s.extra_rdoc_files = %W{README.rdoc}
-
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- spec/*`.split("\n")
-#  s.executables   = ['machines']
+  s.executables   = ['machines']
   s.require_path  = 'lib'
 end
 

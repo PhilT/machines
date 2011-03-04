@@ -1,55 +1,29 @@
 # Machines allows simple configuration of development, staging and production computers or images for ec2
 require 'active_support'
-require 'erb'
 require 'app_conf'
+require 'AWS'
+require 'erb'
+require 'highline/import'
 require 'net/ssh'
 require 'net/scp'
 require 'yaml'
-require File.join(File.dirname(__FILE__), 'colors')
-require File.join(File.dirname(__FILE__), 'progress')
 
 module Machines
-  DEFAULT_IDENTITY = 'ubuntu'
-  DEFAULT_USERNAME = 'www'
 
   class Base
     Dir[File.join(File.dirname(__FILE__), 'machines/**/*.rb')].sort.each do |lib|
       require lib; include eval(ActiveSupport::Inflector.camelize(File.basename(lib, '.rb')))
     end
 
-    attr_reader :passwords, :host, :userpass, :dbmaster, :machinename, :username, :users, :passwords, :environment, :apps, :role
-
-    # Takes the arguments given on the commandline except the <command>. Set defaults.
-    # @param options [Hash]
-    # @option options [String] :machine one of the configurations specified in Machinesfile
-    # @option options [String] :host the url of the remote machine
-    # @option options [Optional String] :password Password to setup for user account.
-    # @option options [Optional String] :initial_password Password used to first login to the remote machine. Defaults to 'ubuntu'
-    # @option options [Optional String] :keyfile Path to the file containing the SSH key
-    # @option options [Optional String] :dbmaster url to the master database server. Defaults to host
-    # @option options [Optional String] :machinename name to give the computer. Defaults to <machine>
-    # @option options [Optional String] :username the username. Defaults to 'www'
-    def initialize(options)
-      @commands = []
-      @passwords = {}
-      @config = options[:machine]
-      @host = options[:host]
-      @userpass = options[:userpass]
-      @initial_password = options[:initial_password] || DEFAULT_IDENTITY
-      @keys = [options[:keyfile]]
-      @dbmaster = options[:dbmaster] || 'localhost'
-      @machinename = options[:machinename] || @config
-      @username = options[:username] || DEFAULT_USERNAME
-      raise ArgumentError, 'Missing options. :machine, :host and :keyfile are required' unless @config && @host
-    end
-
-    def dryrun
+    def test
       discover_users
       load_machinesfile
       run_commands
     end
 
     def setup
+      add_user username, :password => userpass, :admin => true
+      set_sudo_no_password username
       discover_users
       load_machinesfile
       prepare_log_file
@@ -81,11 +55,9 @@ private
     # Loops through all commands calling with either Net::SSH::exec! or Net::SCP::upload!
     # @param [Optional #exec!] ssh Net::SSH connection to send the commands to. Only output them if ssh is nil
     def run_commands net_ssh = nil
-      progress = Progress.new(@commands.size)
       i = 1
-      STDOUT.sync = true
       @failed = false
-      @commands.each do |line, command, check|
+      AppConf.commands.each do |line, command, check|
         progress.advance
 
         if net_ssh
@@ -118,7 +90,8 @@ private
       puts @failed ? bar.dark_red : bar.dark_green
     end
 
-    # Creates a keypair on a dev machine and allows sudo without password to lineup with Ubuntu EC2 images and run the rest of the script
+    # Creates a keypair on a dev machine and allows sudo without password
+    # to lineup with Ubuntu EC2 images and run the rest of the script
     def setup_dev_machine(username, userpass)
       @keys = ["#{host}.key"]
       Net::SSH.start host, username, :password => userpass do |ssh|
@@ -134,19 +107,22 @@ private
     AUTH_KEYS = '/root/.ssh/authorized_keys'
     # Copy authorized_keys so root login enabled (backs up authorized_keys if it exists)
     def enable_root_login(username)
-      6.times do
+      given_up = true
+      10.times do
         begin
           log_to :file, "Attempt to enable root login with #{username}@#{host} using key #{@keys.inspect}"
           Net::SSH.start host, username, :keys => @keys do |ssh|
             log_to :file, ssh.exec!("sudo sh -c 'test -f #{AUTH_KEYS} && mv #{AUTH_KEYS} #{AUTH_KEYS}.orig || mkdir /root/.ssh'")
             log_to :file, ssh.exec!("sudo sh -c 'cp /home/#{username}/.ssh/authorized_keys /root/.ssh/'")
           end
+          given_up = false
           break
         rescue
-          sleep 10
-          puts 'retrying...'
+          sleep 6
+          print '.'
         end
       end
+      puts ''
     end
 
     # Removed authorized_keys so root login disabled (restores original authorized_keys if it exists)

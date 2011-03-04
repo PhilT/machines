@@ -1,4 +1,4 @@
-desc 'Installs mysql, sets app permissions, sets master/slave replication'
+# Installs mysql, sets app permissions, sets master/slave replication
 
 install %w(libmysqld-dev mysql-server)
 

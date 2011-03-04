@@ -1,4 +1,4 @@
-desc 'Set Gnome display preferences'
+# Set Gnome display preferences
 
 configure AppConf.user.name,
   '/apps/metacity/general/titlebar_font' => 'Arial Bold 10',

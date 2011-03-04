@@ -3,7 +3,9 @@ require 'rspec/core/rake_task'
 
 task :default => [:coverage, :yard, :install]
 
-YARD::Rake::YardocTask.new
+YARD::Rake::YardocTask.new do |t|
+  t.options = ['--markup markdown']
+end
 
 RSpec::Core::RakeTask.new(:spec)
 
@@ -25,6 +27,13 @@ task :install do
   else
     raise result
   end
+end
+
+desc 'Run machines'
+task :run do
+  $LOAD_PATH << 'lib'
+  require 'machines'
+  Machines::Base.new.start(ARGV[1])
 end
 
 desc 'takes the version in the gemspec creates a git tag and sends the gem to rubygems'

@@ -1,4 +1,4 @@
-desc 'Install gmate for gEdit'
+# Install gmate for gEdit
 
 dir = File.join AppConf.apps.root, 'gmate'
 username = AppConf.user.name

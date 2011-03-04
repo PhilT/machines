@@ -8,8 +8,9 @@ ec2:
   security_group: eu-public
 
 
-time:
-  zone: GB
-
+timezone: GB
 webserver: nginx
+database:
+  adapter: mysql
+  encoding: utf8
 

@@ -8,8 +8,7 @@ module Machines
     # @option options [Optional String] :owner Name of owner to change to
     #
     # If the `local_source` is a directory it uploads every file within to the remote_dest creating every directory from local_source/ deeper
-    # @example
-    #   upload 'source_dir', '~' #=> creates source_dir/subdir as ~/subdir
+    #     upload 'source_dir', '~' #=> creates source_dir/subdir as ~/subdir
     def upload local_source, remote_dest, options = {}
       if File.directory?(local_source)
         Dir[File.join(local_source, '**', '*')].each do |path|
