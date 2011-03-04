@@ -35,8 +35,11 @@ This will create the following directory structure:
 
 * machines_example
   * certificates
-    * example.com.key
-    * selfsigned.key
+    * example.com.crt - SSL certificate
+    * example.com.key - SSL private key
+    * selfsigned.crt - Self-signed SSL certificate
+    * selfsigned.key - Self-signed SSL private key
+    * amazon.key - Your X.509 private key to access Amazon Web Services
   * config
     * apps.yml - App servers configuration
     * config.yml - EC2 settings, timezone, webserver, database
@@ -57,7 +60,6 @@ This will create the following directory structure:
     * phil
       * basrc
       * confi
-  * amazon.key
   * Machinesfile
 
 ### Configure your deployment
