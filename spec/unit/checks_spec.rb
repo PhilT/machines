@@ -2,15 +2,9 @@ require 'spec_helper'
 
 describe 'Checks' do
 
-  describe 'pass_fail' do
+  describe 'echo_result' do
     it do
-      pass_fail.should == '&& echo CHECK PASSED || echo CHECK FAILED'
-    end
-  end
-
-  describe 'fail_pass' do
-    it do
-      fail_pass.should == '&& echo CHECK FAILED || echo CHECK PASSED'
+      echo_result.should == '&& echo CHECK PASSED || echo CHECK FAILED'
     end
   end
 
@@ -40,7 +34,7 @@ describe 'Checks' do
     end
 
     it do
-      check_file('file', false).should == 'test -s file && echo CHECK FAILED || echo CHECK PASSED'
+      check_file('file', false).should == 'test ! -s file && echo CHECK PASSED || echo CHECK FAILED'
     end
   end
 
@@ -56,7 +50,7 @@ describe 'Checks' do
     end
 
     it do
-      check_dir('dir', false).should == 'test -d dir && echo CHECK FAILED || echo CHECK PASSED'
+      check_dir('dir', false).should == 'test ! -d dir && echo CHECK PASSED || echo CHECK FAILED'
     end
   end
 

@@ -16,18 +16,18 @@ describe 'Database' do
     it 'should set the MySQL root password' do
       mysql_pass 'password'
       @added.should == ['mysqladmin -u root password password']
-      @checks.should == ["mysqladmin -u root -ppassword ping | grep alive #{pass_fail}"]
+      @checks.should == ["mysqladmin -u root -ppassword ping | grep alive #{echo_result}"]
     end
 
   end
 
-  describe 'write_yaml' do
+  describe 'write_database_yml' do
     it 'should write the database.yml file' do
       should_receive(:required_options).with({:to => 'dir', :for => 'app'}, [:to, :for])
       @environment = 'test'
       @dbmaster = 'dbmaster'
       @passwords = {'app' => 'password'}
-      write_yaml :for => 'app', :to => 'dir'
+      write_database_yml :for => 'app', :to => 'dir'
       actual = @added.first
       actual.should match /echo '.*' > dir\/database.yml/m
       actual.should match /test:/m
@@ -36,7 +36,7 @@ describe 'Database' do
       actual.should match /host: dbmaster/m
       actual.should match /password: password/m
       actual.should match /username: app/m
-      @checks.should == ["test -s dir/database.yml #{pass_fail}"]
+      @checks.should == ["test -s dir/database.yml #{echo_result}"]
     end
   end
 end

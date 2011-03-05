@@ -20,7 +20,7 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to Directory to write the database.yml to
     # @option options [String] :for Application name
-    def write_yaml options
+    def write_database_yml options
       required_options options, [:to, :for]
       app = options[:for]
       yml = {@environment.to_s => {'adapter' => 'mysql', 'database' => app, 'username' => app, 'password' => @passwords[app], 'host' => @dbmaster, 'encoding' => 'utf8'}}.to_yaml

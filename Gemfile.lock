@@ -18,7 +18,7 @@ GEM
     activesupport (3.0.5)
     amazon-ec2 (0.9.17)
       xml-simple (>= 1.0.12)
-    app_conf (0.2.0)
+    app_conf (0.2.2)
     autotest (4.4.6)
       ZenTest (>= 4.4.1)
     diff-lcs (1.1.2)

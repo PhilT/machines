@@ -11,7 +11,7 @@ module Machines
     #     add_source 'google', 'http://dl.google.com/linux/deb/ stable main', :gpg => 'https://dl-ssl.google.com/linux/linux_signing_key.pub', :to => 'google-chrome'
     def add_source name, source, options
       append "deb #{source}", :to => "/etc/apt/sources.list.d/#{options[:to] || name}.list"
-      add "wget -q -O - #{options[:gpg]} | apt-key add -", "apt-key list | grep -i #{name} #{pass_fail}"
+      add "wget -q -O - #{options[:gpg]} | apt-key add -", "apt-key list | grep -i #{name} #{echo_result}"
     end
 
     # Adds a PPA source
@@ -20,7 +20,7 @@ module Machines
     # @param [String] key_name What to check in apt-key list to ensure it installed
     #     add_ppa 'mozillateam/firefox-stable', 'mozilla'
     def add_ppa name, key_name
-      add "add-apt-repository ppa:#{name}", "apt-key list | grep -i #{key_name} #{pass_fail}"
+      add "add-apt-repository ppa:#{name}", "apt-key list | grep -i #{key_name} #{echo_result}"
     end
 
     # Update, upgrade, autoremove, autoclean apt packages
@@ -53,7 +53,7 @@ module Machines
             "git clone #{packages} #{options[:to]}",
             "cd #{options[:to]}",
             "find . -maxdepth 1 -name install* | xargs -I xxx bash xxx #{options[:args]}"]
-          run commands, options.merge(:check => "find #{options[:to]} -maxdepth 1 -name install* | grep install #{pass_fail}")
+          run commands, options.merge(:check => "find #{options[:to]} -maxdepth 1 -name install* | grep install #{echo_result}")
         elsif packages.scan(/^http:\/\//).any?
           name = File.basename(packages)
           run ["cd /tmp && wget #{packages}", "dpkg -i #{name}", "rm #{name}", "cd -"]

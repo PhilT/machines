@@ -113,11 +113,11 @@ module Machines
       add "chown #{recursive}#{user}:#{user} #{path}", check_owner(user, path)
     end
 
-    # Create directories for the application (releases, shared/config and shared/system)
+    # Create capistrano style directory structure for the application (releases, shared/config and shared/system)
     # @param [String] where Path to create the folders in
     def make_app_structure where
       %w(releases shared/config shared/system).each do |dir|
-        mkdir File.join(where, dir), :owner => DEFAULT_IDENTITY
+        mkdir File.join(where, dir), :owner => AppConf.user.name
       end
     end
   end

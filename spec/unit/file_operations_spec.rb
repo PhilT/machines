@@ -10,7 +10,7 @@ describe 'FileOperations' do
       Dir.should_not_receive(:[])
       upload 'source', 'dest'
       @added.should == [['source', 'dest']]
-      @checks.should == ["test -s dest #{pass_fail}"]
+      @checks.should == ["test -s dest #{echo_result}"]
     end
 
     it 'should add an upload command with permissions and owner' do
@@ -67,7 +67,7 @@ describe 'FileOperations' do
     it 'should rename a remote file' do
       rename 'oldname', 'newname'
       @added.should == ['mv oldname newname']
-      @checks.should == ["test -s newname #{pass_fail}"]
+      @checks.should == ["test -s newname #{echo_result}"]
     end
   end
 
@@ -75,7 +75,7 @@ describe 'FileOperations' do
     it 'should copy a remote file' do
       copy 'this', 'that'
       @added.should == ['cp this that']
-      @checks.should == ["test -s that #{pass_fail}"]
+      @checks.should == ["test -s that #{echo_result}"]
     end
   end
 
@@ -83,7 +83,7 @@ describe 'FileOperations' do
     it 'should remove a file' do
       remove 'file'
       @added.should == ['rm file']
-      @checks.should == ["test -s file #{fail_pass}"]
+      @checks.should == ["test ! -s file #{echo_result}"]
     end
 
     it 'should forcefully remove a file' do
@@ -154,11 +154,12 @@ describe 'FileOperations' do
 
   describe 'make_app_structure' do
     it 'should add commands to create the app folder structure' do
+      AppConf.from_hash({'user' => {'name' => 'user'}})
       make_app_structure 'path'
       @added.should == [
-        'mkdir -p path/releases', 'chown ubuntu:ubuntu path/releases',
-        'mkdir -p path/shared/config', 'chown ubuntu:ubuntu path/shared/config',
-        'mkdir -p path/shared/system', 'chown ubuntu:ubuntu path/shared/system'
+        'mkdir -p path/releases', 'chown user:user path/releases',
+        'mkdir -p path/shared/config', 'chown user:user path/shared/config',
+        'mkdir -p path/shared/system', 'chown user:user path/shared/system'
       ]
     end
   end

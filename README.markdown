@@ -14,9 +14,8 @@ Goals
   * Passenger 3
   * Ruby on Rails 3
   * MySQL 5
-  * Monit (coming soon)
-  * Munin (coming soon)
-  * Sphinx (coming soon)
+  * Planned
+    * Monit, Munin, Sphinx, logrotate
 * Easily override default selections with configuration options and custom ruby
 
 Installation and Configuration
