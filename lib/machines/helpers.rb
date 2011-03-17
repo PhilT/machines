@@ -57,7 +57,7 @@ module Machines
         break unless line.empty?
       end
       raise ArgumentError, "MISSING line or command in: [#{line}, #{display(command)}]" unless line && command
-      @commands << [line, command, check]
+      AppConf.commands << [line, command, check]
     end
   end
 end

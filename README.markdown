@@ -98,7 +98,7 @@ This will create the following directory structure:
     2. www
     Choose user:
     Password:
-    Hostname to set machine to (Appears in prompt if default .bashrc used):
+    Hostname to set machine to (Shown on bash prompt if default .bashrc used):
 
 If an App Server:
     Enter the IP address or DNS name of the database this app server will connect to:

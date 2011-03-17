@@ -6,7 +6,7 @@ describe 'Helpers' do
   include FakeAddHelper
 
   before(:each) do
-    @commands = []
+    AppConf.commands = []
   end
 
   describe 'display' do
@@ -74,13 +74,13 @@ describe 'Helpers' do
     it 'should add a command to the commands array and include the caller method name' do
       stub!(:caller).and_return ["(eval):13\nrest of trace"]
       real_add 'command', nil
-      @commands.should == [['13', 'command', nil]]
+      AppConf.commands.should == [['13', 'command', nil]]
     end
 
     it 'should not fail when no trace' do
       stub!(:caller).and_return []
       real_add 'command', nil
-      @commands.should == [['', 'command', nil]]
+      AppConf.commands.should == [['', 'command', nil]]
     end
 
     it 'should raise errors when command is missing' do

@@ -22,14 +22,14 @@ module Machines
     end
 
     def setup
-      add_user username, :password => userpass, :admin => true
-      set_sudo_no_password username
+      add_user AppConf.user.name, :password => AppConf.user.pass, :admin => true
+      set_sudo_no_password AppConf.user.name
       discover_users
       load_machinesfile
       prepare_log_file
-      setup_dev_machine(@username, @userpass) if development?
+      setup_dev_machine(AppConf.user.name, AppConf.user.pass) if development?
       enable_root_login(@username)
-      Net::SSH.start @host, 'root', :keys => @keys do |ssh|
+      Net::SSH.start AppConf.hostname, 'root', :keys => @keys do |ssh|
         run_commands ssh
       end
       disable_root_login

@@ -10,13 +10,15 @@ module Machines
     end
 
     def help
-      say 'machines COMMAND'
-      say 'COMMAND can be:'
-      say '  htpasswd - Asks for a username and password and generates basic auth in webserver/conf/htpasswd'
-      say '  generate - Generates an example machines project'
-      say '  check    - Checks Machinesfile for syntax issues'
-      say '  test     - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them'
-      say '  build    - Asks some questions then builds your chosen machine'
+      say <<-HELP
+machines COMMAND
+COMMAND can be:
+  htpasswd - Asks for a username and password and generates basic auth in webserver/conf/htpasswd
+  generate - Generates an example machines project
+  check    - Checks Machinesfile for syntax issues
+  test     - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them
+  build    - Asks some questions then builds your chosen machine
+HELP
     end
 
     def enter_password(message = 'Enter a password: ')
