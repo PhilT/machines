@@ -14,7 +14,7 @@ alias less='less -R'
 
 # Search a Rails project excluding non-source directories
 function s {
-  grep --color=auto --exclude-dir={coverage,db,doc,.git,log,tmp,vendor} -r $* .
+  grep --color=auto --exclude-dir={coverage,db,doc,.git,log,tmp,vendor,.yardoc} -r $* .
 }
 
 # Get git branch name

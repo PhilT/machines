@@ -32,6 +32,14 @@ def generate_template_for(app, enable_ssl = false)
   template File.join(AppConf.webserver, 'app_server.conf.erb'), :settings => app, :to => path)
 end
 
+# Create capistrano style directory structure for the application (releases, shared/config and shared/system)
+# @param [String] where Path to create the folders in
+def make_app_structure where
+  %w(releases shared/config shared/system).each do |dir|
+    mkdir File.join(where, dir), :owner => AppConf.user.name
+  end
+end
+
 mkdir File.join(AppConf.nginx.path, AppConf.app_servers)
 AppConf.apps.each do |app|
   make_app_structure app.path # check this is needed for all environments

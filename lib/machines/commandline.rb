@@ -1,12 +1,11 @@
 module Machines
   module Commandline
     def start(command)
-      command ||= :help
-      send(command)
-    end
-
-    def method_missing(method, *args, &block)
-      help
+      if %(htpasswd generate check test build).include?(command)
+        send(command)
+      else
+        help
+      end
     end
 
     def help
@@ -31,7 +30,7 @@ HELP
     end
 
 
-    def htpasswd(username, password)
+    def htpasswd
       conf_dir = File.join(AppConf.webserver, 'conf')
       path = File.join(conf_dir, 'htpasswd')
       say "Generate BasicAuth password and add to #{path}"
@@ -39,8 +38,9 @@ HELP
       password = enter_password
 
       require 'webrick/utils'
-      crypted_pass.crypt(WEBrick::Utils.random_string(2))
-      FileUtils.mkdir conf_dir unless File.exist?(dir)
+      require 'fileutils'
+      crypted_pass = password.crypt(WEBrick::Utils.random_string(2))
+      FileUtils.mkdir_p conf_dir
       File.open(path, 'a') {|file| file.puts "#{username}:#{crypted_pass}" }
       say "Password encrypted and added to #{path}"
     end
@@ -54,7 +54,7 @@ HELP
     end
 
     def build
-      Machines::Base.setup
+      Machines::Base.new.build
     end
 
   end

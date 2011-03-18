@@ -21,7 +21,7 @@ module Machines
       run_commands
     end
 
-    def setup
+    def build
       add_user AppConf.user.name, :password => AppConf.user.pass, :admin => true
       set_sudo_no_password AppConf.user.name
       discover_users
@@ -41,11 +41,8 @@ private
       machine 'selected', :test
       eval File.read('Machinesfile')
     rescue LoadError
-      puts "Machinesfile does not exist. Please create one."
+      puts "Machinesfile does not exist. Use `machines generate` to create a template."
       exit 1
-    rescue NoMethodError
-      puts "Have you selected the correct machine configuration?"
-      raise
     end
 
     def discover_users
