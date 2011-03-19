@@ -6,7 +6,7 @@ Setup Ubuntu development and server **machines** for hosting Ruby on Rails 3 app
 Goals
 ---------------------------------------
 
-* Simple deployment tool written with ruby
+* To make a simple, transparent build tool
 * Get going quickly with the standard defaults
   * Ubuntu x64 11.04 (when released)
   * Nginx 8
@@ -16,7 +16,12 @@ Goals
   * MySQL 5
   * Planned
     * Monit, Munin, Sphinx, logrotate
-* Easily override default selections with configuration options and custom ruby
+* Easily override defaults with configuration options and custom ruby
+
+I share the belief that development, staging, and production environments should match if not be as close as possible.
+I develop on Ubuntu Linux and so it felt natural to have Ubuntu as my server environment.
+
+This tool should make it simple to develop and deploy Ruby on Rails applications on Ubuntu.
 
 Installation and Configuration
 ---------------------------------------
