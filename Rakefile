@@ -3,16 +3,14 @@ require 'rspec/core/rake_task'
 
 task :default => [:coverage, :yard, :install]
 
-YARD::Rake::YardocTask.new do |t|
-  t.options = ['--markup markdown']
-end
-
+YARD::Rake::YardocTask.new
 RSpec::Core::RakeTask.new(:spec)
 
 desc 'Generate code coverage'
 task :coverage do
   ENV['COVERAGE'] = 'true'
   Rake::Task['spec'].invoke
+  puts Dir.pwd
 end
 
 desc 'Build and install the gem'

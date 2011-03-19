@@ -1,7 +1,5 @@
 require 'date'
 
-LOG_FILE = 'log/output.log'
-
 module Machines
   module Helpers
     # Utility method to tidy up commands before being logged
@@ -18,35 +16,26 @@ module Machines
       end
     end
 
-    def prepare_log_file
-      log_to :file, "Starting Installation at #{DateTime.now.strftime('%Y-%m-%d %H:%M:%S')}\n", 'w'
-    end
-
-    def log_to where, message, mode = 'a'
-      f = where == :file ? File.open(LOG_FILE, mode) : $stdout
-      f.puts message if message
-      f.close if where == :file
-    end
-
-    def log_result_to_file check, message
-      success = true
-      File.open(LOG_FILE, 'a') do |f|
-        if check.nil? || message.nil?
-          f.puts 'NOT CHECKED'.yellow
-          f.puts "\n\n"
-          break
-        end
-        passed = message.split("\n").last.scan(/CHECK PASSED/).any?
-        if passed
-          f.puts "CHECK PASSED".green
-        else
-          f.puts check.red
-          f.puts message.red
-          success = false
-        end
-        f.puts "\n\n"
+    def log_progress progress, message, success
+      message = $terminal.color("[#{"%03d" % progress} / #{"%03d" % AppConf.commands.size}] #{message}", success ? :green : :red)
+      if success
+        AppConf.log.progress.info message
+      else
+        AppConf.log.progress.error message
       end
-      success
+    end
+
+    def log_output message, color = :white
+      AppConf.log.output.info $terminal.color(message, color)
+    end
+
+    def check_result result
+      result.scan(/CHECK PASSED|CHECK FAILED/).first || 'NOT CHECKED'
+    end
+
+    def log_result result
+      color = {'NOT CHECKED' => :yellow, 'CHECK FAILED' => :red, 'CHECK PASSED' => :green}[result]
+      AppConf.log.output.info $terminal.color(result, color)
     end
 
     # Queues up a command on the command list. Includes the calling method name for logging

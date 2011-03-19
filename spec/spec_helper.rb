@@ -1,6 +1,5 @@
-require 'support/coverage'
-
 $LOAD_PATH << 'lib'
+require File.join(File.dirname(__FILE__), 'support/coverage')
 require 'machines'
 include Machines::Checks
 
@@ -9,10 +8,6 @@ RSpec.configure do |c|
     @added = []
     @checks = []
   end
-end
-
-class String
-  def colorize(text, color_code); text; end
 end
 
 module FakeAddHelper

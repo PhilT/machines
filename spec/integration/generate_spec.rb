@@ -8,6 +8,10 @@ describe 'Generate' do
     FileUtils.chdir 'tmp/project'
   end
 
+  after(:each) do
+    FileUtils.chdir '../..'
+  end
+
   it 'creates an example project structure in the current directory' do
     Machines::Base.new.start('generate')
     files = %w(certificates) +

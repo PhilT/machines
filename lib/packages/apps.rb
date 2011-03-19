@@ -28,11 +28,11 @@ end
 
 def generate_template_for(app, enable_ssl = false)
   app.enable_ssl = enable_ssl
-  path = File.join(AppConf[AppConf.webserver].path, AppConf.app_servers, "#{app.name}_#{enable_ssl ? 'ssl' : ''}.conf"
-  template File.join(AppConf.webserver, 'app_server.conf.erb'), :settings => app, :to => path)
+  path = File.join(AppConf[AppConf.webserver].path, AppConf.app_servers, "#{app.name}_#{enable_ssl ? 'ssl' : ''}.conf")
+  template File.join(AppConf.webserver, 'app_server.conf.erb'), :settings => app, :to => path
 end
 
-# Create capistrano style directory structure for the application (releases, shared/config and shared/system)
+# Create capistrano style directory structure for the application - releases, shared/config and shared/system
 # @param [String] where Path to create the folders in
 def make_app_structure where
   %w(releases shared/config shared/system).each do |dir|

@@ -4,6 +4,8 @@ module Machines
     AppConf.template_path = File.join(File.dirname(__FILE__), '..', 'template')
 
     AppConf.from_hash({:log => {:progress => Logger.new(STDOUT), :output => Logger.new('log/output.log')}})
+    AppConf.log.progress.formatter = AppConf.log.output.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n"}
+
     AppConf.webserver = 'nginx'
 
 =begin

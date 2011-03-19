@@ -2,6 +2,7 @@ module Machines
   module Commandline
     def start(command)
       if %(htpasswd generate check test build).include?(command)
+        AppConf.action = command
         send(command)
       else
         help

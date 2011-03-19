@@ -14,13 +14,13 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    ZenTest (4.5.0)
     activesupport (3.0.5)
     amazon-ec2 (0.9.17)
       xml-simple (>= 1.0.12)
     app_conf (0.2.2)
-    autotest (4.4.6)
-      ZenTest (>= 4.4.1)
+    autotest-growl (0.2.9)
+    autotest-standalone (4.5.5)
+    bluecloth (2.1.0)
     diff-lcs (1.1.2)
     highline (1.6.1)
     i18n (0.5.0)
@@ -36,8 +36,8 @@ GEM
     rspec-expectations (2.5.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.5.0)
-    s3 (0.3.7)
-      proxies
+    s3 (0.3.8)
+      proxies (~> 0.2.0)
     simplecov (0.4.0)
       simplecov-html (~> 0.4.0)
     simplecov-html (0.4.3)
@@ -48,8 +48,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  ZenTest
-  autotest
+  autotest-growl
+  autotest-standalone
+  bluecloth
   machines!
   rspec
   simplecov

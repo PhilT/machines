@@ -21,11 +21,12 @@ Gem::Specification.new do |s|
   s.add_dependency 'net-scp'
   s.add_dependency 's3'
 
-  s.add_development_dependency 'autotest'
+  s.add_development_dependency 'autotest-standalone'
+  s.add_development_dependency 'autotest-growl'
+  s.add_development_dependency 'bluecloth'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'yard'
-  s.add_development_dependency 'ZenTest'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- spec/*`.split("\n")

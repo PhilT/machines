@@ -117,6 +117,23 @@ Commandline Options
 * `test`     - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them'
 * `build`    - Asks some questions then builds your chosen machine'
 
+Note on Patches/Pull Requests
+---------------------------------------
+
+This project uses *autotest* for continuous testing
+Install libnotify-bin on linux to get growl notifications when using *autotest*
+
+* Fork the project.
+* Test drive your feature addition or bug fix
+* Commit, do not mess with rakefile, version, or history.
+* Send me a pull request. Bonus points for topic branches.
+
+Copyright
+---------------------------------------
+
+Copyright (c) 2010, 2011 Phil Thompson. See LICENSE for details.
+
+
 Notes
 ---------------------------------------
 

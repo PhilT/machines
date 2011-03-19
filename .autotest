@@ -1,0 +1,8 @@
+require 'autotest/growl'
+
+Autotest.add_hook :initialize do |autotest|
+  %w{bin coverage doc lib/template log tmp .git .yardoc}.each do |exception|
+    autotest.add_exception(exception)
+  end
+end
+

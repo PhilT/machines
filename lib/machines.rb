@@ -52,31 +52,27 @@ private
     # Loops through all commands calling with either Net::SSH::exec! or Net::SCP::upload!
     # @param [Optional #exec!] ssh Net::SSH connection to send the commands to. Only output them if ssh is nil
     def run_commands net_ssh = nil
-      i = 1
-      @failed = false
       AppConf.commands.each do |line, command, check|
-        if net_ssh
-          log_to :file, "Machinesfile line #{line}:".blue
-          prefix = command.is_a?(Array) ? 'Upload' : 'Run'
-          log_to :file, "#{prefix} #{display(command).orange}"
-          upload_successful = true
+        log_output "Machinesfile line #{line}:", :blue
+        prefix = command.is_a?(Array) ? 'Upload' : 'Run'
+        log_output "#{prefix} #{display(command)}", :yellow
+        if AppConf.action == 'build'
           if command.is_a?(Array)
             begin
               Net::SCP.start @host, 'root', :keys => @keys do |scp|
                 scp.upload! command[0], command[1]
               end
             rescue
-              log_to :file, "FAILED\n\n".red
-              upload_failed = true
+              log_output "UPLOAD FAILED", :red
             end
           else
-            log_to :file, net_ssh.exec!(command)
+            log_output net_ssh.exec!(command)
           end
-          failed = upload_failed || !log_result_to_file(check, net_ssh.exec!(check))
-          @failed = true if failed
+          result = check_result net_ssh.exec!(check)
+          log_result result
+          log_progress line, command, uploaded && result != 'CHECK FAILED'
         else
-          log_to :screen, "#{("%-6s" % (line + ':')).dark_blue} #{display(command)}"
-          log_to :screen, check ? "#{'check:'.dark_green} #{display(check)}" : 'no check'.orange
+          check ? log_output(display(check), :green) : log_output('no check', :yellow)
         end
       end
     end
