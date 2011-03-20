@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    machines (0.0.1)
+    machines (0.2.0)
       activesupport
       amazon-ec2
       app_conf

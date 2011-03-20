@@ -3,5 +3,5 @@ add_source 'google', 'http://dl.google.com/linux/deb/ stable main',
             :to => 'google-chrome'
 update
 
-install %w(google-chrome-beta)
+install %w(google-chrome-stable)
 
