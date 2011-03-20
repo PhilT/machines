@@ -1,12 +1,5 @@
 module Machines
   module FileOperations
-    # Appends a string to a file locally
-    # @param [String] string String to append
-    # @param [String] path Path to append string to
-    def append string, path
-      File.open(path, 'a') {|file| file.puts string }
-    end
-
     # Upload a file or directory using SCP and optionally set permissions and ownership
     # @param [String] local_source File or directory on the local machine
     # @param [String] remote_dest Directory on the remote machine to copy to

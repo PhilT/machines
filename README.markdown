@@ -73,6 +73,7 @@ This will create the following directory structure:
 1. Edit files in `config/`
 1. Alter, add or remove `nginx`, `mysql` and custom `packages`
 1. Setup `users`
+1. Add `~/.ssh/id_rsa.pub` public key from users machines to `users/www/authorized_keys` file
 
 ### If installing on a development machine
 * Make sure you have Bridged Networking setup if using a VM
