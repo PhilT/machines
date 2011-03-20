@@ -1,5 +1,5 @@
 $LOAD_PATH << 'lib'
-require File.join(File.dirname(__FILE__), 'support/coverage')
+require 'support/coverage'
 require 'machines'
 include Machines::Checks
 

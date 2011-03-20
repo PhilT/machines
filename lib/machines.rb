@@ -3,9 +3,11 @@ require 'active_support'
 require 'app_conf'
 require 'AWS'
 require 'erb'
+require 'fileutils'
 require 'highline/import'
 require 'net/ssh'
 require 'net/scp'
+require 'webrick/utils'
 require 'yaml'
 
 module Machines
