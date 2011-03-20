@@ -122,6 +122,22 @@ Commandline Options
 * `test`     - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them'
 * `build`    - Asks some questions then builds your chosen machine'
 
+== Warnings
+You might see something one of the following while upgrading/installing packages:
+    debconf: Unable to initialise frontend: Dialog
+    WARNING: Failed to parse default value
+    update-rc.d: warning: unattended-upgrades start runlevel arguments
+
+These are all known issues and nothing to worry about
+
+== TODO
+
+* Add :abort => true to abort on failed check
+* Add asynchronous ssh so output can be piped live
+* Add timer
+* Add checking of return values
+* More logging needed on initialization
+
 Note on Patches/Pull Requests
 ---------------------------------------
 
@@ -137,29 +153,4 @@ Copyright
 ---------------------------------------
 
 Copyright (c) 2010, 2011 Phil Thompson. See LICENSE for details.
-
-
-Notes
----------------------------------------
-
-    log = Logger.new(STDOUT)
-    log.level = Logger::WARN
-
-    log.debug 'Logger created'
-    log.info 'Program started'
-    log.error 'Aaaaah!'
-
-    rescue
-      log.fatal
-    end
-
-    hi = HighLine.new
-    hi.ask("Enter your password:  " ) { |q| q.echo = '' }
-
-    require 'highline/import'
-    ask("Enter your password:  " ) { |q| q.echo = false }
-    $terminal.color('Lady in red', :red)
-
-
-    [001 / 112] This is a log message
 
