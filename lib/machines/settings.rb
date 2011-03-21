@@ -1,16 +1,24 @@
-require 'settings/app_settings'
-
 module Machines
   module Settings
     AppConf.project_dir = Dir.pwd
-    AppConf.load(File.join(AppConf.project_dir, 'config/config.yml'))
     AppConf.commands = []
     AppConf.template_path = File.join(File.dirname(__FILE__), '..', 'template')
-    AppConf.from_hash({:log => {:progress => Logger.new(STDOUT), :output => Logger.new('log/output.log')}})
-    AppConf.log.progress.formatter = AppConf.log.output.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n"}
-    AppConf.user.home = File.join('/home', AppConf.user.name)
 
-    AppSettings.load
+    def load_settings(environment)
+      AppConf.environment = environment
+      AppConf.from_hash({:log => {:path => nil, :progress => nil, :output => nil}})
+      AppConf.log.path = File.join(AppConf.project_dir, 'log', 'output.log')
+      FileUtils.mkdir_p File.dirname(AppConf.log.path)
+      AppConf.log.progress = Logger.new(STDOUT)
+      AppConf.log.output = Logger.new(AppConf.log.path)
+      AppConf.log.progress.formatter = AppConf.log.output.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n"}
+      AppConf.user.home = File.join('/home', AppConf.user.name)
+      AppConf.load(File.join(AppConf.project_dir, 'config/config.yml'), File.join(AppConf.project_dir, 'users/users.yml'))
+      AppConf.appsroot = AppConf[AppConf.user.name].appsroot
+
+      load_app_settings
+    end
+
 =begin
     These all need to be setup
 

@@ -6,7 +6,9 @@ describe 'Helpers' do
   include FakeAddHelper
 
   before(:each) do
-    AppConf.commands = []
+    AppConf.project_dir = File.join(Dir.pwd, 'tmp/project')
+    AppConf.from_hash({:user => {:name => 'www'}})
+    Machines::Base.new.load_settings :staging
   end
 
   describe 'display' do
@@ -117,6 +119,10 @@ describe 'Helpers' do
   end
 
   describe 'add' do
+    before(:each) do
+      AppConf.commands = []
+    end
+
     it 'should add a command to the commands array and include the caller method name' do
       stub!(:caller).and_return ["(eval):13\nrest of trace"]
       real_add 'command', nil
