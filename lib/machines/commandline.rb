@@ -31,7 +31,7 @@ HELP
     end
 
     def htpasswd
-      conf_dir = File.join(AppConf.webserver, 'conf')
+      conf_dir = File.join(AppConf.project_dir, AppConf.webserver, 'conf')
       path = File.join(conf_dir, 'htpasswd')
       say "Generate BasicAuth password and add to #{path}"
       username = ask('Username: ')
@@ -44,7 +44,7 @@ HELP
     end
 
     def generate
-      FileUtils.cp_r(File.join(AppConf.template_path, '.'), '.')
+      FileUtils.cp_r(File.join(AppConf.template_path, '.'), AppConf.project_dir)
     end
   end
 end

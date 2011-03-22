@@ -6,7 +6,6 @@ describe 'Helpers' do
   include FakeAddHelper
 
   before(:each) do
-    AppConf.project_dir = File.join(Dir.pwd, 'tmp/project')
     AppConf.from_hash({:user => {:name => 'www'}})
     Machines::Base.new.load_settings :staging
   end

@@ -54,21 +54,21 @@ describe 'CommandLine' do
     it 'asks for username' do
       File.stub(:open)
       AppConf.webserver = 'nginx'
-      @machines.should_receive(:say).with 'Generate BasicAuth password and add to nginx/conf/htpasswd'
+      @machines.should_receive(:say).with /Generate BasicAuth password and add to .*\/tmp\/unit\/nginx\/conf\/htpasswd/
       @machines.should_receive(:ask).with('Username: ').and_return 'user'
       @machines.should_receive(:enter_password).and_return 'pass'
 
-      FileUtils.should_receive(:mkdir_p).with('nginx/conf')
+      FileUtils.should_receive(:mkdir_p).with(/tmp\/unit\/nginx\/conf/)
       WEBrick::Utils.stub(:random_string).with(2).and_return '12'
-      @machines.should_receive(:append).with("user:#{'pass'.crypt('12')}", 'nginx/conf/htpasswd')
-      @machines.should_receive(:say).with "Password encrypted and added to nginx/conf/htpasswd"
+      @machines.should_receive(:append).with("user:#{'pass'.crypt('12')}", /tmp\/unit\/nginx\/conf\/htpasswd/)
+      @machines.should_receive(:say).with /Password encrypted and added to .*\/tmp\/unit\/nginx\/conf\/htpasswd/
       @machines.htpasswd
     end
   end
 
   describe 'generate' do
     it 'copies the template' do
-      FileUtils.should_receive(:cp_r).with(/lib\/machines\/..\/template\/./, ".")
+      FileUtils.should_receive(:cp_r).with(/lib\/machines\/..\/template\/./, /tmp\/unit/)
       @machines.generate
     end
   end
