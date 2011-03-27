@@ -29,14 +29,14 @@ end
 
 # Installed on machines when user is phil
 users 'phil' do
-  package :chrome_beta
+  package :chrome
   package :firefox
   package :gnome
   package :gmate
 end
 
 # Will only be executed for development machines
-enviroments :development do
+environments :development do
   package :dev_extras
   install %w(mysql-query-browser gitk meld) # can gitk be installed before git-core?
 end

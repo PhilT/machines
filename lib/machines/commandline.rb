@@ -44,7 +44,7 @@ HELP
     end
 
     def generate
-      FileUtils.cp_r(File.join(AppConf.template_path, '.'), AppConf.project_dir)
+      FileUtils.cp_r(File.join(AppConf.application_dir, 'template', '.'), AppConf.project_dir)
     end
   end
 end

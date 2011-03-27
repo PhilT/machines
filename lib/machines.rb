@@ -38,14 +38,14 @@ module Machines
       disable_root_login
     end
 
-private
-
+  private
     def load_machinesfile
-      machine 'selected', :test
-      eval File.read('Machinesfile')
-    rescue LoadError
-      puts "Machinesfile does not exist. Use `machines generate` to create a template."
-      exit 1
+      machinesfile = File.join(AppConf.project_dir, 'Machinesfile')
+      if File.exists?(machinesfile)
+        load machinesfile
+      else
+        raise LoadError, "Machinesfile does not exist. Use `machines generate` to create a template."
+      end
     end
 
     def discover_users

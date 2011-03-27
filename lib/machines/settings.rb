@@ -1,8 +1,8 @@
 module Machines
   module Settings
     AppConf.project_dir = Dir.pwd
+    AppConf.application_dir = File.join(File.dirname(__FILE__), '..')
     AppConf.commands = []
-    AppConf.template_path = File.join(File.dirname(__FILE__), '..', 'template')
 
     def load_settings(environment)
       AppConf.environment = environment
