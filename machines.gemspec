@@ -22,7 +22,6 @@ Gem::Specification.new do |s|
   s.add_dependency 's3'
 
   s.add_development_dependency 'autotest-standalone'
-  s.add_development_dependency 'autotest-growl'
   s.add_development_dependency 'bluecloth'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'simplecov'

@@ -18,7 +18,6 @@ GEM
     amazon-ec2 (0.9.17)
       xml-simple (>= 1.0.12)
     app_conf (0.2.2)
-    autotest-growl (0.2.9)
     autotest-standalone (4.5.5)
     bluecloth (2.1.0)
     diff-lcs (1.1.2)
@@ -41,14 +40,13 @@ GEM
     simplecov (0.4.1)
       simplecov-html (~> 0.4.3)
     simplecov-html (0.4.3)
-    xml-simple (1.0.14)
+    xml-simple (1.0.15)
     yard (0.6.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  autotest-growl
   autotest-standalone
   bluecloth
   machines!

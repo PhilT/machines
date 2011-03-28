@@ -15,7 +15,8 @@ module Machines
 
   class Base
     Dir[File.join(File.dirname(__FILE__), 'machines/**/*.rb')].sort.each do |lib|
-      require lib; include eval(ActiveSupport::Inflector.camelize(File.basename(lib, '.rb')))
+      require lib
+      include eval(ActiveSupport::Inflector.camelize(File.basename(lib, '.rb')))
     end
 
     def test

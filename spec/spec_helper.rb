@@ -1,4 +1,3 @@
-$LOAD_PATH << 'lib'
 Dir['spec/support/*.rb'].each {|file| require File.join('support', File.basename(file)) }
 require 'machines'
 include Machines::Checks
