@@ -30,3 +30,36 @@ module FakeAddHelper
   end
 end
 
+class MockStdOut
+  attr_accessor :buffer
+  def initialize
+    @buffer = ""
+  end
+
+  def print string
+    @buffer << string
+  end
+
+  def flush
+  end
+
+  def puts string
+    print string << "\n"
+  end
+
+  def tty?
+    false
+  end
+end
+
+class MockStdIn
+  attr_accessor :buffer
+  def initialize input = ''
+    @buffer = input
+  end
+
+  def gets
+    @buffer
+  end
+end
+

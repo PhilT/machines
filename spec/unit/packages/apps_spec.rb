@@ -4,6 +4,7 @@ require 'spec_helper'
 describe 'Apps' do
   describe 'make_app_structure' do
     it 'should add commands to create the app folder structure' do
+      pending
       AppConf.from_hash({'user' => {'name' => 'user'}})
 
       # Need to setup mocks before running apps.rb

@@ -1,11 +1,9 @@
 module Machines
   module Configuration
     # Add a machine configuration
-    def machine name, environment, options = {:apps => [], :role => nil}
-      if name == @config
-        @environment = environment
-        @apps = options[:apps]
-        @role = options[:role]
+    def machine name, environment, options = {:apps => [], :roles => []}
+      if name == AppConf.machine
+        load_settings environment, options[:apps], options[:roles]
       end
     end
 

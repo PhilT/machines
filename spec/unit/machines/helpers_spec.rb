@@ -7,7 +7,7 @@ describe 'Helpers' do
 
   before(:each) do
     AppConf.from_hash({:user => {:name => 'www'}})
-    Machines::Base.new.load_settings :staging
+    Machines::Base.new.load_settings :staging, [], []
   end
 
   describe 'display' do

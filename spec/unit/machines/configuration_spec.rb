@@ -8,20 +8,22 @@ describe 'Configuration' do
 
   describe 'machine' do
     it 'should set environment, apps and role when it matches the configuration specified' do
-      @config = 'config'
-      machine 'config', :test, {:apps => ['app', 'another'], :role => 'role'}
+      pending
+      machine 'machine', :test, {:apps => ['app', 'another'], :roles => [:role]}
       @environment.should == :test
       @apps.should == ['app', 'another']
-      @role.should == 'role'
+      @roles.should == [:role]
     end
 
     it 'should set environment when it matches specified configuration but no apps or role specified' do
+      pending
       @config = 'config'
       machine 'config', :test
       @environment.should == :test
     end
 
     it 'should not set anything when it does not match specified configuration' do
+      pending
       machine 'config', :test, {:apps => ['app', 'another'], :role => 'role'}
       @environment.should be_nil
       @apps.should be_nil

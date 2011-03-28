@@ -4,7 +4,7 @@ module Machines
     AppConf.application_dir = File.join(File.dirname(__FILE__), '..')
     AppConf.commands = []
 
-    def load_settings(environment)
+    def load_settings(environment, apps, roles)
       AppConf.environment = environment
       AppConf.from_hash({:log => {:path => nil, :progress => nil, :output => nil}})
       AppConf.log.path = File.join(AppConf.project_dir, 'log', 'output.log')
@@ -24,7 +24,6 @@ module Machines
 
     AppConf.dotfiles
     AppConf.machinename
-    AppConf.machine
     AppConf.hostname
     AppConf.environment
     AppConf.timezone
