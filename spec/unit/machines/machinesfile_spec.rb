@@ -26,5 +26,11 @@ describe 'Machinesfile' do
       lambda {package :builtin_package}.should raise_error LoadError
     end
   end
+
+  describe 'roles' do
+    it 'runs block when specified roles are set' do
+      pending
+    end
+  end
 end
 
