@@ -21,7 +21,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'net-scp'
   s.add_dependency 's3'
 
-  s.add_development_dependency 'autotest-standalone'
+  s.add_development_dependency 'watchr'
+  s.add_development_dependency 'rev'
   s.add_development_dependency 'bluecloth'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'simplecov'
