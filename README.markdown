@@ -106,7 +106,7 @@ This will create the following directory structure:
     Password:
     Hostname to set machine to (Shown on bash prompt if default .bashrc used):
 
-If an App Server:
+If not a DB Server:
     Enter the IP address or DNS name of the database this app server will connect to:
     Enter the root password of the database (Used to create permissions for each of the apps):
 

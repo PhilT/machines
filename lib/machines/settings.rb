@@ -25,14 +25,8 @@ module Machines
 
     AppConf.dotfiles
     AppConf.machinename
-    AppConf.hostname
     AppConf.environment
     AppConf.timezone
-
-    AppConf.user.name
-    AppConf.user.pass
-    AppConf.user.home
-    AppConf.user.appsroot
 
     AppConf.nginx.url
 =end

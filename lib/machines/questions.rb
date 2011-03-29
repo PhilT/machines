@@ -21,6 +21,10 @@ module Machines
     def enter_password
       AppConf.user.pass = enter_and_confirm_password('Enter users password: ')
     end
+
+    def enter_hostname
+      AppConf.hostname = ask 'Hostname to set machine to (Shown on bash prompt if default .bashrc used): '
+    end
   end
 end
 

@@ -84,5 +84,13 @@ MACHINESFILE
       AppConf.user.pass.should == 'pass'
     end
   end
+
+  describe 'enter_hostname' do
+    it 'accepts hostname' do
+      should_receive(:ask).with('Hostname to set machine to (Shown on bash prompt if default .bashrc used): ').and_return 'host'
+      enter_hostname
+      AppConf.hostname.should == 'host'
+    end
+  end
 end
 
