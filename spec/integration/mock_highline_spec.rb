@@ -12,9 +12,16 @@ describe 'HighLine' do
     @output.buffer.should == "something\n"
   end
 
-  it 'handles console input' do
-    @input.buffer = 'test'
+  it 'handles multiple console inputs' do
+    @input.answers = ['test', 'this']
     ask('something').should == 'test'
+    ask('something else').should == 'this'
+  end
+
+  it 'handles console character input' do
+    @input.answers = ['test']
+    answer = ask('something') { |question| question.echo = false }
+    answer.should == 'test'
   end
 end
 

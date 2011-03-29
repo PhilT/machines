@@ -3,6 +3,7 @@ module Machines
     AppConf.project_dir = Dir.pwd
     AppConf.application_dir = File.join(File.dirname(__FILE__), '..')
     AppConf.commands = []
+    AppConf.from_hash(:user => {})
 
     def load_settings(environment, apps, roles)
       AppConf.environment = environment

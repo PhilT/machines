@@ -28,25 +28,25 @@ describe 'CommandLine' do
     end
   end
 
-  describe 'enter_password' do
+  describe 'enter_and_confirm_password' do
     it 'does not echo output' do
       mock_question = mock HighLine::Question
       mock_question.should_receive(:echo=).with(false).twice
       @machines.stub(:ask).and_yield mock_question
-      @machines.enter_password
+      @machines.enter_and_confirm_password
     end
 
     it 'asks for a password and confirmation' do
-      @machines.should_receive(:ask).with('Enter a password: ').once.and_return 'pass'
+      @machines.should_receive(:ask).with('Enter a new password: ').once.and_return 'pass'
       @machines.should_receive(:ask).with('Confirm the password: ').once.and_return 'pass'
-      @machines.enter_password.should == 'pass'
+      @machines.enter_and_confirm_password.should == 'pass'
     end
 
     it 'repeats until password and confirmation match' do
-      @machines.should_receive(:ask).with('Enter a password: ').twice.and_return 'pass'
+      @machines.should_receive(:ask).with('Enter a new password: ').twice.and_return 'pass'
       @machines.should_receive(:ask).with('Confirm the password: ').twice.and_return 'pas', 'pass'
       @machines.should_receive(:say).with('Passwords do not match, please re-enter')
-      @machines.enter_password.should == 'pass'
+      @machines.enter_and_confirm_password.should == 'pass'
     end
   end
 
@@ -56,7 +56,7 @@ describe 'CommandLine' do
       AppConf.webserver = 'nginx'
       @machines.should_receive(:say).with /Generate BasicAuth password and add to .*\/tmp\/unit\/nginx\/conf\/htpasswd/
       @machines.should_receive(:ask).with('Username: ').and_return 'user'
-      @machines.should_receive(:enter_password).and_return 'pass'
+      @machines.should_receive(:enter_and_confirm_password).and_return 'pass'
 
       FileUtils.should_receive(:mkdir_p).with(/tmp\/unit\/nginx\/conf/)
       WEBrick::Utils.stub(:random_string).with(2).and_return '12'

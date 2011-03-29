@@ -21,7 +21,7 @@ COMMAND can be:
 HELP
     end
 
-    def enter_password(message = 'Enter a password: ')
+    def enter_and_confirm_password(message = 'Enter a new password: ')
       begin
         password = ask(message) { |question| question.echo = false }
         password_confirmation = ask('Confirm the password: ') { |question| question.echo = false }
@@ -35,7 +35,7 @@ HELP
       path = File.join(conf_dir, 'htpasswd')
       say "Generate BasicAuth password and add to #{path}"
       username = ask('Username: ')
-      password = enter_password
+      password = enter_and_confirm_password
 
       crypted_pass = password.crypt(WEBrick::Utils.random_string(2))
       FileUtils.mkdir_p conf_dir
