@@ -2,13 +2,20 @@ def all_specs
   system('rspec spec')
 end
 
-def spec spec
-  system "rspec #{spec}"
+@failing = []
+def rspec spec
+  @failing << spec unless @failing.include?(spec)
+  success = system "rspec #{@failing.join(' ')}"
+  if success && @failing.any?
+    puts 'Failing tests now passing. Running full suite...'
+    @failing = []
+    all_specs
+  end
 end
 
-watch( 'spec/.*_spec\.rb' )      {|match| spec(match[0]) }
-watch( 'lib/machines/(.*)\.rb' ) {|match| spec("spec/unit/machines/#{match[1]}_spec.rb") }
-watch( 'lib/machines\.rb' )      {|match| spec("spec/unit/machines/machines_spec.rb") }
+watch( 'spec/.*_spec\.rb' )      {|match| rspec(match[0]) }
+watch( 'lib/machines/(.*)\.rb' ) {|match| rspec("spec/unit/machines/#{match[1]}_spec.rb") }
+watch( 'lib/machines\.rb' )      {|match| rspec("spec/unit/machines/machines_spec.rb") }
 
 # Ctrl-C autotest style interrupt
 @interrupted = false
