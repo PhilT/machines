@@ -26,12 +26,9 @@ module Machines
     end
 
     def build
-      add_user AppConf.user.name, :password => AppConf.user.pass, :admin => true
       set_sudo_no_password AppConf.user.name
-      discover_users
       load_machinesfile
-      prepare_log_file
-      setup_dev_machine(AppConf.user.name, AppConf.user.pass) if development?
+      setup_dev_machine if development?
       enable_root_login(@username)
       Net::SSH.start AppConf.hostname, 'root', :keys => @keys do |ssh|
         run_commands ssh
@@ -47,10 +44,6 @@ module Machines
       else
         raise LoadError, "Machinesfile does not exist. Use `machines generate` to create a template."
       end
-    end
-
-    def discover_users
-      @users = Dir['users/*'].map{|file| File.basename file}
     end
 
     # Loops through all commands calling with either Net::SSH::exec! or Net::SCP::upload!
@@ -83,7 +76,9 @@ module Machines
 
     # Creates a keypair on a dev machine and allows sudo without password
     # to lineup with Ubuntu EC2 images and run the rest of the script
-    def setup_dev_machine(username, userpass)
+    def setup_dev_machine
+      username = AppConf.user.name
+      userpass = AppConf.user.pass
       @keys = ["#{host}.key"]
       Net::SSH.start host, username, :password => userpass do |ssh|
         log_to :file, ssh.exec!("mkdir .ssh && ssh-keygen -f .ssh/id_rsa -N '' -q && cp .ssh/id_rsa.pub .ssh/authorized_keys")

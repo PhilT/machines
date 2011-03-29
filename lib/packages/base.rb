@@ -3,10 +3,10 @@
 link '/etc/localtime', :to => "/usr/share/zoneinfo/#{AppConf.timezone}"
 replace 'UTC=yes', :with => 'UTC=no', :in => '/etc/default/rcS'
 
-write AppConf.machinename, :to => '/etc/hostname'
-run "hostname #{@machinename}"
+write AppConf.hostname, :to => '/etc/hostname'
+run "hostname #{AppConf.hostname}"
 
-write "127.0.1.1\t#{AppConf.machinename}", :to => '/etc/hosts'
+write "127.0.1.1\t#{AppConf.hostname}", :to => '/etc/hosts'
 append "127.0.0.1\tlocalhost", :to => '/etc/hosts'
 
 enviroments :development do

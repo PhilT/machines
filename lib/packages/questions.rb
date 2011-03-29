@@ -1,0 +1,7 @@
+choose_machine
+#start_ec2_instance?
+enter_target_address
+choose_user
+enter_password
+enter_hostname
+

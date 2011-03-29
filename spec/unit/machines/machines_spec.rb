@@ -10,14 +10,12 @@ describe 'Machines' do
     AppConf.user = {:name => 'user', :pass => 'pass'}
     @machines.stub(:print)
     @machines.stub(:puts)
-    @machines.stub(:prepare_log_file)
     @mock_ssh = mock('Ssh')
     Net::SSH.stub(:start)
   end
 
   describe 'dryrun and setup' do
     it "should output the commands to be run" do
-      @machines.should_receive(:discover_users)
       @machines.should_receive(:load_machinesfile)
       @machines.should_receive(:run_commands)
       @machines.dryrun
@@ -26,7 +24,6 @@ describe 'Machines' do
 
   describe 'setup' do
     it 'should run commands in setup mode' do
-      @machines.should_receive(:discover_users)
       @machines.should_receive(:load_machinesfile)
       @machines.should_receive(:enable_root_login)
       Net::SSH.should_receive(:start).with('host', 'root', :keys => ['keyfile']).and_yield @mock_ssh
@@ -110,7 +107,6 @@ describe 'Machines' do
 
   describe 'enable/disable_root_login' do
     before(:each) do
-      @machines.should_receive(:discover_users)
       @machines.should_receive(:load_machinesfile)
       Net::SSH.should_receive(:start).with('host', 'root', :keys => ['keyfile']).and_yield @mock_ssh
       @machines.should_receive(:run_commands).with @mock_ssh

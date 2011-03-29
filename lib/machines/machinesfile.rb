@@ -2,8 +2,11 @@ module Machines
   module Machinesfile
 
     def package name
-      load_package(AppConf.project_dir, name) || load_package(AppConf.application_dir, name) ||
-        raise(LoadError, "Cannot find custom or built-in package #{name}", caller)
+      error = "Cannot find custom or built-in package #{name}."
+      error = 'Cannot find Machinesfile. Use `machines generate` to create a template.' if name == 'Machinesfile'
+      load_package(AppConf.project_dir, name) ||
+        load_package(AppConf.application_dir, name) ||
+        raise(LoadError, error, caller)
     end
 
     def roles *args, &block

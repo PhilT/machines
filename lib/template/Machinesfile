@@ -19,7 +19,7 @@ roles :app do
   package :passenger
   package :passenger_nginx
   package :git
-  package :dotfiles, %w(bashrc gitconfig)
+  package :dotfiles
 end
 
 # Installed on machines that have the db role

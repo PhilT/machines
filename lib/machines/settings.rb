@@ -4,6 +4,7 @@ module Machines
     AppConf.application_dir = File.join(File.dirname(__FILE__), '..')
     AppConf.commands = []
     AppConf.from_hash(:user => {})
+    AppConf.load(File.join(AppConf.project_dir, 'config/config.yml'))
 
     def load_settings(environment, apps, roles)
       AppConf.environment = environment
@@ -14,22 +15,10 @@ module Machines
       AppConf.log.output = Logger.new(AppConf.log.path)
       AppConf.log.progress.formatter = AppConf.log.output.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n"}
       AppConf.user.home = File.join('/home', AppConf.user.name)
-      AppConf.load(File.join(AppConf.project_dir, 'config/config.yml'), File.join(AppConf.project_dir, 'users/users.yml'))
       AppConf.appsroot = AppConf[AppConf.user.name].appsroot
 
       load_app_settings
     end
-
-=begin
-    These all need to be setup
-
-    AppConf.dotfiles
-    AppConf.machinename
-    AppConf.environment
-    AppConf.timezone
-
-    AppConf.nginx.url
-=end
   end
 end
 
