@@ -11,7 +11,7 @@ module Machines
     end
 
     # Queue up command or commands to run remotely
-    # @param [String, Array] command Command(s) to run
+    # @param [String, Array] command Command(s) to run (an array causes the commands to be concatenated with &&)
     # @param [String] check The command to run to check whether the previous command was successful
     def run commands, check, sudo = false
       commands = [commands] if commands.is_a?(String)
