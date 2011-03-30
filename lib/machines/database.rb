@@ -23,7 +23,13 @@ module Machines
     def write_database_yml options
       required_options options, [:to, :for]
       app = options[:for]
-      yml = {@environment.to_s => {'adapter' => 'mysql', 'database' => app, 'username' => app, 'password' => @passwords[app], 'host' => @dbmaster, 'encoding' => 'utf8'}}.to_yaml
+      yml = {AppConf.environment => {
+        'adapter' => 'mysql',
+        'database' => app,
+        'username' => app,
+        'password' => AppConf.apps[app].password,
+        'host' => AppConf.database_address,
+        'encoding' => 'utf8'}}.to_yaml
       path = File.join(options[:to], 'database.yml')
       run "echo '#{yml}' > #{path}", check_file(path)
     end

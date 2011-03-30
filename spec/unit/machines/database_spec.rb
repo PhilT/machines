@@ -23,9 +23,10 @@ describe 'Database' do
   describe 'write_database_yml' do
     it 'should write the database.yml file' do
       should_receive(:required_options).with({:to => 'dir', :for => 'app'}, [:to, :for])
-      @environment = 'test'
-      @dbmaster = 'dbmaster'
-      @passwords = {'app' => 'password'}
+      AppConf.environment = 'test'
+      AppConf.database_address = 'dbhost'
+      AppConf.from_hash(:apps => {:app => {:password => 'password'}})
+
       write_database_yml :for => 'app', :to => 'dir'
       command = AppConf.commands.first.command
       command.should match /export TERM=linux && echo '---.*' > dir\/database.yml/m
@@ -34,7 +35,7 @@ describe 'Database' do
       command.should match /database: app/m
       command.should match /username: app/m
       command.should match /password: password/m
-      command.should match /host: dbmaster/m
+      command.should match /host: dbhost/m
       AppConf.commands.first.check.should == "test -s dir/database.yml #{echo_result}"
     end
   end
