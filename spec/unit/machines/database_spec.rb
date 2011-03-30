@@ -1,22 +1,21 @@
 require 'spec_helper'
 
 describe 'Database' do
+  include Machines::Core
   include Machines::Database
-  include FakeAddHelper
 
   describe 'mysql' do
     it 'should run a SQL statement as root' do
       should_receive(:required_options).with({:on => 'host', :password => 'password'}, [:on, :password])
       mysql 'sql statement', :on => 'host', :password => 'password'
-      @added.should == ['echo "sql statement" | mysql -u root -ppassword -h host']
+      AppConf.commands.map(&:command).should == ['export TERM=linux && echo "sql statement" | mysql -u root -ppassword -h host']
     end
   end
 
   describe 'mysql_pass' do
     it 'should set the MySQL root password' do
       mysql_pass 'password'
-      @added.should == ['mysqladmin -u root password password']
-      @checks.should == ["mysqladmin -u root -ppassword ping | grep alive #{echo_result}"]
+      AppConf.commands.should == [Command.new('', 'export TERM=linux && mysqladmin -u root password password', "mysqladmin -u root -ppassword ping | grep alive #{echo_result}")]
     end
 
   end
@@ -28,15 +27,15 @@ describe 'Database' do
       @dbmaster = 'dbmaster'
       @passwords = {'app' => 'password'}
       write_database_yml :for => 'app', :to => 'dir'
-      actual = @added.first
-      actual.should match /echo '.*' > dir\/database.yml/m
-      actual.should match /test:/m
-      actual.should match /adapter: mysql/m
-      actual.should match /database: app/m
-      actual.should match /host: dbmaster/m
-      actual.should match /password: password/m
-      actual.should match /username: app/m
-      @checks.should == ["test -s dir/database.yml #{echo_result}"]
+      command = AppConf.commands.first.command
+      command.should match /export TERM=linux && echo '---.*' > dir\/database.yml/m
+      command.should match /test:/m
+      command.should match /adapter: mysql/m
+      command.should match /database: app/m
+      command.should match /username: app/m
+      command.should match /password: password/m
+      command.should match /host: dbmaster/m
+      AppConf.commands.first.check.should == "test -s dir/database.yml #{echo_result}"
     end
   end
 end

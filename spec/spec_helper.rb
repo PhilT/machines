@@ -20,17 +20,5 @@ RSpec.configure do |c|
     @output = MockStdOut.new
     $terminal = HighLine.new(@input, @output)
   end
-
-  c.before(:each) do
-    @added = []
-    @checks = []
-  end
-end
-
-module FakeAddHelper
-  def add to_add, check
-    @added << to_add
-    @checks << check
-  end
 end
 

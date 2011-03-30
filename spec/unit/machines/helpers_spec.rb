@@ -6,7 +6,7 @@ describe 'Helpers' do
 
   before(:each) do
     AppConf.user.name = 'www'
-    AppConf.from_hash(:log => {:output => {:info => nil}})
+    AppConf.from_hash(:log => {:output => mock(Logger, :info => nil, :error => nil), :progress => mock(Logger, :info => nil, :error => nil)})
   end
 
   describe 'display' do

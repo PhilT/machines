@@ -62,26 +62,6 @@ describe 'Machines' do
     end
   end
 
-  describe 'discover_users' do
-    before(:each) do
-      Dir.stub(:[]).and_return ['users/first', 'users/another']
-      @machines.stub(:load_machinesfile)
-    end
-
-    it 'should find users through folder list when called by test' do
-      @machines.dryrun
-      @machines.users.should == ['first', 'another']
-    end
-
-    it 'should find users through folder list when called by setup' do
-      @machines.should_receive(:enable_root_login)
-      Net::SSH.should_receive(:start).with('host', 'root', :keys => ['keyfile']).and_yield @mock_ssh
-      @machines.should_receive(:run_commands).with @mock_ssh
-      @machines.should_receive(:disable_root_login)
-      @machines.setup
-      @machines.users.should == ['first', 'another']
-    end
-  end
 
   describe 'run_commands' do
     before(:each) do
@@ -95,16 +75,16 @@ describe 'Machines' do
     end
 
     it 'should display all commands queued in the AppConf.commands array' do
-      @machines.add 'command 1', nil
-      @machines.add 'command 2', nil
+      @machines.run 'command 1', nil
+      @machines.run 'command 2', nil
       @machines.should_receive(:log_to).with(:screen, ':      command 1')
       @machines.should_receive(:log_to).with(:screen, ':      command 2')
       @machines.dryrun
     end
 
     it 'should run all commands queued in the AppConf.commands array with check' do
-      @machines.add 'command 1', 'check1'
-      @machines.add 'command 2', 'check2'
+      @machines.run 'command 1', 'check1'
+      @machines.run 'command 2', 'check2'
       @mock_ssh.should_receive(:exec!).with('command 1').and_return ''
       @mock_ssh.should_receive(:exec!).with('check1').and_return ''
       @mock_ssh.should_receive(:exec!).with('command 2').and_return ''
@@ -113,7 +93,7 @@ describe 'Machines' do
     end
 
     it 'should run upload command' do
-      @machines.add ['from', 'to'], 'check1'
+      @machines.run ['from', 'to'], 'check1'
       @mock_ssh.should_receive(:exec!).with('check1').and_return ''
       mock_scp = mock('Scp')
 
@@ -123,7 +103,7 @@ describe 'Machines' do
     end
 
     it "should catch SCP errors and display message" do
-      @machines.add ['from/path', 'to/path'], 'check1'
+      @machines.run ['from/path', 'to/path'], 'check1'
       @mock_ssh.stub(:exec!)
       mock_scp = mock('Scp')
       mock_scp.should_receive(:upload!).and_raise 'an error'
@@ -133,32 +113,6 @@ describe 'Machines' do
     end
   end
 
-  describe 'enable/disable_root_login' do
-    before(:each) do
-      @machines.should_receive(:load_machinesfile)
-      Net::SSH.should_receive(:start).with('host', 'root', :keys => ['keyfile']).and_yield @mock_ssh
-      @machines.should_receive(:run_commands).with @mock_ssh
-
-    end
-
-    it 'should enable root login' do
-      @machines.stub(:disable_root_login)
-      mock_ssh = mock 'Ssh for root'
-      Net::SSH.should_receive(:start).with('host', AppConf.user.name, {:keys => ['keyfile']}).and_yield(mock_ssh)
-      mock_ssh.should_receive(:exec!).with "sudo sh -c 'test -f /root/.ssh/authorized_keys && mv /root/.ssh/authorized_keys /root/.ssh/authorized_keys.orig || mkdir /root/.ssh'"
-      mock_ssh.should_receive(:exec!).with "sudo sh -c 'cp /home/ubuntu/.ssh/authorized_keys /root/.ssh/'"
-      @machines.setup
-    end
-
-    it 'should lock the root login on the remote machine' do
-      @machines.stub(:enable_root_login)
-      mock_ssh = mock 'Ssh for root'
-      Net::SSH.should_receive(:start).with('host', 'root', :keys => ['keyfile']).and_yield(mock_ssh)
-      mock_ssh.should_receive(:exec!).with 'rm /root/.ssh/authorized_keys'
-      mock_ssh.should_receive(:exec!).with 'test -f /root/.ssh/authorized_keys.orig && mv /root/.ssh/authorized_keys.orig /root/.ssh/authorized_keys'
-      @machines.setup
-    end
-  end
 =end
 end
 
