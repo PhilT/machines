@@ -6,17 +6,19 @@ module Machines
     class Upload < Struct.new(:line, :local_source, :remote_dest, :check)
     end
 
-    def sudo command
-      "echo #{AppConf.user.pass} | sudo -S sh -c '#{command}'"
+    def sudo command, check
+      run command, check, true
     end
 
     # Queue up command or commands to run remotely
     # @param [String, Array] command Command(s) to run
     # @param [String] check The command to run to check whether the previous command was successful
-    def run commands, check
+    def run commands, check, sudo = false
       commands = [commands] if commands.is_a?(String)
       commands = ['export TERM=linux'] + commands
       command = commands.to_a.map{|command| "#{command}"}.to_a.join(' && ')
+      command = "echo #{AppConf.user.pass} | sudo -S sh -c '#{command}'" if sudo
+
       AppConf.commands << Command.new(machinesfile_line, command, check)
     end
 

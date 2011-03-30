@@ -24,7 +24,14 @@ describe 'Configuration' do
       stub!(:display)
       lambda{run [nil, nil]}.should raise_error(ArgumentError)
     end
+  end
 
+  describe 'sudo' do
+    it 'wraps a command in a sudo with password call' do
+      AppConf.user.pass = 'password'
+      sudo 'command', nil
+      AppConf.commands.should == [Command.new('', "echo password | sudo -S sh -c 'export TERM=linux && command'", nil)]
+    end
   end
 end
 
