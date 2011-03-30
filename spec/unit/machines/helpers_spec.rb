@@ -1,18 +1,17 @@
 require 'spec_helper'
 
 describe 'Helpers' do
+  include Machines::Core
   include Machines::Helpers
-  alias :real_add :add
-  include FakeAddHelper
 
   before(:each) do
-    AppConf.from_hash({:user => {:name => 'www'}})
-    Machines::Base.new.load_settings :staging, [], []
+    AppConf.user.name = 'www'
+    AppConf.from_hash(:log => {:output => {:info => nil}})
   end
 
   describe 'display' do
     before(:each) do
-      @passwords = {:some_app => 'password'}
+      AppConf.passwords = ['password']
     end
 
     it 'should remove passwords' do
@@ -24,7 +23,7 @@ describe 'Helpers' do
     end
 
     it 'should ignore empty password list' do
-      @passwords = {}
+      AppConf.passwords = []
       display('something nice').should == 'something nice'
     end
 
@@ -115,30 +114,6 @@ describe 'Helpers' do
       $terminal.should_receive(:color).with('CHECK PASSED', :green).and_return @log_message
       log_result 'CHECK PASSED'
     end
-  end
-
-  describe 'add' do
-    before(:each) do
-      AppConf.commands = []
-    end
-
-    it 'should add a command to the commands array and include the caller method name' do
-      stub!(:caller).and_return ["(eval):13\nrest of trace"]
-      real_add 'command', nil
-      AppConf.commands.should == [['13', 'command', nil]]
-    end
-
-    it 'should not fail when no trace' do
-      stub!(:caller).and_return []
-      real_add 'command', nil
-      AppConf.commands.should == [['', 'command', nil]]
-    end
-
-    it 'should raise errors when command is missing' do
-      stub!(:display)
-      lambda{add [nil, nil]}.should raise_error(ArgumentError)
-    end
-
   end
 end
 

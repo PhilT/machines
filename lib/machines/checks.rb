@@ -26,6 +26,7 @@ module Machines
     end
 
     def check_perms perms, path
+      perms = perms.to_s
       mods = %w(--- --x -w- -wx r-- r-x rw- rwx)
       "ls -la #{path} | grep #{mods[perms[0..0].to_i]}#{mods[perms[1..1].to_i]}#{mods[perms[2..2].to_i]} #{echo_result}"
     end

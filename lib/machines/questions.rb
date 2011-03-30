@@ -14,7 +14,7 @@ module Machines
     end
 
     def choose_user
-      users = from_yaml('users/users.yml').keys
+      users = AppConf.users.keys
       AppConf.user.name = choose(*users) { |menu| menu.prompt = 'Select a user: ' }
     end
 

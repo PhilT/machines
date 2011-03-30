@@ -5,7 +5,7 @@ module Machines
     # Utility method to tidy up commands before being logged
     def display command
       command = command.join(' to ') if command.is_a?(Array)
-      command = command.gsub(/(#{(@passwords.values).join('|')})/, "*****") if @passwords && @passwords.values.any?
+      command = command.gsub(/(#{(AppConf.passwords).join('|')})/, "*****") if AppConf.passwords && AppConf.passwords.any?
       command
     end
 
@@ -38,16 +38,6 @@ module Machines
       AppConf.log.output.info $terminal.color(result, color)
     end
 
-    # Queues up a command on the command list. Includes the calling method name for logging
-    def add command, check
-      line = ''
-      caller.each do |methods|
-        line = methods.scan(/\(eval\):([0-9]+)/).join
-        break unless line.empty?
-      end
-      raise ArgumentError, "MISSING line or command in: [#{line}, #{display(command)}]" unless line && command
-      AppConf.commands << [line, command, check]
-    end
   end
 end
 

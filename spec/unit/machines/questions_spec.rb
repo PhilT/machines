@@ -55,11 +55,11 @@ MACHINESFILE
 
   describe 'choose_user' do
     before(:each) do
-      should_receive(:from_yaml).with('users/users.yml').and_return({'a_user' => {}, 'another' => {}})
+      AppConf.from_hash(:users => {:a_user => {}, :another => {}})
       @mock_menu = mock(HighLine::Menu, :prompt= => nil)
     end
 
-    it 'loads options from users/users.yml' do
+    it 'loads options' do
       should_receive(:choose).with('a_user', 'another').and_yield @mock_menu
       choose_user
     end

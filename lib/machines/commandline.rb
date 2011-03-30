@@ -1,7 +1,13 @@
+class File
+  def self.append path, string
+    File.open(path, 'a') {|file| file.puts string }
+  end
+end
+
 module Machines
   module Commandline
     def start(command)
-      if %w(htpasswd generate check test build).include?(command)
+      if %w(htpasswd generate check dryrun build).include?(command)
         AppConf.action = command
         send command
       else
@@ -16,7 +22,7 @@ COMMAND can be:
   htpasswd - Asks for a username and password and generates basic auth in webserver/conf/htpasswd
   generate - Generates an example machines project
   check    - Checks Machinesfile for syntax issues
-  test     - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them
+  dryrun   - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them
   build    - Asks some questions then builds your chosen machine
 HELP
     end
@@ -39,7 +45,7 @@ HELP
 
       crypted_pass = password.crypt(WEBrick::Utils.random_string(2))
       FileUtils.mkdir_p conf_dir
-      append "#{username}:#{crypted_pass}", path
+      File.append(path, "#{username}:#{crypted_pass}")
       say "Password encrypted and added to #{path}"
     end
 

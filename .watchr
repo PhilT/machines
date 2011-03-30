@@ -17,9 +17,11 @@ end
 @failing = []
 def rspec spec
   return unless spec_exists?(spec)
+  previously_failed = @failing.any?
   @failing << spec unless @failing.include?(spec)
   success = system "rspec #{@failing.join(' ')}"
-  if success && @failing.any?
+  if success && previously_failed
+    puts @failing
     puts 'Failing specs now passing. Running all specs...'
     @failing = []
     all_specs

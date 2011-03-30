@@ -7,11 +7,6 @@ module Machines
       end
     end
 
-    # Is the selected configuration using the development environment
-    def development?
-      @environment == :development
-    end
-
     # Set a database password for an application (Used to communicate between application and db server)
     def password application, password
       @passwords[application] = password
@@ -22,7 +17,7 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to File to append to
     def append line, options
-      add "echo '#{line}' >> #{options[:to]}", check_string(line, options[:to])
+      run "echo '#{line}' >> #{options[:to]}", check_string(line, options[:to])
     end
 
     # overwrite a file with the specified content
@@ -30,7 +25,7 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to File to write to
     def write line, options
-      add "echo '#{line}' > #{options[:to]}", check_string(line, options[:to])
+      run "echo '#{line}' > #{options[:to]}", check_string(line, options[:to])
     end
 
     # Export key/value pairs to a file
@@ -42,7 +37,7 @@ module Machines
       options.each do |key, value|
         unless key == :to
           command = "export #{key}=#{value}"
-          add "echo '#{command}' >> #{options[:to]}", check_string(command, options[:to])
+          run "echo '#{command}' >> #{options[:to]}", check_string(command, options[:to])
         end
       end
     end
@@ -67,25 +62,13 @@ module Machines
     def add_user login, options = {}
       password = "-p #{`openssl passwd #{options[:password]}`.gsub("\n", '')} " if options[:password]
       admin = "-G admin " if options[:admin]
-      add "useradd -s /bin/bash -d /home/#{login} -m #{password}#{admin}#{login}", check_dir("/home/#{login}")
-    end
-
-    # Add a line to /etc/sudoers to allow a user to sudo with no password
-    # @param [String] user User to add
-    def set_sudo_no_password user
-      append "#{user} ALL=(ALL) NOPASSWD: ALL", :to => '/etc/sudoers'
-    end
-
-    # Removes the line in /etc/sudoers that allows a user to sudo with no password
-    # @param [String] user User to remove
-    def unset_sudo_no_password user
-      replace "#{user} ALL=(ALL) NOPASSWD: ALL", :with => '', :in => '/etc/sudoers'
+      run "useradd -s /bin/bash -d /home/#{login} -m #{password}#{admin}#{login}", check_dir("/home/#{login}")
     end
 
     # Removes a user, home and any other related files
     # @param [String] login User name to remove
     def del_user login
-      add "deluser #{login} --remove-home -q", check_file('/home/login', false)
+      run "deluser #{login} --remove-home -q", check_file('/home/login', false)
     end
   end
 end

@@ -2,10 +2,14 @@
 
 install %w(libmysqld-dev mysql-server)
 
-mysql_pass AppConf.user.password
+mysql_pass AppConf.user.pass
 restart 'mysql'
+
 apps.each do |app|
-  password = development? ? app_config[app][:dev_dir] : passwords[app]
+  password = app
+  environments :staging, :production do
+    password = 'something'
+  end #TODO need to set this to the password created
   mysql "GRANT ALL ON *.* TO '#{app}'@'%' IDENTIFIED BY '#{password}';", :on => 'localhost', :password => AppConf.user.password
 end
 

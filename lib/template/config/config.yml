@@ -34,9 +34,10 @@ ruby:
 rvm:
   url: git://github.com/wayneeseguin/rvm.git
 
-phil:
-  appsroot: /home/phil/workspace
+users:
+  phil:
+    appsroot: /home/phil/workspace
 
-www:
-  appsroot: /home/www
+  www:
+    appsroot: /home/www
 

@@ -1,8 +1,36 @@
 require 'spec_helper'
 
 describe 'Machines' do
+
   before(:each) do
-    pending
+    @machines = Machines::Base.new
+    @machines.stub(:load).with("#{AppConf.project_dir}/Machinesfile")
+  end
+
+  describe 'build' do
+    it 'raises LoadError with custom message when no Machinesfile' do
+      @machines.should_receive(:load).with("#{AppConf.project_dir}/Machinesfile").and_raise LoadError.new('Machinesfile not found')
+
+      begin
+        @machines.build
+      rescue LoadError => e
+        e.message.should == 'Machinesfile does not exist. Use `machines generate` to create a template.'
+      end
+    end
+
+    it 'raises normal LoadError when other file' do
+      @machines.should_receive(:load).with("#{AppConf.project_dir}/Machinesfile").and_raise LoadError
+
+      begin
+        @machines.build
+      rescue LoadError => e
+        e.message.should == 'LoadError'
+      end
+    end
+  end
+
+=begin
+  before(:each) do
     AppConf.commands = []
     @machines = Machines::Base.new
     AppConf.machine = 'config'
@@ -131,6 +159,6 @@ describe 'Machines' do
       @machines.setup
     end
   end
-
+=end
 end
 

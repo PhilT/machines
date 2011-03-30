@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe 'Configuration' do
+  include Machines::Core
   include Machines::FileOperations
   include Machines::Helpers
   include Machines::Configuration
-  include FakeAddHelper
 
   describe 'machine' do
     it 'should set environment, apps and role when it matches the configuration specified' do
@@ -31,17 +31,6 @@ describe 'Configuration' do
     end
   end
 
-  describe 'development?' do
-    it do
-      @environment = :development
-      development?.should be_true
-    end
-
-    it do
-      development?.should be_false
-    end
-  end
-
   describe 'password' do
     it 'should add a password to existing passwords' do
       @passwords = {'app' => 'password'}
@@ -59,7 +48,7 @@ describe 'Configuration' do
   describe 'append' do
     it 'should echo a string to a file' do
       append 'some string', :to => 'a_file'
-      @added.should == ["echo 'some string' >> a_file"]
+      AppConf.commands.map(&:command).should == ["export TERM=linux && echo 'some string' >> a_file"]
     end
   end
 
@@ -70,46 +59,30 @@ describe 'Configuration' do
 
     it 'should export a key/value to a file' do
       export :key => :value, :to => 'to_file'
-      @added.should == ["echo 'export key=value' >> to_file"]
-      @checks.should == ["grep 'export key=value' to_file #{echo_result}"]
+      AppConf.commands.map(&:command).should == ["export TERM=linux && echo 'export key=value' >> to_file"]
+      AppConf.commands.map(&:check).should == ["grep 'export key=value' to_file #{echo_result}"]
     end
   end
 
   describe 'add_user' do
     it do
       add_user 'login'
-      @added.should == ['useradd -s /bin/bash -d /home/login -m login']
-      @checks.should == ["test -d /home/login #{echo_result}"]
+      AppConf.commands.map(&:command).should == ['export TERM=linux && useradd -s /bin/bash -d /home/login -m login']
+      AppConf.commands.map(&:check).should == ["test -d /home/login #{echo_result}"]
     end
 
     it do
       add_user 'a_user', :password => 'password', :admin => true
-      @added[0].should match /useradd -s \/bin\/bash -d \/home\/a_user -m -p .* -G admin a_user/
-      @checks.should == ["test -d /home/a_user #{echo_result}"]
-    end
-  end
-
-  describe 'set_sudo_no_password' do
-    it do
-      set_sudo_no_password 'a_user'
-      @added.should == ["echo 'a_user ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"]
-      @checks.should == ["grep 'a_user ALL=(ALL) NOPASSWD: ALL' /etc/sudoers #{echo_result}"]
-    end
-  end
-
-  describe 'unset_sudo_no_password' do
-    it do
-      unset_sudo_no_password 'a_user'
-      @added.should == ["sed -i 's/a_user ALL=(ALL) NOPASSWD: ALL//' /etc/sudoers"]
-      @checks.should == ["grep '' /etc/sudoers #{echo_result}"]
+      AppConf.commands.map(&:command)[0].should match /useradd -s \/bin\/bash -d \/home\/a_user -m -p .* -G admin a_user/
+      AppConf.commands.map(&:check).should == ["test -d /home/a_user #{echo_result}"]
     end
   end
 
   describe 'del_user' do
     it 'should call deluser with remove-all-files option' do
       del_user 'login'
-      @added.should == ['deluser login --remove-home -q']
-      @checks.should == ["test ! -s /home/login #{echo_result}"]
+      AppConf.commands.map(&:command).should == ['export TERM=linux && deluser login --remove-home -q']
+      AppConf.commands.map(&:check).should == ["test ! -s /home/login #{echo_result}"]
     end
   end
 end

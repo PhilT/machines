@@ -8,8 +8,12 @@ require 'highline/import'
 require 'net/ssh'
 require 'net/scp'
 require 'ostruct'
+require 'tempfile'
 require 'webrick/utils'
 require 'yaml'
+
+AppConf.project_dir = Dir.pwd
+AppConf.application_dir = File.dirname(__FILE__)
 
 module Machines
 
@@ -19,28 +23,36 @@ module Machines
       include eval(ActiveSupport::Inflector.camelize(File.basename(lib, '.rb')))
     end
 
-    def test
-      discover_users
-      load_machinesfile
-      run_commands
-    end
-
     def build
-      set_sudo_no_password AppConf.user.name
-      load_machinesfile
-      setup_dev_machine if development?
-      enable_root_login(@username)
-      Net::SSH.start AppConf.hostname, 'root', :keys => @keys do |ssh|
-        run_commands ssh
+      load File.join(AppConf.project_dir, 'Machinesfile')
+      Net::SSH.start AppConf.target_address, AppConf.user.name, :password => AppConf.user.pass do |ssh|
+        log_output ssh.exec!(command)
       end
-      disable_root_login
+    rescue LoadError => e
+      raise LoadError, "Machinesfile does not exist. Use `machines generate` to create a template." if e.message =~ /Machinesfile/
+      raise
     end
 
+  private
+    def upload local_source, remote_dest
+      Net::SCP.start AppConf.target_address, AppConf.user.name, :password => AppConf.user.pass do |scp|
+        scp.upload! local_source, remote_dest
+      end
+    rescue
+      log_output "UPLOAD FAILED", :red
+    end
+
+
+    def run command
+      command
+    end
+
+=begin
   private
     def load_machinesfile
       machinesfile = File.join(AppConf.project_dir, 'Machinesfile')
       if File.exists?(machinesfile)
-        load machinesfile
+        load File.join(AppConf.project_dir, 'Machinesfile')
       else
         raise LoadError, "Machinesfile does not exist. Use `machines generate` to create a template."
       end
@@ -91,11 +103,14 @@ module Machines
     end
 
     AUTH_KEYS = '/root/.ssh/authorized_keys'
+
     # Copy authorized_keys so root login enabled (backs up authorized_keys if it exists)
-    def enable_root_login(username)
+    def enable_root_login
+      username = AppConf.user.name
       given_up = true
-      10.times do
+      6.times do
         begin
+
           log_to :file, "Attempt to enable root login with #{username}@#{host} using key #{@keys.inspect}"
           Net::SSH.start host, username, :keys => @keys do |ssh|
             log_to :file, ssh.exec!("sudo sh -c 'test -f #{AUTH_KEYS} && mv #{AUTH_KEYS} #{AUTH_KEYS}.orig || mkdir /root/.ssh'")
@@ -104,7 +119,7 @@ module Machines
           given_up = false
           break
         rescue
-          sleep 6
+          sleep 10
           print '.'
         end
       end
@@ -119,6 +134,7 @@ module Machines
         log_to :file, ssh.exec!("test -f #{AUTH_KEYS}.orig && mv #{AUTH_KEYS}.orig #{AUTH_KEYS}")
       end
     end
+=end
   end
 end
 

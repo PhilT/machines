@@ -12,8 +12,8 @@ end
 
 authorized_key_file = File.join('users', username, 'authorized_keys')
 if File.exists?(authorized_key_file)
-  mkdir File.join(userhome, '.ssh'), {:perms => '700', :owner => username}
-  upload authorized_key_file, File.join(userhome, '.ssh', 'authorized_keys'), {:perms => '600', :owner => username}
+  mkdir File.join(userhome, '.ssh'), 700
+  upload authorized_key_file, File.join(userhome, '.ssh', 'authorized_keys'), 600
 end
 
 if File.exists?(File.join('users', username, 'bashrc'))

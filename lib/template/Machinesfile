@@ -1,11 +1,14 @@
+package :questions
+package :settings
+
 # Machine types
 # machine 'type', :environment, :roles => [], :apps => []
 all_apps = %w(application wiki)
 machine 'Desktop', :development, :roles => [:app, :db], :apps => all_apps
 machine 'Staging', :staging, :roles => [:app, :db], :apps => all_apps
-machine 'Production', :production, :roles => :app, :apps => all_apps
-machine 'DBmaster', :production, :roles => :db, :dbmaster
-machine 'DBslave', :production, :roles => :db, :dbslave
+machine 'Production', :production, :roles => [:app], :apps => all_apps
+machine 'DBmaster', :production, :roles => [:db, :dbmaster]
+machine 'DBslave', :production, :roles => [:db, :dbslave]
 
 # Installed on all machines
 package :base

@@ -72,8 +72,8 @@ This will create the following directory structure:
 1. Add your certificates and amazon private key
 1. Edit files in `config/`
 1. Alter, add or remove `nginx`, `mysql` and custom `packages`
-1. Setup `users`
-1. Add `~/.ssh/id_rsa.pub` public key from users machines to `users/www/authorized_keys` file
+1. Setup `users/`
+1. Add `~/.ssh/id_rsa.pub` public key from all users machines that need access, to the `users/www/authorized_keys` file
 
 ### If installing on a development machine
 * Make sure you have Bridged Networking setup if using a VM
@@ -82,10 +82,11 @@ This will create the following directory structure:
 
     sudo apt-get update && sudo apt-get -y install openssh-server && ifconfig
 
-### Test the Machinesfile
+### Check the Machinesfile
 
     ssh-keygen -R <host ip> # remove host from known_hosts file (handy when testing)
-    machines test <configuration>
+    machines check
+    machines dryrun
 
 ### Build the machine
 
@@ -120,18 +121,44 @@ Commandline Options
 * `htpasswd` - Asks for a username and password and generates basic auth in webserver/conf/htpasswd'
 * `generate` - Generates an example machines project'
 * `check`    - Checks Machinesfile for syntax issues'
-* `test`     - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them'
+* `dryrun`   - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them'
 * `build`    - Asks some questions then builds your chosen machine'
 
-== Warnings
-You might see something one of the following while upgrading/installing packages:
+Setting up the Test VM
+---------------------------------------
+
+https://help.ubuntu.com/community/Installation/LowMemorySystems
+
+* Grab the Minimal CD from https://help.ubuntu.com/community/Installation/MinimalCD
+* Select Commandline install and follow the prompts
+* Accept default ubuntu hostname
+* Enter 'user' for username and 'password' for the password
+* If desired apply the piix4_smbus error fix(A warning that appears on Ubuntu VMs when booting)
+    sudo sh -c 'echo blacklist i2c_piix4 >> /etc/modprobe.d/blacklist.conf'
+* And add openssh
+    sudo apt-get -y install openssh-server && ifconfig
+* On your local machine (change VM_IP_ADDRESS to the ip address of the VM)
+    sudo sh -c 'echo VM_IP_ADDRESS testvm >> /etc/hosts'
+* What I also do at this point is take a snapshot of the VM
+
+What's happening under the hood
+---------------------------------------
+
+ssh uses the specified user and then sudo is added to commands that require it.
+When sudo is needed for file uploads. The file is uploaded to /tmp then sudo cp'd to the destination.
+
+Warnings
+---------------------------------------
+
+You might see one of the following while upgrading/installing packages:
     debconf: Unable to initialise frontend: Dialog
     WARNING: Failed to parse default value
     update-rc.d: warning: unattended-upgrades start runlevel arguments
 
-These are all known issues and nothing to worry about
+These are all known issues and nothing to worry about.
 
-== TODO
+TODO
+---------------------------------------
 
 * Add :abort => true to abort on failed check
 * Add asynchronous ssh so output can be piped live
@@ -142,13 +169,14 @@ These are all known issues and nothing to worry about
 Note on Patches/Pull Requests
 ---------------------------------------
 
-This project uses *autotest* for continuous testing
-Install libnotify-bin on linux to get growl notifications when using *autotest*
+This project uses *watchr* for continuous testing.
+It's fast and very configurable. The script approximates autotest behaviour.
+    watchr .watchr
 
 * Fork the project.
 * Test drive your feature addition or bug fix
 * Commit, do not mess with rakefile, version, or history.
-* Send me a pull request. Bonus points for topic branches.
+* Send me a pull request. Please use topic branches.
 
 Copyright
 ---------------------------------------
