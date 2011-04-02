@@ -32,11 +32,11 @@ module Machines
     end
 
     def check_owner user, path
-      "ls -la #{path} | grep '#{user}.*#{user}' #{echo_result}"
+      "ls -la #{path} | grep \"#{user}.*#{user}\" #{echo_result}"
     end
 
     def check_string string, file
-      "grep '#{string}' #{file} #{echo_result}"
+      "grep \"#{string}\" #{file} #{echo_result}"
     end
 
     def check_daemon daemon

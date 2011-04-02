@@ -19,7 +19,8 @@ module Machines
     end
 
     def enter_password(type)
-      enter_and_confirm_password("Enter #{type} password: ")
+      AppConf.passwords << enter_and_confirm_password("Enter #{type} password: ")
+      AppConf.passwords.last
     end
 
     def enter_hostname

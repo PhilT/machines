@@ -14,6 +14,7 @@ RSpec.configure do |c|
   c.include(Matchers)
 
   c.before(:each, :type => :unit) do
+    AppConf.passwords = []
     AppConf.commands = []
     AppConf.from_hash(:user => {})
     AppConf.project_dir = UNIT_PROJECT_DIR

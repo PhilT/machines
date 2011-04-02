@@ -12,15 +12,15 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to File to append to
     def append line, options
-      Command.new("echo '#{line}' >> #{options[:to]}", check_string(line, options[:to]))
+      Command.new("echo \"#{line}\" >> #{options[:to]}", check_string(line, options[:to]))
     end
 
-    # overwrite a file with the specified content
+    # Overwrite a file with the specified content
     # @param [String] line Line of text to add
     # @param [Hash] options
     # @option options [String] :to File to write to
     def write line, options
-      Command.new("echo '#{line}' > #{options[:to]}", check_string(line, options[:to]))
+      Command.new("echo \"#{line}\" > #{options[:to]}", check_string(line, options[:to]))
     end
 
     # Export key/value pairs to a file
@@ -30,7 +30,7 @@ module Machines
       required_options options, [:to]
       options.reject{|k, v| k == :to }.map do |key, value|
         command = "export #{key}=#{value}"
-        Command.new("echo '#{command}' >> #{options[:to]}", check_string(command, options[:to]))
+        Command.new("echo \"#{command}\" >> #{options[:to]}", check_string(command, options[:to]))
       end
     end
 
@@ -42,7 +42,7 @@ module Machines
         type = types[value.class]
         raise 'Invalid type for configure' unless type
         value = value.to_json if value.class = Array
-        Command.new("gconftool-2 --set '#{key}' --type #{type} #{value}", nil)
+        Command.new("gconftool-2 --set \"#{key}\" --type #{type} #{value}", nil)
       end
     end
 

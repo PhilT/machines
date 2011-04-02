@@ -14,8 +14,7 @@ module Machines
         'password' => AppConf.apps[app].password,
         'host' => AppConf.database_address,
         'encoding' => 'utf8'}}.to_yaml
-      path = File.join(options[:to], 'database.yml')
-      Command.new("echo '#{yml}' > #{path}", check_file(path))
+      write yml, :to => File.join(options[:to], 'database.yml')
     end
   end
 end

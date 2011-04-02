@@ -24,7 +24,7 @@ module Machines
     # Take off the version numbers from a path name
     # @param [String] name Name of the path to rename
     def remove_version_info name
-      Command.new("find . -maxdepth 1 -name '#{name}*' -a -type d | xargs -I xxx mv xxx #{name}", check_file(name))
+      Command.new("find . -maxdepth 1 -name \"#{name}*\" -a -type d | xargs -I xxx mv xxx #{name}", check_file(name))
     end
 
     # Add a symlink
@@ -41,7 +41,8 @@ module Machines
     # @option options [String] :in Filename to replace text in
     def replace regex, options
       required_options options, [:with, :in]
-      Command.new("sed -i 's/#{regex}/#{options[:with].to_s.gsub('/', '\/').gsub("\n", "\\n")}/' #{options[:in]}", check_string(options[:with], options[:in]))
+      with = options[:with].to_s.gsub('/', '\/').gsub("\n", "\\n")
+      Command.new("sed -i \"s/#{regex}/#{with}/\" #{options[:in]}", check_string(options[:with], options[:in]))
     end
 
     # Write an ERB template

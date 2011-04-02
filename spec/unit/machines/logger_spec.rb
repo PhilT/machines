@@ -51,26 +51,11 @@ describe 'Helpers' do
       put 'command', :line => 1, :color => :yellow
       'command'.should be_displayed in_yellow
     end
-  end
 
-  describe 'display' do
-    before(:each) do
-      AppConf.passwords = ['password']
-    end
-
-    it 'should remove passwords' do
-      display("multi\nline\ncommand with password").should == "multi\nline\ncommand with *****"
-    end
-
-    it 'should ignore empty password list' do
-      AppConf.passwords = []
-      display('something nice').should == 'something nice'
-    end
-
-    it 'should not modify original' do
-      command = "multi\nline\ncommand with password"
-      display(command).should == "multi\nline\ncommand with *****"
-      command.should == "multi\nline\ncommand with password"
+    it 'does not show passwords' do
+      AppConf.passwords = ['a_password', 'another password']
+      put 'something with a_password and another password in'
+      'something with ***** and ***** in'.should be_displayed
     end
   end
 

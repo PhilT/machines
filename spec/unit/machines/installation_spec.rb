@@ -8,18 +8,26 @@ describe 'Installation' do
 
   describe 'add_source' do
     it 'should add to /etc/apt/sources and add a key' do
-      subject = add_source 'name', 'source', :gpg => 'gpg'
+      subject = add_source 'the_name', 'source', :gpg => 'gpg'
       subject.map(&:command).should == [
-        "echo 'deb source' >> /etc/apt/sources.list.d/name.list",
+        "echo \"deb source\" >> /etc/apt/sources.list.d/the_name.list",
         "wget -q -O - gpg | apt-key add -"
+      ]
+      subject.map(&:check).should == [
+        "grep \"deb source\" /etc/apt/sources.list.d/the_name.list #{echo_result}",
+        "apt-key list | grep -i the_name #{echo_result}"
       ]
     end
 
     it 'should write to alternate file specified' do
       subject = add_source 'name', 'source', :gpg => 'gpg', :to => 'altname'
       subject.map(&:command).should == [
-        "echo 'deb source' >> /etc/apt/sources.list.d/altname.list",
+        "echo \"deb source\" >> /etc/apt/sources.list.d/altname.list",
         'wget -q -O - gpg | apt-key add -'
+      ]
+      subject.map(&:check).should == [
+        "grep \"deb source\" /etc/apt/sources.list.d/altname.list #{echo_result}",
+        "apt-key list | grep -i name #{echo_result}"
       ]
     end
   end
@@ -79,7 +87,7 @@ describe 'Installation' do
 
     it 'should add a command to install a gem with a specified version' do
       subject = gem 'package', :version => '1'
-      subject.command.should == "gem install package -v '1'"
+      subject.command.should == "gem install package -v \"1\""
     end
   end
 

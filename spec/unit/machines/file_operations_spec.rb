@@ -28,7 +28,7 @@ describe 'FileOperations' do
 
   describe 'remove_version_info' do
     subject { remove_version_info 'name' }
-    it { subject.command.should == "find . -maxdepth 1 -name 'name*' -a -type d | xargs -I xxx mv xxx name" }
+    it { subject.command.should == "find . -maxdepth 1 -name \"name*\" -a -type d | xargs -I xxx mv xxx name" }
   end
 
   describe 'link' do
@@ -38,7 +38,7 @@ describe 'FileOperations' do
 
   describe 'replace' do
     subject { replace('something', {:with => 'some/path', :in => 'file'}) }
-    it { subject.command.should == "sed -i 's/something/some\\/path/' file" }
+    it { subject.command.should == "sed -i \"s/something/some\\/path/\" file" }
     it { lambda{replace('something')}.should raise_error ArgumentError }
   end
 

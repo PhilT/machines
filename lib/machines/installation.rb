@@ -83,7 +83,7 @@ module Machines
     # @param [Hash] options
     # @option options [String] :version Optional version number
     def gem package, options = {}
-      version =  " -v '#{options[:version]}'" if options[:version]
+      version =  " -v \"#{options[:version]}\"" if options[:version]
       Command.new("gem install #{package}#{version}", check_gem(package, options[:version]))
     end
 

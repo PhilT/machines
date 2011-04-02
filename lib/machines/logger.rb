@@ -31,15 +31,15 @@ module Machines
     end
 
     def format_message message, options
+      message = hide_passwords message
       color = options[:color] || {nil => nil, true => :success, false => :failure}[options[:success]]
       message = $terminal.color(message, color) if color
       message
     end
 
-    # Utility method to tidy up commands before being logged
-    def display command
-      command = command.gsub(/(#{(AppConf.passwords).join('|')})/, "*****") if AppConf.passwords && AppConf.passwords.any?
-      command
+    # Stars out passwords in logs and screen
+    def hide_passwords message
+      AppConf.passwords.any? ? message.gsub(/(#{(AppConf.passwords).join('|')})/, "*****") : message
     end
 
     def check_result result

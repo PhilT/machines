@@ -1,3 +1,4 @@
+AppConf.passwords = []
 AppConf.commands = []
 AppConf.from_hash(:user => {})
 AppConf.from_hash(:db => {})

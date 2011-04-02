@@ -8,7 +8,7 @@ describe 'Configuration' do
   include FakeFS::SpecHelpers
 
   describe 'machine' do
-    it 'should set environment, apps and role when it matches the configuration specified' do
+    it 'sets environment, apps and role when it matches the configuration specified' do
       pending
       machine 'machine', :test, {:apps => ['app', 'another'], :roles => [:role]}
       @environment.should == :test
@@ -16,14 +16,14 @@ describe 'Configuration' do
       @roles.should == [:role]
     end
 
-    it 'should set environment when it matches specified configuration but no apps or role specified' do
+    it 'sets environment when it matches specified configuration but no apps or role specified' do
       pending
       @config = 'config'
       machine 'config', :test
       @environment.should == :test
     end
 
-    it 'should not set anything when it does not match specified configuration' do
+    it 'nothing set when it does not match specified configuration' do
       pending
       machine 'config', :test, {:apps => ['app', 'another'], :role => 'role'}
       @environment.should be_nil
@@ -32,22 +32,29 @@ describe 'Configuration' do
     end
   end
 
+  describe 'write' do
+    it 'overwrites a file with specified content' do
+      subject = write 'some string', :to => 'a_file'
+      subject.command.should == 'echo "some string" > a_file'
+    end
+  end
+
   describe 'append' do
-    it 'should echo a string to a file' do
+    it 'echos a string to a file' do
       subject = append 'some string', :to => 'a_file'
-      subject.command.should == "echo 'some string' >> a_file"
+      subject.command.should == 'echo "some string" >> a_file'
     end
   end
 
   describe 'export' do
-    it 'should fail when not given a file' do
+    it 'fails when not given a file' do
       lambda{export :key => :value}.should raise_error(ArgumentError)
     end
 
-    it 'should export a key/value to a file' do
+    it 'exports a key/value to a file' do
       subject = export :key => :value, :to => 'to_file'
-      subject.map(&:command).should == ["echo 'export key=value' >> to_file"]
-      subject.map(&:check).should == ["grep 'export key=value' to_file #{echo_result}"]
+      subject.map(&:command).should == ["echo \"export key=value\" >> to_file"]
+      subject.map(&:check).should == ["grep \"export key=value\" to_file #{echo_result}"]
     end
   end
 
@@ -66,7 +73,7 @@ describe 'Configuration' do
   end
 
   describe 'del_user' do
-    it 'should call deluser with remove-all-files option' do
+    it 'calls deluser with remove-all-files option' do
       subject = del_user 'login'
       subject.command.should == 'deluser login --remove-home -q'
       subject.check.should == "test ! -s /home/login #{echo_result}"

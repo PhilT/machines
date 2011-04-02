@@ -77,6 +77,7 @@ MACHINESFILE
     it 'prompts for a password' do
       should_receive(:enter_and_confirm_password).with('Enter users password: ').and_return 'pass'
       enter_password('users').should == 'pass'
+      AppConf.passwords.last.should == 'pass'
     end
   end
 
