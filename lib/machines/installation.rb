@@ -36,10 +36,10 @@ module Machines
     # @param [Symbol, String, Array] packages can be:
     #   Git URL::
     #     Git clone URL and run `./install.sh`
-    #   Array::
-    #     Run `apt` to install specified packages in the array (installed separately to aid progress feedback)
     #   URL::
     #     Download from the specified URL and run `dpkg`
+    #   Array or no URL string::
+    #     Run `apt` to install specified packages in the array (or string) (installed separately to aid progress feedback)
     # @param [Hash] options
     # @option options [String] :to Switch to specified directory to install. Used by Git installer
     # @option options [String] :options Add extra options to `./install.sh`
@@ -59,6 +59,8 @@ module Machines
         elsif packages.scan(/^http:\/\//).any?
           name = File.basename(packages)
           commands = Command.new("cd /tmp && wget #{packages} && dpkg -i #{name} && rm #{name} && cd -", nil)
+        else
+          Command.new("#{APTGET_QUIET} install #{packages}", check_package(packages))
         end
       else
         commands = packages.map do |package|

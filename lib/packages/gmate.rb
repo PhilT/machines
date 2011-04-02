@@ -1,14 +1,12 @@
 # Install gmate for gEdit
 
 dir = File.join AppConf.apps.root, 'gmate'
-username = AppConf.user.name
 
-install 'git://github.com/PhilT/gmate.git', :to => dir, :as => username, :args => '-n'
-configure username, '/apps/gedit-2/plugins/active-plugins' => %w(text_tools smart_indent align rails_hotkeys trailsave gemini rubyonrailsloader gedit_openfiles quickhighlightmode completion time docinfo filebrowser snippets spell indent)
+sudo install 'git://github.com/PhilT/gmate.git', :to => dir, :args => '-n'
+configure '/apps/gedit-2/plugins/active-plugins' => %w(text_tools smart_indent align rails_hotkeys trailsave gemini rubyonrailsloader gedit_openfiles quickhighlightmode completion time docinfo filebrowser snippets spell indent)
 
 indent = '/apps/gedit-2/plugins/smart_indent'
-configure username,
-  "#{indent}/haml_tab_size" => 2,
+configure "#{indent}/haml_tab_size" => 2,
   "#{indent}/js_tab_size" => 2,
   "#{indent}/markdown_tab_size" => 2,
   "#{indent}/plain_text_tab_size" => 2,
@@ -16,8 +14,7 @@ configure username,
   "#{indent}/yaml_tab_size" => 2
 
 editor = '/apps/gedit-2/preferences/editor/'
-configure username,
-  "#{editor}bracket_matching/bracket_matching" => true,
+configure "#{editor}bracket_matching/bracket_matching" => true,
   "#{editor}current_line/highlight_current_line" => true,
   "#{editor}cursor_position/restore_cursor_position" => true,
   "#{editor}line_numbers/display_line_numbers" => true,
@@ -28,5 +25,5 @@ configure username,
   "#{editor}tabs/tabs_size" => 2,
   "#{editor}wrap_mode/wrap_mode" => 'GTK_WRAP_NONE',
   "#{editor}save/create_backup_copy" => false
-configure username, '/apps/gedit-2/preferences/ui/toolbar/toolbar_visible' => false
+configure '/apps/gedit-2/preferences/ui/toolbar/toolbar_visible' => false
 

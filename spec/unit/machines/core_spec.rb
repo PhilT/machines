@@ -11,7 +11,6 @@ describe 'Configuration' do
   end
 
   describe 'run' do
-
     it 'adds a command to the commands array' do
       run @command1
       AppConf.commands.should == [@command1]
@@ -27,6 +26,13 @@ describe 'Configuration' do
       run @command1, @command2
       AppConf.commands.should == [@command1, @command2]
     end
+
+    context 'when commands are two strings' do
+      it 'creates a Command' do
+        run 'command', 'check'
+        AppConf.commands.should == [Command.new('command', 'check')]
+      end
+    end
   end
 
   describe 'sudo' do
@@ -34,6 +40,13 @@ describe 'Configuration' do
       AppConf.user.pass = 'password'
       @command1.should_receive(:use_sudo)
       sudo @command1
+    end
+
+    context 'when commands are two strings' do
+      it 'creates a Command' do
+        sudo 'command', 'check'
+        AppConf.commands.should == [Command.new('command', 'check')]
+      end
     end
   end
 

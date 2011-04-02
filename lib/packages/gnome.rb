@@ -1,7 +1,6 @@
 # Set Gnome display preferences
 
-configure AppConf.user.name,
-  '/apps/metacity/general/titlebar_font' => 'Arial Bold 10',
+configure '/apps/metacity/general/titlebar_font' => 'Arial Bold 10',
   '/apps/metacity/general/num_workspaces' => 1,
   '/apps/nautilus/preferences/desktop_font' => 'Sans 9',
   '/apps/nautilus/preferences/default_folder_viewer' => 'compact_view',

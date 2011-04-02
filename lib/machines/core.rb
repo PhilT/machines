@@ -3,12 +3,18 @@ module Machines
     # Queue up command(s) to run remotely
     # @param [Array] *commands Command(s) to run
     def run *commands
+      commands = handle_strings(commands)
       AppConf.commands += commands
+    end
+
+    def handle_strings commands
+      commands.first.is_a?(String) ? [Command.new(commands[0], commands[1])] : commands
     end
 
     # Queue up command(s) using SUDO to run remotely
     # @param [Array] *commands Command(s) to run
     def sudo *commands
+      commands = handle_strings commands
       commands.each do |command|
         if command.is_a?(Upload)
           temp_path = "upload#{Time.now.to_i}"
@@ -25,7 +31,8 @@ module Machines
       end
     end
 
-    # Upload a file or directory using SCP and optionally set permissions
+    # Upload a file or directory using SCP and optionally set permissions.
+    # Can be used with sudo or run
     # @param [String] local_source File or directory on the local machine
     # @param [String] remote_dest Directory on the remote machine to copy to
     #     upload 'source_dir', '~' #=> creates source_dir/subdir as ~/subdir

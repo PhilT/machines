@@ -147,6 +147,10 @@ What's happening under the hood
 ssh uses the specified user and then sudo is added to commands that require it.
 When sudo is needed for file uploads. The file is uploaded to /tmp then sudo cp'd to the destination.
 
+Assumptions
+---------------------------------------
+* Only one user per machine. SSH logs in as that user and there is currently no way to change it.
+
 Warnings
 ---------------------------------------
 

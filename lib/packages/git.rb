@@ -1,2 +1,2 @@
-install %w(git-core)
+sudo install %w(git-core)
 

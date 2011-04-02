@@ -1,6 +1,6 @@
-desc 'Install Passenger'
+# Install Passenger
 
-install libcurl4-openssl-dev
+sudo install libcurl4-openssl-dev
 
-gem 'passenger', :version => AppConf.passenger.version, :as => AppConf.user.name
+run gem 'passenger', :version => AppConf.passenger.version
 

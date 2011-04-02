@@ -7,17 +7,20 @@ userhome = AppConf.user.home
 AppConf.dotfiles.each do |file|
   source = File.join('users', username, file)
   destination = File.join(userhome, ".#{file}")
-  upload source, destination, :owner => username if File.exists?(source)
+  run upload source, destination if File.exists?(source)
 end
 
 authorized_key_file = File.join('users', username, 'authorized_keys')
 if File.exists?(authorized_key_file)
-  mkdir File.join(userhome, '.ssh'), 700
-  upload authorized_key_file, File.join(userhome, '.ssh', 'authorized_keys'), 600
+  run mkdir File.join(userhome, '.ssh')
+  run chmod 700, File.join(userhome, '.ssh')
+  remote_authorized_key_file = File.join(userhome, '.ssh', 'authorized_keys')
+  run upload authorized_key_file, remote_authorized_key_file
+  run chmod 600, remote_authorized_key_file
 end
 
 if File.exists?(File.join('users', username, 'bashrc'))
-  replace 'export RAILS_ENV=', :with => "export RAILS_ENV=#{AppConf.environment}", :in => File.join(userhome, '.bashrc')
-  replace 'export CDPATH=', :with => "export CDPATH=#{AppConf.user.appsroot}", :in => File.join(userhome, '.bashrc')
+  run replace 'export RAILS_ENV=', :with => "export RAILS_ENV=#{AppConf.environment}", :in => File.join(userhome, '.bashrc')
+  run replace 'export CDPATH=', :with => "export CDPATH=#{AppConf.user.appsroot}", :in => File.join(userhome, '.bashrc')
 end
 
