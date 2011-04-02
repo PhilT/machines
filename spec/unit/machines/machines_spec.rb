@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'Machines' do
-  include FakeFS::SpecHelpers
 
   subject {Machines::Base.new}
 

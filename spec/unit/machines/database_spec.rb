@@ -4,7 +4,6 @@ describe 'Database' do
   include Machines::Core
   include Machines::Configuration
   include Machines::Database
-  include FakeFS::SpecHelpers
 
   describe 'write_database_yml' do
     it 'should write the database.yml file' do

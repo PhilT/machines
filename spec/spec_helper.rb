@@ -12,6 +12,8 @@ FileUtils.cp_r('lib/template/.', 'tmp/unit')
 
 RSpec.configure do |c|
   c.include(Matchers)
+  c.include(FakeFS::SpecHelpers)
+
 
   c.before(:each, :type => :unit) do
     AppConf.passwords = []

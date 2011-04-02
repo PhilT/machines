@@ -3,7 +3,6 @@ require 'spec_helper'
 describe 'FileOperations' do
   include Machines::Core
   include Machines::FileOperations
-  include FakeFS::SpecHelpers
 
   describe 'rename' do
     subject { rename('oldname', 'newname') }

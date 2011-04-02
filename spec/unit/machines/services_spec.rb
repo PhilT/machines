@@ -4,7 +4,6 @@ describe 'Services' do
   include Machines::Core
   include Machines::FileOperations
   include Machines::Services
-  include FakeFS::SpecHelpers
 
   describe 'add_init_d' do
     before { Time.stub(:now).and_return Time.new(2011, 4, 2, 16, 37) }

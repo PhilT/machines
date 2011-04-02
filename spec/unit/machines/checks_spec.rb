@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'Checks' do
-
   describe 'echo_result' do
     it do
       echo_result.should == '&& echo CHECK PASSED || echo CHECK FAILED'

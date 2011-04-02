@@ -3,7 +3,6 @@ require 'spec_helper'
 describe 'Helpers' do
   include Machines::Core
   include Machines::Logger
-  include FakeFS::SpecHelpers
 
   before(:each) do
     AppConf.user.name = 'www'

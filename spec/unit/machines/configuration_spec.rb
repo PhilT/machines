@@ -5,7 +5,6 @@ describe 'Configuration' do
   include Machines::FileOperations
   include Machines::Logger
   include Machines::Configuration
-  include FakeFS::SpecHelpers
 
   describe 'machine' do
     it 'sets environment, apps and role when it matches the configuration specified' do

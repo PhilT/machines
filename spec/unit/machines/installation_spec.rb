@@ -4,7 +4,6 @@ describe 'Installation' do
   include Machines::Core
   include Machines::Installation
   include Machines::Configuration
-  include FakeFS::SpecHelpers
 
   describe 'add_source' do
     it 'should add to /etc/apt/sources and add a key' do

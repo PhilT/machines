@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Command do
   include Machines::Logger
-  include FakeFS::SpecHelpers
 
   subject { Upload.new('local', 'remote', 'check') }
 

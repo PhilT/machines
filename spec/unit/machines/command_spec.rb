@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Command do
   include Machines::Logger
-  include FakeFS::SpecHelpers
 
   subject { Command.new('command', 'check') }
 

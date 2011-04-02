@@ -3,7 +3,6 @@ require 'spec_helper'
 describe 'Configuration' do
   include Machines::Core
   include Machines::FileOperations
-  include FakeFS::SpecHelpers
 
   before(:each) do
     @command1 = Command.new('command 1', 'check 1')
