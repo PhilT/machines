@@ -17,7 +17,7 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to File to append to
     def append line, options
-      run "echo '#{line}' >> #{options[:to]}", check_string(line, options[:to])
+      Command.new("echo '#{line}' >> #{options[:to]}", check_string(line, options[:to]))
     end
 
     # overwrite a file with the specified content
@@ -25,7 +25,7 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to File to write to
     def write line, options
-      run "echo '#{line}' > #{options[:to]}", check_string(line, options[:to])
+      Command.new("echo '#{line}' > #{options[:to]}", check_string(line, options[:to]))
     end
 
     # Export key/value pairs to a file
@@ -33,25 +33,21 @@ module Machines
     # @option options [String] :to File to export key(s) to
     def export options
       required_options options, [:to]
-      commands = []
-      options.each do |key, value|
-        unless key == :to
-          command = "export #{key}=#{value}"
-          run "echo '#{command}' >> #{options[:to]}", check_string(command, options[:to])
-        end
+      options.reject{|k, v| k == :to }.map do |key, value|
+        command = "export #{key}=#{value}"
+        Command.new("echo '#{command}' >> #{options[:to]}", check_string(command, options[:to]))
       end
     end
 
     # Sets gconf key value pairs
-    # @param [String] user User to configure
     # @param [Hash] options One or many key/value pairs to set
-    def configure user, options
-      options.each do |key, value|
+    def configure options
+      options.map do |key, value|
         types = {String => 'string', Fixnum => 'int', TrueClass => 'bool', FalseClass => 'bool', Float => 'float', Array => 'list --list-type=string'}
         type = types[value.class]
         raise 'Invalid type for configure' unless type
         value = value.to_json if value.class = Array
-        run "gconftool-2 --set '#{key}' --type #{type} #{value}", :as => user
+        Command.new("gconftool-2 --set '#{key}' --type #{type} #{value}", nil)
       end
     end
 
@@ -62,13 +58,13 @@ module Machines
     def add_user login, options = {}
       password = "-p #{`openssl passwd #{options[:password]}`.gsub("\n", '')} " if options[:password]
       admin = "-G admin " if options[:admin]
-      run "useradd -s /bin/bash -d /home/#{login} -m #{password}#{admin}#{login}", check_dir("/home/#{login}")
+      Command.new("useradd -s /bin/bash -d /home/#{login} -m #{password}#{admin}#{login}", check_dir("/home/#{login}"))
     end
 
     # Removes a user, home and any other related files
     # @param [String] login User name to remove
     def del_user login
-      run "deluser #{login} --remove-home -q", check_file('/home/login', false)
+      Command.new("deluser #{login} --remove-home -q", check_file('/home/login', false))
     end
   end
 end

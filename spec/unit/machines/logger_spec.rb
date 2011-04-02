@@ -1,0 +1,115 @@
+require 'spec_helper'
+
+describe 'Helpers' do
+  include Machines::Core
+  include Machines::Logger
+  include FakeFS::SpecHelpers
+
+  before(:each) do
+    AppConf.user.name = 'www'
+  end
+
+  describe 'put' do
+    it 'sends a formatted message to the screen' do
+      should_receive(:say).with 'formatted message'
+      should_receive(:format_message).with('message', {}).and_return 'formatted message'
+      put 'message', {}
+    end
+  end
+
+  describe 'log' do
+    it 'sends a formatted message to the log' do
+      AppConf.log = mock File
+      AppConf.log.should_receive(:puts).with 'formatted message'
+      should_receive(:format_message).with('message', {}).and_return 'formatted message'
+      log 'message', {}
+    end
+  end
+
+  describe 'format_message' do
+    it 'sends text to the screen' do
+      put 'something'
+      'something'.should be_displayed
+    end
+
+    it 'sends the command and line number' do
+      put 'command', :line => 1
+      'command'.should be_displayed
+    end
+
+    it 'displays message in green when success is true' do
+      put 'command', :line => 1, :success => true
+      'command'.should be_displayed in_green
+    end
+
+    it 'displays message in red when success is false' do
+      put 'command', :line => 1, :success => false
+      'command'.should be_displayed in_red
+    end
+
+    it 'displays message in specified color' do
+      put 'command', :line => 1, :color => :yellow
+      'command'.should be_displayed in_yellow
+    end
+  end
+
+  describe 'display' do
+    before(:each) do
+      AppConf.passwords = ['password']
+    end
+
+    it 'should remove passwords' do
+      display("multi\nline\ncommand with password").should == "multi\nline\ncommand with *****"
+    end
+
+    it 'should ignore empty password list' do
+      AppConf.passwords = []
+      display('something nice').should == 'something nice'
+    end
+
+    it 'should not modify original' do
+      command = "multi\nline\ncommand with password"
+      display(command).should == "multi\nline\ncommand with *****"
+      command.should == "multi\nline\ncommand with password"
+    end
+  end
+
+  describe 'required_options' do
+    it do
+      lambda{required_options({:required => :option}, [:required])}.should_not raise_error(ArgumentError)
+    end
+
+    it do
+      lambda{required_options({}, [:required])}.should raise_error(ArgumentError)
+    end
+  end
+
+  describe 'check_result' do
+    it 'returns CHECK PASSED when result contains CHECK PASSED' do
+      check_result('blaCHECK PASSEDsomething').should == 'CHECK PASSED'
+    end
+
+    it 'returns CHECK FAILED when result contains CHECK FAILED' do
+      check_result('blaCHECK FAILEDsomething').should == 'CHECK FAILED'
+    end
+
+    it 'returns NOT CHECKED when result contains neither CHECK PASSED nor CHECK FAILED' do
+      check_result('').should == 'NOT CHECKED'
+    end
+  end
+
+  describe 'color_for' do
+    it do
+      color_for('NOT CHECKED').should == :warning
+    end
+
+    it do
+      color_for('CHECK FAILED').should == :failure
+    end
+
+    it do
+      color_for('CHECK PASSED').should == :success
+    end
+  end
+end
+

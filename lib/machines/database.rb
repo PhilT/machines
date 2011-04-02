@@ -7,13 +7,13 @@ module Machines
     # @option options [String] :password The mysql root password
     def mysql(sql, options)
       required_options options, [:on, :password]
-      run "echo \"#{sql}\" | mysql -u root -p#{options[:password]} -h #{options[:on]}", nil
+      Command.new("echo \"#{sql}\" | mysql -u root -p#{options[:password]} -h #{options[:on]}", nil)
     end
 
     # Set a MySQL root password
     # @param [String] password Root password to set
     def mysql_pass password
-      run "mysqladmin -u root password #{password}", "mysqladmin -u root -p#{password} ping | grep alive #{echo_result}"
+      Command.new("mysqladmin -u root password #{password}", "mysqladmin -u root -p#{password} ping | grep alive #{echo_result}")
     end
 
     # Write the database.yml file
@@ -31,7 +31,7 @@ module Machines
         'host' => AppConf.database_address,
         'encoding' => 'utf8'}}.to_yaml
       path = File.join(options[:to], 'database.yml')
-      run "echo '#{yml}' > #{path}", check_file(path)
+      Command.new("echo '#{yml}' > #{path}", check_file(path))
     end
   end
 end

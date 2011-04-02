@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'Machinesfile' do
   include Machines::Machinesfile
+  include FakeFS::SpecHelpers
 
   describe 'package' do
     it 'loads custom package when it exists' do

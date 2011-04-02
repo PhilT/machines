@@ -3,21 +3,18 @@ require 'spec_helper'
 describe 'Database' do
   include Machines::Core
   include Machines::Database
+  include FakeFS::SpecHelpers
 
   describe 'mysql' do
-    it 'should run a SQL statement as root' do
-      should_receive(:required_options).with({:on => 'host', :password => 'password'}, [:on, :password])
-      mysql 'sql statement', :on => 'host', :password => 'password'
-      AppConf.commands.map(&:command).should == ['export TERM=linux && echo "sql statement" | mysql -u root -ppassword -h host']
-    end
+    before { should_receive(:required_options).with({:on => 'host', :password => 'password'}, [:on, :password]) }
+    subject { subject = mysql 'sql statement', :on => 'host', :password => 'password' }
+    it { subject.command.should == 'echo "sql statement" | mysql -u root -ppassword -h host' }
   end
 
   describe 'mysql_pass' do
-    it 'should set the MySQL root password' do
-      mysql_pass 'password'
-      AppConf.commands.should == [Command.new('', 'export TERM=linux && mysqladmin -u root password password', "mysqladmin -u root -ppassword ping | grep alive #{echo_result}")]
-    end
-
+    subject { mysql_pass 'password' }
+    it { subject.command.should == 'mysqladmin -u root password password' }
+    it { subject.check.should == "mysqladmin -u root -ppassword ping | grep alive #{echo_result}" }
   end
 
   describe 'write_database_yml' do
@@ -27,16 +24,16 @@ describe 'Database' do
       AppConf.database_address = 'dbhost'
       AppConf.from_hash(:apps => {:app => {:password => 'password'}})
 
-      write_database_yml :for => 'app', :to => 'dir'
-      command = AppConf.commands.first.command
-      command.should match /export TERM=linux && echo '---.*' > dir\/database.yml/m
+      subject = write_database_yml :for => 'app', :to => 'dir'
+      command = subject.command
+      command.should match /echo '---.*' > dir\/database.yml/m
       command.should match /test:/m
       command.should match /adapter: mysql/m
       command.should match /database: app/m
       command.should match /username: app/m
       command.should match /password: password/m
       command.should match /host: dbhost/m
-      AppConf.commands.first.check.should == "test -s dir/database.yml #{echo_result}"
+      subject.check.should == "test -s dir/database.yml #{echo_result}"
     end
   end
 end

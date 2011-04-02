@@ -1,5 +1,7 @@
 require 'highline/import'
 
+ONLY_RUN_SPECIFIED = false
+
 def spec_exists? spec
   if File.exists?(spec)
     true
@@ -11,21 +13,32 @@ def spec_exists? spec
 end
 
 def all_specs
-  system('rspec spec')
+  system('clear && rspec spec/unit')
+end
+
+
+def rspec spec
+  ONLY_RUN_SPECIFIED ? rspec_only_specified(spec) : rspec_including_failing(spec)
 end
 
 @failing = []
-def rspec spec
+def rspec_including_failing spec
   return unless spec_exists?(spec)
   previously_failed = @failing.any?
   @failing << spec unless @failing.include?(spec)
-  success = system "rspec #{@failing.join(' ')}"
-  if success && previously_failed
-    puts @failing
-    puts 'Failing specs now passing. Running all specs...'
+  success = system "clear && rspec #{@failing.join(' ')}"
+  if success
+    if previously_failed
+      puts @failing
+      puts 'Failing specs now passing. Running all specs...'
+      all_specs
+    end
     @failing = []
-    all_specs
   end
+end
+
+def rspec_only_specified spec
+  system "clear && rspec #{spec}"
 end
 
 watch( 'spec/.*_spec\.rb' )      {|match| rspec(match[0]) }

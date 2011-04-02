@@ -5,5 +5,5 @@ install %w(ttf-mscorefonts-installer)
 run 'fc-cache -f', "fc-cache #{echo_result}"
 
 uninstall %w(example-content)
-remove "#{AppConf.user.home}/examples.desktop", :force => true
+remove "#{AppConf.user.home}/examples.desktop"
 

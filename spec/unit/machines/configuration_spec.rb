@@ -3,8 +3,9 @@ require 'spec_helper'
 describe 'Configuration' do
   include Machines::Core
   include Machines::FileOperations
-  include Machines::Helpers
+  include Machines::Logger
   include Machines::Configuration
+  include FakeFS::SpecHelpers
 
   describe 'machine' do
     it 'should set environment, apps and role when it matches the configuration specified' do
@@ -47,8 +48,8 @@ describe 'Configuration' do
 
   describe 'append' do
     it 'should echo a string to a file' do
-      append 'some string', :to => 'a_file'
-      AppConf.commands.map(&:command).should == ["export TERM=linux && echo 'some string' >> a_file"]
+      subject = append 'some string', :to => 'a_file'
+      subject.command.should == "echo 'some string' >> a_file"
     end
   end
 
@@ -58,31 +59,31 @@ describe 'Configuration' do
     end
 
     it 'should export a key/value to a file' do
-      export :key => :value, :to => 'to_file'
-      AppConf.commands.map(&:command).should == ["export TERM=linux && echo 'export key=value' >> to_file"]
-      AppConf.commands.map(&:check).should == ["grep 'export key=value' to_file #{echo_result}"]
+      subject = export :key => :value, :to => 'to_file'
+      subject.map(&:command).should == ["echo 'export key=value' >> to_file"]
+      subject.map(&:check).should == ["grep 'export key=value' to_file #{echo_result}"]
     end
   end
 
   describe 'add_user' do
     it do
-      add_user 'login'
-      AppConf.commands.map(&:command).should == ['export TERM=linux && useradd -s /bin/bash -d /home/login -m login']
-      AppConf.commands.map(&:check).should == ["test -d /home/login #{echo_result}"]
+      subject = add_user 'login'
+      subject.command.should == 'useradd -s /bin/bash -d /home/login -m login'
+      subject.check.should == "test -d /home/login #{echo_result}"
     end
 
     it do
-      add_user 'a_user', :password => 'password', :admin => true
-      AppConf.commands.map(&:command)[0].should match /useradd -s \/bin\/bash -d \/home\/a_user -m -p .* -G admin a_user/
-      AppConf.commands.map(&:check).should == ["test -d /home/a_user #{echo_result}"]
+      subject = add_user 'a_user', :password => 'password', :admin => true
+      subject.command.should match /useradd -s \/bin\/bash -d \/home\/a_user -m -p .* -G admin a_user/
+      subject.check.should == "test -d /home/a_user #{echo_result}"
     end
   end
 
   describe 'del_user' do
     it 'should call deluser with remove-all-files option' do
-      del_user 'login'
-      AppConf.commands.map(&:command).should == ['export TERM=linux && deluser login --remove-home -q']
-      AppConf.commands.map(&:check).should == ["test ! -s /home/login #{echo_result}"]
+      subject = del_user 'login'
+      subject.command.should == 'deluser login --remove-home -q'
+      subject.check.should == "test ! -s /home/login #{echo_result}"
     end
   end
 end

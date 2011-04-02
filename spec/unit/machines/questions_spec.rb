@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'Questions' do
   include Machines::Questions
+  include FakeFS::SpecHelpers
 
   describe 'choose_machine' do
     before(:each) do

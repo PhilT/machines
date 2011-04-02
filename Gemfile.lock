@@ -20,6 +20,7 @@ GEM
     app_conf (0.2.3)
     bluecloth (2.1.0)
     diff-lcs (1.1.2)
+    fakefs (0.3.1)
     highline (1.6.1)
     i18n (0.5.0)
     iobuffer (1.0.0)
@@ -51,6 +52,7 @@ PLATFORMS
 
 DEPENDENCIES
   bluecloth
+  fakefs
   machines!
   rev
   rspec
