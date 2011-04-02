@@ -1,5 +1,6 @@
 AppConf.commands = []
 AppConf.from_hash(:user => {})
+AppConf.from_hash(:db => {})
 AppConf.load(File.join(AppConf.project_dir, 'config/config.yml'))
 AppConf.log_path = File.join(AppConf.project_dir, 'log', 'output.log')
 FileUtils.mkdir_p File.dirname(AppConf.log_path)

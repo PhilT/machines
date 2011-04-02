@@ -27,30 +27,26 @@ MACHINESFILE
 
     it 'sets the choice' do
       should_receive(:choose).and_return 'Staging'
-      choose_machine
-      AppConf.machine.should == 'Staging'
+      choose_machine.should == 'Staging'
     end
   end
 
   describe 'start_ec2_instance' do
     it 'sets AppConf.ec2_instance to true' do
       should_receive(:agree).with('Would you like to start a new EC2 instance (y/n)? ').and_return true
-      start_ec2_instance?
-      AppConf.ec2_instance.should be_true
+      start_ec2_instance?.should be_true
     end
 
     it 'sets AppConf.ec2_instance to false' do
       should_receive(:agree).with('Would you like to start a new EC2 instance (y/n)? ').and_return false
-      start_ec2_instance?
-      AppConf.ec2_instance.should be_false
+      start_ec2_instance?.should be_false
     end
   end
 
   describe 'target_address' do
     it 'accepts IP or DNS address of target machine' do
       should_receive(:ask).with('Enter the IP or DNS address of the target machine (EC2, VM, LAN): ').and_return 'target ip'
-      enter_target_address
-      AppConf.target_address.should == 'target ip'
+      enter_target_address('machine').should == 'target ip'
     end
   end
 
@@ -73,24 +69,21 @@ MACHINESFILE
 
     it 'sets the choice' do
       should_receive(:choose).and_return('a_user')
-      choose_user
-      AppConf.user.name.should == 'a_user'
+      choose_user.should == 'a_user'
     end
   end
 
   describe 'enter_password' do
     it 'prompts for a password' do
       should_receive(:enter_and_confirm_password).with('Enter users password: ').and_return 'pass'
-      enter_password
-      AppConf.user.pass.should == 'pass'
+      enter_password('users').should == 'pass'
     end
   end
 
   describe 'enter_hostname' do
     it 'accepts hostname' do
       should_receive(:ask).with('Hostname to set machine to (Shown on bash prompt if default .bashrc used): ').and_return 'host'
-      enter_hostname
-      AppConf.hostname.should == 'host'
+      enter_hostname.should == 'host'
     end
   end
 end
