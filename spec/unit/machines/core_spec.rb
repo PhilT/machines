@@ -71,5 +71,79 @@ describe 'Configuration' do
       ]
     end
   end
+
+  describe 'only' do
+    it 'yields when matched' do
+      should_receive(:matched).with('options').and_return true
+      yielded = false
+      only 'options' do
+        yielded = true
+      end
+      yielded.should be_true
+    end
+
+    it 'does not yield when not matched' do
+      should_receive(:matched).with('options').and_return false
+      yielded = false
+      only 'options' do
+        yielded = true
+      end
+      yielded.should be_false
+    end
+  end
+
+  describe 'except' do
+    it 'does not yield when matched' do
+      should_receive(:matched).with('options').and_return true
+      yielded = false
+      except 'options' do
+        yielded = true
+      end
+      yielded.should be_false
+    end
+
+    it 'yields when not matched' do
+      should_receive(:matched).with('options').and_return false
+      yielded = false
+      except 'options' do
+        yielded = true
+      end
+      yielded.should be_true
+    end
+  end
+
+  describe 'matched' do
+    context 'AppConf values are arrays' do
+      before do
+        AppConf.params_array = [:matched, :another]
+      end
+
+      context 'options values are arrays' do
+        it { matched({:params_array => [:matched]}).should be_true }
+        it { matched({:params_array => [:unmatched]}).should be_false }
+      end
+
+      context 'options values are symbols' do
+        it { matched({:params_array => :matched}).should be_true }
+        it { matched({:params_array => :unmatched}).should be_false }
+      end
+    end
+
+    context 'AppConf values are symbols' do
+      before do
+        AppConf.single_param = :matched
+      end
+
+      context 'options values are arrays' do
+        it { matched({:single_param => [:matched]}).should be_true }
+        it { matched({:single_param => [:unmatched]}).should be_false }
+      end
+
+      context 'options values are symbols' do
+        it { matched({:single_param => :matched}).should be_true }
+        it { matched({:single_param => :unmatched}).should be_false }
+      end
+    end
+  end
 end
 

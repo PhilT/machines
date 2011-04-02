@@ -14,7 +14,7 @@ machine 'DBslave', :production, :roles => [:db, :dbslave]
 package :base
 
 # Installed on machines that have the app role
-roles :app do
+only :roles => :app do
   install %w(ffmpeg libmagick9-dev)
   package :rvm
   package :ruby
@@ -26,12 +26,12 @@ roles :app do
 end
 
 # Installed on machines that have the db role
-roles :db do
+only :roles => :db do
   package :mysql
 end
 
 # Installed on machines when user is phil
-users 'phil' do
+only :users => 'phil' do
   package :chrome
   package :firefox
   package :gnome
@@ -39,11 +39,8 @@ users 'phil' do
 end
 
 # Will only be executed for development machines
-environments :development do
+only :environments => :development do
   package :dev_extras
   install %w(mysql-query-browser gitk meld) # can gitk be installed before git-core?
 end
-
-# Installed on all machines
-package :secure_ssh
 

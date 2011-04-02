@@ -7,11 +7,6 @@ module Machines
       end
     end
 
-    # Set a database password for an application (Used to communicate between application and db server)
-    def password application, password
-      @passwords[application] = password
-    end
-
     # Add some text to the end of a file
     # @param [String] line Line of text to add
     # @param [Hash] options

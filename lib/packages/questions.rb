@@ -9,14 +9,16 @@ unless AppConf.ec2_instance
   AppConf.user.pass = enter_password('users')
 end
 
-environments :staging, :production do
+only :environments => [:staging, :production] do
   AppConf.hostname = AppConf.environment
 end
 
-environments :development do
+only :environments => :development
   AppConf.hostname = enter_hostname
 end
 
-AppConf.dbmaster.address = enter_target_address('database master machine')
-AppConf.db.pass = enter_password('database root')
+except :roles => :db
+  AppConf.db.address = enter_target_address('database master machine')
+  AppConf.db.pass = enter_password('database root')
+end
 

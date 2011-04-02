@@ -40,6 +40,35 @@ module Machines
       Upload.new(local_source, remote_dest, check_file(remote_dest))
     end
 
+    #Only executes the code if AppConf parameters match what is given in args
+    def only options, &block
+      yield if matched(options)
+    end
+
+    #Does not execute the code if AppConf parameters match what is given in args
+    def except options, &block
+      yield unless matched(options)
+    end
+
+    def matched options
+      options.each do |key, value|
+        if AppConf[key].is_a?(Array)
+          if value.is_a?(Array)
+            return unless AppConf[key].reject{ |symbol| !value.include?(symbol) }.any?
+          else
+            return unless AppConf[key].include?(value)
+          end
+        else
+          if value.is_a?(Array)
+            return unless value.include?(AppConf[key])
+          else
+            return unless value == AppConf[key]
+          end
+        end
+      end
+      true
+    end
+
     # Validate some methods that require certain options
     def required_options options, required
       required.each do |option|

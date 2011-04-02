@@ -32,20 +32,6 @@ describe 'Configuration' do
     end
   end
 
-  describe 'password' do
-    it 'should add a password to existing passwords' do
-      @passwords = {'app' => 'password'}
-      password 'another', 'anotherpass'
-      @passwords.should == {'app' => 'password', 'another' => 'anotherpass'}
-    end
-
-    it 'should add a password to empty passwords' do
-      @passwords = {}
-      password 'app', 'newpass'
-      @passwords.should == {'app' => 'newpass'}
-    end
-  end
-
   describe 'append' do
     it 'should echo a string to a file' do
       subject = append 'some string', :to => 'a_file'
