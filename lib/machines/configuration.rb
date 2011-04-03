@@ -1,12 +1,5 @@
 module Machines
   module Configuration
-    # Add a machine configuration
-    def machine name, environment, options = {:apps => [], :roles => []}
-      if name == AppConf.machine
-        load_settings environment, options[:apps], options[:roles]
-      end
-    end
-
     # Add some text to the end of a file
     # @param [String] line Line of text to add
     # @param [Hash] options

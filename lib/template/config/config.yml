@@ -4,7 +4,7 @@ ec2:
   url: eu-west-1.ec2.amazonaws.com
   ami: ami-e59ca991 # EU WEST 1 Ubuntu x64 10.10 EBS
   type: m1.large
-  private_key_file: amazon.key
+  private_key_file: certificates/amazon.key
   security_group: eu-public
 
 dotfiles:

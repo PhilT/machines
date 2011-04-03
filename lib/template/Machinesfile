@@ -1,5 +1,4 @@
-package :questions
-package :settings
+package :init
 
 # Machine types
 # machine 'type', :environment, :roles => [], :apps => []

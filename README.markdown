@@ -1,7 +1,14 @@
-machines
+Machines
 =======================================
 
-Setup Ubuntu development and server **machines** for hosting Ruby on Rails 3 applications.
+Setup Ubuntu development and server **Machines** for hosting Ruby on Rails 3 applications.
+
+Status
+---------------------------------------
+
+This is the second major version. The first was more of a proof of concept and it worked. This version is
+much more flexible and extendable. Much better documented and easier (I hope) to get started. It is currently
+under development but we are very close to rolling out a beta.
 
 Goals
 ---------------------------------------
@@ -18,10 +25,12 @@ Goals
     * Monit, Munin, Sphinx, logrotate
 * Easily override defaults with configuration options and custom ruby
 
-I share the belief that development, staging, and production environments should match if not be as close as possible.
-I develop on Ubuntu Linux and so it felt natural to have Ubuntu as my server environment.
+I believe that development, staging, and production environments should match if not be as close as possible.
+I develop on Ubuntu Linux and so it felt natural to have Ubuntu as my server environment. I spent many years
+building and configuring PCs and anything that makes the job easier is a good thing in my opinion.
 
-This tool should make it simple to develop and deploy Ruby on Rails applications on Ubuntu.
+This tool should make it simple to develop and deploy Ruby on Rails applications on Ubuntu by providing sensible
+defaults in a template build script, the `Machinesfile` and associated `package` files.
 
 Installation and Configuration
 ---------------------------------------
@@ -94,7 +103,7 @@ This will create the following directory structure:
 
     $ machines build
 
-*machines* will ask a series of questions:
+**Machines** will ask a series of questions:
 
     1. Desktop
     2. Staging
@@ -156,13 +165,22 @@ What's happening under the hood
 
 ssh uses the specified user and then sudo is added to commands that require it.
 When sudo is needed for file uploads. The file is uploaded to /tmp then sudo cp'd to the destination.
+When `package` is called in the `Machinesfile` that file is loaded either from the local, custom packages
+directory or from the Machines packages.
 
-Assumptions
+Limitations
 ---------------------------------------
-* Only one user per machine. SSH logs in as that user and there is currently no way to change it.
+* Only one user per machine. SSH logs in as that user and there is currently no way to change it. Multiple
+  users is not something we currently need and has therefore been made a low priority.
+* The system has been designed to allow a certain flexibility in the configuration although some things
+  may not yet be totally configurable it should be possible to add or modify a relevant package. For
+  example, app settings allow different servers to have different apps setup on them. This however has
+  not yet been exercised.
 
 Warnings
 ---------------------------------------
+
+[NEED TO CHECK THIS IS STILL HAPPENING]
 
 You might see one of the following while upgrading/installing packages:
     debconf: Unable to initialise frontend: Dialog

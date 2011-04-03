@@ -12,7 +12,7 @@ module Machines
         'database' => app,
         'username' => app,
         'password' => AppConf.apps[app].password,
-        'host' => AppConf.database_address,
+        'host' => AppConf.db.address,
         'encoding' => 'utf8'}}.to_yaml
       write yml, :to => File.join(options[:to], 'database.yml')
     end

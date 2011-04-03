@@ -22,19 +22,6 @@ module Machines
       @instance_id = @ec2.run_instances(instance_options)['instancesSet']['item'].first['instanceId']
       wait_for lambda{instance_state(@ec2, @instance_id) == 'running'}
     end
-
-    def run_machines
-      say "Running machines install script..."
-      details = @ec2.describe_instances(:instance_id => @instance_id)
-      dns_name = details['reservationSet']['item'].first['instancesSet']['item'].first['dnsName']
-      machines = Machines::Base.new(
-        :machine => machine,
-        :host => dns_name,
-        :keyfile => AppConf.ec2.private_key_file,
-        :userpass => password
-      )
-      machines.setup
-    end
   end
 end
 

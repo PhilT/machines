@@ -12,11 +12,7 @@ require 'tempfile'
 require 'webrick/utils'
 require 'yaml'
 
-AppConf.project_dir = Dir.pwd
-AppConf.application_dir = File.dirname(__FILE__)
-
 module Machines
-
   class Base
     Dir[File.join(File.dirname(__FILE__), 'machines/**/*.rb')].sort.each do |lib|
       require lib
@@ -28,7 +24,14 @@ module Machines
     def build
       load File.join(AppConf.project_dir, 'Machinesfile')
 
-      Net::SCP.start AppConf.target_address, AppConf.user.name, :password => AppConf.user.pass do |scp|
+      if AppConf.ec2_instance
+        username = 'ubuntu'
+        options = {:keys => [AppConf.ec2.private_key_file]}
+      else
+        username = AppConf.user.name
+        options = {:password => AppConf.user.pass}
+      end
+      Net::SCP.start AppConf.target_address, username, options do |scp|
         Command.scp = scp
         AppConf.commands.each do |command|
           command.run

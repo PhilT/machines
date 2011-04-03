@@ -50,12 +50,6 @@ module Machines
     def color_for result
       {'NOT CHECKED' => :warning, 'CHECK FAILED' => :failure, 'CHECK PASSED' => :success}[result]
     end
-
-    # Loads a YAML file from the project directory
-    def from_yaml(path)
-      path = File.join(AppConf.project_dir, path)
-      YAML.load(File.open(path))
-    end
   end
 end
 

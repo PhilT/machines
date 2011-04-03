@@ -44,6 +44,18 @@ describe 'Machines' do
 
       subject.build
     end
+
+    it 'starts an SCP session using key based authentication' do
+      AppConf.target_address = 'target'
+      AppConf.user.name = 'username'
+      AppConf.ec2_instance = true
+      AppConf.ec2 = AppConf.new
+      AppConf.ec2.private_key_file = 'private_key_file'
+
+      Net::SCP.should_receive(:start).with('target', 'ubuntu', :keys => ['private_key_file'])
+
+      subject.build
+    end
   end
 end
 

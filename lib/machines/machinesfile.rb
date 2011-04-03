@@ -1,5 +1,14 @@
 module Machines
   module Machinesfile
+    # Add a machine configuration
+    def machine name, environment, options = {:apps => [], :roles => []}
+      if name == AppConf.machine
+        AppConf.environment = environment
+        AppConf.roles = options[:roles]
+        load_app_settings(options[:apps])
+      end
+    end
+
     def package name
       if name == 'Machinesfile'
         error = 'Cannot find Machinesfile. Use `machines generate` to create a template.'
@@ -16,7 +25,6 @@ module Machines
       package_name = File.join(base_dir, 'packages', "#{name}.rb")
       load package_name if File.exists?(package_name)
     end
-
   end
 end
 

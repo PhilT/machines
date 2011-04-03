@@ -7,26 +7,20 @@ module Machines
     end
 
     # Loads application settings from config/apps.yml and makes them available in AppConf.apps
-    def load_app_settings
-      yaml = from_yaml('config/apps.yml')
-      AppConf.apps = []
-      environment = AppConf.environment.to_s
-      yaml.each do |app_name, app_hash|
-        app = AppBuilder.new
-        app.name = app_name
-        app.path = File.join(AppConf.appsroot, app.name)
-        if app_hash[environment].ssl
-          app.ssl_key = app_hash[environment].ssl + '.key'
-          app.ssl_crt = app_hash[environment].ssl + '.crt'
-        end
-        app_hash.each do |k, v|
-          app.send("#{k}=", v) unless v.is_a?(Hash)
+    def load_app_settings(apps)
+      path = File.join(AppConf.project_dir, 'config/apps.yml')
+      yaml = YAML.load(File.open(path))
+      yaml.select{|name| apps.include?(name) }.each do |app_name, settings|
+        environment = settings[AppConf.environment.to_s] || raise(ArgumentError, 'No setttings for specified environment')
+        settings['name'] = app_name
+        settings['path'] = File.join(AppConf.appsroot, settings['path'])
+        if environment['ssl']
+          settings['ssl_key'] = environment['ssl'] + '.key'
+          settings['ssl_crt'] = environment['ssl'] + '.crt'
         end
 
-        app_hash[environment].each do |k, v|
-          app.send("#{k}=", v)
-        end
-        AppConf.apps << app
+        environment.each { |k, v| settings[k] = v }
+        AppConf.apps[app_name] = AppBuilder.new(settings.reject{|k, v| v.is_a?(Hash) })
       end
     end
   end

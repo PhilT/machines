@@ -6,31 +6,6 @@ describe 'Configuration' do
   include Machines::Logger
   include Machines::Configuration
 
-  describe 'machine' do
-    it 'sets environment, apps and role when it matches the configuration specified' do
-      pending
-      machine 'machine', :test, {:apps => ['app', 'another'], :roles => [:role]}
-      @environment.should == :test
-      @apps.should == ['app', 'another']
-      @roles.should == [:role]
-    end
-
-    it 'sets environment when it matches specified configuration but no apps or role specified' do
-      pending
-      @config = 'config'
-      machine 'config', :test
-      @environment.should == :test
-    end
-
-    it 'nothing set when it does not match specified configuration' do
-      pending
-      machine 'config', :test, {:apps => ['app', 'another'], :role => 'role'}
-      @environment.should be_nil
-      @apps.should be_nil
-      @role.should be_nil
-    end
-  end
-
   describe 'write' do
     it 'overwrites a file with specified content' do
       subject = write 'some string', :to => 'a_file'

@@ -4,12 +4,15 @@ describe 'Database' do
   include Machines::Core
   include Machines::Configuration
   include Machines::Database
+  include Machines::AppSettings
 
   describe 'write_database_yml' do
     it 'should write the database.yml file' do
       should_receive(:required_options).with({:to => 'dir', :for => 'app'}, [:to, :for])
       AppConf.environment = 'test'
-      AppConf.database_address = 'dbhost'
+      AppConf.db = AppConf.new
+      AppConf.db.address = 'dbhost'
+      AppConf.apps = {'app' => AppBuilder.new(:password => 'password')}
       AppConf.from_hash(:apps => {:app => {:password => 'password'}})
 
       subject = write_database_yml :for => 'app', :to => 'dir'
