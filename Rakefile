@@ -1,16 +1,24 @@
 require 'yard'
 require 'rspec/core/rake_task'
+require 'highline/import'
 
-task :default => [:coverage, :yard, :install]
+task :default => [:coverage, :yard, :install] do
+  puts '', $terminal.color('Done.', :bold, :blue)
+end
 
 YARD::Rake::YardocTask.new
-RSpec::Core::RakeTask.new(:spec)
+RSpec::Core::RakeTask.new do |t|
+  t.pattern = './spec/unit/**/*_spec.rb'
+end
 
 desc 'Generate code coverage'
 task :coverage do
   ENV['COVERAGE'] = 'true'
+  puts '', $terminal.color('Running specs with code coverage', :bold, :blue)
   Rake::Task['spec'].invoke
-  puts Dir.pwd
+
+  puts '', $terminal.color('Running integration specs', :bold, :blue)
+  system('rspec spec/integration')
 end
 
 desc 'Build and install the gem'

@@ -32,6 +32,7 @@ module Machines
 
     def format_message message, options
       message = hide_passwords message
+      message = "(#{"%03d" % (options[:progress] + 1)}/#{"%03d" % AppConf.commands.count}) #{message}" if options[:progress]
       color = options[:color] || {nil => nil, true => :success, false => :failure}[options[:success]]
       message = $terminal.color(message, color) if color
       message

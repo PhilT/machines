@@ -14,6 +14,7 @@ describe Command do
 
   describe 'run' do
     it 'wraps command execution in logging' do
+      AppConf.commands << subject
       HighLine.use_color = false
       log = MockStdOut.new
       AppConf.log = log
@@ -30,7 +31,7 @@ RUN    command
 result of command
 CHECK PASSED
 LOG
-      "RUN    command".should be_displayed
+      "(001/001) RUN    command".should be_displayed
     end
 
     it 'wraps command execution in sudo' do

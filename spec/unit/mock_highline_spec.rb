@@ -1,27 +1,28 @@
 require 'spec_helper'
 
 describe 'HighLine' do
-  before(:each) do
-    @input = MockStdIn.new
-    @output = MockStdOut.new
-    $terminal = HighLine.new(@input, @output)
-  end
-
   it 'handles console output' do
     say('something')
-    @output.buffer.should == "something\n"
+    $output.should == "something\n"
   end
 
   it 'handles multiple console inputs' do
-    @input.answers = ['test', 'this']
-    ask('something').should == 'test'
-    ask('something else').should == 'this'
+    $input.answers = ["test", "this"]
+    ask('something? ').should == 'test'
+    ask('something else? ').should == 'this'
+    say('finally say something.')
+    $output.should == <<-THIS
+something?
+something else?
+finally say something.
+THIS
   end
 
-  it 'handles console character input' do
-    @input.answers = ['test']
-    answer = ask('something') { |question| question.echo = false }
-    answer.should == 'test'
+  it 'handles character input with no echo' do
+    $input.answers = ['first', 'second']
+    ask('hidden 1? ') { |question| question.echo = false }.should == 'first'
+    ask('hidden 2? ') { |question| question.echo = false }.should == 'second'
+    $output.should == "hidden 1?\nhidden 2?\n"
   end
 end
 

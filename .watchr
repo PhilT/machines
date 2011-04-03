@@ -41,7 +41,7 @@ def rspec_only_specified spec
   system "clear && rspec #{spec}"
 end
 
-watch( 'spec/.*_spec\.rb' )      {|match| rspec(match[0]) }
+watch( 'spec/unit/.*_spec\.rb' ) {|match| rspec(match[0]) }
 watch( 'lib/machines/(.*)\.rb' ) {|match| rspec("spec/unit/machines/#{match[1]}_spec.rb") }
 watch( 'lib/machines\.rb' )      {|match| rspec("spec/unit/machines/machines_spec.rb") }
 

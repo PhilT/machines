@@ -9,16 +9,26 @@ describe 'CommandLine' do
 
   describe 'start' do
     it 'calls specified command' do
-      %w(htpasswd generate check dryrun build).each do |command|
+      %w(htpasswd check dryrun build).each do |command|
         should_receive command
-        start command
+        start command, nil
         AppConf.action.should == command
       end
     end
 
+    it 'calls generate with directory' do
+      should_receive(:generate).with('dir')
+      start 'generate', 'dir'
+    end
+
+    it 'calls generate without directory' do
+      should_receive(:generate).with(nil)
+      start 'generate', nil
+    end
+
     it 'calls help when no matching command' do
       should_receive(:help)
-      start('anything')
+      start('anything', nil)
     end
   end
 
@@ -54,7 +64,12 @@ describe 'CommandLine' do
   describe 'generate' do
     it 'copies the template' do
       FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template", AppConf.project_dir)
-      generate
+      generate nil
+    end
+
+    it 'copies the template within dir' do
+      FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template", AppConf.project_dir + '/dir')
+      generate 'dir'
     end
   end
 end

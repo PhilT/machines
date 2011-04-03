@@ -38,11 +38,11 @@ module Machines
 
   protected
     def process &block
-      log info, :line => @line, :color => :highlight
+      log info, :color => :highlight
       yield
       result = check_result(@@ssh.exec!(@check))
       log result, :color => color_for(result)
-      put info, :line => @line, :check => result != 'CHECK FAILED'
+      put info, :progress => AppConf.commands.index(self), :check => result != 'CHECK FAILED'
     end
 
   private

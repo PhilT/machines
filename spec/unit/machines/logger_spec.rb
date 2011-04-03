@@ -26,29 +26,31 @@ describe 'Helpers' do
   end
 
   describe 'format_message' do
+    before { AppConf.commands = [1,2,3] }
+
     it 'sends text to the screen' do
       put 'something'
       'something'.should be_displayed
     end
 
     it 'sends the command and line number' do
-      put 'command', :line => 1
-      'command'.should be_displayed
+      put 'command', :progress => 0
+      '(001/003) command'.should be_displayed
     end
 
     it 'displays message in green when success is true' do
-      put 'command', :line => 1, :success => true
-      'command'.should be_displayed in_green
+      put 'command', :progress => 0, :success => true
+      '(001/003) command'.should be_displayed in_green
     end
 
     it 'displays message in red when success is false' do
-      put 'command', :line => 1, :success => false
-      'command'.should be_displayed in_red
+      put 'command', :progress => 0, :success => false
+      '(001/003) command'.should be_displayed in_red
     end
 
     it 'displays message in specified color' do
-      put 'command', :line => 1, :color => :yellow
-      'command'.should be_displayed in_yellow
+      put 'command', :progress => 0, :color => :yellow
+      '(001/003) command'.should be_displayed in_yellow
     end
 
     it 'does not show passwords' do
