@@ -2,12 +2,12 @@ module EndToEndSteps
   def ensure_vm_exists_and_can_connect
     response = ''
     begin
-      Net::SSH.start 'testvm', 'user', :password => 'password' do |ssh|
+      Net::SSH.start 'machinesvm', 'user', :password => 'password' do |ssh|
         response = ssh.exec!('echo $USER')
       end
     rescue
-      puts "A VM is required to run this test. Make sure /etc/hosts has an entry"
-      puts "for testvm and a user exists on it called 'user' with 'password'"
+      puts $terminal.color("A VM is required to run this test. Make sure /etc/hosts has an entry", :bold, :red)
+      puts $terminal.color("for testvm and a user exists on it called 'user' with 'password'", :bold, :red)
     end
     response.should include 'user'
   end

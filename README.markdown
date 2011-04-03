@@ -82,6 +82,8 @@ This will create the following directory structure:
 
     sudo apt-get update && sudo apt-get -y install openssh-server && ifconfig
 
+(See Setting up the test Machines VM further down for more info)
+
 ### Check the Machinesfile
 
     ssh-keygen -R <host ip> # remove host from known_hosts file (handy when testing)
@@ -124,21 +126,25 @@ Commandline Options
 * `dryrun`   - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them'
 * `build`    - Asks some questions then builds your chosen machine'
 
-Setting up the Test VM
+Setting up the test Machines VM
 ---------------------------------------
 
 https://help.ubuntu.com/community/Installation/LowMemorySystems
 
-* Grab the Minimal CD from https://help.ubuntu.com/community/Installation/MinimalCD
-* Select Commandline install and follow the prompts
-* Accept default ubuntu hostname
+* Grab the Minimal CD Image from https://help.ubuntu.com/community/Installation/MinimalCD (I tend to go for x64)
+* For the VM I use VirtualBox.
+  * Go to Network and set Bridged or Host-only Adapter
+  * Go to Storage, select the Empty CD, click the CD icon on the far right and find the image
+  * I also turn off the Audio device
+* Start the VM, select Command line Install and follow the prompts
+* Accept default hostname (this will be set later)
 * Enter 'user' for username and 'password' for the password
 * If desired apply the piix4_smbus error fix(A warning that appears on Ubuntu VMs when booting)
     sudo sh -c 'echo blacklist i2c_piix4 >> /etc/modprobe.d/blacklist.conf'
 * And add openssh
     sudo apt-get -y install openssh-server && ifconfig
 * On your local machine (change VM_IP_ADDRESS to the ip address of the VM)
-    sudo sh -c 'echo VM_IP_ADDRESS testvm >> /etc/hosts'
+    sudo sh -c 'echo VM_IP_ADDRESS machinesvm >> /etc/hosts'
 * What I also do at this point is take a snapshot of the VM
 
 What's happening under the hood
@@ -175,6 +181,7 @@ Note on Patches/Pull Requests
 
 This project uses *watchr* for continuous testing.
 It's fast and very configurable. The script approximates autotest behaviour.
+It've also added an option to only run the spec/code being worked on.
     watchr .watchr
 
 * Fork the project.

@@ -35,6 +35,23 @@ task :install do
   end
 end
 
+namespace :vm do
+  desc 'Start the virtual machine in headless mode'
+  task :start do
+    system('VBoxManage startvm machinesvm --type headless')
+  end
+
+  desc 'Stop the virtual machine'
+  task :stop do
+    system('VBoxManage controlvm machinesvm savestate')
+  end
+
+  desc 'Get virtual machine state'
+  task :state do
+    system('VBoxManage showvminfo machinesvm | grep State')
+  end
+end
+
 desc 'Run machines'
 task :run do
   $LOAD_PATH << 'lib'

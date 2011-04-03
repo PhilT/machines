@@ -1,6 +1,7 @@
 require 'fileutils'
 
-require 'support/mock_highline'
+require 'support/mock_stdin'
+require 'support/mock_stdout'
 require 'support/cli_matchers'
 require 'support/end_to_end_steps'
 
@@ -17,8 +18,8 @@ describe 'End to End Test' do
     AppConf.project_dir.should == File.join(@pwd, 'tmp')
 
     FileUtils.rm_rf 'project'
-    $input = MockStdIn.new
-    $output = MockStdOut.new
+    $input = MockStdin.new
+    $output = MockStdout.new
     $terminal = HighLine.new($input, $output)
 
     ensure_vm_exists_and_can_connect
