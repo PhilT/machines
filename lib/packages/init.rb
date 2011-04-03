@@ -1,9 +1,6 @@
 # Initialization and user input prior to installation
 
 # Settings
-AppConf.project_dir = Dir.pwd
-AppConf.application_dir = File.dirname(__FILE__)
-
 AppConf.passwords = []
 AppConf.commands = []
 AppConf.apps = {}
@@ -20,7 +17,7 @@ AppConf.ec2_instance = start_ec2_instance?
 Thread.new { start_ec2_instance } if AppConf.ec2_instance
 AppConf.target_address = enter_target_address('machine') unless AppConf.ec2_instance
 AppConf.user.name = choose_user
-AppConf.ec2_instance ? AppConf.user.pass = enter_password('users')
+AppConf.user.pass = enter_password('users') unless AppConf.ec2_instance
 AppConf.user.home = File.join('/home', AppConf.user.name)
 AppConf.appsroot = AppConf[AppConf.user.name].appsroot
 

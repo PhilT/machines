@@ -12,6 +12,9 @@ require 'tempfile'
 require 'webrick/utils'
 require 'yaml'
 
+AppConf.project_dir = Dir.pwd
+AppConf.application_dir = File.dirname(__FILE__)
+
 module Machines
   class Base
     Dir[File.join(File.dirname(__FILE__), 'machines/**/*.rb')].sort.each do |lib|
