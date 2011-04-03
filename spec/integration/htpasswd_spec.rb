@@ -22,7 +22,7 @@ describe 'htpasswd' do
     response.should include "Passwords do not match, please re-enter"
     response.should include "Enter a new password:"
     response.should include "Password encrypted and added to #{AppConf.project_dir}/nginx/conf/htpasswd"
-    File.read('tmp/integration/nginx/conf/htpasswd').should =~ /user:.{13}/
+    File.read("#{AppConf.project_dir}/nginx/conf/htpasswd").should =~ /user:.{13}/
   end
 
   it 'make sure password is appended to existing htpasswd file' do
