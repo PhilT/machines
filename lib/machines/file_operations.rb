@@ -48,6 +48,7 @@ module Machines
     # Write an ERB template
     # @param [String] erb_path Path to the ERB file to process
     # @param [Hash] options
+    # @option options [AppBuilder] :settings Contains the settings as OpenStruct method calls for calling from the template
     # @option options [String] :to File to write to
     def template erb_path, options
       erb = ERB.new(File.open(erb_path))

@@ -8,9 +8,10 @@ describe 'AppSettings' do
     AppConf.apps = {}
     AppConf.environment = :test
     AppConf.appsroot = '/home/user'
-    @config = {
-
-    }
+    @settings = {'app' => {
+        'path' => 'path',
+        'test' => {'setting' => 'setting'}
+      }, 'another' => {'path' => 'other/path'}}
     File.stub(:open)
   end
 
@@ -22,13 +23,25 @@ describe 'AppSettings' do
     end
 
     it 'loads the app settings for selected apps' do
-      YAML.stub(:load).and_return({'app' => {
-        'path' => 'path',
-        'test' => {
-        }
-      }, 'another' => {'path' => 'other/path'}})
+      YAML.stub(:load).and_return(@settings)
       load_app_settings ['app']
-      AppConf.apps.should == {'app' => AppBuilder.new(:name => 'app', :path => '/home/user/path')}
+      AppConf.apps.should == {'app' => AppBuilder.new(:name => 'app', :path => '/home/user/path', :setting => 'setting')}
+    end
+
+    it 'handles ssl settings' do
+      @settings['app']['test']['ssl'] = 'signed'
+      YAML.stub(:load).and_return(@settings)
+      load_app_settings ['app']
+      AppConf.apps.should == {
+        'app' => AppBuilder.new(
+          :name => 'app',
+          :path => '/home/user/path',
+          :setting => 'setting',
+          :ssl_key => 'signed.key',
+          :ssl_crt => 'signed.crt',
+          :ssl => 'signed'
+        )
+      }
     end
 
     it 'raises when settings not included for specified environment' do

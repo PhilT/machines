@@ -31,10 +31,11 @@ module Machines
     # @param [Hash] options One or many key/value pairs to set
     def configure options
       options.map do |key, value|
-        types = {String => 'string', Fixnum => 'int', TrueClass => 'bool', FalseClass => 'bool', Float => 'float', Array => 'list --list-type=string'}
+        types = {String => 'string', Fixnum => 'int', TrueClass => 'bool',
+          FalseClass => 'bool', Float => 'float', Array => 'list --list-type=string'}
         type = types[value.class]
         raise 'Invalid type for configure' unless type
-        value = value.to_json if value.class = Array
+        value = value.to_json if value.is_a?(Array)
         Command.new("gconftool-2 --set \"#{key}\" --type #{type} #{value}", nil)
       end
     end
@@ -46,7 +47,10 @@ module Machines
     def add_user login, options = {}
       password = "-p #{`openssl passwd #{options[:password]}`.gsub("\n", '')} " if options[:password]
       admin = "-G admin " if options[:admin]
-      Command.new("useradd -s /bin/bash -d /home/#{login} -m #{password}#{admin}#{login}", check_dir("/home/#{login}"))
+      Command.new(
+        "useradd -s /bin/bash -d /home/#{login} -m #{password}#{admin}#{login}",
+        check_dir("/home/#{login}")
+      )
     end
 
     # Removes a user, home and any other related files

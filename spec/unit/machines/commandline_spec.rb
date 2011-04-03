@@ -1,11 +1,7 @@
 require 'spec_helper'
 
 describe 'CommandLine' do
-  include Machines::Commandline
-
-  before(:each) do
-    stub!(:say, :ask)
-  end
+  include Commandline
 
   describe 'start' do
     it 'calls specified command' do
@@ -58,6 +54,15 @@ describe 'CommandLine' do
       should_receive(:ask).with('Confirm the password: ').twice.and_return 'pas', 'pass'
       should_receive(:say).with('Passwords do not match, please re-enter')
       enter_and_confirm_password.should == 'pass'
+    end
+  end
+
+  describe 'htpasswd' do
+    it 'htpasswd is generated and saved' do
+      AppConf.webserver = 'server'
+      $input.answers = %w(user pass pass)
+      htpasswd
+      File.read('/tmp/server/conf/htpasswd').should =~ /user:.{13}/
     end
   end
 

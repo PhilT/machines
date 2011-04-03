@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe 'FileOperations' do
-  include Machines::Core
-  include Machines::FileOperations
+  include Core
+  include FileOperations
+  include AppSettings
 
   describe 'rename' do
     subject { rename('oldname', 'newname') }
@@ -36,9 +37,17 @@ describe 'FileOperations' do
   end
 
   describe 'replace' do
-    subject { replace('something', {:with => 'some/path', :in => 'file'}) }
+    subject { replace('something', :with => 'some/path', :in => 'file') }
     it { subject.command.should == "sed -i \"s/something/some\\/path/\" file" }
     it { lambda{replace('something')}.should raise_error ArgumentError }
+  end
+
+  describe 'template' do
+    it 'loads ERB template, applies settings and writes to remote machine' do
+      File.should_receive(:open).with('erb_path').and_return('<%= method_on_binding %>')
+      should_receive(:write).with('result', hash_including(:to => 'file'))
+      template('erb_path', :settings => AppBuilder.new(:method_on_binding => 'result'), :to => 'file')
+    end
   end
 
   describe 'mkdir' do

@@ -32,6 +32,26 @@ describe 'Configuration' do
     end
   end
 
+  describe 'configure' do
+    before(:each) do
+      @options = {:string => 'str', :number => 123, :t => true, :f => false, :float => 1.1, :array => ['item 1', 'item 2']}
+    end
+
+    it 'supports different types' do
+      actual = configure @options
+      actual.should == [
+        Command.new('gconftool-2 --set "string" --type string str', nil),
+        Command.new('gconftool-2 --set "number" --type int 123', nil),
+        Command.new('gconftool-2 --set "t" --type bool true', nil),
+        Command.new('gconftool-2 --set "f" --type bool false', nil),
+        Command.new('gconftool-2 --set "float" --type float 1.1', nil),
+        Command.new('gconftool-2 --set "array" --type list --list-type=string ["item 1","item 2"]', nil)
+      ]
+    end
+
+    it { lambda{ configure(:invalid_type => Object.new) }.should raise_error }
+  end
+
   describe 'add_user' do
     it do
       subject = add_user 'login'
