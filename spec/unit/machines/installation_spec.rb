@@ -57,17 +57,24 @@ describe 'Installation' do
       subject.command.should == 'rm -rf ~/installer && git clone git://url ~/installer && cd ~/installer && find . -maxdepth 1 -name install* | xargs -I xxx bash xxx '
     end
 
+    it 'should add commands to download, install and remove a package ' do
+      subject = install "http://some.url/package_name.deb", nil
+      subject.command.should == 'cd /tmp && wget http://some.url/package_name.deb && dpkg -i package_name.deb && rm package_name.deb && cd -'
+    end
+
+    it 'should add a command to install a single apt package' do
+      subject = install 'package1'
+      subject.map(&:command).should == [
+        'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install package1',
+      ]
+    end
+
     it 'should add a command to install apt packages' do
       subject = install %w(package1 package2)
       subject.map(&:command).should == [
         'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install package1',
         'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install package2'
       ]
-    end
-
-    it 'should add commands to download, install and remove a package ' do
-      subject = install "http://some.url/package_name.deb", nil
-      subject.command.should == 'cd /tmp && wget http://some.url/package_name.deb && dpkg -i package_name.deb && rm package_name.deb && cd -'
     end
   end
 

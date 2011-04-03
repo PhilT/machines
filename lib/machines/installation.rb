@@ -60,9 +60,11 @@ module Machines
           name = File.basename(packages)
           commands = Command.new("cd /tmp && wget #{packages} && dpkg -i #{name} && rm #{name} && cd -", nil)
         else
-          Command.new("#{APTGET_QUIET} install #{packages}", check_package(packages))
+          packages = [packages]
         end
-      else
+      end
+
+      if packages.is_a?(Array)
         commands = packages.map do |package|
           Command.new("#{APTGET_QUIET} install #{package}", check_package(package))
         end

@@ -30,26 +30,28 @@ describe 'Machinesfile' do
   end
 
   describe 'package' do
+    it 'raises specific error when failing to load Machinesfile' do
+      should_not_receive(:load)
+      lambda{ package 'Machinesfile' }.should raise_error LoadError, /Cannot find Machinesfile/
+    end
+
     it 'loads custom package when it exists' do
       custom_package = "#{AppConf.project_dir}/packages/custom_package.rb"
-      File.stub(:exists?).with(custom_package).and_return true
+      File.new custom_package, 'w'
       should_receive(:load).with(custom_package).and_return true
       package :custom_package
     end
 
     it 'loads built-in package when no custom package' do
       @builtin_package = "#{AppConf.application_dir}/packages/builtin_package.rb"
-      File.stub(:exists?).with("#{AppConf.project_dir}/packages/builtin_package.rb").and_return false
-      File.stub(:exists?).with(@builtin_package).and_return true
+      File.new @builtin_package, 'w'
       should_receive(:load).with(@builtin_package).and_return true
       package :builtin_package
     end
 
     it 'raises when no custom and no built-in package' do
       should_not_receive(:load)
-      File.stub(:exists?).with("#{AppConf.project_dir}/packages/builtin_package.rb").and_return false
-      File.stub(:exists?).with("#{AppConf.application_dir}/packages/builtin_package.rb").and_return false
-      lambda {package :builtin_package}.should raise_error LoadError
+      lambda { package :builtin_package}.should raise_error LoadError, /Cannot find .* package builtin_package/
     end
   end
 end
