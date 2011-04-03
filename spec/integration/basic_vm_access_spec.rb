@@ -1,18 +1,6 @@
 require 'spec_helper'
 
-module FakeFS
-  class File
-    class Stat
-      def mode
-        0644
-      end
-    end
-  end
-end
-
 describe 'htpasswd' do
-  include FakeFS::SpecHelpers
-
   it 'SSHs into VM and SUDOs to check no password required' do
     #Machinesfile
     AppConf.from_hash(:user => {})

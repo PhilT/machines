@@ -1,9 +1,3 @@
-class File
-  def self.append path, string
-    File.open(path, 'a') {|file| file.puts string }
-  end
-end
-
 module Machines
   module Commandline
     def start(command)
@@ -45,7 +39,7 @@ HELP
 
       crypted_pass = password.crypt(WEBrick::Utils.random_string(2))
       FileUtils.mkdir_p conf_dir
-      File.append(path, "#{username}:#{crypted_pass}")
+      File.open(path, 'a') {|file| file.puts "#{username}:#{crypted_pass}" }
       say "Password encrypted and added to #{path}"
     end
 

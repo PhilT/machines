@@ -24,7 +24,7 @@ module Machines
       include module_or_class unless module_or_class.is_a?(Class)
     end
 
-    # Loads Machinesfile, opens SSH and SCP connections, execs commands and uploads files
+    # Loads Machinesfile, opens an SCP connection and runs all commands and file uploads
     def build
       load File.join(AppConf.project_dir, 'Machinesfile')
 

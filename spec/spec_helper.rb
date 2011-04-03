@@ -9,7 +9,7 @@ UNIT_PROJECT_DIR = '/tmp'
 
 RSpec.configure do |c|
   c.include(Matchers)
-  c.include(FakeFS::SpecHelpers, :type => :unit)
+  c.include(FakeFS::SpecHelpers)
 
   c.before(:each, :type => :unit) do
     AppConf.passwords = []
