@@ -1,11 +1,6 @@
 require 'spec_helper'
 
-describe 'HighLine' do
-  it 'handles console output' do
-    say('something')
-    $output.should == "something\n"
-  end
-
+describe MockStdin do
   it 'handles multiple console inputs' do
     $input.answers = ["test", "this"]
     ask('something? ').should == 'test'

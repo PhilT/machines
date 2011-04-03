@@ -18,7 +18,7 @@ describe Command do
 
     before(:each) do
       HighLine.use_color = false
-      @log = MockStdOut.new
+      @log = MockStdout.new
       AppConf.log = @log
       @mock_ssh = mock Net::SSH
       @mock_scp = mock Net::SCP, :session => @mock_ssh

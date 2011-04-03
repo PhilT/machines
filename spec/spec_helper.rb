@@ -14,8 +14,8 @@ RSpec.configure do |c|
     AppConf.commands = []
     AppConf.from_hash(:user => {})
     AppConf.project_dir = '/tmp'
-    $input = MockStdIn.new
-    $output = MockStdOut.new
+    $input = MockStdin.new
+    $output = MockStdout.new
     $terminal = HighLine.new($input, $output)
   end
 end

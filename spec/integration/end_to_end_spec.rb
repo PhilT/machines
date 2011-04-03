@@ -30,8 +30,9 @@ describe 'End to End Test' do
 
 
   it 'generates template, asks questions and runs build script' do
-    can_generate_template
-    can_generate_htpasswds_for_staging
+    generates_template
+    generates_htpasswd_to_limit_access_to_staging
+    checks_machinesfile
   end
 
 end

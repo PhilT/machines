@@ -16,7 +16,7 @@ describe Command do
     it 'wraps command execution in logging' do
       AppConf.commands << subject
       HighLine.use_color = false
-      log = MockStdOut.new
+      log = MockStdout.new
       AppConf.log = log
 
       mock_ssh = mock Net::SSH
@@ -36,7 +36,7 @@ LOG
 
     it 'wraps command execution in sudo' do
       HighLine.use_color = false
-      log = MockStdOut.new
+      log = MockStdout.new
       AppConf.log = log
       AppConf.user.pass = 'userpass'
 

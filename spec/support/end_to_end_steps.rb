@@ -12,7 +12,7 @@ module EndToEndSteps
     response.should include 'user'
   end
 
-  def can_generate_template
+  def generates_template
     Machines::Base.new.start('generate', 'project')
     files = %w(certificates) +
       %w(config/apps.yml config/config.yml) +
@@ -23,7 +23,7 @@ module EndToEndSteps
     end
   end
 
-  def can_generate_htpasswds_for_staging
+  def generates_htpasswd_to_limit_access_to_staging
     $input.answers = ['user', 'pass', 'p1ass', 'pass', 'pass']
 
     AppConf.webserver = 'nginx'
@@ -41,6 +41,10 @@ Confirm the password:
 Password encrypted and added to nginx/conf/htpasswd
 THIS
     File.read("#{AppConf.project_dir}/nginx/conf/htpasswd").should =~ /user:.{13}/
+  end
+
+  def checks_machinesfile
+
   end
 end
 
