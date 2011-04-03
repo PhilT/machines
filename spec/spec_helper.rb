@@ -5,15 +5,11 @@ require 'machines'
 include Machines::Checks
 include Machines
 
-UNIT_PROJECT_DIR = File.join(Dir.pwd, 'tmp/unit')
-FileUtils.rm_rf UNIT_PROJECT_DIR
-FileUtils.mkdir_p UNIT_PROJECT_DIR
-FileUtils.cp_r('lib/template/.', 'tmp/unit')
+UNIT_PROJECT_DIR = '/tmp'
 
 RSpec.configure do |c|
   c.include(Matchers)
-  c.include(FakeFS::SpecHelpers)
-
+  c.include(FakeFS::SpecHelpers, :type => :unit)
 
   c.before(:each, :type => :unit) do
     AppConf.passwords = []
@@ -26,7 +22,7 @@ RSpec.configure do |c|
   end
 
   c.before(:all, :type => :integration) do
-    AppConf.project_dir = File.join(Dir.pwd, 'tmp/integration')
+    AppConf.project_dir = File.join(Dir.pwd, 'tmp/project')
     $input = MockStdIn.new
     $output = MockStdOut.new
     $terminal = HighLine.new($input, $output)

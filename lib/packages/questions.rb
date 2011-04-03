@@ -13,11 +13,11 @@ only :environments => [:staging, :production] do
   AppConf.hostname = AppConf.environment
 end
 
-only :environments => :development
+only :environments => :development do
   AppConf.hostname = enter_hostname
 end
 
-except :roles => :db
+except :roles => :db do
   AppConf.db.address = enter_target_address('database master machine')
   AppConf.db.pass = enter_password('database root')
 end

@@ -51,25 +51,9 @@ describe 'CommandLine' do
     end
   end
 
-  describe 'htpasswd' do
-    it 'asks for username' do
-      File.stub(:open)
-      AppConf.webserver = 'nginx'
-      should_receive(:say).with /Generate BasicAuth password and add to .*\/tmp\/unit\/nginx\/conf\/htpasswd/
-      should_receive(:ask).with('Username: ').and_return 'user'
-      should_receive(:enter_and_confirm_password).and_return 'pass'
-
-      FileUtils.should_receive(:mkdir_p).with(/tmp\/unit\/nginx\/conf/)
-      WEBrick::Utils.stub(:random_string).with(2).and_return '12'
-      File.should_receive(:append).with(/tmp\/unit\/nginx\/conf\/htpasswd/, "user:#{'pass'.crypt('12')}")
-      should_receive(:say).with /Password encrypted and added to .*\/tmp\/unit\/nginx\/conf\/htpasswd/
-      htpasswd
-    end
-  end
-
   describe 'generate' do
     it 'copies the template' do
-      FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template/.", AppConf.project_dir)
+      FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template", AppConf.project_dir)
       generate
     end
   end
