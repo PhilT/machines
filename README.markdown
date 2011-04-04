@@ -27,10 +27,15 @@ Goals
 
 I believe that development, staging, and production environments should match if not be as close as possible.
 I develop on Ubuntu Linux and so it felt natural to have Ubuntu as my server environment. I spent many years
-building and configuring PCs and anything that makes the job easier is a good thing in my opinion.
+building and configuring PCs and anything that can be done to automate the process is a good thing in my opinion.
+
+Description
+---------------------------------------
 
 This tool should make it simple to develop and deploy Ruby on Rails applications on Ubuntu by providing sensible
 defaults in a template build script, the `Machinesfile` and associated `package` files.
+
+[TODO: Describe packages, sudo, run, commands, etc]
 
 Installation and Configuration
 ---------------------------------------
@@ -109,15 +114,15 @@ Commandline Options
 About the Template
 ---------------------------------------
 
-Default structure created by `machines new <directory>`:
+Default structure created by running `machines new example`:
 
-* machines_example
+* example
   * certificates
     * example.com.crt - SSL certificate
     * example.com.key - SSL private key
     * selfsigned.crt - Self-signed SSL certificate
     * selfsigned.key - Self-signed SSL private key
-    * amazon.key - Your X.509 private key to access Amazon Web Services
+    * amazon.key - Your X.509 private key to access EC2. The name (without .key) should match the name on your EC2 account.
   * config
     * apps.yml - App servers configuration
     * config.yml - EC2 settings, timezone, webserver, database
@@ -132,7 +137,7 @@ Default structure created by `machines new <directory>`:
     * app_server.conf.erb
     * initd
     * nginx.conf.erb
-  * packages
+  * packages - Packages with the same name as builtin packages take precedence
     * dev_extras.rb (example custom package)
   * users
     * phil
@@ -194,16 +199,7 @@ You might see one of the following while upgrading/installing packages:
     WARNING: Failed to parse default value
     update-rc.d: warning: unattended-upgrades start runlevel arguments
 
-These are all known issues and nothing to worry about.
-
-TODO
----------------------------------------
-
-* Add :abort => true to abort on failed check
-* Add asynchronous ssh so output can be piped live
-* Add timer
-* Add checking of return values
-* More logging needed on initialization
+These are known issues and nothing to worry about.
 
 Note on Patches/Pull Requests
 ---------------------------------------
@@ -217,6 +213,9 @@ It've also added an option to only run the spec/code being worked on.
 * Test drive your feature addition or bug fix
 * Commit, do not mess with rakefile, version, or history.
 * Send me a pull request. Please use topic branches.
+
+The packages are not currently tested but most will be covered by the integration test being written.
+Feel free to add/enhancement packages and submit pull requests.
 
 Copyright
 ---------------------------------------

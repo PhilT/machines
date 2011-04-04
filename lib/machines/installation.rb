@@ -3,16 +3,22 @@ module Machines
     APTGET_QUIET = 'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y'
 
     # Adds a DEB source
-    # @param [String] name Used to name the sources.list file and what to check in apt-key list to ensure it installed
-    # @param [String] source URL of the package
+    # @param [String] source URL of the package. If DISTRIB_CODENAME is included then it
+    #                 is replaced by the Ubuntu version name
     # @param [Hash] options
-    # @option options [String] :to Overrides name of sources.list file
-    # @option options [String] :gpg URL of key
-    #     add_source 'google', 'http://dl.google.com/linux/deb/ stable main', :gpg => 'https://dl-ssl.google.com/linux/linux_signing_key.pub', :to => 'google-chrome'
-    def add_source name, source, options
+    # @option options [String] :key URL of key
+    # @option options [String] :name Used to check `apt-key list` to ensure it installed
+    #     sudo deb 'http://dl.google.com/linux/deb/ stable main',
+    #       :key => 'https://dl-ssl.google.com/linux/linux_signing_key.pub',
+    #       :name => 'Google'
+    def deb source, options
+      command = "echo deb #{source} >> /etc/apt/sources.list"
+      if source =~ /DISTRIB_CODENAME/
+        command = "expr substr `cat /etc/lsb-release | grep DISTRIB_CODENAME` 18 20 | xargs -I DISTRIB_CODENAME #{command}"
+      end
       [
-        append("deb #{source}", :to => "/etc/apt/sources.list.d/#{options[:to] || name}.list"),
-        Command.new("wget -q -O - #{options[:gpg]} | apt-key add -", "apt-key list | grep -i #{name} #{echo_result}")
+        Command.new(command, check_string(source.gsub(/ .*$/, ''), '/etc/apt/sources.list')),
+        Command.new("wget -q #{options[:key]} -O - | apt-key add -", "apt-key list | grep -i #{options[:name]} #{echo_result}")
       ]
     end
 
@@ -32,7 +38,8 @@ module Machines
       end
     end
 
-    # Installs one or more packages using apt, deb or it's install.sh file
+    # Installs one or more packages using apt, deb or git clone and install.sh
+    # (See `extract` to just uncompress tar.gz or zip files)
     # @param [Symbol, String, Array] packages can be:
     #   Git URL::
     #     Git clone URL and run `./install.sh`
