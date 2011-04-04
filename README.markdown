@@ -144,7 +144,7 @@ https://help.ubuntu.com/community/Installation/LowMemorySystems
 * For the VM I use VirtualBox.
   * Create a new VM with the name of machinesvm (used in the rake tasks)
   * Select Ubuntu or Ubuntu x64 as the OS (depending on your chosen image)
-  * Go to Network and set Bridged or Host-only Adapter
+  * Go to Network and set Bridged Adapter
   * Go to Storage, select the Empty CD, click the CD icon on the far right and find the image
   * I also turn off the Audio device
 * Start the VM, select Command line Install and follow the prompts

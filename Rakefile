@@ -46,6 +46,16 @@ namespace :vm do
     system('VBoxManage controlvm machinesvm savestate')
   end
 
+  desc 'Shutdown the virtual machine'
+  task :kill do
+    system('VBoxManage controlvm machinesvm poweroff')
+  end
+
+  desc 'Restore last snapshot of virtual machine'
+  task :restore => :stop do
+    system('VBoxManage snapshot machinesvm restorecurrent')
+  end
+
   desc 'Get virtual machine state'
   task :state do
     system('VBoxManage showvminfo machinesvm | grep State')
