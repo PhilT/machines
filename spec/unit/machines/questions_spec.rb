@@ -31,12 +31,12 @@ MACHINESFILE
   end
 
   describe 'start_ec2_instance' do
-    it 'sets AppConf.ec2_instance to true' do
+    it 'returns true' do
       should_receive(:agree).with('Would you like to start a new EC2 instance (y/n)? ').and_return true
       start_ec2_instance?.should be_true
     end
 
-    it 'sets AppConf.ec2_instance to false' do
+    it 'returns false' do
       should_receive(:agree).with('Would you like to start a new EC2 instance (y/n)? ').and_return false
       start_ec2_instance?.should be_false
     end

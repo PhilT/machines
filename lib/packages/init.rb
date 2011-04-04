@@ -13,11 +13,11 @@ AppConf.log = File.open(AppConf.log_path, 'w')
 
 # Questions
 AppConf.machine = choose_machine
-AppConf.ec2_instance = start_ec2_instance?
-Thread.new { start_ec2_instance } if AppConf.ec2_instance
-AppConf.target_address = enter_target_address('machine') unless AppConf.ec2_instance
+AppConf.ec2.start = start_ec2_instance?
+thread = Thread.new { connect && run_instance } if AppConf.ec2.start
+AppConf.target_address = enter_target_address('machine') unless AppConf.ec2.start
 AppConf.user.name = choose_user
-AppConf.user.pass = enter_password('users') unless AppConf.ec2_instance
+AppConf.user.pass = enter_password('users') unless AppConf.ec2.start
 AppConf.user.home = File.join('/home', AppConf.user.name)
 AppConf.appsroot = AppConf[AppConf.user.name].appsroot
 
@@ -33,4 +33,6 @@ except :roles => :db do
   AppConf.db.address = enter_target_address('database master machine')
   AppConf.db.pass = enter_password('database root')
 end
+
+thread.join
 

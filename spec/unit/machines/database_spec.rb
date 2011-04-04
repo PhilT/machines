@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe 'Database' do
-  include Machines::Core
-  include Machines::Configuration
-  include Machines::Database
-  include Machines::AppSettings
+  include Core
+  include Configuration
+  include Database
+  include AppSettings
 
   describe 'write_database_yml' do
     it 'should write the database.yml file' do

@@ -1,8 +1,7 @@
 module Machines
   module Ec2Machine
-    def connect
-      say 'Connecting to EC2...'
-      @ec2 = AWS::EC2::Base.new(
+    def connect_to_ec2
+      AppConf.ec2.connection = AWS::EC2::Base.new(
         :access_key_id => AppConf.ec2.access_key_id,
         :secret_access_key => AppConf.ec2.secret_access_key,
         :server => AppConf.ec2.url
@@ -10,7 +9,6 @@ module Machines
     end
 
     def run_instance
-      say 'Starting new Ubuntu instance...'
       instance_options = {
         :key_name => File.basename(AppConf.ec2.private_key_file, '.key'),
         :security_group => AppConf.ec2.security_group,
@@ -19,8 +17,16 @@ module Machines
         :monitoring_enabled => false # Is this enabled later or do I need to allow it to be configured?
       }
 
-      @instance_id = @ec2.run_instances(instance_options)['instancesSet']['item'].first['instanceId']
-      wait_for lambda{instance_state(@ec2, @instance_id) == 'running'}
+      AppConf.ec2.instance_id = AppConf.ec2.connection.run_instances(instance_options)['instancesSet']['item'][0]['instanceId']
+      wait_for_running_state(300)
+    end
+
+    def wait_for_running_state(timeout)
+      later = Time.now + timeout
+      while 'running' != AppConf.ec2.connection.describe_instances(:instance_id => AppConf.ec2.instance_id)['reservationSet']['item'][0]['instancesSet']['item'][0]['instanceState']['name']
+        sleep 5
+        raise TimeoutError, "Timed out waiting for instance to start. Instance ID: #{AppConf.ec2.instance_id}" if Time.now > later
+      end
     end
   end
 end
