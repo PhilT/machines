@@ -37,43 +37,14 @@ Installation and Configuration
 
 ### Install the gem
 
-        gem install machines
+    gem install machines
 
 ### Generate an example build script
 
-        mkdir machines_example && cd machines_example
-        machines generate
+    machines new <directory>
 
-This will create the following directory structure:
-
-* machines_example
-  * certificates
-    * example.com.crt - SSL certificate
-    * example.com.key - SSL private key
-    * selfsigned.crt - Self-signed SSL certificate
-    * selfsigned.key - Self-signed SSL private key
-    * amazon.key - Your X.509 private key to access Amazon Web Services
-  * config
-    * apps.yml - App servers configuration
-    * config.yml - EC2 settings, timezone, webserver, database
-    * hosts.yml - List of domains to add for local nginx/passenger development to /etc/hosts
-    * packages.yml - packages settings (versions, paths, urls etc)
-  * mysql
-    * dbmaster.cnf
-    * dbslave.cnf
-  * nginx
-    * conf
-      * htpasswd
-    * app_server.conf.erb
-    * initd
-    * nginx.conf.erb
-  * packages
-    * dev_extras.rb (example custom package)
-  * users
-    * phil
-      * basrc
-      * confi
-  * Machinesfile
+Running `machines new example` creates the `example` directory and copies in a default template
+(a bit like `rails new`).
 
 ### Configure your deployment
 
@@ -130,10 +101,44 @@ While running open another terminal to view detailed output:
 Commandline Options
 ---------------------------------------
 * `htpasswd` - Asks for a username and password and generates basic auth in webserver/conf/htpasswd'
-* `generate` - Generates an example machines project'
+* `new`      - Generates an example machines project'
 * `check`    - Checks Machinesfile for syntax issues'
 * `dryrun`   - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them'
 * `build`    - Asks some questions then builds your chosen machine'
+
+About the Template
+---------------------------------------
+
+Default structure created by `machines new <directory>`:
+
+* machines_example
+  * certificates
+    * example.com.crt - SSL certificate
+    * example.com.key - SSL private key
+    * selfsigned.crt - Self-signed SSL certificate
+    * selfsigned.key - Self-signed SSL private key
+    * amazon.key - Your X.509 private key to access Amazon Web Services
+  * config
+    * apps.yml - App servers configuration
+    * config.yml - EC2 settings, timezone, webserver, database
+    * hosts.yml - List of domains to add for local nginx/passenger development to /etc/hosts
+    * packages.yml - packages settings (versions, paths, urls etc)
+  * mysql
+    * dbmaster.cnf
+    * dbslave.cnf
+  * nginx
+    * conf
+      * htpasswd
+    * app_server.conf.erb
+    * initd
+    * nginx.conf.erb
+  * packages
+    * dev_extras.rb (example custom package)
+  * users
+    * phil
+      * basrc
+      * confi
+  * Machinesfile
 
 Setting up the test Machines VM
 ---------------------------------------
