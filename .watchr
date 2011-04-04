@@ -41,9 +41,11 @@ def rspec_only_specified spec
   system "clear && rspec #{spec}"
 end
 
-watch( 'spec/(unit|support)/.*_spec\.rb' ) {|match| rspec(match[0]) }
 watch( 'lib/machines/(.*)\.rb' ) {|match| rspec("spec/unit/machines/#{match[1]}_spec.rb") }
-watch( 'spec/support/(.*)\.rb' ) {|match| rspec("spec/unit/support/#{match[1]}_spec.rb") }
+watch( 'lib/packages/(.*)\.rb' ) {|match| rspec("spec/unit/packages/#{match[1]}_spec.rb") }
+
+watch( 'spec/(unit)/.*_spec\.rb' ) {|match| rspec(match[0]) }
+
 watch( 'lib/machines\.rb' )      {|match| rspec("spec/unit/machines/machines_spec.rb") }
 
 # CTRL+C autotest style interrupt

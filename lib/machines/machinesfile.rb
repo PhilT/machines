@@ -23,7 +23,12 @@ module Machines
   private
     def load_package base_dir, name
       package_name = File.join(base_dir, 'packages', "#{name}.rb")
-      load package_name if File.exists?(package_name)
+      if File.exists?(package_name)
+        eval(File.read(package_name))
+        true
+      else
+        false
+      end
     end
   end
 end

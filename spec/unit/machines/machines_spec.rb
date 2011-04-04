@@ -5,7 +5,7 @@ describe 'Machines' do
   subject {Machines::Base.new}
 
   before(:each) do
-    subject.stub(:load)
+    File.stub(:read).and_return ''
     AppConf.ec2 = AppConf.new unless AppConf.ec2
     AppConf.ec2.start = nil
   end
@@ -18,7 +18,7 @@ describe 'Machines' do
     end
 
     it 'raises LoadError with custom message when no Machinesfile' do
-      subject.should_receive(:load).with("#{AppConf.project_dir}/Machinesfile").and_raise LoadError.new('Machinesfile not found')
+      File.should_receive(:read).with("#{AppConf.project_dir}/Machinesfile").and_raise LoadError.new('Machinesfile not found')
 
       begin
         subject.build
@@ -28,7 +28,7 @@ describe 'Machines' do
     end
 
     it 'raises normal LoadError on other files' do
-      subject.should_receive(:load).with("#{AppConf.project_dir}/Machinesfile").and_raise LoadError
+      File.should_receive(:read).with("#{AppConf.project_dir}/Machinesfile").and_raise LoadError
 
       begin
         subject.build
@@ -51,7 +51,6 @@ describe 'Machines' do
     end
 
     it 'runs each command' do
-      subject.stub(:load)
       mock_command = mock Command
       mock_scp = mock Net::SCP, :session => nil
       AppConf.commands = [mock_command]

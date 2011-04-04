@@ -26,7 +26,7 @@ module Machines
 
     # Loads Machinesfile, opens an SCP connection and runs all commands and file uploads
     def build
-      load File.join(AppConf.project_dir, 'Machinesfile')
+      eval File.read(File.join(AppConf.project_dir, 'Machinesfile'))
 
       if AppConf.ec2.start
         username = 'ubuntu'

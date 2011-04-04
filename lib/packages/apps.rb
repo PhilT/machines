@@ -13,7 +13,7 @@ def make_app_structure where
   end
 end
 
-run mkdir File.join(AppConf.nginx.path, AppConf.app_servers)
+run mkdir File.join(AppConf.nginx.path, AppConf.nginx.app_servers)
 AppConf.apps.each do |app|
   make_app_structure app.path # check this is needed for all environments
   run generate_template_for(app)
