@@ -170,12 +170,14 @@ directory or from the Machines packages.
 
 Limitations
 ---------------------------------------
-* Only one user per machine. SSH logs in as that user and there is currently no way to change it. Multiple
-  users is not something we currently need and has therefore been made a low priority.
+* Only one user per machine. Servers use www (by default) for nginx/apache, passenger and deployments.
+  It's common practice to have separate users for these roles. This will be added in a future release.
 * The system has been designed to allow a certain flexibility in the configuration although some things
   may not yet be totally configurable it should be possible to add or modify a relevant package. For
   example, app settings allow different servers to have different apps setup on them. This however has
-  not yet been exercised.
+  not yet been tested.
+* We are currently focused on Ruby 1.9.2, Rails 3 and Passenger 3 deployments as our projects have all
+  been upgraded. If there is significant interest we may look at supported 1.8.7 and Rails 2.
 
 Warnings
 ---------------------------------------
