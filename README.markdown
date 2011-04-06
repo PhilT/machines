@@ -22,7 +22,7 @@ Goals
   * Ruby on Rails 3
   * MySQL 5
   * Planned
-    * Monit, Munin, Sphinx, logrotate
+    * Monit, Munin, Sphinx, logrotate, Mail
 * Easily override defaults with configuration options and custom ruby
 
 I believe that development, staging, and production environments should match if not be as close as possible.
@@ -216,6 +216,29 @@ It've also added an option to only run the spec/code being worked on.
 
 The packages are not currently tested but most will be covered by the integration test being written.
 Feel free to add/enhancement packages and submit pull requests.
+
+References
+---------------------------------------
+
+### APIs
+
+http://aws.amazon.com/documentation/
+http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/
+http://net-ssh.github.com/
+http://rdoc.info/github/grempe/amazon-ec2
+
+
+### Blog Posts
+
+http://kris.me.uk/2010/11/15/rails3-rvm-passenger3-apache.html
+http://thoughtsincomputation.com/posts/deploying-in-harmony-capistrano-rvm-bundler-and-git
+http://ginzametrics.com/deploy-rails-app-to-ec2-with-rubber.html
+http://aws.amazon.com/articles/1663
+http://wiki.dennyhalim.com/ubuntu-minimal-desktop
+http://www.psychocats.net/ubuntu/minimal
+https://help.ubuntu.com/community/Installation/LowMemorySystems
+https://github.com/jnstq/rails-nginx-passenger-ubuntu
+http://articles.slicehost.com/2007/10/17/ubuntu-lts-adding-an-nginx-init-script
 
 Copyright
 ---------------------------------------
