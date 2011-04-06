@@ -7,7 +7,7 @@ Status
 ---------------------------------------
 
 This is the second major version. The first was more of a proof of concept and it worked. This version is
-much more flexible and extendable. Much better documented and easier (I hope) to get started. It is currently
+much more flexible and extendable. Better documentation and easier (I hope) to get started. It is currently
 under development but we are very close to rolling out a beta.
 
 Goals
@@ -19,11 +19,14 @@ Goals
   * Nginx 8
   * RVM (latest)
   * Passenger 3
+  * Ruby 1.9.2
   * Ruby on Rails 3
   * MySQL 5
   * Planned
-    * Monit, Munin, Sphinx, logrotate, Mail
+    * Apache, Monit, Munin, Sphinx, logrotate, Mail
 * Easily override defaults with configuration options and custom ruby
+* Nice dev extras such as Firefox and Chrome packages making it easier to keep up-to-date with the latest version
+
 
 I believe that development, staging, and production environments should match if not be as close as possible.
 I develop on Ubuntu Linux and so it felt natural to have Ubuntu as my server environment. I spent many years
@@ -222,23 +225,23 @@ References
 
 ### APIs
 
-http://aws.amazon.com/documentation/
-http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/
-http://net-ssh.github.com/
-http://rdoc.info/github/grempe/amazon-ec2
+* http://aws.amazon.com/documentation/
+* http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/
+* http://net-ssh.github.com/
+* http://rdoc.info/github/grempe/amazon-ec2
 
 
 ### Blog Posts
 
-http://kris.me.uk/2010/11/15/rails3-rvm-passenger3-apache.html
-http://thoughtsincomputation.com/posts/deploying-in-harmony-capistrano-rvm-bundler-and-git
-http://ginzametrics.com/deploy-rails-app-to-ec2-with-rubber.html
-http://aws.amazon.com/articles/1663
-http://wiki.dennyhalim.com/ubuntu-minimal-desktop
-http://www.psychocats.net/ubuntu/minimal
-https://help.ubuntu.com/community/Installation/LowMemorySystems
-https://github.com/jnstq/rails-nginx-passenger-ubuntu
-http://articles.slicehost.com/2007/10/17/ubuntu-lts-adding-an-nginx-init-script
+* http://kris.me.uk/2010/11/15/rails3-rvm-passenger3-apache.html
+* http://thoughtsincomputation.com/posts/deploying-in-harmony-capistrano-rvm-bundler-and-git
+* http://ginzametrics.com/deploy-rails-app-to-ec2-with-rubber.html
+* http://aws.amazon.com/articles/1663
+* http://wiki.dennyhalim.com/ubuntu-minimal-desktop
+* http://www.psychocats.net/ubuntu/minimal
+* https://help.ubuntu.com/community/Installation/LowMemorySystems
+* https://github.com/jnstq/rails-nginx-passenger-ubuntu
+* http://articles.slicehost.com/2007/10/17/ubuntu-lts-adding-an-nginx-init-script
 
 Copyright
 ---------------------------------------
