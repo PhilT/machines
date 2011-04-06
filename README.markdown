@@ -128,9 +128,8 @@ Default structure created by running `machines new example`:
     * amazon.key - Your X.509 private key to access EC2. The name (without .key) should match the name on your EC2 account.
   * config
     * apps.yml - App servers configuration
-    * config.yml - EC2 settings, timezone, webserver, database
+    * config.yml - EC2 settings, timezone, webserver, database, package settings (versions, paths, urls etc)
     * hosts.yml - List of domains to add for local nginx/passenger development to /etc/hosts
-    * packages.yml - packages settings (versions, paths, urls etc)
   * mysql
     * dbmaster.cnf
     * dbslave.cnf
@@ -225,23 +224,23 @@ References
 
 ### APIs
 
-* http://aws.amazon.com/documentation/
-* http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/
-* http://net-ssh.github.com/
-* http://rdoc.info/github/grempe/amazon-ec2
+* <http://aws.amazon.com/documentation/>
+* <http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/>
+* <http://net-ssh.github.com/>
+* <http://rdoc.info/github/grempe/amazon-ec2>
 
 
 ### Blog Posts
 
-* http://kris.me.uk/2010/11/15/rails3-rvm-passenger3-apache.html
-* http://thoughtsincomputation.com/posts/deploying-in-harmony-capistrano-rvm-bundler-and-git
-* http://ginzametrics.com/deploy-rails-app-to-ec2-with-rubber.html
-* http://aws.amazon.com/articles/1663
-* http://wiki.dennyhalim.com/ubuntu-minimal-desktop
-* http://www.psychocats.net/ubuntu/minimal
-* https://help.ubuntu.com/community/Installation/LowMemorySystems
-* https://github.com/jnstq/rails-nginx-passenger-ubuntu
-* http://articles.slicehost.com/2007/10/17/ubuntu-lts-adding-an-nginx-init-script
+* <http://kris.me.uk/2010/11/15/rails3-rvm-passenger3-apache.html>
+* <http://thoughtsincomputation.com/posts/deploying-in-harmony-capistrano-rvm-bundler-and-git>
+* <http://ginzametrics.com/deploy-rails-app-to-ec2-with-rubber.html>
+* <http://aws.amazon.com/articles/1663>
+* <http://wiki.dennyhalim.com/ubuntu-minimal-desktop>
+* <http://www.psychocats.net/ubuntu/minimal>
+* <https://help.ubuntu.com/community/Installation/LowMemorySystems>
+* <https://github.com/jnstq/rails-nginx-passenger-ubuntu>
+* <http://articles.slicehost.com/2007/10/17/ubuntu-lts-adding-an-nginx-init-script>
 
 Copyright
 ---------------------------------------
