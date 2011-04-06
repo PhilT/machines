@@ -1,7 +1,7 @@
 Machines
 =======================================
 
-Setup Ubuntu development and server **Machines** for hosting Ruby on Rails 3 applications.
+Setup Ubuntu development and server **Machines** locally or on Amazon EC2 for hosting Ruby on Rails 3 applications.
 
 Status
 ---------------------------------------
