@@ -16,7 +16,7 @@ AppConf.machine = choose_machine
 AppConf.ec2.start = start_ec2_instance?
 thread = Thread.new { connect && run_instance } if AppConf.ec2.start
 AppConf.target_address = enter_target_address('machine') unless AppConf.ec2.start
-AppConf.user.name = choose_user
+AppConf.users = AppConf.user.name = choose_user
 AppConf.user.pass = enter_password('users') unless AppConf.ec2.start
 AppConf.user.home = File.join('/home', AppConf.user.name)
 AppConf.appsroot = AppConf[AppConf.user.name].appsroot

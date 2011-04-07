@@ -1,3 +1,4 @@
+require 'net/ssh'
 require 'yard'
 require 'rspec/core/rake_task'
 require 'highline/import'
@@ -60,6 +61,42 @@ namespace :vm do
   task :state do
     system('VBoxManage showvminfo machinesvm | grep State')
   end
+
+  namespace :win do
+    desc 'Start the virtual machine in headless mode (on a Windows host)'
+    task :start do
+      ssh_virtualbox('startvm machinesvm')
+    end
+
+    desc 'Stop the virtual machine (on a Windows host)'
+    task :stop do
+      ssh_virtualbox('controlvm machinesvm savestate')
+    end
+
+    desc 'Shutdown the virtual machine (on a Windows host)'
+    task :kill do
+      ssh_virtualbox('controlvm machinesvm poweroff')
+    end
+
+    desc 'Restore last snapshot of virtual machine (on a Windows host)'
+    task :restore => :stop do
+      ssh_virtualbox('snapshot machinesvm restorecurrent')
+    end
+
+    desc 'Get virtual machine state (on a Windows host)'
+    task :state do
+      output = ssh_virtualbox('showvminfo machinesvm')
+      puts "State: #{output.scan(/State:\s+(.*)/).first.first}"
+    end
+  end
+end
+
+def ssh_virtualbox command
+  output = ''
+  Net::SSH.start('winhost', 'phil', :password => 'password') do |ssh|
+    output = ssh.exec!("C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage #{command}")
+  end
+  output
 end
 
 desc 'Run machines'

@@ -40,6 +40,5 @@ end
 # Will only be executed for development machines
 only :environments => :development do
   package :dev_extras
-  install %w(mysql-query-browser gitk meld) # can gitk be installed before git-core?
 end
 

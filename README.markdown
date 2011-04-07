@@ -241,6 +241,7 @@ References
 * <https://help.ubuntu.com/community/Installation/LowMemorySystems>
 * <https://github.com/jnstq/rails-nginx-passenger-ubuntu>
 * <http://articles.slicehost.com/2007/10/17/ubuntu-lts-adding-an-nginx-init-script>
+* <http://gembundler.com/deploying.html>
 
 Copyright
 ---------------------------------------

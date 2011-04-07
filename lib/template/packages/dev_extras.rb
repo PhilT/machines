@@ -2,10 +2,15 @@
 #   * flash
 #   * ubuntu extras
 #   * sqlite3
+#   * MySQL Query Browser
+#   * Gitk
+#   * Meld (for merging)
 #   * MS fonts
 #   * VirtualBox
 # removes
 #   * example content
+
+install %w(mysql-query-browser gitk meld)
 
 sudo install %w(flashplugin-installer ubuntu-restricted-extras libsqlite3-dev)
 
