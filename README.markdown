@@ -114,6 +114,24 @@ Commandline Options
 * `dryrun`   - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them'
 * `build`    - Asks some questions then builds your chosen machine'
 
+### Rake tasks for managing the VM (these tasks will be turned into commands on Machines to make testing easier)
+
+    rake vm:kill         # Shutdown the virtual machine
+    rake vm:restore      # Restore last snapshot of virtual machine
+    rake vm:start        # Start the virtual machine in headless mode
+    rake vm:state        # Get virtual machine state
+    rake vm:stop         # Stop the virtual machine
+
+    rake vm:win:kill     # Shutdown the virtual machine (on a Windows host)
+    rake vm:win:restore  # Restore last snapshot of virtual machine (on a Windows host)
+    rake vm:win:start    # Start the virtual machine in headless mode (on a Windows host)
+    rake vm:win:state    # Get virtual machine state (on a Windows host)
+    rake vm:win:stop     # Stop the virtual machine (on a Windows host)
+
+If you have Ubuntu running on a Windows Host you can use the vm:win:* tasks to control the machines VM used for testing.
+The simplest program I've found to get a Windows SSH server is freeSSHd (<http://www.freesshd.com/?ctt=download>).
+
+
 About the Template
 ---------------------------------------
 
