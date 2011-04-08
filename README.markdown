@@ -6,15 +6,13 @@ Setup Ubuntu development and server **Machines** locally or on Amazon EC2 for ho
 Status
 ---------------------------------------
 
-This is the second major version. The first was more of a proof of concept and it worked. This version is
-much more flexible and extendable. Better documentation and easier (I hope) to get started. It is currently
-under development but we are very close to rolling out a beta.
+It is currently under development but we are very close to rolling out a beta.
 
 Goals
 ---------------------------------------
 
 * To make a simple, transparent build tool
-* Get going quickly with the standard defaults
+* Get going quickly with the defaults
   * Ubuntu x64 11.04 (when released)
   * Nginx 8
   * RVM (latest)
@@ -24,19 +22,20 @@ Goals
   * MySQL 5
   * Planned
     * Apache, Monit, Munin, Sphinx, logrotate, Mail
-* Easily override defaults with configuration options and custom ruby
+* Easily override the defaults with configuration options and custom ruby
 * Nice dev extras such as Firefox and Chrome packages making it easier to keep up-to-date with the latest version
 
 
 I believe that development, staging, and production environments should match if not be as close as possible.
-I develop on Ubuntu Linux and so it felt natural to have Ubuntu as my server environment. I spent many years
+I develop on Ubuntu Linux and so it felt natural to have Ubuntu as my server environment. I've spent many years
 building and configuring PCs and anything that can be done to automate the process is a good thing in my opinion.
 
 Description
 ---------------------------------------
 
 This tool should make it simple to develop and deploy Ruby on Rails applications on Ubuntu by providing sensible
-defaults in a template build script, the `Machinesfile` and associated `package` files.
+defaults in a template build script, the `Machinesfile` and associated `package` files. Take a look at `lib/template` for
+an example `Machinesfile` and packages.
 
 [TODO: Describe packages, sudo, run, commands, etc]
 
@@ -108,11 +107,11 @@ While running open another terminal to view detailed output:
 
 Commandline Options
 ---------------------------------------
-* `htpasswd` - Asks for a username and password and generates basic auth in webserver/conf/htpasswd'
-* `new`      - Generates an example machines project'
-* `check`    - Checks Machinesfile for syntax issues'
-* `dryrun`   - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them'
-* `build`    - Asks some questions then builds your chosen machine'
+* `htpasswd`  - Asks for a username and password and generates basic auth in webserver/conf/htpasswd'
+* `new [DIR]` - Generates an example machines project'
+* `check`     - Checks Machinesfile for syntax issues'
+* `dryrun`    - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them'
+* `build`     - Asks some questions then builds your chosen machine'
 
 ### Rake tasks for managing the VM (these tasks will be turned into commands on Machines to make testing easier)
 

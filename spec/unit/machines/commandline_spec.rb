@@ -14,12 +14,12 @@ describe 'CommandLine' do
 
     it 'calls generate with directory' do
       should_receive(:generate).with('dir')
-      start 'generate', 'dir'
+      start 'new', 'dir'
     end
 
     it 'calls generate without directory' do
       should_receive(:generate).with(nil)
-      start 'generate', nil
+      start 'new', nil
     end
 
     it 'calls help when no matching command' do
