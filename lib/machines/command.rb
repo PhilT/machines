@@ -24,7 +24,8 @@ module Machines
 
     def run
       command = "export TERM=linux && #{@command}"
-      command = "echo #{AppConf.user.pass} | sudo -S sh -c '#{command}'" if @sudo
+      echo_password = "echo #{AppConf.user.pass} | " if AppConf.sudo.requires_password
+      command = "#{echo_password}sudo -S sh -c '#{command}'" if @sudo
       process {log @@ssh.exec! command }
     end
 

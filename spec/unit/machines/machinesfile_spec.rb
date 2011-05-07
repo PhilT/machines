@@ -7,6 +7,7 @@ describe 'Machinesfile' do
   describe 'machine' do
     before(:each) do
       AppConf.environment = nil
+      AppConf.environments = nil
       AppConf.roles = nil
     end
 
@@ -18,6 +19,7 @@ describe 'Machinesfile' do
       machine 'machine', :test, :apps => ['app', 'another'], :roles => [:role]
 
       AppConf.environment.should == :test
+      AppConf.environments.should == :test
       AppConf.roles.should == [:role]
     end
 
@@ -25,6 +27,7 @@ describe 'Machinesfile' do
       AppConf.machine = 'something else'
       machine 'config', :test, :apps => ['app', 'another'], :roles => [:role]
       AppConf.environment.should be_nil
+      AppConf.environments.should be_nil
       AppConf.roles.should be_nil
     end
   end

@@ -23,7 +23,7 @@ nginx:
   version: 0.8.54
   url: http://nginx.org/download/nginx-0.8.54.tar.gz
   path: /opt/nginx/
-  app_servers: servers
+  servers_dir: servers
 
 passenger:
   version: 3.0.4

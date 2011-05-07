@@ -28,7 +28,7 @@ module Machines
     def build
       eval File.read(File.join(AppConf.project_dir, 'Machinesfile'))
 
-      if AppConf.ec2.start
+      if AppConf.ec2.use
         username = 'ubuntu'
         options = {:keys => [AppConf.ec2.private_key_file]}
       else

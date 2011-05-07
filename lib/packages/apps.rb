@@ -3,7 +3,8 @@
 
 def generate_template_for(app, enable_ssl = false)
   app.enable_ssl = enable_ssl
-  path = File.join(AppConf[AppConf.webserver].path, AppConf.app_servers, "#{app.name}_#{enable_ssl ? 'ssl' : ''}.conf")
+  server_settings = AppConf[AppConf.webserver]
+  path = File.join(server_settings.path, server_settings.servers_dir, "#{app.name}_#{enable_ssl ? 'ssl' : ''}.conf")
   template File.join(AppConf.webserver, 'app_server.conf.erb'), :settings => app, :to => path
 end
 
@@ -14,8 +15,8 @@ def make_app_structure where
 end
 
 run mkdir File.join(AppConf.nginx.path, AppConf.nginx.app_servers)
-AppConf.apps.each do |app|
-  make_app_structure app.path # check this is needed for all environments
+AppConf.apps.each do |app_name, app|
+  make_app_structure app.path unless AppConf.environment == :development
   run generate_template_for(app)
   if app.ssl_key
     run generate_template_for(app, true)

@@ -7,7 +7,7 @@ describe 'Machines' do
   before(:each) do
     File.stub(:read).and_return ''
     AppConf.ec2 = AppConf.new unless AppConf.ec2
-    AppConf.ec2.start = nil
+    AppConf.ec2.use = nil
   end
 
   describe 'build' do
@@ -43,7 +43,7 @@ describe 'Machines' do
     end
 
     it 'starts an SCP session using key based authentication' do
-      AppConf.ec2.start = true
+      AppConf.ec2.use = true
       AppConf.ec2.private_key_file = 'private_key_file'
       Net::SCP.should_receive(:start).with('target', 'ubuntu', :keys => ['private_key_file'])
 

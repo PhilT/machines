@@ -3,7 +3,7 @@ module Machines
     # Add a machine configuration
     def machine name, environment, options = {:apps => [], :roles => []}
       if name == AppConf.machine
-        AppConf.environment = environment
+        AppConf.environment = AppConf.environments = environment
         AppConf.roles = options[:roles]
         load_app_settings(options[:apps])
       end

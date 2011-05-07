@@ -13,6 +13,10 @@ describe Command do
   end
 
   describe 'run' do
+    before(:each) do
+      AppConf.from_hash(:sudo => {})
+    end
+
     it 'wraps command execution in logging' do
       AppConf.commands << subject
       HighLine.use_color = false
@@ -34,14 +38,38 @@ LOG
       "(001/001) RUN    command".should be_displayed
     end
 
-    it 'wraps command execution in sudo' do
+    it 'wraps command execution in sudo with a password' do
       HighLine.use_color = false
       log = MockStdout.new
       AppConf.log = log
       AppConf.user.pass = 'userpass'
+      AppConf.sudo.requires_password = true
 
       mock_ssh = mock Net::SSH
       mock_ssh.stub(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && command'").and_return "result of command"
+      mock_ssh.stub(:exec!).with('check').and_return "CHECK PASSED"
+      Command.scp = mock Net::SCP, :session => mock_ssh
+
+      subject.use_sudo
+      subject.run
+
+      log.buffer.should == <<-LOG
+SUDO   command
+result of command
+CHECK PASSED
+LOG
+      "SUDO   command".should be_displayed
+    end
+
+    it 'wraps command execution in sudo with no password' do
+      HighLine.use_color = false
+      log = MockStdout.new
+      AppConf.log = log
+      AppConf.user.pass = 'userpass'
+      AppConf.sudo.requires_password = false
+
+      mock_ssh = mock Net::SSH
+      mock_ssh.stub(:exec!).with("sudo -S sh -c 'export TERM=linux && command'").and_return "result of command"
       mock_ssh.stub(:exec!).with('check').and_return "CHECK PASSED"
       Command.scp = mock Net::SCP, :session => mock_ssh
 
