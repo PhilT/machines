@@ -3,6 +3,15 @@ Machines
 
 Setup Ubuntu development and server **Machines** locally or on Amazon EC2 for hosting Ruby on Rails 3 applications.
 
+Run commands like:
+
+    sudo install %w(build-essential zlib1g-dev libpcre3-dev)
+    sudo write "127.0.1.1\t#{AppConf.hostname}", :to => '/etc/hosts'
+    run download AppConf.nginx.url
+    run template 'nginx/nginx.conf.erb', :to => File.join(AppConf.nginx.path, 'conf', 'nginx.conf')
+
+
+
 Status
 ---------------------------------------
 

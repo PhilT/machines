@@ -8,6 +8,7 @@ module Machines
       cs[:warning]    = [:yellow]
       cs[:failure]    = [:red]
       cs[:success]    = [:green]
+      cs[:info]       = [:blue]
     end
 
     # Displays message on screen

@@ -63,7 +63,7 @@ describe 'Installation' do
       subject.map(&:command).should == ['export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install package1']
     end
 
-    it 'instaniates a command to install apt packages' do
+    it 'instaniates a command to install multiple apt packages' do
       subject = install %w(package1 package2)
       subject.map(&:command).should == [
         'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install package1',
