@@ -5,7 +5,7 @@ def generate_template_for(app, enable_ssl = false)
   app.enable_ssl = enable_ssl
   server_settings = AppConf[AppConf.webserver]
   path = File.join(server_settings.path, server_settings.servers_dir, "#{app.name}_#{enable_ssl ? 'ssl' : ''}.conf")
-  template File.join(AppConf.webserver, 'app_server.conf.erb'), :settings => app, :to => path
+  template File.join(AppConf.project_dir, AppConf.webserver, 'app_server.conf.erb'), :settings => app, :to => path
 end
 
 def make_app_structure where
@@ -14,7 +14,7 @@ def make_app_structure where
   end
 end
 
-run mkdir File.join(AppConf.nginx.path, AppConf.nginx.app_servers)
+run mkdir File.join(AppConf.nginx.path, AppConf.nginx.servers_dir)
 AppConf.apps.each do |app_name, app|
   make_app_structure app.path unless AppConf.environment == :development
   run generate_template_for(app)
@@ -23,6 +23,6 @@ AppConf.apps.each do |app_name, app|
     sudo upload "certificates/#{ssl_crt}", '/etc/ssl/certs/{ssl_crt}'
     sudo upload "certificates/#{ssl_key}", '/etc/ssl/private/#{ssl_key}'
   end
-  run write_database_yml app, File.join(app.path, 'shared', 'config')
+  run write_database_yml :to => File.join(app.path, 'shared', 'config'), :for => app_name
 end
 

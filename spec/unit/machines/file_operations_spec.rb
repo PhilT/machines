@@ -44,7 +44,7 @@ describe 'FileOperations' do
 
   describe 'template' do
     it 'loads ERB template, applies settings and writes to remote machine' do
-      File.should_receive(:open).with('erb_path').and_return('<%= method_on_binding %>')
+      File.should_receive(:read).with('erb_path').and_return('<%= method_on_binding %>')
       should_receive(:write).with('result', hash_including(:to => 'file'))
       template('erb_path', :settings => AppBuilder.new(:method_on_binding => 'result'), :to => 'file')
     end
