@@ -26,6 +26,3 @@ parse_git_branch() {
 #     machine-name current-dir ruby@gemset [branch]
 PS1="\[\e[0;35m\]\h \[\e[0;34m\]\w \[\e[0;31m\]\$(~/.rvm/bin/rvm-prompt v g)\[\e[0;33m\]\$(parse_git_branch) \[\e[0;35m\]\$\[\e[m\] "
 
-# Initialize RVM
-if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
-

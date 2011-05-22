@@ -22,19 +22,15 @@ describe 'packages/dotfiles' do
 
   it 'adds the following commands' do
     eval @package
-    AppConf.commands.map(&:command).should == [
-      nil,
-      "sed -i \"s/export RAILS_ENV=/export RAILS_ENV=railsenv/\" home_dir/.bashrc",
-      "sed -i \"s/export CDPATH=/export CDPATH=appsroot/\" home_dir/.bashrc",
-      "mkdir -p home_dir/.ssh",
-      "chmod 700 home_dir/.ssh",
-      nil,
-      "chmod 600 home_dir/.ssh/authorized_keys"
+    AppConf.commands.map(&:info).should == [
+      "UPLOAD /tmp/users/username/bashrc to home_dir/.bashrc",
+      "RUN    sed -i \"s/export RAILS_ENV=/export RAILS_ENV=railsenv/\" home_dir/.bashrc",
+      "RUN    sed -i \"s/export CDPATH=/export CDPATH=appsroot/\" home_dir/.bashrc",
+      "RUN    mkdir -p home_dir/.ssh",
+      "RUN    chmod 700 home_dir/.ssh",
+      "UPLOAD /tmp/users/username/authorized_keys to home_dir/.ssh/authorized_keys",
+      "RUN    chmod 600 home_dir/.ssh/authorized_keys"
     ]
-    AppConf.commands.first.local.should == '/tmp/users/username/bashrc'
-    AppConf.commands.first.remote.should == 'home_dir/.bashrc'
-    AppConf.commands[5].local.should == '/tmp/users/username/authorized_keys'
-    AppConf.commands[5].remote.should == 'home_dir/.ssh/authorized_keys'
   end
 end
 

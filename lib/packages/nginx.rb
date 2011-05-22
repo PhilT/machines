@@ -1,11 +1,10 @@
 task 'Download and install Nginx' do
-  run download AppConf.nginx.url
-  run extract "nginx-#{AppConf.nginx.version}.tar.gz"
+  run extract AppConf.nginx.url
   sudo add_init_d 'nginx'
-  run template 'nginx/nginx.conf.erb', :to => File.join(AppConf.nginx.path, 'conf', 'nginx.conf')
+  run template File.join(AppConf.project_dir, 'nginx', 'nginx.conf.erb'), :to => File.join(AppConf.nginx.path, 'conf', 'nginx.conf')
 end
 
-task 'Upload htpasswd file'
+task 'Upload htpasswd file' do
   htpasswd_file = File.join(AppConf.nginx.path, 'conf', 'htpasswd')
   sudo upload 'nginx/conf/htpasswd', htpasswd_file
   sudo chmod 400, htpasswd_file

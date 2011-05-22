@@ -37,10 +37,11 @@ module Machines
     end
 
     # Queue up command(s) to run remotely
-    # @param [Array] *commands Command(s) to run
+    # @param [Array] *commands Command(s) to run.
+    # If first command is a string it creates a Command object using the first two strings as command and check
     def run *commands
       commands = handle_strings(commands)
-      AppConf.commands += commands
+      AppConf.commands += commands.flatten
     end
 
     def handle_strings commands

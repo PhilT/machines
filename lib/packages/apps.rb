@@ -4,7 +4,7 @@
 def generate_template_for(app, enable_ssl = false)
   app.enable_ssl = enable_ssl
   server_settings = AppConf[AppConf.webserver]
-  path = File.join(server_settings.path, server_settings.servers_dir, "#{app.name}_#{enable_ssl ? 'ssl' : ''}.conf")
+  path = File.join(server_settings.path, server_settings.servers_dir, "#{app.name}#{enable_ssl ? '_ssl' : ''}.conf")
   template File.join(AppConf.project_dir, AppConf.webserver, 'app_server.conf.erb'), :settings => app, :to => path
 end
 

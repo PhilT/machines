@@ -32,6 +32,3 @@ git-remove-history() {
   git filter-branch --index-filter 'git rm --cached --ignore-unmatch $1' HEAD && git push --force
 }
 
-# Initialize RVM
-if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
-

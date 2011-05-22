@@ -24,7 +24,7 @@ task 'Ask some questions' do
     AppConf.hostname = AppConf.environment
   end
 
-  only :environments => :development do
+  only :environment => :development do
     AppConf.hostname = enter_hostname
   end
 
@@ -33,6 +33,6 @@ task 'Ask some questions' do
     AppConf.db.pass = enter_password('database root')
   end
 
-  thread.join
+  thread.join if thread
 end
 

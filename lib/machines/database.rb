@@ -7,7 +7,7 @@ module Machines
     def write_database_yml options
       required_options options, [:to, :for]
       app = options[:for]
-      yml = {AppConf.environment => {
+      yml = {AppConf.environment.to_s => {
         'adapter' => 'mysql',
         'database' => app,
         'username' => app,

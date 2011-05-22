@@ -38,7 +38,7 @@ only :users => 'phil' do
 end
 
 # Will only be executed for development machines
-only :environments => :development do
+only :environment => :development do
   package :dev_extras
 end
 
