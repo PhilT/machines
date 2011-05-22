@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Package: base' do
+describe 'packages/base' do
   include Core
   include FileOperations
   include Configuration
@@ -9,16 +9,13 @@ describe 'Package: base' do
 
   before(:each) do
     FakeFS.deactivate!
-    AppConf.hostname = 'hostname'
-    AppConf.from_hash(:user => {:name => 'username', :home => 'home_dir'}, :ruby => {:version => 'ruby_version'})
-    AppConf.from_hash(:nginx => {:path => 'nginx_path', :servers_dir => 'servers'})
     @package = File.read(File.join(AppConf.application_dir, 'packages/base.rb'))
-    AppConf.log = mock 'Logger'
-    AppConf.log.stub(:puts)
     FakeFS.activate!
+    AppConf.hostname = 'hostname'
+    AppConf.log = mock 'Logger', :puts => nil
   end
 
-  it 'run base package' do
+  it 'adds the following commands' do
     eval @package
     AppConf.commands.map(&:command).should == ["ln -sf /etc/localtime /usr/share/zoneinfo/",
       "sed -i \"s/UTC=yes/UTC=no/\" /etc/default/rcS",
