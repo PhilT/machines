@@ -38,6 +38,6 @@ http {
   passenger_max_pool_size 8;
   passenger_pool_idle_time 3600;
 
-  include <%= AppConf.nginx.path %>/app_servers/*.conf;
+  include <%= File.join(AppConf.nginx.path, AppConf.nginx.servers_dir, '*.conf') %>;
 }
 

@@ -22,8 +22,8 @@ Goals
 
 * To make a simple, transparent build tool
 * Get going quickly with the defaults
-  * Ubuntu x64 11.04 (when released)
-  * Nginx 8
+  * Tested on Ubuntu x64 11.04
+  * Nginx 1.0.2
   * RVM (latest)
   * Passenger 3
   * Ruby 1.9.2
@@ -32,7 +32,7 @@ Goals
   * Planned
     * Apache, Monit, Munin, Sphinx, logrotate, Mail
 * Easily override the defaults with configuration options and custom ruby
-* Nice dev extras such as Firefox and Chrome packages making it easier to keep up-to-date with the latest version
+* Nice dev extras such as Firefox and Chrome packages making it easier to keep up-to-date with the latest versions
 
 
 I believe that development, staging, and production environments should match if not be as close as possible.
@@ -203,8 +203,8 @@ What's happening under the hood
 
 ssh uses the specified user and then sudo is added to commands that require it.
 When sudo is needed for file uploads. The file is uploaded to /tmp then sudo cp'd to the destination.
-When `package` is called in the `Machinesfile` that file is loaded either from the local, custom packages
-directory or from the Machines packages.
+When `package` is called in the `Machinesfile` that file is loaded either from the projects packages directory,
+or from the Machines packages.
 
 Limitations
 ---------------------------------------
@@ -215,7 +215,7 @@ Limitations
   example, app settings allow different servers to have different apps setup on them. This however has
   not yet been tested.
 * We are currently focused on Ruby 1.9.2, Rails 3 and Passenger 3 deployments as our projects have all
-  been upgraded. If there is significant interest we may look at supported 1.8.7 and Rails 2.
+  been upgraded. If there is significant interest we may look at supporting 1.8.7 and Rails 2.
 
 Warnings
 ---------------------------------------
@@ -229,12 +229,12 @@ You might see one of the following while upgrading/installing packages:
 
 These are known issues and nothing to worry about.
 
-Note on Patches/Pull Requests
+Development, Patches, Pull Requests
 ---------------------------------------
 
 This project uses *watchr* for continuous testing.
 It's fast and very configurable. The script approximates autotest behaviour.
-It've also added an option to only run the spec/code being worked on.
+It've also added an option to only run the spec/code being worked on (check the .watchr file for details)
     watchr .watchr
 
 * Fork the project.
@@ -242,8 +242,8 @@ It've also added an option to only run the spec/code being worked on.
 * Commit, do not mess with rakefile, version, or history.
 * Send me a pull request. Please use topic branches.
 
-The packages are not currently tested but most will be covered by the integration test being written.
-Feel free to add/enhancement packages and submit pull requests.
+Currently adding package tests and integration test.
+Feel free to add/enhance packages and submit pull requests.
 
 References
 ---------------------------------------

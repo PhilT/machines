@@ -51,7 +51,7 @@ module Machines
     # @option options [AppBuilder] :settings Contains the settings as OpenStruct method calls for calling from the template
     # @option options [String] :to File to write to
     def template erb_path, options
-      erb = ERB.new(File.open(erb_path))
+      erb = ERB.new(File.read(erb_path))
       binding = options[:settings] ? options[:settings].get_binding : nil
       write erb.result(binding), options
     end
