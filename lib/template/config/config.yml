@@ -15,9 +15,10 @@ webserver: nginx
 database:
   adapter: mysql
   encoding: utf8
+  replication_pass: tzIrh2eKjH
 
 gmate:
-  git://github.com/PhilT/gmate.git
+  git://github.com/gmate/gmate.git
 
 nginx:
   version: 1.0.2

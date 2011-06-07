@@ -25,7 +25,7 @@ describe 'AppSettings' do
     it 'loads the app settings for selected apps' do
       YAML.stub(:load).and_return(@settings)
       load_app_settings ['app']
-      AppConf.apps.should == {'app' => AppBuilder.new(:name => 'app', :path => '/home/user/path', :setting => 'setting')}
+      AppConf.apps.should == {'app' => AppBuilder.new(:name => 'app', :path => '/home/user/path', :setting => 'setting', :db_password => 'app')}
     end
 
     it 'handles ssl settings' do
@@ -39,7 +39,8 @@ describe 'AppSettings' do
           :setting => 'setting',
           :ssl_key => 'signed.key',
           :ssl_crt => 'signed.crt',
-          :ssl => 'signed'
+          :ssl => 'signed',
+          :db_password => 'app'
         )
       }
     end

@@ -12,6 +12,7 @@ module Machines
       yaml = YAML.load(File.open(path))
       yaml.select{|name| apps.include?(name) }.each do |app_name, settings|
         environment = settings[AppConf.environment.to_s] || raise(ArgumentError, 'No setttings for specified environment')
+        environment['db_password'] ||= app_name
         settings['name'] = app_name
         settings['path'] = File.join(AppConf.appsroot, settings['path'])
         if environment['ssl']

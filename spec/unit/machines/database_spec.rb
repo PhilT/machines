@@ -12,8 +12,7 @@ describe 'Database' do
       AppConf.environment = 'test'
       AppConf.db = AppConf.new
       AppConf.db.address = 'dbhost'
-      AppConf.apps = {'app' => AppBuilder.new(:password => 'password')}
-      AppConf.from_hash(:apps => {:app => {:password => 'password'}})
+      AppConf.apps = {'app' => AppBuilder.new(:db_password => 'password')}
 
       subject = write_database_yml :for => 'app', :to => 'dir'
       command = subject.command

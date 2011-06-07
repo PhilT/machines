@@ -6,9 +6,11 @@ application:
     server_name: staging.example.com *.staging.example.com
     ssl: selfsigned
     basic_auth: true
+    db_password: s126A6ljU2
   production:
     server_name: example.com *.example.com
     ssl: example.com
+    db_password: jOPM534rCJ
 
 wiki:
   path: velocity
@@ -16,6 +18,8 @@ wiki:
     server_name: wiki.example.local
   staging:
     server_name: wiki.staging.example.com
+    db_password: lcpPQSHEs9
   production:
     server_name: wiki.example.com
+    db_password: tnVlsFw9GV
 

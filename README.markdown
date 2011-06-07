@@ -28,9 +28,9 @@ Goals
   * Passenger 3
   * Ruby 1.9.2
   * Ruby on Rails 3
-  * MySQL 5
+  * MySQL 5 including replication
   * Planned
-    * Apache, Monit, Munin, Sphinx, logrotate, Mail
+    * Apache, Monit, Munin, Sphinx, logrotate, Mail, DB backups
 * Easily override the defaults with configuration options and custom ruby
 * Nice dev extras such as Firefox and Chrome packages making it easier to keep up-to-date with the latest versions
 
