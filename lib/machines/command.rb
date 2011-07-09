@@ -12,7 +12,6 @@ module Machines
     end
 
     def initialize(command, check)
-      @line = machinesfile_line
       @command = command
       @check = check
       @sudo = false
@@ -44,19 +43,6 @@ module Machines
       result = check_result(@@ssh.exec!(@check))
       log result, :color => color_for(result)
       put info, :progress => AppConf.commands.index(self), :check => result != 'CHECK FAILED'
-    end
-
-  private
-    # Extracts the line in the machines file this relates to
-    # Used internally
-    def machinesfile_line
-      line = ''
-      caller.each do |methods|
-        line = methods.scan(/\(eval\):([0-9]+)/).join
-        break unless line.empty?
-      end
-      raise ArgumentError, "MISSING line: #{line}" unless line
-      line
     end
   end
 end
