@@ -1,4 +1,12 @@
 module EndToEndSteps
+  def start_vm
+    system('VBoxManage startvm machinesvm --type headless')
+  end
+
+  def stop_vm
+    system('VBoxManage controlvm machinesvm poweroff')
+  end
+
   def ensure_vm_exists_and_can_connect
     response = ''
     connection_error = nil
@@ -18,7 +26,7 @@ module EndToEndSteps
     end
     if connection_error
       puts $terminal.color("A VM is required to run this test. Make sure /etc/hosts has an entry", :bold, :red)
-      puts $terminal.color("for testvm and a user exists on it called 'user' with 'password'", :bold, :red)
+      puts $terminal.color("for machinesvm and a user exists on it called 'user' with 'password'", :bold, :red)
       puts $terminal.color("Error: #{connection_error.message}", :red)
     end
     response.should include 'user'

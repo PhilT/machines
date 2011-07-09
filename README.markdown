@@ -179,10 +179,10 @@ Setting up the test Machines VM
 https://help.ubuntu.com/community/Installation/LowMemorySystems
 
 * Grab the Minimal CD Image from https://help.ubuntu.com/community/Installation/MinimalCD (I tend to go for x64)
-* For the VM I use VirtualBox.
-  * Create a new VM with the name of machinesvm (used in the rake tasks)
+* For virtualization software I use VirtualBox.
+  * Create a new VM with the name of machinesvm (used in the rake tasks and tests)
   * Select Ubuntu or Ubuntu x64 as the OS (depending on your chosen image)
-  * Go to Network and set Bridged Adapter
+  * Go to Network and add a Bridged Adapter and a Host-only Adapter
   * Go to Storage, select the Empty CD, click the CD icon on the far right and find the image
   * I also turn off the Audio device
 * Start the VM, select Command line Install and follow the prompts
@@ -192,9 +192,9 @@ https://help.ubuntu.com/community/Installation/LowMemorySystems
     sudo sh -c 'echo blacklist i2c_piix4 >> /etc/modprobe.d/blacklist.conf'
 * And add openssh
     sudo apt-get -y install openssh-server && ifconfig
-* On your local machine (change VM_IP_ADDRESS to the ip address of the VM)
+* On your local machine add an entry to the hosts file (change VM_IP_ADDRESS to the ip address of the VM)
     sudo sh -c 'echo VM_IP_ADDRESS machinesvm >> /etc/hosts'
-* What I also do at this point is take a snapshot of the VM
+* Finally, take a snapshot of the VM
 
 There are also some rake tasks for starting and stopping the vm.
 

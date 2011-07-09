@@ -22,7 +22,13 @@ describe 'End to End Test' do
     $output = MockStdout.new
     $terminal = HighLine.new($input, $output)
 
-    ensure_vm_exists_and_can_connect
+    start_vm
+
+    begin
+      ensure_vm_exists_and_can_connect
+    rescue
+      stop_vm
+    end
   end
 
   after do
