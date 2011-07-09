@@ -19,9 +19,6 @@ describe 'packages/firefox' do
     AppConf.commands.map(&:info).should == [
       "SUDO   add-apt-repository ppa:mozillateam/firefox-stable",
       "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y update",
-      "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y upgrade",
-      "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y autoremove",
-      "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y autoclean",
       "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install firefox"
     ]
   end

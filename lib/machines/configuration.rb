@@ -36,6 +36,7 @@ module Machines
         type = types[value.class]
         raise 'Invalid type for configure' unless type
         value = value.to_json if value.is_a?(Array)
+        value = %("#{value}") if type == 'string'
         Command.new("gconftool-2 --set \"#{key}\" --type #{type} #{value}", nil)
       end
     end

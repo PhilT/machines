@@ -31,8 +31,12 @@ module Machines
       Command.new("add-apt-repository ppa:#{name}", "apt-key list | grep -i #{key_name} #{echo_result}")
     end
 
-    # Update, upgrade, autoremove, autoclean apt packages
     def update
+      Command.new("#{APTGET_QUIET} update", nil)
+    end
+
+    # Update, upgrade, autoremove, autoclean apt packages
+    def upgrade
       %w(update upgrade autoremove autoclean).map do |command|
         Command.new("#{APTGET_QUIET} #{command}", nil)
       end

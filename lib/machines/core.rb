@@ -2,9 +2,14 @@ module Machines
   module Core
     # Executes a task in a package
     # Provides a way to describe parts of a package and log the status
-    def task description, &block
-      log description, :color => :info
+    def task name, description = nil, &block
+      log description || name, :color => :info
+      store_task name, &block if name.is_a?(Symbol)
       yield
+    end
+
+    def store_task name, &block
+      AppConf.tasks[name] = block
     end
 
     # Only executes the code if AppConf parameters match what is given in args

@@ -1,13 +1,10 @@
 module Machines
   module Commandline
     def start(command, option)
-      if %w(htpasswd new check dryrun build).include?(command)
+      if %w(htpasswd new check dryrun build exec).include?(command)
         AppConf.action = command
-        if command == 'new'
-          send 'generate', option
-        else
-          send command
-        end
+        command = 'generate' if command == 'new'
+        send command, option
       else
         help
       end
@@ -22,6 +19,7 @@ COMMAND can be:
   check     - Checks Machinesfile for syntax issues
   dryrun    - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them
   build     - Asks some questions then builds your chosen machine
+  exec      - Runs a single named task
 HELP
     end
 
@@ -34,7 +32,7 @@ HELP
       password
     end
 
-    def htpasswd
+    def htpasswd ignored = nil
       conf_dir = File.join(AppConf.project_dir, AppConf.webserver, 'conf')
       path = File.join(conf_dir, 'htpasswd')
       say "Generate BasicAuth password and add to #{path}"

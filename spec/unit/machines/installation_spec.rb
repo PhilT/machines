@@ -32,8 +32,15 @@ describe 'Installation' do
   end
 
   describe 'update' do
-    it 'instaniates a command to upgrade apt' do
+    it 'instaniates a command to update apt' do
       subject = update
+      subject.command.should == 'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y update'
+    end
+  end
+
+  describe 'upgrade' do
+    it 'instaniates a command to upgrade apt' do
+      subject = upgrade
       subject.map(&:command).should == [
         'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y update',
         'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y upgrade',

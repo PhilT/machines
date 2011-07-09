@@ -2,6 +2,7 @@ task 'Initialize some AppConf settings' do
   AppConf.passwords = []
   AppConf.commands = []
   AppConf.apps = {}
+  AppConf.tasks = {}
   AppConf.from_hash(:user => {})
   AppConf.from_hash(:db => {})
   AppConf.load(File.join(AppConf.project_dir, 'config/config.yml'))

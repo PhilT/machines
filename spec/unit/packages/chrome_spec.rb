@@ -16,14 +16,11 @@ describe 'packages/chrome' do
 
   it 'adds the following commands' do
     eval @package
-    AppConf.commands.map(&:command).should == [
-      "echo deb http://dl.google.com/linux/deb/ stable main >> /etc/apt/sources.list",
-      "wget -q https://dl-ssl.google.com/linux/linux_signing_key.pub -O - | apt-key add -",
-      "export DEBIAN_FRONTEND=noninteractive && apt-get -q -y update",
-      "export DEBIAN_FRONTEND=noninteractive && apt-get -q -y upgrade",
-      "export DEBIAN_FRONTEND=noninteractive && apt-get -q -y autoremove",
-      "export DEBIAN_FRONTEND=noninteractive && apt-get -q -y autoclean",
-      "export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install google-chrome-stable"
+    AppConf.commands.map(&:info).should == [
+      "SUDO   echo deb http://dl.google.com/linux/deb/ stable main >> /etc/apt/sources.list",
+      "SUDO   wget -q https://dl-ssl.google.com/linux/linux_signing_key.pub -O - | apt-key add -",
+      "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y update",
+      "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install google-chrome-stable"
     ]
   end
 end

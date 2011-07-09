@@ -14,6 +14,7 @@ RSpec.configure do |c|
     AppConf.clear
     AppConf.passwords = []
     AppConf.commands = []
+    AppConf.tasks = {}
     AppConf.from_hash(:user => {})
     AppConf.application_dir = application_dir
     AppConf.project_dir = '/tmp'

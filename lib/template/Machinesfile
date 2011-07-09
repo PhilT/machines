@@ -42,3 +42,6 @@ only :environment => :development do
   package :dev_extras
 end
 
+
+sudo upgrade
+
