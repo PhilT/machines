@@ -1,10 +1,17 @@
-module EndToEndSteps
+module CommonSteps
   def start_vm
+    puts $terminal.color("Restoring snapshot", :blue)
+    system('VBoxManage snapshot machinesvm restore Clean')
+
+    puts $terminal.color("Starting VM", :blue)
     system('VBoxManage startvm machinesvm --type headless')
   end
 
   def stop_vm
+    return unless `VBoxManage showvminfo machinesvm | grep State` =~ /running/
+    puts $terminal.color("Stopping VM", :blue)
     system('VBoxManage controlvm machinesvm poweroff')
+    sleep 3
   end
 
   def ensure_vm_exists_and_can_connect
@@ -21,7 +28,7 @@ module EndToEndSteps
         break
       rescue => e
         connection_error = e
-        sleep 5
+        sleep 3
       end
     end
     if connection_error
@@ -41,30 +48,6 @@ module EndToEndSteps
     files.each do |name|
       File.should exist File.join(AppConf.project_dir, name)
     end
-  end
-
-  def generates_htpasswd_to_limit_access_to_staging
-    $input.answers = ['user', 'pass', 'p1ass', 'pass', 'pass']
-
-    AppConf.webserver = 'nginx'
-    machines = Machines::Base.new
-
-    machines.start('htpasswd', nil)
-    $output.should == <<-THIS
-Generate BasicAuth password and add to nginx/conf/htpasswd
-Username:
-Enter a new password:
-Confirm the password:
-Passwords do not match, please re-enter
-Enter a new password:
-Confirm the password:
-Password encrypted and added to nginx/conf/htpasswd
-THIS
-    File.read("#{AppConf.project_dir}/nginx/conf/htpasswd").should =~ /user:.{13}/
-  end
-
-  def checks_machinesfile
-
   end
 end
 

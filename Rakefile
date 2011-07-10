@@ -3,7 +3,7 @@ require 'yard'
 require 'rspec/core/rake_task'
 require 'highline/import'
 
-task :default => [:coverage, :yard, :install] do
+task :default => [:coverage, :integration, :yard, :install] do
   puts '', $terminal.color('Done.', :bold, :blue)
 end
 
@@ -17,7 +17,11 @@ task :coverage do
   ENV['COVERAGE'] = 'true'
   puts '', $terminal.color('Running specs with code coverage', :bold, :blue)
   Rake::Task['spec'].invoke
+  ENV['COVERAGE'] = nil
+end
 
+desc 'Run integration specs'
+task :integration do
   puts '', $terminal.color('Running integration specs', :bold, :blue)
   system('rspec spec/integration')
 end

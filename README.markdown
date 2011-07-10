@@ -5,17 +5,18 @@ Setup Ubuntu development and server **Machines** locally or on Amazon EC2 for ho
 
 Run commands like:
 
-    sudo install %w(build-essential zlib1g-dev libpcre3-dev)
-    sudo write "127.0.1.1\t#{AppConf.hostname}", :to => '/etc/hosts'
-    run download AppConf.nginx.url
-    run template 'nginx/nginx.conf.erb', :to => File.join(AppConf.nginx.path, 'conf', 'nginx.conf')
+    sudo install %w(build-essential zlib1g-dev libpcre3-dev) # Install apt packages
+    sudo write "127.0.1.1\t#{AppConf.hostname}", :to => '/etc/hosts' # Write a file
+    sudo append "192.168.1.2\tserver", :to => '/etc/hosts' # Append to a file
+    run download AppConf.nginx.url # Download a file
+    run template 'nginx/nginx.conf.erb', :to => File.join(AppConf.nginx.path, 'conf', 'nginx.conf') # Write a file from an ERB template
 
 
 
 Status
 ---------------------------------------
 
-It is currently under development but we are very close to rolling out a beta.
+It is currently under development but I am very close to rolling out a beta.
 
 Goals
 ---------------------------------------
@@ -194,7 +195,7 @@ https://help.ubuntu.com/community/Installation/LowMemorySystems
     sudo apt-get -y install openssh-server && ifconfig
 * On your local machine add an entry to the hosts file (change VM_IP_ADDRESS to the ip address of the VM)
     sudo sh -c 'echo VM_IP_ADDRESS machinesvm >> /etc/hosts'
-* Finally, take a snapshot of the VM
+* Finally, take a snapshot of the VM and name it 'Clean'. This is used to restore the VM to a known state after each test run
 
 There are also some rake tasks for starting and stopping the vm.
 
