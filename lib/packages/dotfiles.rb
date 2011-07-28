@@ -1,14 +1,15 @@
 username = AppConf.user.name
 userhome = AppConf.user.home
 
-task "Upload files in users/name/#{username}/, prepend a dot and substitute some bashrc vars" do
-  AppConf.dotfiles.each do |file|
-    source = File.join(AppConf.project_dir, 'users', username, file)
-    destination = File.join(userhome, ".#{file}")
+task "Upload files in users/name/#{username}/dotfiles, prepend a dot and substitute some bashrc vars" do
+
+  dotfiles_dir = File.join(AppConf.project_dir, 'users', username, 'dotfiles')
+  Dir[File.join(dotfiles_dir, '*')].each do |source|
+    destination = File.join(userhome, ".#{File.basename(source)}")
     run upload source, destination if File.exists?(source)
   end
 
-  if File.exists?(File.join(AppConf.project_dir, 'users', username, 'bashrc'))
+  if File.exists?(File.join(dotfiles_dir, 'bashrc'))
     run replace 'export RAILS_ENV=', :with => "export RAILS_ENV=#{AppConf.environment}", :in => File.join(userhome, '.bashrc')
     run replace 'export CDPATH=', :with => "export CDPATH=#{AppConf.user.appsroot}", :in => File.join(userhome, '.bashrc')
   end

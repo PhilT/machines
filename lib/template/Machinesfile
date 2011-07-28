@@ -14,7 +14,7 @@ package :base
 
 # Installed on machines that have the app role
 only :roles => :app do
-  install %w(ffmpeg libmagick9-dev)
+  package :webapps
   package :rvm
   package :ruby
   package :nginx
@@ -40,6 +40,9 @@ end
 # Will only be executed for development machines
 only :environment => :development do
   package :dev_extras
+  package :openbox
+  package :docky
+  package :apps
 end
 
 

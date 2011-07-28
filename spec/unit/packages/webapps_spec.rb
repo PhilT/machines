@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'packages/apps' do
+describe 'packages/webapps' do
   include Core
   include FileOperations
   include AppSettings
@@ -9,7 +9,7 @@ describe 'packages/apps' do
 
   before(:each) do
     FakeFS.deactivate!
-    @package = File.read(File.join(AppConf.application_dir, 'packages/apps.rb'))
+    @package = File.read(File.join(AppConf.application_dir, 'packages/webapps.rb'))
     FakeFS.activate!
 
     AppConf.from_hash(:user => {:name => 'username', :home => 'home_dir'}, :ruby => {:version => 'ruby_version'})

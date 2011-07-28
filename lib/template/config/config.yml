@@ -7,9 +7,6 @@ ec2:
   private_key_file: certificates/amazon.key
   security_group: eu-public
 
-dotfiles:
-  - bashrc
-  - gitconfig
 timezone: GB
 webserver: nginx
 database:
