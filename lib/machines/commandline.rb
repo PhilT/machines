@@ -4,7 +4,11 @@ module Machines
       if %w(htpasswd new check dryrun build exec).include?(command)
         AppConf.action = command
         command = 'generate' if command == 'new'
-        send command, option
+        if option
+          send command, option
+        else
+          send command
+        end
       else
         help
       end
@@ -47,7 +51,9 @@ HELP
 
     def generate dir
       AppConf.project_dir = File.join(AppConf.project_dir, dir) if dir
+      return say 'Directory already exists' if File.exists? AppConf.project_dir
       FileUtils.cp_r(File.join(AppConf.application_dir, 'template'), AppConf.project_dir)
+      say "Project created at #{AppConf.project_dir}"
     end
   end
 end

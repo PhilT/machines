@@ -18,7 +18,7 @@ describe 'CommandLine' do
     end
 
     it 'calls generate without directory' do
-      should_receive(:generate).with(nil)
+      should_receive(:generate).with(no_args)
       start 'new', nil
     end
 
@@ -74,6 +74,13 @@ describe 'CommandLine' do
 
     it 'copies the template within dir' do
       FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template", AppConf.project_dir + '/dir')
+      should_receive(:say).with('Project created at /tmp/dir')
+      generate 'dir'
+    end
+
+    it 'displays message and terminates when directory exists' do
+      FileUtils.mkdir_p('/tmp/dir')
+      should_receive(:say).with('Directory already exists')
       generate 'dir'
     end
   end
