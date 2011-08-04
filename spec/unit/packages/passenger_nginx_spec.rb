@@ -8,15 +8,13 @@ describe 'packages/passenger_nginx' do
   include Machines::Logger
 
   before(:each) do
-    FakeFS.deactivate!
-    @package = File.read(File.join(AppConf.application_dir, 'packages/passenger_nginx.rb'))
-    FakeFS.activate!
+    load_package('passenger_nginx')
     AppConf.log = mock 'Logger', :puts => nil
-    AppConf.from_hash(:nginx => {:destination => 'nginx_dest', :version => '1.0.2'})
+    AppConf.from_hash(:nginx => {:path => 'nginx_dest', :version => '1.0.2'})
   end
 
   it 'adds the following commands' do
-    eval @package
+    eval_package
     AppConf.commands.map(&:info).should == [
       "RUN    passenger-install-nginx-module --auto --prefix=nginx_dest --nginx-source-dir=/tmp/nginx-1.0.2 --extra-configure-flags=--with-http_ssl_module"
     ]

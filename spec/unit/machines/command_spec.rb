@@ -15,13 +15,22 @@ describe Command do
   describe 'run' do
     before(:each) do
       AppConf.from_hash(:sudo => {})
+      HighLine.use_color = false
+      @log = MockStdout.new
+      AppConf.log = @log
+      AppConf.log_only = false
+    end
+
+    it 'does not execute command when logging only' do
+      mock_ssh = mock Net::SSH
+      mock_ssh.should_not_receive :exec!
+      Command.scp = mock Net::SCP, :session => mock_ssh
+      AppConf.log_only = true
+      subject.run
     end
 
     it 'wraps command execution in logging' do
       AppConf.commands << subject
-      HighLine.use_color = false
-      log = MockStdout.new
-      AppConf.log = log
 
       mock_ssh = mock Net::SSH
       mock_ssh.stub(:exec!).with('export TERM=linux && command').and_return "result of command"
@@ -30,7 +39,7 @@ describe Command do
 
       subject.run
 
-      log.buffer.should == <<-LOG
+      @log.buffer.should == <<-LOG
 RUN    command
 result of command
 CHECK PASSED
@@ -39,11 +48,7 @@ LOG
     end
 
     it 'wraps command execution in sudo with a password' do
-      HighLine.use_color = false
-      log = MockStdout.new
-      AppConf.log = log
       AppConf.user.pass = 'userpass'
-      AppConf.sudo.requires_password = true
 
       mock_ssh = mock Net::SSH
       mock_ssh.stub(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && command'").and_return "result of command"
@@ -53,7 +58,7 @@ LOG
       subject.use_sudo
       subject.run
 
-      log.buffer.should == <<-LOG
+      @log.buffer.should == <<-LOG
 SUDO   command
 result of command
 CHECK PASSED
@@ -62,12 +67,6 @@ LOG
     end
 
     it 'wraps command execution in sudo with no password' do
-      HighLine.use_color = false
-      log = MockStdout.new
-      AppConf.log = log
-      AppConf.user.pass = 'userpass'
-      AppConf.sudo.requires_password = false
-
       mock_ssh = mock Net::SSH
       mock_ssh.stub(:exec!).with("sudo -S sh -c 'export TERM=linux && command'").and_return "result of command"
       mock_ssh.stub(:exec!).with('check').and_return "CHECK PASSED"
@@ -76,7 +75,7 @@ LOG
       subject.use_sudo
       subject.run
 
-      log.buffer.should == <<-LOG
+      @log.buffer.should == <<-LOG
 SUDO   command
 result of command
 CHECK PASSED

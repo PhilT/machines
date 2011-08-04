@@ -11,9 +11,7 @@ describe 'packages/mysql' do
   include Machines::Logger
 
   before(:each) do
-    FakeFS.deactivate!
-    @package = File.read(File.join(AppConf.application_dir, 'packages/mysql.rb'))
-    FakeFS.activate!
+    load_package('mysql')
     AppConf.log = mock 'Logger', :puts => nil
     AppConf.from_hash(:db => {:address => 'DBIP', :pass => 'DBPASS'})
     AppConf.from_hash(:database => {:replication_pass => 'REPL_PASS'})
@@ -27,7 +25,7 @@ describe 'packages/mysql' do
     it 'installs MySQL' do
       AppConf.roles = :db
 
-      eval @package
+      eval_package
       AppConf.commands.map(&:info).should == [
         "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install libmysqld-dev",
         "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install mysql-server",
@@ -48,7 +46,7 @@ describe 'packages/mysql' do
         [:development, :test].each do |env|
           AppConf.commands = []
           AppConf.environment = env
-          eval @package
+          eval_package
           AppConf.commands.map(&:info).should == [
             %{RUN    echo "GRANT ALL ON *.* TO 'name'@'%' IDENTIFIED BY 'PASSWORD';" | mysql -u root -pDBPASS -h DBIP}
           ]
@@ -61,7 +59,7 @@ describe 'packages/mysql' do
         [:staging, :production].each do |env|
           AppConf.commands = []
           AppConf.environment = env
-          eval @package
+          eval_package
           AppConf.commands.map(&:info).should == [
             %{RUN    echo "GRANT ALL ON *.* TO 'name'@'%' IDENTIFIED BY 'PASSWORD';" | mysql -u root -pDBPASS -h DBIP}
           ]
@@ -73,7 +71,7 @@ describe 'packages/mysql' do
   context 'dbmaster role' do
     it 'sets up replication master' do
       AppConf.roles = :dbmaster
-      eval @package
+      eval_package
       AppConf.commands.map(&:info).should == [
         "UPLOAD mysql/dbmaster.cnf to upload#{@time.to_i}",
         "SUDO   cp upload#{@time.to_i} /etc/mysql/conf.d/dbmaster.cnf",
@@ -86,7 +84,7 @@ describe 'packages/mysql' do
   context 'dbslave role' do
     it 'sets up replication slave' do
       AppConf.roles = :dbslave
-      eval @package
+      eval_package
       AppConf.commands.map(&:info).should == [
         "UPLOAD mysql/dbslave.cnf to upload#{@time.to_i}",
         "SUDO   cp upload#{@time.to_i} /etc/mysql/conf.d/dbslave.cnf",

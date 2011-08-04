@@ -24,3 +24,14 @@ RSpec.configure do |c|
   end
 end
 
+def load_package name
+  FakeFS.deactivate!
+  @package_path = File.join(AppConf.application_dir, File.join('packages', "#{name}.rb"))
+  @package = File.read(@package_path)
+  FakeFS.activate!
+end
+
+def eval_package
+  eval @package, nil, @package_path
+end
+

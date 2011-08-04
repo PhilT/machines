@@ -8,15 +8,13 @@ describe 'packages/gmate' do
   include Machines::Logger
 
   before(:each) do
-    FakeFS.deactivate!
-    @package = File.read(File.join(AppConf.application_dir, 'packages/gmate.rb'))
-    FakeFS.activate!
+    load_package('gmate')
     AppConf.log = mock 'Logger', :puts => nil
     AppConf.appsroot = 'apps_root'
   end
 
   it 'adds the following commands' do
-    eval @package
+    eval_package
     AppConf.commands.map(&:info).should == [
       'SUDO   rm -rf apps_root/gmate && git clone git://github.com/gmate/gmate.git apps_root/gmate && cd apps_root/gmate && find . -maxdepth 1 -name install* | xargs -I xxx bash xxx -n',
       'RUN    gconftool-2 --set "/apps/gedit-2/plugins/active-plugins" --type list --list-type=string ["text_tools","smart_indent","align","rails_hotkeys","trailsave","gemini","rubyonrailsloader","gedit_openfiles","quickhighlightmode","completion","time","docinfo","filebrowser","snippets","spell","indent"]',

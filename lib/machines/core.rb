@@ -1,15 +1,25 @@
 module Machines
   module Core
-    # Executes a task in a package
-    # Provides a way to describe parts of a package and log the status
+    # If a block is given, store the task, describe it and log it
+    # If no block is given, sets commands to only those of the specified task so they can be run standalone
     def task name, description = nil, &block
-      log description || name, :color => :info
-      store_task name, &block if name.is_a?(Symbol)
-      yield
+      if block
+        store_task name, description, &block if name.is_a?(Symbol)
+        yield
+      else
+        AppConf.commands = []
+        AppConf.tasks[name][:block].call
+      end
     end
 
-    def store_task name, &block
-      AppConf.tasks[name] = block
+    def store_task name, description, &block
+      AppConf.tasks[name] = {:description => description, :block => block}
+    end
+
+    def list_tasks
+      AppConf.tasks.each do |name, task|
+        say "  #{"%-20s" % name}#{task[:description]}"
+      end
     end
 
     # Only executes the code if AppConf parameters match what is given in args
@@ -49,10 +59,6 @@ module Machines
       AppConf.commands += commands.flatten
     end
 
-    def handle_strings commands
-      commands.first.is_a?(String) ? [Command.new(commands[0], commands[1])] : commands
-    end
-
     # Queue up command(s) using SUDO to run remotely
     # @param [Array] *commands Command(s) to run
     def sudo *commands
@@ -87,6 +93,10 @@ module Machines
       required.each do |option|
         raise ArgumentError, "Missing option '#{option}'. Check trace for location of the problem." unless options[option]
       end
+    end
+
+    def handle_strings commands
+      commands.first.is_a?(String) ? [Command.new(commands[0], commands[1])] : commands
     end
   end
 end

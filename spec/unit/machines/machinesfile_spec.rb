@@ -5,30 +5,10 @@ describe 'Machinesfile' do
   include Machines::AppSettings
 
   describe 'machine' do
-    before(:each) do
-      AppConf.environment = nil
-      AppConf.environments = nil
-      AppConf.roles = nil
-    end
-
-    it 'sets environment, apps and role when it matches the configuration specified' do
-      should_receive(:load_app_settings).with(['app', 'another'])
-      AppConf.machine = 'machine'
-      AppConf.from_hash(:user => {:name => 'user'})
-
+    it 'adds the machine configuration to the machines hash' do
+      AppConf.machines = {}
       machine 'machine', :test, :apps => ['app', 'another'], :roles => [:role]
-
-      AppConf.environment.should == :test
-      AppConf.environments.should == :test
-      AppConf.roles.should == [:role]
-    end
-
-    it 'nothing set when it does not match specified configuration' do
-      AppConf.machine = 'something else'
-      machine 'config', :test, :apps => ['app', 'another'], :roles => [:role]
-      AppConf.environment.should be_nil
-      AppConf.environments.should be_nil
-      AppConf.roles.should be_nil
+      AppConf.machines['machine'].should == {:environment => :test, :apps => ['app', 'another'], :roles => [:role]}
     end
   end
 

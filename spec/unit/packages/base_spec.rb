@@ -8,15 +8,13 @@ describe 'packages/base' do
   include Machines::Logger
 
   before(:each) do
-    FakeFS.deactivate!
-    @package = File.read(File.join(AppConf.application_dir, 'packages/base.rb'))
-    FakeFS.activate!
+    load_package('base')
     AppConf.hostname = 'hostname'
     AppConf.log = mock 'Logger', :puts => nil
   end
 
   it 'adds the following commands' do
-    eval @package
+    eval_package
     AppConf.commands.map(&:command).should == ["ln -sf /etc/localtime /usr/share/zoneinfo/",
       "sed -i \"s/UTC=yes/UTC=no/\" /etc/default/rcS",
       "echo \"hostname\" > /etc/hostname",

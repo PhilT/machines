@@ -10,13 +10,37 @@ describe 'Configuration' do
   end
 
   describe 'task' do
-    it 'logs and yields' do
-      should_receive(:log).with('description', :color => :info)
+    it 'yields' do
       yielded = false
       task 'description' do
         yielded = true
       end
       yielded.should be_true
+    end
+
+    it 'stores task' do
+      block = Proc.new {}
+      task :name, 'description', &block
+      AppConf.tasks.should == {:name => {:description => 'description', :block => block}}
+    end
+
+    it 'sets commands to only those of the specified task' do
+      block_ran = false
+      block = Proc.new { block_ran = true }
+      AppConf.tasks[:name] = {:block => block}
+      task :name
+      block_ran.should be_true
+    end
+  end
+
+  describe 'list_tasks' do
+    it 'displays a list of tasks' do
+      task :name, 'description', &Proc.new {}
+      task :another, 'another description', &Proc.new {}
+      list_tasks
+      $output.should == '  name                description
+  another             another description
+'
     end
   end
 

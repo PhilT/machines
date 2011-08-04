@@ -8,14 +8,12 @@ describe 'packages/gnome' do
   include Machines::Logger
 
   before(:each) do
-    FakeFS.deactivate!
-    @package = File.read(File.join(AppConf.application_dir, 'packages/gnome.rb'))
-    FakeFS.activate!
+    load_package('gnome')
     AppConf.log = mock 'Logger', :puts => nil
   end
 
   it 'adds the following commands' do
-    eval @package
+    eval_package
     AppConf.commands.map(&:info).should == [
       'RUN    gconftool-2 --set "/apps/metacity/general/titlebar_font" --type string "Arial Bold 10"',
       'RUN    gconftool-2 --set "/apps/metacity/general/num_workspaces" --type int 1',

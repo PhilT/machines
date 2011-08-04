@@ -8,9 +8,7 @@ describe 'packages/webapps' do
   include Database
 
   before(:each) do
-    FakeFS.deactivate!
-    @package = File.read(File.join(AppConf.application_dir, 'packages/webapps.rb'))
-    FakeFS.activate!
+    load_package('webapps')
 
     AppConf.from_hash(:user => {:name => 'username', :home => 'home_dir'}, :ruby => {:version => 'ruby_version'})
     AppConf.apps = {'application' => AppBuilder.new('name' => 'application', 'path' => 'app_path', 'enable_ssl' => nil)}
@@ -23,7 +21,7 @@ describe 'packages/webapps' do
 
   it 'adds the following commands' do
     AppConf.environment = :production
-    eval @package
+    eval_package
     AppConf.commands.map(&:info).should == [
       "RUN    mkdir -p nginx_path/servers",
       "RUN    mkdir -p app_path/releases",
@@ -36,7 +34,7 @@ describe 'packages/webapps' do
 
   it "doesn't make app structure when target is a development machine" do
     AppConf.environment = :development
-    eval @package
+    eval_package
     AppConf.commands.map(&:info).should == [
       "RUN    mkdir -p nginx_path/servers",
       "RUN    echo \"the template\n\" > nginx_path/servers/application.conf",

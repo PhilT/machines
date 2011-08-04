@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe 'Machines' do
+  include Core
 
   subject {Machines::Base.new}
 
@@ -8,10 +9,22 @@ describe 'Machines' do
     File.stub(:read).and_return ''
     AppConf.ec2 = AppConf.new unless AppConf.ec2
     AppConf.ec2.use = nil
+    AppConf.log_only = false
+    FileUtils.mkdir_p '/tmp/config'
+    File.open('/tmp/config/config.yml', 'w') { |f| f.puts "timezone: GB" }
+  end
+
+  describe 'dryrun' do
+    it 'asks build to only log commands' do
+      subject.should_receive(:build)
+      subject.dryrun
+      AppConf.log_only.should be_true
+    end
   end
 
   describe 'build' do
     before(:each) do
+      subject.stub(:init)
       AppConf.target_address = 'target'
       AppConf.user.name = 'username'
       AppConf.user.pass = 'userpass'
@@ -23,7 +36,7 @@ describe 'Machines' do
       begin
         subject.build
       rescue LoadError => e
-        e.message.should == 'Machinesfile does not exist. Use `machines generate` to create a template.'
+        e.message.should == 'Machinesfile does not exist. Use `machines new <DIR>` to create a template.'
       end
     end
 
@@ -52,13 +65,33 @@ describe 'Machines' do
 
     it 'runs each command' do
       mock_command = mock Command
-      mock_scp = mock Net::SCP, :session => nil
       AppConf.commands = [mock_command]
+      mock_scp = mock Net::SCP, :session => nil
 
       Net::SCP.should_receive(:start).with('target', 'username', :password => 'userpass').and_yield(mock_scp)
       Command.should_receive(:scp=).with(mock_scp)
       mock_command.should_receive(:run)
 
+      subject.build
+    end
+
+    it 'runs single task when supplied' do
+      mock_scp = mock Net::SCP, :session => nil
+      Net::SCP.stub(:start).and_yield(mock_scp)
+      AppConf.commands = [mock(Command)]
+      AppConf.commands.first.should_not_receive(:run)
+      mock_command_from_task = Command.new 'command', 'check'
+      mock_command_from_task.should_receive(:run)
+      AppConf.tasks = { :task => {:block => Proc.new { run mock_command_from_task }} }
+
+      subject.build 'task'
+    end
+
+    it 'logs instead of SSHing and running commands' do
+      Net::SCP.should_not_receive(:start)
+      AppConf.commands = [mock(Command)]
+      AppConf.commands.first.should_receive(:run)
+      AppConf.log_only = true
       subject.build
     end
   end

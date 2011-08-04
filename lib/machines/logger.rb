@@ -41,7 +41,7 @@ module Machines
 
     # Stars out passwords in logs and screen
     def hide_passwords message
-      AppConf.passwords.any? ? message.gsub(/(#{(AppConf.passwords).join('|')})/, "*****") : message
+      AppConf.passwords && AppConf.passwords.any? ? message.gsub(/(#{(AppConf.passwords).join('|')})/, "*****") : message
     end
 
     def check_result result

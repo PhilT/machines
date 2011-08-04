@@ -18,12 +18,6 @@ RSpec.configure do |c|
     $input = MockStdin.new
     $output = MockStdout.new
     $terminal = HighLine.new($input, $output)
-    start_vm
-    ensure_vm_exists_and_can_connect
-  end
-
-  c.after(:each) do
-    stop_vm
   end
 end
 

@@ -9,9 +9,7 @@ describe 'packages/nginx' do
   include Machines::Logger
 
   before(:each) do
-    FakeFS.deactivate!
-    @package = File.read(File.join(AppConf.application_dir, 'packages/nginx.rb'))
-    FakeFS.activate!
+    load_package('nginx')
     AppConf.log = mock 'Logger', :puts => nil
     AppConf.from_hash(:nginx => {:version => '1.0.2', :path => 'nginx_path', :url => 'nginx_url'})
     FileUtils.mkdir_p '/tmp/nginx'
@@ -21,7 +19,7 @@ describe 'packages/nginx' do
   end
 
   it 'adds the following commands' do
-    eval @package
+    eval_package
     AppConf.commands.map(&:info).should == [
        "RUN    cd /tmp && wget nginx_url && tar -zxf nginx_url && rm nginx_url && cd -",
        "UPLOAD init.d/nginx to upload#{@time.to_i}",

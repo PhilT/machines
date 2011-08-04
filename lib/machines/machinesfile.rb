@@ -2,11 +2,7 @@ module Machines
   module Machinesfile
     # Add a machine configuration
     def machine name, environment, options = {:apps => [], :roles => []}
-      if name == AppConf.machine
-        AppConf.environment = AppConf.environments = environment
-        AppConf.roles = options[:roles]
-        load_app_settings(options[:apps])
-      end
+      AppConf.machines[name] = {:environment => environment, :apps => options[:apps], :roles => options[:roles]}
     end
 
     def package name
@@ -15,16 +11,16 @@ module Machines
       else
         error = "Cannot find custom or built-in package #{name}."
       end
-      load_package(AppConf.project_dir, name) ||
-        load_package(AppConf.application_dir, name) ||
-        raise(LoadError, error, caller)
+      package = load_package(AppConf.project_dir, name)
+      package ||= load_package(AppConf.application_dir, name)
+      package || raise(LoadError, error, caller)
     end
 
   private
     def load_package base_dir, name
       package_name = File.join(base_dir, 'packages', "#{name}.rb")
       if File.exists?(package_name)
-        eval(File.read(package_name))
+        eval(File.read(package_name), nil, "eval: #{package_name}")
         true
       else
         false

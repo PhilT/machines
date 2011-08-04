@@ -1,6 +1,6 @@
 module DevelopmentMachineSteps
-  def checks_machinesfile
-
+  def runs_build
+    $input.answers = %w()
   end
 end
 

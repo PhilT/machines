@@ -20,30 +20,61 @@ module Machines
   class Base
     Dir[File.join(File.dirname(__FILE__), 'machines/**/*.rb')].sort.each do |lib|
       require lib
-      module_or_class = eval(ActiveSupport::Inflector.camelize(File.basename(lib, '.rb')))
+      path = ActiveSupport::Inflector.camelize(File.basename(lib, '.rb'))
+      module_or_class = eval(path, nil, "eval: #{path}")
       include module_or_class unless module_or_class.is_a?(Class)
     end
 
+    def init
+      AppConf.machines = {}
+      AppConf.passwords = []
+      AppConf.commands = []
+      AppConf.apps = {}
+      AppConf.tasks = {}
+      AppConf.from_hash(:user => {})
+      AppConf.from_hash(:db => {})
+      AppConf.load(File.join(AppConf.project_dir, 'config/config.yml'))
+      AppConf.log_path = File.join(AppConf.project_dir, 'log', 'output.log')
+      FileUtils.mkdir_p File.dirname(AppConf.log_path)
+      AppConf.log = File.open(AppConf.log_path, 'w')
+    end
+
+    def dryrun
+      AppConf.log_only = true
+      build
+    end
+
     # Loads Machinesfile, opens an SCP connection and runs all commands and file uploads
-    def build
-      eval File.read(File.join(AppConf.project_dir, 'Machinesfile'))
+    def build task_name = nil
+      init
+      machinesfile = File.join(AppConf.project_dir, 'Machinesfile')
+      eval File.read(machinesfile), nil, "eval: #{machinesfile}"
+
+      task task_name.to_sym if task_name
 
       if AppConf.ec2.use
         username = 'ubuntu'
-        options = {:keys => [AppConf.ec2.private_key_file]}
+        scp_options = {:keys => [AppConf.ec2.private_key_file]}
       else
         username = AppConf.user.name
-        options = {:password => AppConf.user.pass}
+        scp_options = {:password => AppConf.user.pass}
       end
-      Net::SCP.start AppConf.target_address, username, options do |scp|
-        Command.scp = scp
+
+      if AppConf.log_only
         AppConf.commands.each do |command|
           command.run
+        end
+      else
+        Net::SCP.start AppConf.target_address, username, scp_options do |scp|
+          Command.scp = scp
+          AppConf.commands.each do |command|
+            command.run
+          end
         end
       end
     rescue LoadError => e
       if e.message =~ /Machinesfile/
-        raise LoadError, "Machinesfile does not exist. Use `machines generate` to create a template."
+        raise LoadError, "Machinesfile does not exist. Use `machines new <DIR>` to create a template."
       else
         raise
       end

@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe 'CommandLine' do
+  include Core
   include Commandline
 
   describe 'start' do

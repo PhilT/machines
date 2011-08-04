@@ -1,7 +1,7 @@
 module Machines
   module Commandline
     def start(command, option)
-      if %w(htpasswd new check dryrun build exec).include?(command)
+      if %w(htpasswd new check dryrun build).include?(command)
         AppConf.action = command
         command = 'generate' if command == 'new'
         if option
@@ -18,12 +18,12 @@ module Machines
       say <<-HELP
 machines COMMAND
 COMMAND can be:
-  htpasswd  - Asks for a username and password and generates basic auth in webserver/conf/htpasswd
-  new [DIR] - Generates an example machines project. Specify DIR to generate in directory
-  check     - Checks Machinesfile for syntax issues
-  dryrun    - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them
-  build     - Asks some questions then builds your chosen machine
-  exec      - Runs a single named task
+  htpasswd     - Asks for a username and password and generates basic auth in webserver/conf/htpasswd
+  new <DIR>    - Creates a directory called DIR and generates an example machines project in it
+  check        - Checks Machinesfile for syntax issues
+  dryrun       - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them
+  build        - Asks some questions then builds your chosen machine
+  build <TASK> - Builds a single named task
 HELP
     end
 

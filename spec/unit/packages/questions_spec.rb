@@ -1,68 +1,70 @@
 require 'spec_helper'
 
-describe 'packages/init' do
+describe 'packages/questions' do
   include Core
   include Machines::Logger
 
   before(:each) do
-    FakeFS.deactivate!
-    @package = File.read(File.join(AppConf.application_dir, 'packages/init.rb'))
-    FakeFS.activate!
+    load_package('questions')
     AppConf.log = mock 'Logger', :puts => nil
     AppConf.ec2 = AppConf.new
-    AppConf.from_hash(:user_name => {:appsroot => 'appsroot'})
+    AppConf.from_hash(:db => {})
+    AppConf.from_hash(:users => {:user_name => {:appsroot => 'appsroot'}})
     AppConf.stub(:load)
-    stub!(:choose_machine)
+    stub!(:choose_machine).and_return 'machine'
+    stub!(:load_app_settings)
     stub!(:start_ec2_instance?).and_return false
     stub!(:enter_target_address)
     stub!(:choose_user).and_return 'user_name'
     stub!(:enter_password)
   end
 
-  it 'loads AppConf with config.yml' do
-    AppConf.should_receive(:load).with('/tmp/config/config.yml')
-    eval @package
-  end
-
   it 'asks questions' do
-    should_receive(:choose_machine)
+    AppConf.machines = {'machine' => {:environment => :unknown, :apps => nil, :roles => nil}}
+    should_receive(:choose_machine).and_return 'machine'
     should_receive(:start_ec2_instance?).and_return false
     should_receive(:enter_target_address).twice
     should_receive(:choose_user).and_return 'user_name'
     should_receive(:enter_password).twice
-    eval @package
+    eval_package
+  end
+
+  it 'loads app settings' do
+    AppConf.machines = {'machine' => {:environment => :unknown, :apps => ['app1', 'app2'], :roles => nil}}
+    should_receive(:load_app_settings).with(['app1', 'app2'])
+    eval_package
   end
 
   describe 'staging' do
     it 'sets hostname to environment' do
-      AppConf.environments = AppConf.environment = :staging
-      eval @package
+      AppConf.machines = {'machine' => {:environment => :staging, :apps => nil, :roles => nil}}
+      eval_package
       AppConf.hostname.should == :staging
     end
   end
 
   describe 'production' do
     it 'sets hostname to environment' do
-      AppConf.environments = AppConf.environment = :production
-      eval @package
+      AppConf.machines = {'machine' => {:environment => :production, :apps => nil, :roles => nil}}
+      eval_package
       AppConf.hostname.should == :production
     end
   end
 
   describe 'development' do
     it 'asks for hostname' do
-      AppConf.environment = :development
+    AppConf.machines = {'machine' => {:environment => :development, :apps => nil, :roles => nil}}
       should_receive(:enter_hostname)
-      eval @package
+      eval_package
     end
   end
 
   describe 'db role' do
     it 'does not ask for db host or password' do
-      AppConf.roles = :db
+      AppConf.machines = {'machine' => {:environment => :staging, :apps => nil, :roles => :db}}
       should_receive(:enter_target_address).once
       should_receive(:enter_password).once
-      eval @package
+      eval_package
     end
   end
 end
