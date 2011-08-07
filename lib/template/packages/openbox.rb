@@ -9,15 +9,19 @@ task :openbox, 'Install Openbox window manager and associated fonts, themes, etc
     'pcmanfm',                   # Lightweight File manager
     'slock',                     # Locks screen. Unlocks when users password is entered - no prompt. Can be used with xautolock
     'ttf-ubuntu-font-family',    # The new ubuntu font
+    'ttf-mscorefonts-installer', # Microsoft fonts
     'xautolock',                 # Locks screen after idle
     'xcompmgr',                  # Compositing manager - Needed by docky for transparency
     'xorg',                      # Basic X Windows Graphical Interface needed by Openbox
   ]
 
+  # NOT NEEDED?
+  #sudo 'fc-cache -f', "fc-cache #{echo_result}" # Update font cache
+
   sudo append 'ALL   ALL=NOPASSWD:/sbin/shutdown', :to => '/etc/sudoers'
   sudo append 'ALL   ALL=NOPASSWD:/sbin/reboot', :to => '/etc/sudoers'
 
-  # CHECK IF THESE ARE NEEDED
+  # NOT NEEDED?
   #configure /desktop/gnome/font_rendering/antialiasing, rgba
   #configure /desktop/gnome/font_rendering/dpi --type float 96
   #configure /desktop/gnome/font_rendering/hinting, slight

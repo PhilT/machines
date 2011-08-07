@@ -46,7 +46,7 @@ module Machines
     # (See `extract` to just uncompress tar.gz or zip files)
     # @param [Symbol, String, Array] packages can be:
     #   Git URL::
-    #     Git clone URL and run `./install.sh`
+    #     Git clone URL and run `./install.sh` (or ./install)
     #   URL::
     #     Download from the specified URL and run `dpkg`
     #   Array or no URL string::
@@ -54,7 +54,7 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to Switch to specified directory to install. Used by Git installer
     # @option options [String] :options Add extra options to `./install.sh`
-    #     install 'git://github.com/wayneeseguin/rvm.git', :to => '/home/ubuntu/installer', :as => 'ubuntu', :options => '--auto' #=> Runs install.sh --auto in /home/ubuntu/installer folder
+    #     install 'git://github.com/gmate/gmate.git', :to => dir, :args => '-n' #=> git clones and runs install with -n
     #     install %w(build-essential libssl-dev mysql-server) #=> Installs apt packages
     #     install 'http://example.com/my_package.deb', :cleanup => true #=> Installs a deb using dpkg then removes the deb
     def install packages, options = {}

@@ -14,6 +14,23 @@ describe 'Machines' do
     File.open('/tmp/config/config.yml', 'w') { |f| f.puts "timezone: GB" }
   end
 
+  describe 'init' do
+    it 'initializes some AppConf settings and loads configs' do
+      subject.init
+      AppConf.machines.should == {}
+      AppConf.passwords.should == []
+      AppConf.commands.should == []
+      AppConf.apps.should == {}
+      AppConf.tasks.should == {}
+      AppConf.user.should be_a AppConf
+      AppConf.db.should be_a AppConf
+      AppConf.timezone.should == 'GB'
+      AppConf.log_path.should == '/tmp/log/output.log'
+      File.should exist '/tmp/log/output.log'
+      AppConf.log.should be_a File
+    end
+  end
+
   describe 'dryrun' do
     it 'asks build to only log commands' do
       subject.should_receive(:build)

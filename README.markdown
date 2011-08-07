@@ -6,11 +6,11 @@ Setup Ubuntu development and server **Machines** locally or on Amazon EC2 for ho
 Run commands like:
 
     sudo install %w(build-essential zlib1g-dev libpcre3-dev) # Install apt packages
+    sudo install 'git://github.com/gmate/gmate.git', :to => dir, :args => '-n' # Clone a Git repo and run the installer with -n
     sudo write "127.0.1.1\t#{AppConf.hostname}", :to => '/etc/hosts' # Write a file
     sudo append "192.168.1.2\tserver", :to => '/etc/hosts' # Append to a file
     run download AppConf.nginx.url # Download a file
     run template 'nginx/nginx.conf.erb', :to => File.join(AppConf.nginx.path, 'conf', 'nginx.conf') # Write a file from an ERB template
-
 
 
 Status
@@ -18,27 +18,43 @@ Status
 
 It is currently under development but I am very close to rolling out a beta.
 
-Goals
+`machines dryrun` is now running and generating the commands. Will be testing shortly (Aug 2011)
+
+
+Features
 ---------------------------------------
 
-* To make a simple, transparent build tool
-* Get going quickly with the defaults
-  * Tested on Ubuntu x64 11.04
-  * Nginx 1.0.2
-  * RVM (latest)
+* Working default template includes:
+  * Nginx 1
+  * RVM
   * Passenger 3
   * Ruby 1.9.2
   * Ruby on Rails 3
   * MySQL 5 including replication
+  * logrotate
+  * Git
+  * Openbox, docky, gEdit with gmate and VirtualBox for development
   * Planned
-    * Apache, Monit, Munin, Sphinx, logrotate, Mail, DB backups
+    * Monit, Munin, Sphinx, mail, DB backups
 * Easily override the defaults with configuration options and custom ruby
-* Nice dev extras such as Firefox and Chrome packages making it easier to keep up-to-date with the latest versions
+* Firefox and Chrome browser package repos added making it easier to keep up-to-date with the latest versions
+* Tested on Ubuntu i386/amd64 11.04 minimal install
 
+
+Motivation
+---------------------------------------
 
 I believe that development, staging, and production environments should match if not be as close as possible.
 I develop on Ubuntu Linux and so it felt natural to have Ubuntu as my server environment. I've spent many years
 building and configuring PCs and anything that can be done to automate the process is a good thing in my opinion.
+I also like to know what I've got installed so I have little clutter and an optimally running machine. I also like
+to reinstall development machines usually when upgrading Ubuntu and prefer a clean start.
+
+There are a few configuration management tools on the market such as Puppet and Chef but they try to cater for every
+possible server environment. They also do a very good job of configuration change management. Machines narrows the
+scope to a single platform and framework and does not try to manage change, instead opting for reinstallation. As
+cloud computing instances can be brought up on a whim, I find this an acceptable compromise to further aid simplicity.
+
 
 Description
 ---------------------------------------
@@ -48,6 +64,7 @@ defaults in a template build script, the `Machinesfile` and associated `package`
 an example `Machinesfile` and packages.
 
 [TODO: Describe packages, sudo, run, commands, etc]
+
 
 Installation and Configuration
 ---------------------------------------
@@ -72,20 +89,28 @@ Running `machines new example` creates the `example` directory and copies in a d
 1. Setup `users/`
 1. Add `~/.ssh/id_rsa.pub` public key from all users machines that need access, to the `users/www/authorized_keys` file
 
-### If installing on a development machine
-* Make sure you have Bridged Networking setup if using a VM
-* Install Ubuntu
+### If installing a development machine
+
+If testing on a VM see **Setting up the test Machines virtual machine** below.
+
+* Download and prepare the Ubuntu USB image. Replace `/dev/sdX` with your USB device name (use dmesg)
+** i386
+    wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/boot.img.gz -O /tmp/boot_i386.img.gz
+    gunzip /tmp/boot_i386.img.gz
+    sudo dd if=/tmp/boot_i386.img of=/dev/sdX
+** or amd64
+    wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/boot.img.gz -O /tmp/boot_amd64.img.gz
+    gunzip /tmp/boot_amd64.img.gz
+    sudo dd if=/tmp/boot_amd64.img of=/dev/sdX
+* Insert the USB stick and boot from it to install Ubuntu
 * Install SSH Server & note the IP address
-
     sudo apt-get update && sudo apt-get -y install openssh-server && ifconfig
-
-(See Setting up the test Machines VM further down for more info)
 
 ### Check the Machinesfile
 
     ssh-keygen -R <host ip> # remove host from known_hosts file (handy when testing)
-    machines check
     machines dryrun
+    cat log/output.log
 
 ### Build the machine
 
@@ -115,13 +140,21 @@ While running open another terminal to view detailed output:
 
     tail -f log/output.log
 
+
 Commandline Options
 ---------------------------------------
-* `htpasswd`  - Asks for a username and password and generates basic auth in webserver/conf/htpasswd'
-* `new [DIR]` - Generates an example machines project'
-* `check`     - Checks Machinesfile for syntax issues'
-* `dryrun`    - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them'
-* `build`     - Asks some questions then builds your chosen machine'
+
+    machines COMMAND
+    COMMAND can be:
+      htpasswd            - Asks for a username and password and generates basic auth in webserver/conf/htpasswd
+      new <DIR>           - Creates a directory called DIR and generates an example machines project in it
+      check               - Checks Machinesfile for syntax issues
+      dryrun              - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them
+      build               - Asks some questions then builds your chosen machine
+      build <TASK>        - Builds a single named task
+      packages            - lists the available packages
+      override <PACKAGE>  - copies the default package into project/packages so it can be edited/overidden
+
 
 ### Rake tasks for managing the VM (these tasks will be turned into commands on Machines to make testing easier)
 
@@ -174,22 +207,22 @@ Default structure created by running `machines new example`:
       * confi
   * Machinesfile
 
-Setting up the test Machines VM
+
+Setting up the test Machines virtual machine
 ---------------------------------------
 
-https://help.ubuntu.com/community/Installation/LowMemorySystems
-
-* Grab the Minimal CD Image from https://help.ubuntu.com/community/Installation/MinimalCD (I tend to go for x64)
-* For virtualization software I use VirtualBox.
+* Grab the Minimal CD Image (I use the x64 one)
+    wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/mini.iso -O /tmp/11.04x64.iso
+* Start your virtualization software (I use VirtualBox).
   * Create a new VM with the name of machinesvm (used in the rake tasks and tests)
   * Select Ubuntu or Ubuntu x64 as the OS (depending on your chosen image)
   * Go to Network and add a Bridged Adapter and a Host-only Adapter
-  * Go to Storage, select the Empty CD, click the CD icon on the far right and find the image
+  * Go to Storage, select the Empty CD, click the CD icon on the far right and find the image (in /tmp)
   * I also turn off the Audio device
 * Start the VM, select Command line Install and follow the prompts
 * Accept default hostname (this will be set later)
 * Enter 'user' for username and 'password' for the password
-* If desired apply the piix4_smbus error fix(A warning that appears on Ubuntu VMs when booting)
+* If desired apply the piix4_smbus error fix(A warning that appears on Ubuntu VMs when booting: May be fixed in 11.04)
     sudo sh -c 'echo blacklist i2c_piix4 >> /etc/modprobe.d/blacklist.conf'
 * And add openssh
     sudo apt-get -y install openssh-server && ifconfig
@@ -197,7 +230,6 @@ https://help.ubuntu.com/community/Installation/LowMemorySystems
     sudo sh -c 'echo VM_IP_ADDRESS machinesvm >> /etc/hosts'
 * Finally, take a snapshot of the VM and name it 'Clean'. This is used to restore the VM to a known state after each test run
 
-There are also some rake tasks for starting and stopping the vm.
 
 What's happening under the hood
 ---------------------------------------
@@ -206,6 +238,7 @@ ssh uses the specified user and then sudo is added to commands that require it.
 When sudo is needed for file uploads. The file is uploaded to /tmp then sudo cp'd to the destination.
 When `package` is called in the `Machinesfile` that file is loaded either from the projects packages directory,
 or from the Machines packages.
+
 
 Limitations
 ---------------------------------------
@@ -218,6 +251,7 @@ Limitations
 * We are currently focused on Ruby 1.9.2, Rails 3 and Passenger 3 deployments as our projects have all
   been upgraded. If there is significant interest we may look at supporting 1.8.7 and Rails 2.
 
+
 Warnings
 ---------------------------------------
 
@@ -229,6 +263,7 @@ You might see one of the following while upgrading/installing packages:
     update-rc.d: warning: unattended-upgrades start runlevel arguments
 
 These are known issues and nothing to worry about.
+
 
 Development, Patches, Pull Requests
 ---------------------------------------
@@ -245,6 +280,7 @@ It've also added an option to only run the spec/code being worked on (check the 
 
 Currently adding package tests and integration test.
 Feel free to add/enhance packages and submit pull requests.
+
 
 References
 ---------------------------------------
@@ -266,9 +302,11 @@ References
 * <http://wiki.dennyhalim.com/ubuntu-minimal-desktop>
 * <http://www.psychocats.net/ubuntu/minimal>
 * <https://help.ubuntu.com/community/Installation/LowMemorySystems>
+* <https://help.ubuntu.com/community/Installation/MinimalCD>
 * <https://github.com/jnstq/rails-nginx-passenger-ubuntu>
 * <http://articles.slicehost.com/2007/10/17/ubuntu-lts-adding-an-nginx-init-script>
 * <http://gembundler.com/deploying.html>
+
 
 Copyright
 ---------------------------------------

@@ -15,6 +15,16 @@ def make_app_structure where
 end
 
 run mkdir File.join(AppConf.nginx.path, AppConf.nginx.servers_dir)
+logrotate_options = '{
+  weekly
+  missingok
+  compress
+  rotate 4
+  delaycompress
+  notifempty
+  copytruncate
+}
+'
 AppConf.apps.each do |app_name, app|
   make_app_structure app.path unless AppConf.environment == :development
   run generate_template_for(app)
@@ -22,6 +32,8 @@ AppConf.apps.each do |app_name, app|
     run generate_template_for(app, true)
     sudo upload "certificates/#{ssl_crt}", '/etc/ssl/certs/{ssl_crt}'
     sudo upload "certificates/#{ssl_key}", '/etc/ssl/private/#{ssl_key}'
+
+    sudo append "#{File.join(app.path, 'log', '*.log')} #{logrotate_options}", :to => '/etc/logrotate.conf'
   end
   run write_database_yml :to => File.join(app.path, 'shared', 'config'), :for => app_name
 end

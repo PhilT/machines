@@ -26,7 +26,7 @@ describe 'packages/nginx' do
        "SUDO   cp upload#{@time.to_i} /etc/init.d/nginx",
        "RUN    rm -f upload#{@time.to_i}",
        "SUDO   /usr/sbin/update-rc.d -f nginx defaults",
-       "RUN    echo \"the template\n\" > nginx_path/conf/nginx.conf",
+       "SUDO   echo \"the template\n\" > nginx_path/conf/nginx.conf",
        "UPLOAD nginx/conf/htpasswd to upload#{@time.to_i}",
        "SUDO   cp upload#{@time.to_i} nginx_path/conf/htpasswd",
        "RUN    rm -f upload#{@time.to_i}",

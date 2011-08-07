@@ -24,6 +24,7 @@ describe 'CommandLine' do
     end
 
     it 'calls help when no matching command' do
+      stub!('anything').and_raise NoMethodError
       should_receive(:help)
       start('anything', nil)
     end
@@ -83,6 +84,56 @@ describe 'CommandLine' do
       FileUtils.mkdir_p('/tmp/dir')
       should_receive(:say).with('Directory already exists')
       generate 'dir'
+    end
+  end
+
+  describe 'packages' do
+    it 'displays a list of default and project packages' do
+      FileUtils.mkdir_p File.join(AppConf.application_dir, 'packages')
+      FileUtils.mkdir_p File.join(AppConf.project_dir, 'packages')
+      FileUtils.touch File.join(AppConf.application_dir, 'packages', 'base.rb')
+      FileUtils.touch File.join(AppConf.project_dir, 'packages', 'apps.rb')
+      packages
+      $output.should == 'Default packages
+ * base
+Project packages
+ * apps
+'
+    end
+  end
+
+  describe 'override' do
+    before(:each) do
+      FileUtils.mkdir_p File.join(AppConf.application_dir, 'packages')
+      FileUtils.mkdir_p File.join(AppConf.project_dir, 'packages')
+      FileUtils.touch File.join(AppConf.application_dir, 'packages', 'base.rb')
+    end
+
+    it 'copies package to project directory' do
+      override 'base'
+      File.should exist File.join(AppConf.project_dir, 'packages', 'base.rb')
+    end
+
+    context 'when copying over existing package' do
+      before(:each) do
+        FileUtils.touch File.join(AppConf.project_dir, 'packages', 'base.rb')
+      end
+
+      it 'terminates when user answer no' do
+        $input.answers = %w(n)
+        override 'base'
+        $output.should == 'Package already exists. Overwrite? (y/n)
+Aborted.
+'
+      end
+
+      it 'overwrites project package with default package' do
+        $input.answers = %w(y)
+        override 'base'
+        $output.should == 'Package already exists. Overwrite? (y/n)
+Package copied to packages/base.rb
+'
+      end
     end
   end
 end

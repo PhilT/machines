@@ -1,9 +1,12 @@
 ec2:
   access_key_id: 123
   secret_access_key: 456
-  url: eu-west-1.ec2.amazonaws.com
-  ami: ami-e59ca991 # EU WEST 1 Ubuntu x64 10.10 EBS
+
+  # 32 bit instances - t1.micro, m1.small, m1.medium
+  # 64 bit instances - m1.large, m1.xlarge, c1.xlarge, cc1.4xlarge, cg1.4xlarge, m2.xlarge, m2.2xlarge, m2.4xlarge
   type: m1.large
+  ami: ami-379ea943 # EU WEST 1 Ubuntu x64 11.04 EBS - Choose your preferred AMI at http://alestic.com/
+  url: eu-west-1.ec2.amazonaws.com
   private_key_file: certificates/amazon.key
   security_group: eu-public
 
@@ -17,14 +20,15 @@ database:
 gmate:
   git://github.com/gmate/gmate.git
 
+# Latest version including preferred nginx version:
+# https://github.com/FooBarWidget/passenger/blob/master/NEWS
+passenger:
+  version: 3.0.8
 nginx:
-  version: 1.0.2
-  url: http://nginx.org/download/nginx-1.0.2.tar.gz
+  version: 1.0.5
+  url: http://nginx.org/download/nginx-1.0.5.tar.gz
   path: /opt/nginx/
   servers_dir: servers
-
-passenger:
-  version: 3.0.7
 
 ruby:
   version: 1.9.2

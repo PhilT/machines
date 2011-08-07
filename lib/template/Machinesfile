@@ -31,20 +31,13 @@ end
 
 # Installed on machines when user is phil
 only :users => 'phil' do
-  package :chrome
-  package :firefox
-  package :gnome
-  package :gmate
-end
-
-# Will only be executed for development machines
-only :environment => :development do
-  package :dev_extras
   package :openbox
   package :docky
   package :apps
+  package :chrome
+  package :firefox
+  package :gmate
 end
-
 
 sudo upgrade
 
