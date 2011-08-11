@@ -1,4 +1,4 @@
-task 'Set Gnome display preferences' do
+task :gnome, 'Set Gnome display preferences' do
   run configure '/apps/metacity/general/titlebar_font' => 'Arial Bold 10',
     '/apps/metacity/general/num_workspaces' => 1,
     '/apps/nautilus/preferences/desktop_font' => 'Sans 9',

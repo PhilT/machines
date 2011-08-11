@@ -10,7 +10,7 @@ module Machines
     end
 
     def enter_target_address(type)
-      ask "Enter the IP or DNS address of the target #{type} (EC2, VM, LAN): "
+      ask "Enter the IP or DNS address of the target #{type} (EC2, VM or LAN address): "
     end
 
     def choose_user

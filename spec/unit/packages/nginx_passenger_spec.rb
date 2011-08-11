@@ -1,14 +1,8 @@
 require 'spec_helper'
 
-describe 'packages/passenger_nginx' do
-  include Core
-  include FileOperations
-  include Configuration
-  include Installation
-  include Machines::Logger
-
+describe 'packages/nginx_passenger' do
   before(:each) do
-    load_package('passenger_nginx')
+    load_package('nginx_passenger')
     AppConf.log = mock 'Logger', :puts => nil
     AppConf.from_hash(:nginx => {:path => 'nginx_dest', :version => '1.0.2'})
   end

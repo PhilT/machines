@@ -1,0 +1,12 @@
+<%= log_path %> {
+  daily
+  rotate 14
+  compress
+  delaycompress
+  sharedscripts
+  <%= stats_command %>
+  postrotate
+    test ! -f /var/run/nginx.pid || kill -USR1 `cat /var/run/nginx.pid`
+  endscript
+}
+

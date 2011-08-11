@@ -1,15 +1,6 @@
 require 'spec_helper'
 
 describe 'packages/mysql' do
-  include AppSettings
-  include Configuration
-  include Core
-  include Database
-  include FileOperations
-  include Installation
-  include Services
-  include Machines::Logger
-
   before(:each) do
     load_package('mysql')
     AppConf.log = mock 'Logger', :puts => nil
@@ -28,7 +19,7 @@ describe 'packages/mysql' do
       eval_package
       AppConf.commands.map(&:info).should == [
         "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install libmysqld-dev",
-        "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install mysql-server",
+        "SUDO   apt-get -q -y install mysql-server",
         "RUN    mysqladmin -u root password DBPASS",
         "RUN    service mysqld restart"
       ]

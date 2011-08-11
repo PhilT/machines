@@ -1,4 +1,4 @@
-task 'install gmate for gEdit and set some preferences and plugins' do
+task :gmate, 'install gmate for gEdit and set some preferences and plugins' do
   dir = File.join AppConf.appsroot, 'gmate'
 
   sudo install 'git://github.com/gmate/gmate.git', :to => dir, :args => '-n'

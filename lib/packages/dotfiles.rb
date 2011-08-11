@@ -1,8 +1,7 @@
 username = AppConf.user.name
 userhome = AppConf.user.home
 
-task "Upload files in users/name/#{username}/dotfiles, prepend a dot and substitute some bashrc vars" do
-
+task :dotfiles, "Upload files in users/name/#{username}/dotfiles, prepend a dot and substitute some bashrc vars" do
   dotfiles_dir = File.join(AppConf.project_dir, 'users', username, 'dotfiles')
   Dir[File.join(dotfiles_dir, '*')].each do |source|
     destination = File.join(userhome, ".#{File.basename(source)}")
@@ -11,11 +10,11 @@ task "Upload files in users/name/#{username}/dotfiles, prepend a dot and substit
 
   if File.exists?(File.join(dotfiles_dir, 'bashrc'))
     run replace 'export RAILS_ENV=', :with => "export RAILS_ENV=#{AppConf.environment}", :in => File.join(userhome, '.bashrc')
-    run replace 'export CDPATH=', :with => "export CDPATH=#{AppConf.user.appsroot}", :in => File.join(userhome, '.bashrc')
+    run replace 'export CDPATH=', :with => "export CDPATH=#{AppConf.appsroot}", :in => File.join(userhome, '.bashrc')
   end
 end
 
-task 'Upload authorized_keys file' do
+task :keyfiles, 'Upload authorized_keys file' do
   authorized_key_file = File.join(AppConf.project_dir, 'users', username, 'authorized_keys')
   if File.exists?(authorized_key_file)
     run mkdir File.join(userhome, '.ssh')

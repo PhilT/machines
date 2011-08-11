@@ -9,8 +9,14 @@ module Machines
       ]
     end
 
+    # Start a daemon
+    # @param [String] daemon Name of the service to start
+    def start daemon
+      Command.new("service #{daemon} start", check_daemon(daemon))
+    end
+
     # Restart a daemon
-    # @param [String] daemon Name of the init.d daemon to restart
+    # @param [String] daemon Name of the service to restart
     def restart daemon
       Command.new("service #{daemon} restart", check_daemon(daemon))
     end

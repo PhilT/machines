@@ -45,12 +45,12 @@ module Machines
       Command.new("sed -i \"s/#{regex}/#{with}/\" #{options[:in]}", check_string(options[:with], options[:in]))
     end
 
-    # Write an ERB template
+    # Write a file from an ERB template
     # @param [String] erb_path Path to the ERB file to process
     # @param [Hash] options
     # @option options [AppBuilder] :settings Contains the settings as OpenStruct method calls for calling from the template
     # @option options [String] :to File to write to
-    def template erb_path, options
+    def create_from erb_path, options
       erb = ERB.new(File.read(erb_path))
       binding = options[:settings] ? options[:settings].get_binding : nil
       write erb.result(binding), options

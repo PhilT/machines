@@ -237,19 +237,18 @@ What's happening under the hood
 ssh uses the specified user and then sudo is added to commands that require it.
 When sudo is needed for file uploads. The file is uploaded to /tmp then sudo cp'd to the destination.
 When `package` is called in the `Machinesfile` that file is loaded either from the projects packages directory,
-or from the Machines packages.
+or from the Machines packages if not found in the project.
 
 
 Limitations
 ---------------------------------------
-* Only one user per machine. Servers use www (by default) for nginx/apache, passenger and deployments.
-  It's common practice to have separate users for these roles. This will be added in a future release.
+* Only one user per machine. Servers use www-data (by default) for nginx/apache, passenger and deployments.
 * The system has been designed to allow a certain flexibility in the configuration although some things
-  may not yet be totally configurable it should be possible to add or modify a relevant package. For
+  may not yet be totally configurable it should be possible to add or modify the relevant package. For
   example, app settings allow different servers to have different apps setup on them. This however has
   not yet been tested.
 * We are currently focused on Ruby 1.9.2, Rails 3 and Passenger 3 deployments as our projects have all
-  been upgraded. If there is significant interest we may look at supporting 1.8.7 and Rails 2.
+  been upgraded.
 
 
 Warnings
@@ -270,7 +269,7 @@ Development, Patches, Pull Requests
 
 This project uses *watchr* for continuous testing.
 It's fast and very configurable. The script approximates autotest behaviour.
-It've also added an option to only run the spec/code being worked on (check the .watchr file for details)
+It've also added an option to only run the spec/code being worked on. This helps focus on one file.
     watchr .watchr
 
 * Fork the project.
@@ -293,19 +292,27 @@ References
 * <http://rdoc.info/github/grempe/amazon-ec2>
 
 
-### Blog Posts
+### General
 
-* <http://kris.me.uk/2010/11/15/rails3-rvm-passenger3-apache.html>
-* <http://thoughtsincomputation.com/posts/deploying-in-harmony-capistrano-rvm-bundler-and-git>
-* <http://ginzametrics.com/deploy-rails-app-to-ec2-with-rubber.html>
-* <http://aws.amazon.com/articles/1663>
+* Rails deployment guide: <http://kris.me.uk/2010/11/15/rails3-rvm-passenger3-apache.html>
+* Another Rails deployment guide: <http://thoughtsincomputation.com/posts/deploying-in-harmony-capistrano-rvm-bundler-and-git>
+* EC2 deployment for Rails with Rubber: <http://ginzametrics.com/deploy-rails-app-to-ec2-with-rubber.html>
+* MySQL and EBS: <http://aws.amazon.com/articles/1663>
+* Nginx Passenger setup guide: <https://github.com/jnstq/rails-nginx-passenger-ubuntu>
+* Nginx init.d script: <http://articles.slicehost.com/2007/10/17/ubuntu-lts-adding-an-nginx-init-script>
+* Bundler Deployment: <http://gembundler.com/deploying.html>
+* Free SSL Certificates: <http://www.startssl.com/>
+
+### Ubuntu minimal install guides
+
 * <http://wiki.dennyhalim.com/ubuntu-minimal-desktop>
 * <http://www.psychocats.net/ubuntu/minimal>
 * <https://help.ubuntu.com/community/Installation/LowMemorySystems>
-* <https://help.ubuntu.com/community/Installation/MinimalCD>
-* <https://github.com/jnstq/rails-nginx-passenger-ubuntu>
-* <http://articles.slicehost.com/2007/10/17/ubuntu-lts-adding-an-nginx-init-script>
-* <http://gembundler.com/deploying.html>
+
+Acknowledgements
+---------------------------------------
+
+Thanks to all the people that published the hundreds of articles, blog posts and APIs I've read.
 
 
 Copyright

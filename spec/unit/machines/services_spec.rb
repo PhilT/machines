@@ -17,5 +17,10 @@ describe 'Services' do
     subject { restart 'daemon' }
     it { subject.command.should == 'service daemon restart' }
   end
+
+  describe 'start' do
+    subject { start 'daemon' }
+    it { subject.command.should == 'service daemon start' }
+  end
 end
 

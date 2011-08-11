@@ -1,6 +1,15 @@
 module Machines
   module Installation
-    APTGET_QUIET = 'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y'
+    APTGET_QUIET = 'apt-get -q -y'
+    @noninteractive_set = false
+    def aptget_quiet
+      if @noninteractive_set
+        APTGET_QUIET
+      else
+        @noninteractive_set = true
+        'export DEBIAN_FRONTEND=noninteractive && ' + APTGET_QUIET
+      end
+    end
 
     # Adds a DEB source
     # @param [String] source URL of the package. If DISTRIB_CODENAME is included then it
@@ -32,13 +41,13 @@ module Machines
     end
 
     def update
-      Command.new("#{APTGET_QUIET} update", nil)
+      Command.new("#{aptget_quiet} update", nil)
     end
 
     # Update, upgrade, autoremove, autoclean apt packages
     def upgrade
       %w(update upgrade autoremove autoclean).map do |command|
-        Command.new("#{APTGET_QUIET} #{command}", nil)
+        Command.new("#{aptget_quiet} #{command}", nil)
       end
     end
 
@@ -77,7 +86,7 @@ module Machines
 
       if packages.is_a?(Array)
         commands = packages.map do |package|
-          Command.new("#{APTGET_QUIET} install #{package}", check_package(package))
+          Command.new("#{aptget_quiet} install #{package}", check_package(package))
         end
       end
       commands
@@ -87,7 +96,7 @@ module Machines
     # @param [Array] packages Packages to remove
     def uninstall packages
       packages.map do |package|
-        Command.new("#{APTGET_QUIET} remove #{package}", check_package(package, false))
+        Command.new("#{aptget_quiet} remove #{package}", check_package(package, false))
       end
     end
 
@@ -109,11 +118,14 @@ module Machines
 
     # Download, extract, and remove an archive. Currently supports `zip` or `tar.gz`. Extracts into /tmp
     # @param [String] package Package name to extract
-    def extract package
+    # @param [Hash] options
+    # @option options [Optional String] :to directory to clone to
+    def extract package, options = {}
       name = File.basename(package)
       cmd = package[/.zip/] ? 'unzip -qq' : 'tar -zxf'
-      dir = cmd =~ /unzip/ ? File.basename(name, '.zip') : File.basename(name, '.tar.gz')
-      Command.new("cd /tmp && wget #{package} && #{cmd} #{name} && rm #{name} && cd -", check_dir("/tmp/#{dir}"))
+      dir = cmd =~ /unzip/ ? File.basename(name, '.zip') : File.basename(name).gsub(/\.tar.*/, '')
+      dest = " mv #{dir} #{options[:to]} &&" if options[:to]
+      Command.new("cd /tmp && wget #{package} && #{cmd} #{name} &&#{dest} rm #{name} && cd -", check_dir("#{options[:to] || File.join('/tmp', dir)}"))
     end
 
     # Clone a project from a Git repository
@@ -123,7 +135,6 @@ module Machines
     def git_clone url, options = {}
       Command.new("git clone -q #{url} #{options[:to]}", check_dir(options[:to]))
     end
-
   end
 end
 

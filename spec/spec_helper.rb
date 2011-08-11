@@ -10,6 +10,13 @@ RSpec.configure do |c|
   c.include(Matchers)
   c.include(FakeFS::SpecHelpers)
 
+  module AllModules
+    include Core
+    include AppSettings, Checks, Commandline, Configuration, Database, Ec2Machine
+    include FileOperations, Installation, Machines::Logger, Machinesfile, Questions, Services
+  end
+  c.include(AllModules)
+
   c.before(:each) do
     AppConf.clear
     AppConf.passwords = []
@@ -17,7 +24,7 @@ RSpec.configure do |c|
     AppConf.tasks = {}
     AppConf.from_hash(:user => {})
     AppConf.application_dir = application_dir
-    AppConf.project_dir = '/tmp'
+    AppConf.project_dir = '/prj'
     $input = MockStdin.new
     $output = MockStdout.new
     $terminal = HighLine.new($input, $output)

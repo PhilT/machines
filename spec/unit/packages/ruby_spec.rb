@@ -1,12 +1,6 @@
 require 'spec_helper'
 
 describe 'packages/ruby' do
-  include Core
-  include FileOperations
-  include Configuration
-  include Installation
-  include Machines::Logger
-
   before(:each) do
     load_package('ruby')
     AppConf.log = mock 'Logger', :puts => nil

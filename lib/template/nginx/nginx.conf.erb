@@ -1,5 +1,5 @@
 user <%= AppConf.user.name %>;
-worker_processes  4;
+worker_processes  4; # Match this with the number of CPUs or increase for large static files
 
 events {
   worker_connections  1024;
@@ -19,23 +19,21 @@ http {
                     '$status $body_bytes_sent "$http_referer" '
                     '"$http_user_agent" "$http_x_forwarded_for"';
 
-  server_names_hash_bucket_size  128; # From EngineYard
-
   gzip              on;
   gzip_http_version 1.0;
   gzip_comp_level   2;
   gzip_proxied      any;
-  gzip_buffers      16 8k;  # From EngineYard
   gzip_types        text/plain text/css application/x-javascript text/xml
                     application/xml application/xml+rss text/javascript;
 
-  client_max_body_size 150M;
-  client_body_buffer_size 128k;
-  client_body_timeout 3600;
+  client_body_buffer_size 128k;   # Size of the memory buffer that will be written to before using a temporary file
+  # client_max_body_size 1M;      # Max content that will be served. Increase if media content is to be served
+  # client_body_timeout 60;       # Time allowed to respond within in seconds. Increase if requests are expected to take a long time
 
-  passenger_ruby <%= AppConf.user.home %>/.rvm/wrappers/ruby-<%= AppConf.ruby.version %>/ruby
-  passenger_max_pool_size 8;
-  passenger_pool_idle_time 3600;
+  passenger_ruby <%= AppConf.user.home %>/.rvm/wrappers/default/ruby
+  passenger_max_pool_size 8;                # Max number of simultaneous instances
+  passenger_pool_idle_time 0;               # Don't shutdown instances unless needed
+  passenger_pre_start http://localhost;     # Prestart RiskPlatform
 
   include <%= File.join(AppConf.nginx.path, AppConf.nginx.servers_dir, '*.conf') %>;
 }

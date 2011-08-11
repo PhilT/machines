@@ -1,12 +1,6 @@
 require 'spec_helper'
 
 describe 'packages/gmate' do
-  include Core
-  include FileOperations
-  include Configuration
-  include Installation
-  include Machines::Logger
-
   before(:each) do
     load_package('gmate')
     AppConf.log = mock 'Logger', :puts => nil

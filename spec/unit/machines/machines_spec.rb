@@ -10,8 +10,8 @@ describe 'Machines' do
     AppConf.ec2 = AppConf.new unless AppConf.ec2
     AppConf.ec2.use = nil
     AppConf.log_only = false
-    FileUtils.mkdir_p '/tmp/config'
-    File.open('/tmp/config/config.yml', 'w') { |f| f.puts "timezone: GB" }
+    FileUtils.mkdir_p '/prj/config'
+    File.open('/prj/config/config.yml', 'w') { |f| f.puts "timezone: GB" }
   end
 
   describe 'init' do
@@ -25,8 +25,8 @@ describe 'Machines' do
       AppConf.user.should be_a AppConf
       AppConf.db.should be_a AppConf
       AppConf.timezone.should == 'GB'
-      AppConf.log_path.should == '/tmp/log/output.log'
-      File.should exist '/tmp/log/output.log'
+      AppConf.log_path.should == '/prj/log/output.log'
+      File.should exist '/prj/log/output.log'
       AppConf.log.should be_a File
     end
   end

@@ -44,7 +44,7 @@ MACHINESFILE
 
   describe 'target_address' do
     it 'accepts IP or DNS address of target machine' do
-      should_receive(:ask).with('Enter the IP or DNS address of the target machine (EC2, VM, LAN): ').and_return 'target ip'
+      should_receive(:ask).with('Enter the IP or DNS address of the target machine (EC2, VM or LAN address): ').and_return 'target ip'
       enter_target_address('machine').should == 'target ip'
     end
   end

@@ -43,9 +43,9 @@ describe 'Installation' do
       subject = upgrade
       subject.map(&:command).should == [
         'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y update',
-        'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y upgrade',
-        'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y autoremove',
-        'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y autoclean'
+        'apt-get -q -y upgrade',
+        'apt-get -q -y autoremove',
+        'apt-get -q -y autoclean'
       ]
     end
   end
@@ -74,7 +74,7 @@ describe 'Installation' do
       subject = install %w(package1 package2)
       subject.map(&:command).should == [
         'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install package1',
-        'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install package2'
+        'apt-get -q -y install package2'
       ]
     end
   end
@@ -106,14 +106,22 @@ describe 'Installation' do
   end
 
   describe 'extract' do
-    it 'instaniates commands to download, extract and remove an archive' do
-      subject = extract 'http://url/package'
-      subject.command.should == 'cd /tmp && wget http://url/package && tar -zxf package && rm package && cd -'
+    it 'instaniates commands to download, extract and remove a tar archive' do
+      subject = extract 'http://url/package.tar'
+      subject.command.should == 'cd /tmp && wget http://url/package.tar && tar -zxf package.tar && rm package.tar && cd -'
+      subject.check.should == 'test -d /tmp/package && echo CHECK PASSED || echo CHECK FAILED'
     end
 
     it 'instaniates commands to download, extract and remove a zip archive' do
       subject = extract 'http://url/package.zip'
       subject.command.should == 'cd /tmp && wget http://url/package.zip && unzip -qq package.zip && rm package.zip && cd -'
+      subject.check.should == 'test -d /tmp/package && echo CHECK PASSED || echo CHECK FAILED'
+    end
+
+    it 'moves extracted contents to specified folder' do
+      subject = extract 'http://url/package-1.0.tar.gz', :to => '/opt/package'
+      subject.command.should == 'cd /tmp && wget http://url/package-1.0.tar.gz && tar -zxf package-1.0.tar.gz && mv package-1.0 /opt/package && rm package-1.0.tar.gz && cd -'
+      subject.check.should == 'test -d /opt/package && echo CHECK PASSED || echo CHECK FAILED'
     end
   end
 

@@ -3,7 +3,7 @@ module DryrunSteps
     $input.answers = %w(Desktop phil pa$$ pa$$ host)
     machines = Machines::Base.new
 
-    machines.start('dryrun', nil)
+    machines.execute('dryrun', nil)
     $output.should == <<-THIS
 Project created at /home/phil/workspace/machines/tmp/project
 1. Desktop
@@ -13,7 +13,7 @@ Project created at /home/phil/workspace/machines/tmp/project
 5. DBslave
 Select machine to build:
 1. phil
-2. www
+2. www-data
 Select a user:
 Enter users password:
 Confirm the password:

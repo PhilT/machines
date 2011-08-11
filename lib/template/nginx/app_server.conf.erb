@@ -1,23 +1,28 @@
+# Redirect from www
+server {
+  server_name www.<%= server_name %>;
+  rewrite ^ https://\$server_name\$uri permanent
+}
+
 server {
   listen <%= enable_ssl ? 443 : 80 %>;
   server_name <%= server_name %>;
   root <%= File.join(AppConf.user.home, name, 'public') %>;
   rails_env <%= AppConf.environment %>;
   passenger_enabled on;
+  add_header  Cache-Control public;             # Ensure browsers cache secure pages
 
   <% if enable_ssl %>
     ssl on;
     ssl_certificate /etc/ssl/certs/<%= ssl_crt %>;
     ssl_certificate_key /etc/ssl/private/<%= ssl_key %>;
+    location / {
+      proxy_set_header X-FORWARDED_PROTO https;
+    }
   <% end %>
 
   access_log /var/log/nginx/<%= name %>.access.log main;
   error_log /var/log/nginx/<%= name %>.error.log notice;
-
-  # Allow images and css in maintenance.html file
-  if ($request_filename ~* \.(css|jpg|gif|png)$) {
-    break;
-  }
 
   # Cache assets: see http://developer.yahoo.com/performance/rules.html#expires
   location ~ ^/(images|javascripts|stylesheets)/ {
@@ -31,6 +36,10 @@ server {
   # Rewrite all the requests to the maintenance.html page if it exists.
   if (-f $document_root/system/maintenance.html) {
     return 503;
+  }
+  # Allow images and css in maintenance.html file
+  if ($request_filename ~* \.(css|jpg|gif|png)$) {
+    break;
   }
   error_page 503 @503;
   location @503 {

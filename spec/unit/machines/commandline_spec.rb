@@ -4,36 +4,28 @@ describe 'CommandLine' do
   include Core
   include Commandline
 
-  describe 'start' do
+  describe 'execute' do
     it 'calls specified command' do
       %w(htpasswd check dryrun build).each do |command|
         should_receive command
-        start command, nil
+        execute command, nil
         AppConf.action.should == command
       end
     end
 
     it 'calls generate with directory' do
       should_receive(:generate).with('dir')
-      start 'new', 'dir'
+      execute 'new', 'dir'
     end
 
     it 'calls generate without directory' do
       should_receive(:generate).with(no_args)
-      start 'new', nil
+      execute 'new', nil
     end
 
     it 'calls help when no matching command' do
-      stub!('anything').and_raise NoMethodError
-      should_receive(:help)
-      start('anything', nil)
-    end
-  end
-
-  describe 'help' do
-    it 'displays the help' do
-      should_receive(:say).with /machines COMMAND/
-      help
+      execute('anything', nil)
+      $output.should == Help.new.to_s
     end
   end
 
@@ -64,7 +56,7 @@ describe 'CommandLine' do
       AppConf.webserver = 'server'
       $input.answers = %w(user pass pass)
       htpasswd
-      File.read('/tmp/server/conf/htpasswd').should =~ /user:.{13}/
+      File.read('/prj/server/conf/htpasswd').should =~ /user:.{13}/
     end
   end
 
@@ -76,12 +68,12 @@ describe 'CommandLine' do
 
     it 'copies the template within dir' do
       FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template", AppConf.project_dir + '/dir')
-      should_receive(:say).with('Project created at /tmp/dir')
+      should_receive(:say).with('Project created at /prj/dir')
       generate 'dir'
     end
 
     it 'displays message and terminates when directory exists' do
-      FileUtils.mkdir_p('/tmp/dir')
+      FileUtils.mkdir_p('/prj/dir')
       should_receive(:say).with('Directory already exists')
       generate 'dir'
     end

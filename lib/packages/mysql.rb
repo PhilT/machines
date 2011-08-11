@@ -8,7 +8,7 @@ def run_mysql_statement(sql, options)
 end
 
 only :roles => :db do
-  task 'Install MySQL' do
+  task :mysql, 'Install MySQL' do
     sudo install %w(libmysqld-dev mysql-server)
     set_mysql_root_password AppConf.db.pass
     run restart 'mysqld'
@@ -16,7 +16,7 @@ only :roles => :db do
 end
 
 only :roles => :app do
-  task 'Set app permissions to database' do
+  task :dbperms, 'Set app permissions to database' do
     AppConf.apps.values.each do |app|
       run_mysql_statement "GRANT ALL ON *.* TO '#{app.name}'@'%' IDENTIFIED BY '#{app.db_password}';",
         :on => AppConf.db.address, :password => AppConf.db.pass
@@ -24,7 +24,7 @@ only :roles => :app do
   end
 end
 
-task 'Setup database replication' do
+task :replication, 'Setup database replication' do
   only :roles => :dbmaster do
     sudo upload "mysql/dbmaster.cnf", "/etc/mysql/conf.d/dbmaster.cnf"
     run_mysql_statement "GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%' IDENTIFIED BY '#{AppConf.database.replication_pass}';",

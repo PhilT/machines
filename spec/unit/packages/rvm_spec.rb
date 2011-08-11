@@ -1,12 +1,6 @@
 require 'spec_helper'
 
 describe 'packages/rvm' do
-  include Core
-  include FileOperations
-  include Configuration
-  include Installation
-  include Machines::Logger
-
   before(:each) do
     load_package('rvm')
     AppConf.log = mock 'Logger', :puts => nil
@@ -20,8 +14,8 @@ describe 'packages/rvm' do
       "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install curl",
       "RUN    bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)",
       "RUN    echo \"[[ -s \"$HOME/.rvm/scripts/rvm\" ]] && . \"$HOME/.rvm/scripts/rvm\" # Load RVM function\" >> user_home/.bashrc",
+      "RUN    source user_home/.bashrc",
       "RUN    echo \"export rvm_trust_rvmrcs_flag=1\" >> user_home/.rvmrc",
-      "RUN    source user_home/.bashrc"
     ]
   end
 end

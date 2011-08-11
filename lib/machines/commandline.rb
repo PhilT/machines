@@ -1,30 +1,18 @@
 module Machines
   module Commandline
-    def start(command, option)
-      AppConf.action = command
-      command = 'generate' if command == 'new'
-      if option
-        send command, option
+    def execute(command, option)
+      help = Help.new
+      if help.commands.include?(command)
+        AppConf.action = command
+        command = 'generate' if command == 'new'
+        if option
+          send command, option
+        else
+          send command
+        end
       else
-        send command
+        say help.to_s
       end
-    rescue
-      help
-    end
-
-    def help
-      say <<-HELP
-machines COMMAND
-COMMAND can be:
-  htpasswd            - Asks for a username and password and generates basic auth in webserver/conf/htpasswd
-  new <DIR>           - Creates a directory called DIR and generates an example machines project in it
-  check               - Checks Machinesfile for syntax issues
-  dryrun              - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them
-  build               - Asks some questions then builds your chosen machine
-  build <TASK>        - Builds a single named task
-  packages            - lists the available packages
-  override <PACKAGE>  - copies the default package into project/packages so it can be edited/overidden
-HELP
     end
 
     def enter_and_confirm_password(message = 'Enter a new password: ')

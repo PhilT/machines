@@ -14,14 +14,15 @@ package :base
 
 # Installed on machines that have the app role
 only :roles => :app do
+  package :dotfiles
   package :webapps
+  package :git                # Needed by RVM, gmate, etc
   package :rvm
   package :ruby
   package :nginx
   package :passenger
-  package :passenger_nginx
-  package :git
-  package :dotfiles
+  package :nginx_passenger
+  package :nginx_logrotate
 end
 
 # Installed on machines that have the db role

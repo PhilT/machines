@@ -1,24 +1,18 @@
 require 'spec_helper'
 
 describe 'packages/nginx' do
-  include Core
-  include FileOperations
-  include Configuration
-  include Installation
-  include Services
-  include Machines::Logger
-
   before(:each) do
     load_package('nginx')
     AppConf.log = mock 'Logger', :puts => nil
     AppConf.from_hash(:nginx => {:version => '1.0.2', :path => 'nginx_path', :url => 'nginx_url'})
-    FileUtils.mkdir_p '/tmp/nginx'
-    File.open('/tmp/nginx/nginx.conf.erb', 'w') {|f| f.puts 'the template' }
+    FileUtils.mkdir_p '/prj/nginx'
+    File.open('/prj/nginx/nginx.conf.erb', 'w') {|f| f.puts 'the template' }
     @time = Time.now
     Time.stub(:now).and_return @time
   end
 
   it 'adds the following commands' do
+    AppConf.environment = :staging
     eval_package
     AppConf.commands.map(&:info).should == [
        "RUN    cd /tmp && wget nginx_url && tar -zxf nginx_url && rm nginx_url && cd -",

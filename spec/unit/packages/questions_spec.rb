@@ -1,9 +1,6 @@
 require 'spec_helper'
 
 describe 'packages/questions' do
-  include Core
-  include Machines::Logger
-
   before(:each) do
     load_package('questions')
     AppConf.log = mock 'Logger', :puts => nil

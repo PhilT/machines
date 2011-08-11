@@ -1,22 +1,17 @@
 require 'spec_helper'
 
 describe 'packages/webapps' do
-  include Core
-  include FileOperations
-  include AppSettings
-  include Configuration
-  include Database
-
   before(:each) do
     load_package('webapps')
 
     AppConf.from_hash(:user => {:name => 'username', :home => 'home_dir'}, :ruby => {:version => 'ruby_version'})
     AppConf.apps = {'application' => AppBuilder.new('name' => 'application', 'path' => 'app_path', 'enable_ssl' => nil, 'db_password' => 'pa$$')}
+    AppConf.from_hash(:awstats => {:path => 'stats_path'})
     AppConf.webserver = 'nginx'
     AppConf.from_hash(:nginx => {:path => 'nginx_path', :servers_dir => 'servers'})
     AppConf.from_hash(:db => {:address => 'db_master'})
-    FileUtils.mkdir_p '/tmp/nginx'
-    File.open('/tmp/nginx/app_server.conf.erb', 'w') {|f| f.puts 'the template' }
+    FileUtils.mkdir_p '/prj/nginx'
+    File.open('/prj/nginx/app_server.conf.erb', 'w') {|f| f.puts 'the template' }
   end
 
   it 'adds the following commands' do
