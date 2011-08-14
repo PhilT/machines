@@ -60,9 +60,19 @@ describe 'Installation' do
         'find . -maxdepth 1 -name install* | xargs -I xxx bash xxx '
     end
 
-    it 'instaniates commands to download, install and remove a package ' do
-      subject = install "http://some.url/package_name.deb", nil
-      subject.command.should == 'cd /tmp && wget http://some.url/package_name.deb && dpkg -i package_name.deb && rm package_name.deb && cd -'
+    it 'instaniates commands to download, install and remove a DEB package ' do
+      subject = install "http://some.url/package_name.deb"
+      subject.map(&:command).should == [
+        'cd /tmp && wget http://some.url/package_name.deb && dpkg -i --force-architecture package_name.deb && rm package_name.deb && cd -'
+      ]
+    end
+
+    it 'instaniates commands to download, extract, install and remove a group of DEB packages ' do
+      subject = install "http://some.url/package_name.tar.gz"
+      subject.map(&:command).should == [
+        'cd /tmp && wget http://some.url/package_name.tar.gz && tar -zxf package_name.tar.gz && rm package_name.tar.gz && cd -',
+        'cd /tmp/package_name && dpkg -i --force-architecture *.deb && cd - && rm -rf /tmp/package_name'
+      ]
     end
 
     it 'instaniates a command to install a single apt package' do

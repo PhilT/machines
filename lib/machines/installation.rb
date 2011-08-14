@@ -51,7 +51,7 @@ module Machines
       end
     end
 
-    # Installs one or more packages using apt, deb or git clone and install.sh
+    # Installs one or more packages using apt, deb or git clone and install.sh (Ignores architecture differences)
     # (See `extract` to just uncompress tar.gz or zip files)
     # @param [Symbol, String, Array] packages can be:
     #   Git URL::
@@ -77,8 +77,16 @@ module Machines
           check = "find #{options[:to]} -maxdepth 1 -name install* | grep install #{echo_result}"
           commands = Command.new(command, check)
         elsif packages.scan(/^http:\/\//).any?
-          name = File.basename(packages)
-          commands = Command.new("cd /tmp && wget #{packages} && dpkg -i #{name} && rm #{name} && cd -", nil)
+          commands = []
+          if packages.scan(/\.deb$/i).empty?
+            commands << extract(packages)
+            name = File.basename(packages).gsub(/\.(tar|zip).*/, '')
+            commands << Command.new("cd /tmp/#{name} && dpkg -i --force-architecture *.deb && cd - && rm -rf /tmp/#{name}", nil)
+          else
+            name = File.basename(packages)
+            commands << Command.new("cd /tmp && wget #{packages} && dpkg -i --force-architecture #{name} && rm #{name} && cd -", nil)
+          end
+          return commands
         else
           packages = [packages]
         end
