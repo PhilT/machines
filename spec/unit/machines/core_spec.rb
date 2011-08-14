@@ -18,6 +18,12 @@ describe 'Configuration' do
       yielded.should be_true
     end
 
+    it 'logs the task' do
+      task :name, 'description' do
+      end
+      AppConf.commands.first.info.should == 'TASK   name - description'
+    end
+
     it 'stores task' do
       block = Proc.new {}
       task :name, 'description', &block

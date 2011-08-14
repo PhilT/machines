@@ -14,13 +14,14 @@ task :openbox, 'Install Openbox window manager and associated fonts, themes, etc
     'xcompmgr',                  # Compositing manager - Needed by docky for transparency
     'xorg',                      # Basic X Windows Graphical Interface needed by Openbox
   ]
+end
 
-  # NOT NEEDED?
-  #sudo 'fc-cache -f', "fc-cache #{echo_result}" # Update font cache
-
+task :sudo_no_password, 'Ensure we can shutdown/reboot without needing a password for sudo' do
   sudo append 'ALL   ALL=NOPASSWD:/sbin/shutdown', :to => '/etc/sudoers'
   sudo append 'ALL   ALL=NOPASSWD:/sbin/reboot', :to => '/etc/sudoers'
+end
 
+task :fonts, 'Set openbox and Gnome interface fonts' do
   # NOT NEEDED?
   #configure /desktop/gnome/font_rendering/antialiasing, rgba
   #configure /desktop/gnome/font_rendering/dpi --type float 96

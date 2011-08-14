@@ -5,6 +5,7 @@ module Machines
     def task name, description = nil, &block
       if block
         store_task name, description, &block if name.is_a?(Symbol)
+        AppConf.commands << LogCommand.new(name, description)
         yield
       else
         AppConf.commands = []
@@ -55,14 +56,14 @@ module Machines
     # @param [Array] *commands Command(s) to run.
     # If first command is a string it creates a Command object using the first two strings as command and check
     def run *commands
-      commands = handle_strings(commands)
+      commands = command_from_string(commands)
       AppConf.commands += commands.flatten
     end
 
     # Queue up command(s) using SUDO to run remotely
     # @param [Array] *commands Command(s) to run
     def sudo *commands
-      commands = handle_strings commands
+      commands = command_from_string commands
       commands.flatten.each do |command|
         if command.is_a?(Upload)
           temp_path = "upload#{Time.now.to_i}"
@@ -95,7 +96,7 @@ module Machines
       end
     end
 
-    def handle_strings commands
+    def command_from_string commands
       commands.first.is_a?(String) ? [Command.new(commands[0], commands[1])] : commands
     end
   end

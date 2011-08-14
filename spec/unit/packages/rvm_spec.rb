@@ -11,10 +11,12 @@ describe 'packages/rvm' do
   it 'adds the following commands' do
     eval_package
     AppConf.commands.map(&:info).should == [
+      'TASK   rvm - Install RVM',
       "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install curl",
       "RUN    bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)",
       "RUN    echo \"[[ -s \"$HOME/.rvm/scripts/rvm\" ]] && . \"$HOME/.rvm/scripts/rvm\" # Load RVM function\" >> user_home/.bashrc",
       "RUN    source user_home/.bashrc",
+      'TASK   rvm_prompt_off - turn off trust prompting for new .rvmrc files',
       "RUN    echo \"export rvm_trust_rvmrcs_flag=1\" >> user_home/.rvmrc",
     ]
   end

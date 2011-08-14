@@ -10,6 +10,7 @@ describe 'packages/nginx_passenger' do
   it 'adds the following commands' do
     eval_package
     AppConf.commands.map(&:info).should == [
+      'TASK   nginx_passenger - Install Passenger Nginx module',
       "RUN    passenger-install-nginx-module --auto --prefix=nginx_dest --nginx-source-dir=/tmp/nginx-1.0.2 --extra-configure-flags=--with-http_ssl_module"
     ]
   end

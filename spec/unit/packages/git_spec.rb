@@ -9,7 +9,8 @@ describe 'packages/git' do
   it 'adds the following commands' do
     eval_package
     AppConf.commands.map(&:info).should == [
-      "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install git-core"
+      'TASK   git - Install Git',
+      'SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install git-core'
     ]
   end
 end

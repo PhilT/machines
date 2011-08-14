@@ -10,6 +10,7 @@ describe 'packages/awstats' do
   it 'adds the following commands' do
     eval_package
     AppConf.commands.map(&:info).should == [
+      'TASK   awstats - Download and install AWStats',
       "SUDO   cd /tmp && wget awstats_url && tar -zxf awstats_url && mv awstats_url awstats_path && rm awstats_url && cd -",
       "SUDO   echo \"awstats template\n\" > awstats_path/conf/awstats.conf"
     ]

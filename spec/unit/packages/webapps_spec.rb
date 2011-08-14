@@ -18,6 +18,7 @@ describe 'packages/webapps' do
     AppConf.environment = :production
     eval_package
     AppConf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.should == [
+      'TASK   webapps - Sets up Web apps in config/apps.yml using app_server.conf.erb',
       "RUN    mkdir -p nginx_path/servers",
       "RUN    mkdir -p app_path/releases",
       "RUN    mkdir -p app_path/shared/config",
@@ -31,6 +32,7 @@ describe 'packages/webapps' do
     AppConf.environment = :development
     eval_package
     AppConf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.should == [
+      'TASK   webapps - Sets up Web apps in config/apps.yml using app_server.conf.erb',
       "RUN    mkdir -p nginx_path/servers",
       "RUN    echo \"the template\n\" > nginx_path/servers/application.conf",
       "RUN    echo \"---\ndevelopment:\n  adapter: mysql\n  database: application\n  username: application\n  password: pa$$\n  host: db_master\n  encoding: utf8\n\" > app_path/shared/config/database.yml"
