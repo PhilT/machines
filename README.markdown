@@ -10,8 +10,7 @@ Run commands like:
     sudo write "127.0.1.1\t#{AppConf.hostname}", :to => '/etc/hosts' # Write a file
     sudo append "192.168.1.2\tserver", :to => '/etc/hosts' # Append to a file
     run download AppConf.nginx.url # Download a file
-    run template 'nginx/nginx.conf.erb', :to => File.join(AppConf.nginx.path, 'conf', 'nginx.conf') # Write a file from an ERB template
-
+    run create_from 'nginx/nginx.conf.erb', :to => File.join(AppConf.nginx.path, 'conf', 'nginx.conf') # Write a file from an ERB template
 
 Status
 ---------------------------------------
@@ -48,7 +47,7 @@ I believe that development, staging, and production environments should match if
 I develop on Ubuntu Linux and so it felt natural to have Ubuntu as my server environment. I've spent many years
 building and configuring PCs and anything that can be done to automate the process is a good thing in my opinion.
 I also like to know what I've got installed so I have little clutter and an optimally running machine. I also like
-to reinstall development machines usually when upgrading Ubuntu and prefer a clean start.
+to reinstall development machines usually when upgrading Ubuntu or adding/changing hardware and prefer a clean start.
 
 There are a few configuration management tools on the market such as Puppet and Chef but they try to cater for every
 possible server environment. They also do a very good job of configuration change management. Machines narrows the
@@ -60,8 +59,8 @@ Description
 ---------------------------------------
 
 This tool should make it simple to develop and deploy Ruby on Rails applications on Ubuntu by providing sensible
-defaults in a template build script, the `Machinesfile` and associated `package` files. Take a look at `lib/template` for
-an example `Machinesfile` and packages.
+defaults in a template build script, the `Machinesfile` and associated `package` files.
+
 
 [TODO: Describe packages, sudo, run, commands, etc]
 
@@ -84,7 +83,7 @@ Running `machines new example` creates the `example` directory and copies in a d
 
 1. Edit the build script (`Machinesfile`)
 1. Add your certificates and amazon private key
-1. Edit files in `config/`
+1. Edit settings in `config/`
 1. Alter, add or remove `nginx`, `mysql` and custom `packages`
 1. Setup `users/`
 1. Add `~/.ssh/id_rsa.pub` public key from all users machines that need access, to the `users/www/authorized_keys` file
@@ -179,29 +178,29 @@ About the Template
 
 Default structure created by running `machines new example`:
 
-* example
-  * certificates
+* example/
+  * certificates/
     * example.com.crt - SSL certificate
     * example.com.key - SSL private key
     * selfsigned.crt - Self-signed SSL certificate
     * selfsigned.key - Self-signed SSL private key
     * amazon.key - Your X.509 private key to access EC2. The name (without .key) should match the name on your EC2 account.
-  * config
+  * config/
     * apps.yml - App servers configuration
     * config.yml - EC2 settings, timezone, webserver, database, package settings (versions, paths, urls etc)
     * hosts.yml - List of domains to add for local nginx/passenger development to /etc/hosts
-  * mysql
+  * mysql/
     * dbmaster.cnf
     * dbslave.cnf
-  * nginx
+  * nginx/
     * conf
       * htpasswd
     * app_server.conf.erb
     * initd
     * nginx.conf.erb
-  * packages - Packages with the same name as builtin packages take precedence
+  * packages/ - Packages with the same name as builtin packages take precedence
     * dev_extras.rb (example custom package)
-  * users
+  * users/
     * phil
       * basrc
       * confi

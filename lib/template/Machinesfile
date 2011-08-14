@@ -38,6 +38,7 @@ only :users => 'phil' do
   package :chrome
   package :firefox
   package :gmate
+  package :amazon_mp3
 end
 
 sudo upgrade
