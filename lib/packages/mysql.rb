@@ -24,14 +24,16 @@ only :roles => :app do
   end
 end
 
-task :replication, 'Setup database replication' do
-  only :roles => :dbmaster do
+only :roles => :dbmaster do
+  task :replication, 'Setup database replication' do
     sudo upload "mysql/dbmaster.cnf", "/etc/mysql/conf.d/dbmaster.cnf"
     run_mysql_statement "GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%' IDENTIFIED BY '#{AppConf.database.replication_pass}';",
       :on => AppConf.target.address, :password => AppConf.db.pass
   end
+end
 
-  only :roles => :dbslave do
+only :roles => :dbslave do
+  task :replication, 'Setup database replication' do
     sudo upload "mysql/dbslave.cnf", "/etc/mysql/conf.d/dbslave.cnf"
     run_mysql_statement "CHANGE MASTER TO MASTER_HOST='#{AppConf.dbmaster.address}', MASTER_USER='repl' MASTER_PASSWORD='#{AppConf.database.replication_pass}';",
       :on => AppConf.target.address, :password => AppConf.db.pass

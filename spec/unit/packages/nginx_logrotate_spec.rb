@@ -12,10 +12,10 @@ describe 'packages/nginx_logrotate' do
   it 'generates command' do
     eval_package
     AppConf.commands.map(&:info).should == [
-      %(TASK   logrotate_nginx - Logrotate nginx access and error logs and optionally generate stats),
+      %(\nTASK   logrotate_nginx - Logrotate nginx access and error logs and optionally generate stats),
       %(SUDO   echo "nginx template\n" > /etc/logrotate.d/nginx),
       %(SUDO   echo "nginx template\n" > /etc/logrotate.d/nginx),
-      %(TASK   logrotate_apps - Logrotate Rails app logs),
+      %(\nTASK   logrotate_apps - Logrotate Rails app logs),
       %(SUDO   echo "app template\n" > /etc/logrotate.d/appname)
     ]
   end

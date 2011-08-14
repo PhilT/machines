@@ -10,7 +10,7 @@ module Machines
     end
 
     def info
-      "TASK   #{@name} - #{@description}"
+      "\nTASK   #{@name} - #{@description}"
     end
   end
 end

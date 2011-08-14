@@ -21,7 +21,7 @@ describe 'Configuration' do
     it 'logs the task' do
       task :name, 'description' do
       end
-      AppConf.commands.first.info.should == 'TASK   name - description'
+      AppConf.commands.first.info.should == "\nTASK   name - description"
     end
 
     it 'stores task' do

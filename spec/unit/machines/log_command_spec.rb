@@ -6,7 +6,7 @@ describe LogCommand do
   subject {LogCommand.new :name, 'description'}
 
   it 'logs the name and description' do
-    subject.should_receive(:log).with("TASK   name - description", :color => :info)
+    subject.should_receive(:log).with("\nTASK   name - description", :color => :info)
     subject.run
   end
 end
