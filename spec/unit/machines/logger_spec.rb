@@ -58,6 +58,11 @@ describe 'Helpers' do
       put 'something with a_password and another password in'
       'something with ***** and ***** in'.should be_displayed
     end
+
+    it 'does not break when no message' do
+      put nil
+      '(no message)'.should be_displayed
+    end
   end
 
   describe 'required_options' do

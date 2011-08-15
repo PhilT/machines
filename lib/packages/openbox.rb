@@ -28,11 +28,11 @@ task :fonts, 'Set openbox and Gnome interface fonts' do
   #configure /desktop/gnome/font_rendering/hinting, slight
   #configure /desktop/gnome/font_rendering/rgba_order, rgb
 
-  configure "/apps/metacity/general/titlebar_font" => "Ubuntu Bold 9"
-  configure "/apps/nautilus/preferences/desktop_font" => "Ubuntu Light 9"
-  configure "/apps/nautilus/preferences/default_folder_viewer" => 'compact_view'
-  configure "/desktop/gnome/interface/font_name" => "Ubuntu Light 9"
-  configure "/desktop/gnome/interface/document_font_name" => "Ubuntu Light 9"
-  configure "/desktop/gnome/interface/monospace_font_name" => "Monospace 8"
+  run configure "/apps/metacity/general/titlebar_font" => "Ubuntu Bold 9"
+  run configure "/apps/nautilus/preferences/desktop_font" => "Ubuntu Light 9"
+  run configure "/apps/nautilus/preferences/default_folder_viewer" => 'compact_view'
+  run configure "/desktop/gnome/interface/font_name" => "Ubuntu Light 9"
+  run configure "/desktop/gnome/interface/document_font_name" => "Ubuntu Light 9"
+  run configure "/desktop/gnome/interface/monospace_font_name" => "Monospace 8"
 end
 

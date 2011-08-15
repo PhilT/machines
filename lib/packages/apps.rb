@@ -1,4 +1,4 @@
-task :apps, 'Apps for minimal development machine' do
+task :apps, 'Install apps for minimal development machine' do
   sudo install [
     'abiword',                  # lightweight word processor
     'audacious',                # media player

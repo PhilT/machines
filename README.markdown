@@ -243,11 +243,8 @@ Limitations
 ---------------------------------------
 * Only one user per machine. Servers use www-data (by default) for nginx/apache, passenger and deployments.
 * The system has been designed to allow a certain flexibility in the configuration although some things
-  may not yet be totally configurable it should be possible to add or modify the relevant package. For
-  example, app settings allow different servers to have different apps setup on them. This however has
-  not yet been tested.
-* We are currently focused on Ruby 1.9.2, Rails 3 and Passenger 3 deployments as our projects have all
-  been upgraded.
+  may not yet be totally configurable it should be possible to add or modify the relevant package.
+* We are currently focused on Ruby 1.9.2, Rails 3 and Passenger 3.
 
 
 Warnings
