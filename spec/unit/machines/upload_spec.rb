@@ -69,6 +69,10 @@ LOG
     it 'does not match when check is different' do
       subject.should_not == Upload.new('local', 'remote', 'ch')
     end
+
+    it 'does not match when not an Upload' do
+      subject.should_not == Object.new
+    end
   end
 end
 

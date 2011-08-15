@@ -17,6 +17,7 @@ module Machines
     end
 
     def == other
+      return false unless other.is_a?(Upload)
       local == other.local && remote == other.remote && check == other.check
     end
 
