@@ -8,7 +8,7 @@ describe 'packages/apps' do
   it 'adds the following commands' do
     eval_package
     AppConf.commands.map(&:info).should == [
-      "\nTASK   apps - Install apps for minimal development machine",
+      "TASK   apps - Install apps for minimal development machine",
       "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install abiword",
       "SUDO   apt-get -q -y install audacious",
       "SUDO   apt-get -q -y install brasero",

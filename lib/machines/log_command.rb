@@ -6,11 +6,14 @@ module Machines
     end
 
     def run
-      log info, :color => :info
+      AppConf.console.log ''
+      AppConf.console.log info, :color => :info, :progress => progress
+      AppConf.file.log ''
+      AppConf.file.log info, :color => :info
     end
 
     def info
-      "\nTASK   #{@name} - #{@description}"
+      "TASK   #{@name} - #{@description}"
     end
   end
 end

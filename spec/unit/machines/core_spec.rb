@@ -21,7 +21,7 @@ describe 'Configuration' do
     it 'logs the task' do
       task :name, 'description' do
       end
-      AppConf.commands.first.info.should == "\nTASK   name - description"
+      AppConf.commands.first.info.should == "TASK   name - description"
     end
 
     it 'stores task' do
@@ -183,6 +183,16 @@ describe 'Configuration' do
         copy_command,
         Command.new("rm -f upload1301758620", check_file('upload1301758620', false))
       ]
+    end
+  end
+
+  describe 'required_options' do
+    it do
+      lambda{required_options({:required => :option}, [:required])}.should_not raise_error(ArgumentError)
+    end
+
+    it do
+      lambda{required_options({}, [:required])}.should raise_error(ArgumentError)
     end
   end
 end

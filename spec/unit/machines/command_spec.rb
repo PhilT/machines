@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe Command do
-  include Machines::Logger
-
   subject { Command.new('command', 'check') }
 
   describe 'initialize' do
@@ -14,73 +12,72 @@ describe Command do
 
   describe 'run' do
     before(:each) do
-      AppConf.from_hash(:sudo => {})
-      HighLine.use_color = false
-      @log = MockStdout.new
-      AppConf.log = @log
-      AppConf.log_only = false
+      AppConf.commands = [subject]
+      @mock_ssh = mock Net::SSH
+      @mock_ssh.stub(:exec!).and_return 'result'
+      @mock_ssh.stub(:exec!).with('export TERM=linux && command').and_return "result"
+      @mock_ssh.stub(:exec!).with('check').and_return "CHECK PASSED"
+      Command.scp = mock Net::SCP, :session => @mock_ssh
     end
 
     it 'does not execute command when logging only' do
-      mock_ssh = mock Net::SSH
-      mock_ssh.should_not_receive :exec!
-      Command.scp = mock Net::SCP, :session => mock_ssh
+      @mock_ssh.should_not_receive :exec!
       AppConf.log_only = true
       subject.run
     end
 
-    it 'wraps command execution in logging' do
-      AppConf.commands << subject
+    describe 'logs' do
+      it 'successful command to screen and file' do
+        subject.run
 
-      mock_ssh = mock Net::SSH
-      mock_ssh.stub(:exec!).with('export TERM=linux && command').and_return "result of command"
-      mock_ssh.stub(:exec!).with('check').and_return "CHECK PASSED"
-      Command.scp = mock Net::SCP, :session => mock_ssh
+        "100% RUN    command\r".should be_displayed
+        "100% RUN    command\n".should be_displayed as_success
 
-      subject.run
+        "RUN    command\n".should be_logged as_highlight
+        "result\n".should be_logged
+        "CHECK PASSED\n".should be_logged as_success
+      end
 
-      @log.buffer.should == <<-LOG
-RUN    command
-result of command
-CHECK PASSED
-LOG
-      "(001/001) RUN    command".should be_displayed
+      it 'successful sudo command to screen and file' do
+        AppConf.user.pass = 'userpass'
+        subject.use_sudo
+        subject.run
+
+        "100% SUDO   command\r".should be_displayed
+        "100% SUDO   command\n".should be_displayed as_success
+
+        "SUDO   command\n".should be_logged as_highlight
+        "result\n".should be_logged
+        "CHECK PASSED\n".should be_logged as_success
+      end
+
+      it 'unsuccesful command to screen and file' do
+        @mock_ssh.stub(:exec!).with('check').and_return "CHECK FAILED"
+
+        subject.run
+
+        "100% RUN    command\r".should be_displayed
+        "100% RUN    command\n".should be_displayed as_failure
+
+        "RUN    command\n".should be_logged as_highlight
+        "result\n".should be_logged
+        "CHECK FAILED\n".should be_logged as_failure
+      end
     end
 
     it 'wraps command execution in sudo with a password' do
       AppConf.user.pass = 'userpass'
-
-      mock_ssh = mock Net::SSH
-      mock_ssh.stub(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && command'").and_return "result of command"
-      mock_ssh.stub(:exec!).with('check').and_return "CHECK PASSED"
-      Command.scp = mock Net::SCP, :session => mock_ssh
+      @mock_ssh.stub(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && command'").and_return "result"
 
       subject.use_sudo
       subject.run
-
-      @log.buffer.should == <<-LOG
-SUDO   command
-result of command
-CHECK PASSED
-LOG
-      "SUDO   command".should be_displayed
     end
 
     it 'wraps command execution in sudo with no password' do
-      mock_ssh = mock Net::SSH
-      mock_ssh.stub(:exec!).with("sudo -S sh -c 'export TERM=linux && command'").and_return "result of command"
-      mock_ssh.stub(:exec!).with('check').and_return "CHECK PASSED"
-      Command.scp = mock Net::SCP, :session => mock_ssh
+      @mock_ssh.stub(:exec!).with("sudo -S sh -c 'export TERM=linux && command'").and_return "result"
 
       subject.use_sudo
       subject.run
-
-      @log.buffer.should == <<-LOG
-SUDO   command
-result of command
-CHECK PASSED
-LOG
-      "SUDO   command".should be_displayed
     end
   end
 

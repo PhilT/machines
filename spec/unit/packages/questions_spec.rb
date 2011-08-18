@@ -3,7 +3,6 @@ require 'spec_helper'
 describe 'packages/questions' do
   before(:each) do
     load_package('questions')
-    AppConf.log = mock 'Logger', :puts => nil
     AppConf.ec2 = AppConf.new
     AppConf.from_hash(:db => {})
     AppConf.from_hash(:users => {:user_name => {:appsroot => 'appsroot'}})

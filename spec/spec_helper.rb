@@ -13,7 +13,7 @@ RSpec.configure do |c|
   module AllModules
     include Core
     include AppSettings, Checks, Commandline, Configuration, Database, Ec2Machine
-    include FileOperations, Installation, Machines::Logger, Machinesfile, Questions, Services
+    include FileOperations, Installation, Machinesfile, Questions, Services
   end
   c.include(AllModules)
 
@@ -25,6 +25,12 @@ RSpec.configure do |c|
     AppConf.from_hash(:user => {})
     AppConf.application_dir = application_dir
     AppConf.project_dir = '/prj'
+
+    $file = FakeOut.new
+    $console = FakeOut.new
+    AppConf.file = Machines::Logger.new $file
+    AppConf.console = Machines::Logger.new $console, :truncate => true
+
     $input = MockStdin.new
     $output = MockStdout.new
     $terminal = HighLine.new($input, $output)

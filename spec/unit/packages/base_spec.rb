@@ -4,21 +4,20 @@ describe 'packages/base' do
   before(:each) do
     load_package('base')
     AppConf.hostname = 'hostname'
-    AppConf.log = mock 'Logger', :puts => nil
   end
 
   it 'adds the following commands' do
     eval_package
     AppConf.commands.map(&:info).should == [
-      "\nTASK   timezone - Set timezone from config.yml",
+      "TASK   timezone - Set timezone from config.yml",
       "SUDO   ln -sf /etc/localtime /usr/share/zoneinfo/",
       "SUDO   sed -i \"s/UTC=yes/UTC=no/\" /etc/default/rcS",
-      "\nTASK   hosts - Set /etc/hosts",
+      "TASK   hosts - Set /etc/hosts",
       "SUDO   echo \"127.0.0.1 localhost.localdomain localhost\" > /etc/hosts",
       "SUDO   echo \"127.0.1.1 hostname\" >> /etc/hosts",
       "SUDO   echo \"hostname\" > /etc/hostname",
       "SUDO   service hostname start",
-      "\nTASK   base - Install base packages",
+      "TASK   base - Install base packages",
       "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install build-essential",
       "SUDO   apt-get -q -y install zlib1g-dev",
       "SUDO   apt-get -q -y install libpcre3-dev",

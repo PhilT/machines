@@ -8,7 +8,7 @@ describe 'packages/openbox' do
   it 'adds the following commands' do
     eval_package
     AppConf.commands.map(&:info).should == [
-      "\nTASK   openbox - Install Openbox window manager and associated fonts, themes, etc",
+      "TASK   openbox - Install Openbox window manager and associated fonts, themes, etc",
       "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install dmz-cursor-theme",
       "SUDO   apt-get -q -y install elementary-icon-theme",
       "SUDO   apt-get -q -y install feh",
@@ -22,10 +22,10 @@ describe 'packages/openbox' do
       "SUDO   apt-get -q -y install xautolock",
       "SUDO   apt-get -q -y install xcompmgr",
       "SUDO   apt-get -q -y install xorg",
-      "\nTASK   sudo_no_password - Ensure we can shutdown/reboot without needing a password for sudo",
+      "TASK   sudo_no_password - Ensure we can shutdown/reboot without needing a password for sudo",
       "SUDO   echo \"ALL   ALL=NOPASSWD:/sbin/shutdown\" >> /etc/sudoers",
       "SUDO   echo \"ALL   ALL=NOPASSWD:/sbin/reboot\" >> /etc/sudoers",
-      "\nTASK   fonts - Set openbox and Gnome interface fonts",
+      "TASK   fonts - Set openbox and Gnome interface fonts",
       "RUN    gconftool-2 --set \"/apps/metacity/general/titlebar_font\" --type string \"Ubuntu Bold 9\"",
       "RUN    gconftool-2 --set \"/apps/nautilus/preferences/desktop_font\" --type string \"Ubuntu Light 9\"",
       "RUN    gconftool-2 --set \"/apps/nautilus/preferences/default_folder_viewer\" --type string \"compact_view\"",

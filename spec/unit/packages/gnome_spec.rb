@@ -3,13 +3,12 @@ require 'spec_helper'
 describe 'packages/gnome' do
   before(:each) do
     load_package('gnome')
-    AppConf.log = mock 'Logger', :puts => nil
   end
 
   it 'adds the following commands' do
     eval_package
     AppConf.commands.map(&:info).should == [
-      "\nTASK   gnome - Set Gnome display preferences",
+      "TASK   gnome - Set Gnome display preferences",
       'RUN    gconftool-2 --set "/apps/metacity/general/titlebar_font" --type string "Arial Bold 10"',
       'RUN    gconftool-2 --set "/apps/metacity/general/num_workspaces" --type int 1',
       'RUN    gconftool-2 --set "/apps/nautilus/preferences/desktop_font" --type string "Sans 9"',

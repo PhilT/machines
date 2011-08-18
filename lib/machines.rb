@@ -34,9 +34,11 @@ module Machines
       AppConf.from_hash(:user => {})
       AppConf.from_hash(:db => {})
       AppConf.load(File.join(AppConf.project_dir, 'config/config.yml'))
-      AppConf.log_path = File.join(AppConf.project_dir, 'log', 'output.log')
-      FileUtils.mkdir_p File.dirname(AppConf.log_path)
-      AppConf.log = File.open(AppConf.log_path, 'w')
+
+      path = File.join(AppConf.project_dir, 'log', 'output.log')
+      FileUtils.mkdir_p File.dirname(path)
+      AppConf.file = Machines::Logger.new File.open(path, 'w')
+      AppConf.console = Machines::Logger.new STDOUT, :truncate => true
     end
 
     def dryrun

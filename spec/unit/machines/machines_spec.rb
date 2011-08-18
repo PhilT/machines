@@ -25,9 +25,9 @@ describe 'Machines' do
       AppConf.user.should be_a AppConf
       AppConf.db.should be_a AppConf
       AppConf.timezone.should == 'GB'
-      AppConf.log_path.should == '/prj/log/output.log'
       File.should exist '/prj/log/output.log'
-      AppConf.log.should be_a File
+      AppConf.file.should be_a Machines::Logger
+      AppConf.console.should be_a Machines::Logger
     end
   end
 

@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe Command do
-  include Machines::Logger
-
   subject { Upload.new('local', 'remote', 'check') }
 
   describe 'initialize' do
@@ -15,11 +13,8 @@ describe Command do
   end
 
   describe 'run' do
-
     before(:each) do
-      HighLine.use_color = false
-      @log = MockStdout.new
-      AppConf.log = @log
+      AppConf.commands = [subject]
       @mock_ssh = mock Net::SSH
       @mock_scp = mock Net::SCP, :session => @mock_ssh
       Command.scp = @mock_scp
@@ -28,14 +23,12 @@ describe Command do
 
     it 'uploads local to remote with logging' do
       @mock_scp.should_receive(:upload!).with('local', 'remote', {:recursive => false})
-
       subject.run
 
-      @log.buffer.should == <<-LOG
-UPLOAD local to remote
-CHECK PASSED
-LOG
-      "UPLOAD local to remote".should be_displayed
+      "UPLOAD local to remote\n".should be_logged as_highlight
+      "CHECK PASSED\n".should be_logged as_success
+      "100% UPLOAD local to remote\r".should be_displayed
+      "100% UPLOAD local to remote\n".should be_displayed as_success
     end
 
     it 'uploads a directory source' do
@@ -43,7 +36,6 @@ LOG
       @mock_scp.should_receive(:upload!).with('local', 'remote', {:recursive => true})
 
       subject.run
-
     end
   end
 

@@ -1,11 +1,6 @@
 require 'spec_helper'
 
 describe 'Configuration' do
-  include Machines::Core
-  include Machines::FileOperations
-  include Machines::Logger
-  include Machines::Configuration
-
   describe 'write' do
     it 'overwrites a file with specified content' do
       subject = write 'some string', :to => 'a_file'

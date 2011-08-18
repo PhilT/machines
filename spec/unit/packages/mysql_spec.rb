@@ -3,7 +3,6 @@ require 'spec_helper'
 describe 'packages/mysql' do
   before(:each) do
     load_package('mysql')
-    AppConf.log = mock 'Logger', :puts => nil
     AppConf.from_hash(:db => {:address => 'DBIP', :pass => 'DBPASS'})
     AppConf.from_hash(:database => {:replication_pass => 'REPL_PASS'})
     AppConf.from_hash(:target => {:address => 'TARGET'})
@@ -18,7 +17,7 @@ describe 'packages/mysql' do
 
       eval_package
       AppConf.commands.map(&:info).should == [
-        "\nTASK   mysql - Install MySQL",
+        "TASK   mysql - Install MySQL",
         "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install libmysqld-dev",
         "SUDO   apt-get -q -y install mysql-server",
         "RUN    mysqladmin -u root password DBPASS",
@@ -40,7 +39,7 @@ describe 'packages/mysql' do
           AppConf.environment = env
           eval_package
           AppConf.commands.map(&:info).should == [
-            "\nTASK   dbperms - Set app permissions to database",
+            "TASK   dbperms - Set app permissions to database",
             %{RUN    echo "GRANT ALL ON *.* TO 'name'@'%' IDENTIFIED BY 'PASSWORD';" | mysql -u root -pDBPASS -h DBIP}
           ]
         end
@@ -54,7 +53,7 @@ describe 'packages/mysql' do
           AppConf.environment = env
           eval_package
           AppConf.commands.map(&:info).should == [
-            "\nTASK   dbperms - Set app permissions to database",
+            "TASK   dbperms - Set app permissions to database",
             %{RUN    echo "GRANT ALL ON *.* TO 'name'@'%' IDENTIFIED BY 'PASSWORD';" | mysql -u root -pDBPASS -h DBIP},
           ]
         end
@@ -67,7 +66,7 @@ describe 'packages/mysql' do
       AppConf.roles = :dbmaster
       eval_package
       AppConf.commands.map(&:info).should == [
-        "\nTASK   replication - Setup database replication",
+        "TASK   replication - Setup database replication",
         "UPLOAD mysql/dbmaster.cnf to upload#{@time.to_i}",
         "SUDO   cp upload#{@time.to_i} /etc/mysql/conf.d/dbmaster.cnf",
         "RUN    rm -f upload#{@time.to_i}",
@@ -81,7 +80,7 @@ describe 'packages/mysql' do
       AppConf.roles = :dbslave
       eval_package
       AppConf.commands.map(&:info).should == [
-        "\nTASK   replication - Setup database replication",
+        "TASK   replication - Setup database replication",
         "UPLOAD mysql/dbslave.cnf to upload#{@time.to_i}",
         "SUDO   cp upload#{@time.to_i} /etc/mysql/conf.d/dbslave.cnf",
         "RUN    rm -f upload#{@time.to_i}",
