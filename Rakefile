@@ -9,7 +9,7 @@ end
 
 YARD::Rake::YardocTask.new
 RSpec::Core::RakeTask.new do |t|
-  t.pattern = './spec/unit/**/*_spec.rb'
+  t.pattern = './spec/lib/**/*_spec.rb'
 end
 
 desc 'Generate code coverage'

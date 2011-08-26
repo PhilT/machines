@@ -31,22 +31,22 @@ module Machines
     end
 
     def == other
-      @command == other.command && @check == other.check
+      other.is_a?(Command) && @command == other.command && @check == other.check
     end
 
   protected
     def progress
-      AppConf.commands.index(self)
+      "%3d%% " % (AppConf.commands.index(self) + 1 / AppConf.commands.count.to_f * 100).round
     end
 
     def process &block
-      AppConf.console.log info, :newline => false, :progress => progress
+      AppConf.console.log progress + info, :newline => false
       AppConf.file.log info, :color => :highlight
       unless AppConf.log_only
         yield
         result = check_result(@@ssh.exec!(@check))
         AppConf.file.log result, :color => color_for(result)
-        AppConf.console.log info, :progress => progress, :success => result != 'CHECK FAILED'
+        AppConf.console.log progress + info, :success => result != 'CHECK FAILED'
       end
     end
 

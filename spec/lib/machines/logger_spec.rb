@@ -32,23 +32,23 @@ describe 'Helpers' do
     end
 
     it 'sends the command and line number' do
-      AppConf.file.log 'command', :progress => 0
-      "33% command\n".should be_logged
+      AppConf.file.log 'command'
+      "command\n".should be_logged
     end
 
     it 'displays message in success colour' do
-      AppConf.file.log 'command', :progress => 0, :success => true
-      "33% command\n".should be_logged as_success
+      AppConf.file.log 'command', :success => true
+      "command\n".should be_logged as_success
     end
 
     it 'displays message in failure colour' do
-      AppConf.file.log 'command', :progress => 0, :success => false
-      "33% command\n".should be_logged as_failure
+      AppConf.file.log 'command', :success => false
+      "command\n".should be_logged as_failure
     end
 
     it 'displays message in specified color' do
-      AppConf.file.log 'command', :progress => 0, :color => :yellow
-      "33% command\n".should be_logged in_yellow
+      AppConf.file.log 'command', :color => :yellow
+      "command\n".should be_logged in_yellow
     end
 
     it 'does not show passwords' do

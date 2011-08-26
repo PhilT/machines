@@ -7,17 +7,17 @@ module Matchers
 
     def matches? expected
       ending = expected.scan(/(\n|\r)$/).flatten.first
-      expected.gsub!(/(\n|\r)$/, '')
+      expected.sub!(/(\n|\r)$/, '')
       @expected = (@color ? $terminal.color(expected, @color.to_sym) : expected) + ending.to_s
       @actual == @expected
     end
 
     def failure_message
-      "expected '#{@expected.inspect}' but got '#{@actual.inspect}'"
+      "expected #{@expected.inspect} but got #{@actual.inspect}"
     end
 
     def negative_failure_message
-      "expected something other than '#{@expected}'"
+      "expected something other than #{@expected.inspect}"
     end
   end
 

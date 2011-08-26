@@ -22,11 +22,13 @@ Gem::Specification.new do |s|
   s.add_dependency 's3'
 
   s.add_development_dependency 'bluecloth'
+  s.add_development_dependency 'guard'
+  s.add_development_dependency 'guard-bundler'
+  s.add_development_dependency 'guard-rspec'
   s.add_development_dependency 'fakefs'
   s.add_development_dependency 'rev'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'simplecov'
-  s.add_development_dependency 'watchr'
   s.add_development_dependency 'yard'
 
   s.files         = `git ls-files`.split("\n")
