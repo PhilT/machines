@@ -1,8 +1,3 @@
-task :timezone, 'Set timezone from config.yml' do
-  sudo link '/etc/localtime', "/usr/share/zoneinfo/#{AppConf.timezone}"
-  sudo replace 'UTC=yes', :with => 'UTC=no', :in => '/etc/default/rcS'
-end
-
 task :hosts, 'Set /etc/hosts' do
   # Sets hostname according to the following: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=316099
   sudo write "127.0.0.1 localhost.localdomain localhost", :to => '/etc/hosts'

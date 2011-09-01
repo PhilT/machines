@@ -14,9 +14,9 @@ task :dotfiles, "Upload files in users/name/#{username}/dotfiles, prepend a dot 
   end
 end
 
-task :keyfiles, 'Upload authorized_keys file' do
-  authorized_key_file = File.join(AppConf.project_dir, 'users', username, 'authorized_keys')
-  if File.exists?(authorized_key_file)
+authorized_key_file = File.join(AppConf.project_dir, 'users', username, 'authorized_keys')
+if File.exists?(authorized_key_file)
+  task :keyfiles, 'Upload authorized_keys file' do
     run mkdir File.join(userhome, '.ssh')
     run chmod 700, File.join(userhome, '.ssh')
     remote_authorized_key_file = File.join(userhome, '.ssh', 'authorized_keys')

@@ -9,9 +9,6 @@ describe 'packages/base' do
   it 'adds the following commands' do
     eval_package
     AppConf.commands.map(&:info).should == [
-      "TASK   timezone - Set timezone from config.yml",
-      "SUDO   ln -sf /etc/localtime /usr/share/zoneinfo/",
-      "SUDO   sed -i \"s/UTC=yes/UTC=no/\" /etc/default/rcS",
       "TASK   hosts - Set /etc/hosts",
       "SUDO   echo \"127.0.0.1 localhost.localdomain localhost\" > /etc/hosts",
       "SUDO   echo \"127.0.1.1 hostname\" >> /etc/hosts",

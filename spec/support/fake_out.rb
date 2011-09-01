@@ -3,6 +3,10 @@ class FakeOut
     @buffer = []
   end
 
+  def inspect
+    @buffer.join("\n")
+  end
+
   def print message
     @buffer << message
   end

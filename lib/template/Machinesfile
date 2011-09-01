@@ -1,5 +1,3 @@
-# Machine types
-# machine 'type', :environment, :roles => [], :apps => []
 all_apps = %w(application wiki)
 machine 'Desktop', :development, :roles => [:app, :db], :apps => all_apps
 machine 'Staging', :staging, :roles => [:app, :db], :apps => all_apps
@@ -9,14 +7,12 @@ machine 'DBslave', :production, :roles => [:db, :dbslave]
 
 package :questions
 
-# Installed on all machines
 package :base
 
-# Installed on machines that have the app role
 only :roles => :app do
   package :dotfiles
   package :webapps
-  package :git                # Needed by RVM, gmate, etc
+  package :git
   package :rvm
   package :ruby
   package :nginx
@@ -25,12 +21,10 @@ only :roles => :app do
   package :nginx_logrotate
 end
 
-# Installed on machines that have the db role
 only :roles => :db do
   package :mysql
 end
 
-# Installed on machines when user is phil
 only :users => 'phil' do
   package :openbox
   package :docky
