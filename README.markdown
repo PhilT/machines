@@ -90,15 +90,15 @@ If testing on a VM see **Setting up the test Machines virtual machine** below.
 
   For i386 do:
 
-      wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/boot.img.gz -O /tmp/boot_i386.img.gz
-      gunzip /tmp/boot_i386.img.gz
-      sudo dd if=/tmp/boot_i386.img of=/dev/sdX
+      wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/boot.img.gz -O ~/Downloads/Ubuntu11.04_i386.img.gz
+      gunzip ~/Downloads/Ubuntu11.04_i386.img.gz
+      sudo dd if=~/Downloads/Ubuntu11.04_i386.img of=/dev/sdX
 
   or for amd64 do:
 
-      wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/boot.img.gz -O /tmp/boot_amd64.img.gz
-      gunzip /tmp/boot_amd64.img.gz
-      sudo dd if=/tmp/boot_amd64.img of=/dev/sdX
+      wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/boot.img.gz -O ~/Downloads/Ubuntu11.04_amd64.img.gz
+      gunzip ~/Downloads/Ubuntu11.04_amd64.img.gz
+      sudo dd if=~/Downloads/Ubuntu11.04_amd64.img of=/dev/sdX
 
 * Insert the USB stick and boot from it to install Ubuntu
 * Install SSH Server & note the IP address
@@ -210,9 +210,15 @@ Default structure created by running `machines new example`:
 Setting up the test Machines virtual machine
 ---------------------------------------
 
-* Grab the Minimal CD Image (I use the x64 one)
+* Grab the Minimal CD Image
 
-      wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/mini.iso -O /tmp/11.04x64.iso
+  For i386 do:
+
+      wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/mini.iso -O ~/Downloads/Ubuntu11.04_i386.iso
+
+  or for amd64 do:
+
+      wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/mini.iso -O ~/Downloads/Ubuntu11.04_amd64.iso
 
 * Start your virtualization software (I use VirtualBox).
   * Create a new VM with the name of machinesvm (used in the rake tasks and tests)
