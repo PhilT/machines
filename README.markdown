@@ -211,7 +211,9 @@ Setting up the test Machines virtual machine
 ---------------------------------------
 
 * Grab the Minimal CD Image (I use the x64 one)
-    wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/mini.iso -O /tmp/11.04x64.iso
+
+      wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/mini.iso -O /tmp/11.04x64.iso
+
 * Start your virtualization software (I use VirtualBox).
   * Create a new VM with the name of machinesvm (used in the rake tasks and tests)
   * Select Ubuntu or Ubuntu x64 as the OS (depending on your chosen image)
@@ -222,11 +224,17 @@ Setting up the test Machines virtual machine
 * Accept default hostname (this will be set later)
 * Enter 'user' for username and 'password' for the password
 * If desired apply the piix4_smbus error fix(A warning that appears on Ubuntu VMs when booting: May be fixed in 11.04)
-    sudo sh -c 'echo blacklist i2c_piix4 >> /etc/modprobe.d/blacklist.conf'
+
+      sudo sh -c 'echo blacklist i2c_piix4 >> /etc/modprobe.d/blacklist.conf'
+
 * And add openssh
-    sudo apt-get -y install openssh-server && ifconfig
+
+      sudo apt-get -y install openssh-server && ifconfig
+
 * On your local machine add an entry to the hosts file (change VM_IP_ADDRESS to the ip address of the VM)
-    sudo sh -c 'echo VM_IP_ADDRESS machinesvm >> /etc/hosts'
+
+      sudo sh -c 'echo VM_IP_ADDRESS machinesvm >> /etc/hosts'
+
 * Finally, take a snapshot of the VM and name it 'Clean'. This is used to restore the VM to a known state after each test run
 
 
