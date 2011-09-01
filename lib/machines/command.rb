@@ -40,7 +40,7 @@ module Machines
     end
 
     def process &block
-      AppConf.console.log progress + info, :newline => false
+      AppConf.console.log progress + info, :newline => AppConf.log_only
       AppConf.file.log info, :color => :highlight
       unless AppConf.log_only
         yield

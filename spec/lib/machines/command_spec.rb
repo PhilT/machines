@@ -27,6 +27,17 @@ describe Command do
     end
 
     describe 'logs' do
+      before(:each) do
+        AppConf.log_only = false
+      end
+
+      it 'to screen without using return when logging only' do
+      AppConf.log_only = true
+        subject.run
+
+        "100% RUN    command\n".should be_displayed
+      end
+
       it 'successful command to screen and file' do
         subject.run
 

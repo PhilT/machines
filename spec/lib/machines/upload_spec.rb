@@ -15,6 +15,7 @@ describe Command do
   describe 'run' do
     before(:each) do
       AppConf.commands = [subject]
+      AppConf.log_only = false
       @mock_ssh = mock Net::SSH
       @mock_scp = mock Net::SCP, :session => @mock_ssh
       Command.scp = @mock_scp
@@ -29,6 +30,14 @@ describe Command do
       "CHECK PASSED\n".should be_logged as_success
       "100% UPLOAD local to remote\r".should be_displayed
       "100% UPLOAD local to remote\n".should be_displayed as_success
+    end
+
+    it 'logs with newline when logging only' do
+      @mock_scp.stub(:upload!)
+      AppConf.log_only = true
+      subject.run
+
+      "100% UPLOAD local to remote\n".should be_displayed
     end
 
     it 'uploads a directory source' do

@@ -3,7 +3,7 @@ require 'date'
 module Machines
   class Logger
     HighLine.color_scheme = HighLine::ColorScheme.new do |cs|
-      cs[:highlight]  = [:bold, :white]
+      cs[:highlight]  = [:bold, :blue]
       cs[:warning]    = [:yellow]
       cs[:failure]    = [:red]
       cs[:success]    = [:green]
