@@ -31,7 +31,7 @@ describe Command do
         AppConf.log_only = false
       end
 
-      it 'to screen without using return when logging only' do
+      it 'to screen using newline instead of return when logging only' do
       AppConf.log_only = true
         subject.run
 

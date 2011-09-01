@@ -263,11 +263,6 @@ These are known issues and nothing to worry about.
 Development, Patches, Pull Requests
 ---------------------------------------
 
-This project uses *watchr* for continuous testing.
-It's fast and very configurable. The script approximates autotest behaviour.
-It've also added an option to only run the spec/code being worked on. This helps focus on one file.
-    watchr .watchr
-
 * Fork the project.
 * Test drive your feature addition or bug fix
 * Commit, do not mess with rakefile, version, or history.
