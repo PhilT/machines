@@ -5,12 +5,12 @@ Setup Ubuntu development and server **Machines** locally or on Amazon EC2 for ho
 
 Run commands like:
 
-    sudo install %w(build-essential zlib1g-dev libpcre3-dev) # Install apt packages
-    sudo install 'git://github.com/gmate/gmate.git', :to => dir, :args => '-n' # Clone a Git repo and run the installer with -n
-    sudo write "127.0.1.1\t#{AppConf.hostname}", :to => '/etc/hosts' # Write a file
-    sudo append "192.168.1.2\tserver", :to => '/etc/hosts' # Append to a file
-    run download AppConf.nginx.url # Download a file
-    run create_from 'nginx/nginx.conf.erb', :to => File.join(AppConf.nginx.path, 'conf', 'nginx.conf') # Write a file from an ERB template
+    sudo install %w(build-essential zlib1g-dev libpcre3-dev)
+    sudo install 'git://github.com/gmate/gmate.git', :to => dir, :args => '-n'
+    sudo write "127.0.1.1\t#{AppConf.hostname}", :to => '/etc/hosts'
+    sudo append "192.168.1.2\tserver", :to => '/etc/hosts'
+    run download AppConf.nginx.url
+    run create_from 'nginx/nginx.conf.erb', :to => File.join(AppConf.nginx.path, 'conf', 'nginx.conf')
 
 Status
 ---------------------------------------
@@ -23,21 +23,12 @@ It is currently under development but I am very close to rolling out a beta.
 Features
 ---------------------------------------
 
-* Working default template includes:
-  * Nginx 1
-  * RVM
-  * Passenger 3
-  * Ruby 1.9.2
-  * Ruby on Rails 3
-  * MySQL 5 including replication
-  * logrotate
-  * Git
-  * Openbox, docky, gEdit with gmate and VirtualBox for development
-  * Planned
-    * Monit, Munin, Sphinx, mail, DB backups
+* Preconfigured Ruby & Rails development environment including, Openbox, docky, gEdit with gmate and VirtualBox
+* Working default template supports Nginx, RVM, Passenger, Ruby, Rails apps, MySQL (+ replication), Git, Monit, Logrotate
 * Easily override the defaults with configuration options and custom ruby
-* Firefox and Chrome browser package repos added making it easier to keep up-to-date with the latest versions
-* Tested on Ubuntu i386/amd64 11.04 minimal install
+* Several deb sources added making it easier to keep up-to-date with the latest versions
+* Tested on Ubuntu i386/amd64 11.04 minimal
+* Minimal Ubuntu ISO/IMG used for increased security, stability and speed
 
 
 Motivation
@@ -58,11 +49,14 @@ cloud computing instances can be brought up on a whim, I find this an acceptable
 Description
 ---------------------------------------
 
-This tool should make it simple to develop and deploy Ruby on Rails applications on Ubuntu by providing sensible
-defaults in a template build script, the `Machinesfile` and associated `package` files.
+This tool should make it simple to develop and deploy Ruby on Rails applications on Ubuntu by providing a build script
+with sensible defaults.
 
+The top level script is the `Machinesfile`. This contains the packages to include. Packages contain the commands to
+run. Default packages are provided by *machines*. Default packages can be overridden and new ones created. Feel free to
+fork *machines* and your add packages. Send a pull request and if they are tested they'll be added to the next release.
 
-[TODO: Describe packages, sudo, run, commands, etc]
+Commands are added to a queue with `sudo` or `run`. [Here is a list of the packages](https://github.com/PhilT/machines/tree/master/lib/packages) in *machines*. [TODO: List of commands]
 
 
 Installation and Configuration
@@ -94,15 +88,20 @@ If testing on a VM see **Setting up the test Machines virtual machine** below.
 
 * Download and prepare the Ubuntu USB image. Replace `/dev/sdX` with your USB device name (use dmesg)
 ** i386
+
     wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/boot.img.gz -O /tmp/boot_i386.img.gz
     gunzip /tmp/boot_i386.img.gz
     sudo dd if=/tmp/boot_i386.img of=/dev/sdX
+
 ** or amd64
+
     wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/boot.img.gz -O /tmp/boot_amd64.img.gz
     gunzip /tmp/boot_amd64.img.gz
     sudo dd if=/tmp/boot_amd64.img of=/dev/sdX
+
 * Insert the USB stick and boot from it to install Ubuntu
 * Install SSH Server & note the IP address
+
     sudo apt-get update && sudo apt-get -y install openssh-server && ifconfig
 
 ### Check the Machinesfile
