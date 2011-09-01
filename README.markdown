@@ -87,17 +87,18 @@ Running `machines new example` creates the `example` directory and copies in a d
 If testing on a VM see **Setting up the test Machines virtual machine** below.
 
 * Download and prepare the Ubuntu USB image. Replace `/dev/sdX` with your USB device name (use dmesg)
-** i386
 
-    wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/boot.img.gz -O /tmp/boot_i386.img.gz
-    gunzip /tmp/boot_i386.img.gz
-    sudo dd if=/tmp/boot_i386.img of=/dev/sdX
+  For i386 do:
 
-** or amd64
+      wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/boot.img.gz -O /tmp/boot_i386.img.gz
+      gunzip /tmp/boot_i386.img.gz
+      sudo dd if=/tmp/boot_i386.img of=/dev/sdX
 
-    wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/boot.img.gz -O /tmp/boot_amd64.img.gz
-    gunzip /tmp/boot_amd64.img.gz
-    sudo dd if=/tmp/boot_amd64.img of=/dev/sdX
+  or for amd64 do:
+
+      wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/boot.img.gz -O /tmp/boot_amd64.img.gz
+      gunzip /tmp/boot_amd64.img.gz
+      sudo dd if=/tmp/boot_amd64.img of=/dev/sdX
 
 * Insert the USB stick and boot from it to install Ubuntu
 * Install SSH Server & note the IP address
