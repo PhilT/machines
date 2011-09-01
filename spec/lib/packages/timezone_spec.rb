@@ -9,7 +9,7 @@ describe 'packages/timezone' do
   it 'adds the following commands' do
     eval_package
     AppConf.commands.map(&:info).should == [
-      "TASK   timezone - Set timezone from config.yml",
+      "TASK   timezone - Set timezone from config.yml and update time daily using NTP",
       "SUDO   ln -sf /etc/localtime /usr/share/zoneinfo/GB",
       "SUDO   sed -i \"s/UTC=yes/UTC=no/\" /etc/default/rcS",
       'SUDO   echo "ntpdate -s ntp.ubuntu.com pool.ntp.org" > /etc/cron.daily/ntpdate',

@@ -1,64 +1,11 @@
 module Machines
   module FileOperations
-    # Rename a remote file
-    # @param [String] oldname Existing filename
-    # @param [String] newname Rename to this =
-    def rename oldname, newname
-      Command.new("mv #{oldname} #{newname}", check_file(newname))
-    end
-
-    # Copy a remote file or directory
-    # @param [String] from Existing path
-    # @param [String] to Path to copy to
-    def copy from, to
-      recursive = '-R ' if File.directory?(from)
-      Command.new("cp #{recursive}#{from} #{to}", check_file(to))
-    end
-
-    # Remove a remote file
-    # @param [String] file to remove (uses rm with -f which ignore non-existent files)
-    def remove file
-      Command.new("rm -f #{file}", check_file(file, false))
-    end
-
-    # Take off the version numbers from a path name
-    # @param [String] name Name of the path to rename
-    def remove_version_info name
-      Command.new("find . -maxdepth 1 -name \"#{name}*\" -a -type d | xargs -I xxx mv xxx #{name}", check_file(name))
-    end
-
-    # Add a symlink
-    # @param [String] target Existing path to link
-    # @param [String] link_name path name for the link
-    def link target, link_name
-      Command.new("ln -sf #{target} #{link_name}", check_link(link_name))
-    end
-
-    # Replace some text in a file
-    # @param [String] regex The expression to search for
+    # Add some text to the end of a file
+    # @param [String] line Line of text to add
     # @param [Hash] options
-    # @option options [String] :with Text to use as the replacement
-    # @option options [String] :in Filename to replace text in
-    def replace regex, options
-      required_options options, [:with, :in]
-      with = options[:with].to_s.gsub('/', '\/').gsub("\n", "\\n")
-      Command.new("sed -i \"s/#{regex}/#{with}/\" #{options[:in]}", check_string(options[:with], options[:in]))
-    end
-
-    # Write a file from an ERB template
-    # @param [String] erb_path Path to the ERB file to process
-    # @param [Hash] options
-    # @option options [AppBuilder] :settings Contains the settings as OpenStruct method calls for calling from the template
-    # @option options [String] :to File to write to
-    def create_from erb_path, options
-      erb = ERB.new(File.read(erb_path))
-      binding = options[:settings] ? options[:settings].get_binding : nil
-      write erb.result(binding), options
-    end
-
-    # Create a path on the remote host
-    def mkdir dir
-      Command.new("mkdir -p #{dir}", check_dir(dir))
+    # @option options [String] :to File to append to
+    def append line, options
+      Command.new("echo \"#{line}\" >> #{options[:to]}", check_string(line, options[:to]))
     end
 
     # Change permissions of a path
@@ -76,6 +23,75 @@ module Machines
     def chown user, path, options = {}
       recursive = '-R ' if options[:recursive]
       Command.new("chown #{recursive}#{user}:#{user} #{path}", check_owner(user, path))
+    end
+
+    # Copy a remote file or directory
+    # @param [String] from Existing path
+    # @param [String] to Path to copy to
+    def copy from, to
+      recursive = '-R ' if File.directory?(from)
+      Command.new("cp #{recursive}#{from} #{to}", check_file(to))
+    end
+
+    # Write a file from an ERB template
+    # @param [String] erb_path Path to the ERB file to process
+    # @param [Hash] options
+    # @option options [AppBuilder] :settings Contains the settings as OpenStruct method calls for calling from the template
+    # @option options [String] :to File to write to
+    def create_from erb_path, options
+      erb = ERB.new(File.read(erb_path))
+      binding = options[:settings] ? options[:settings].get_binding : nil
+      write erb.result(binding), options
+    end
+
+    # Add a symlink
+    # @param [String] target Existing path to link
+    # @param [String] link_name path name for the link
+    def link target, link_name
+      Command.new("ln -sf #{target} #{link_name}", check_link(link_name))
+    end
+
+    # Create a path on the remote host
+    def mkdir dir
+      Command.new("mkdir -p #{dir}", check_dir(dir))
+    end
+
+    # Rename a remote file
+    # @param [String] oldname Existing filename
+    # @param [String] newname Rename to this =
+    def rename oldname, newname
+      Command.new("mv #{oldname} #{newname}", check_file(newname))
+    end
+
+    # Remove a remote file
+    # @param [String] file to remove (uses rm with -f which ignore non-existent files)
+    def remove file
+      Command.new("rm -f #{file}", check_file(file, false))
+    end
+
+    # Take off the version numbers from a path name
+    # @param [String] name Name of the path to rename
+    def remove_version_info name
+      Command.new("find . -maxdepth 1 -name \"#{name}*\" -a -type d | xargs -I xxx mv xxx #{name}", check_file(name))
+    end
+
+    # Replace some text in a file
+    # @param [String] regex The expression to search for
+    # @param [Hash] options
+    # @option options [String] :with Text to use as the replacement
+    # @option options [String] :in Filename to replace text in
+    def replace regex, options
+      required_options options, [:with, :in]
+      with = options[:with].to_s.gsub('/', '\/').gsub("\n", "\\n")
+      Command.new("sed -i \"s/#{regex}/#{with}/\" #{options[:in]}", check_string(options[:with], options[:in]))
+    end
+
+    # Overwrite a file with the specified content
+    # @param [String] line Line of text to add
+    # @param [Hash] options
+    # @option options [String] :to File to write to
+    def write line, options
+      Command.new("echo \"#{line}\" > #{options[:to]}", check_string(line, options[:to]))
     end
   end
 end

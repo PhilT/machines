@@ -1,29 +1,17 @@
 require 'spec_helper'
 
 describe 'Configuration' do
-  describe 'write' do
-    it 'overwrites a file with specified content' do
-      subject = write 'some string', :to => 'a_file'
-      subject.command.should == 'echo "some string" > a_file'
-    end
-  end
-
-  describe 'append' do
-    it 'echos a string to a file' do
-      subject = append 'some string', :to => 'a_file'
-      subject.command.should == 'echo "some string" >> a_file'
-    end
-  end
-
-  describe 'export' do
-    it 'fails when not given a file' do
-      lambda{export :key => :value}.should raise_error(ArgumentError)
+  describe 'add_user' do
+    it do
+      subject = add_user 'login'
+      subject.command.should == 'useradd -s /bin/bash -d /home/login -m login'
+      subject.check.should == "test -d /home/login #{echo_result}"
     end
 
-    it 'exports a key/value to a file' do
-      subject = export :key => :value, :to => 'to_file'
-      subject.map(&:command).should == ["echo \"export key=value\" >> to_file"]
-      subject.map(&:check).should == ["grep \"export key=value\" to_file #{echo_result}"]
+    it do
+      subject = add_user 'a_user', :password => 'password', :admin => true
+      subject.command.should match /useradd -s \/bin\/bash -d \/home\/a_user -m -p .* -G admin a_user/
+      subject.check.should == "test -d /home/a_user #{echo_result}"
     end
   end
 
@@ -45,20 +33,6 @@ describe 'Configuration' do
     end
 
     it { lambda{ configure(:invalid_type => Object.new) }.should raise_error }
-  end
-
-  describe 'add_user' do
-    it do
-      subject = add_user 'login'
-      subject.command.should == 'useradd -s /bin/bash -d /home/login -m login'
-      subject.check.should == "test -d /home/login #{echo_result}"
-    end
-
-    it do
-      subject = add_user 'a_user', :password => 'password', :admin => true
-      subject.command.should match /useradd -s \/bin\/bash -d \/home\/a_user -m -p .* -G admin a_user/
-      subject.check.should == "test -d /home/a_user #{echo_result}"
-    end
   end
 
   describe 'del_user' do
