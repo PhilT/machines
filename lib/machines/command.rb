@@ -50,10 +50,9 @@ module Machines
           AppConf.file.log result, :color => color_for(result)
           AppConf.console.log progress + info, :success => result != 'CHECK FAILED'
         rescue Exception => e
-          AppConf.file.log e.to_s, :color => :failure
-          AppConf.console.log progress + info, :success => false
-          raise
-        ensure
+          AppConf.console.log(progress + info, :success => false) rescue nil
+          AppConf.file.log(e.to_s, :color => :failure) rescue nil
+          raise e
         end
       end
     end

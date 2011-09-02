@@ -106,6 +106,20 @@ describe Command do
         "result\n".should be_logged
         "Exception\n".should be_logged as_failure
       end
+
+      it 'ensure logging failures do not stop app exiting gracefully' do
+        @mock_ssh.should_receive(:exec!).with('check').and_raise Exception.new
+        AppConf.file.stub(:log)
+        AppConf.file.should_receive(:log).with('Exception', :color => :failure).and_raise ArgumentError
+        lambda {subject.run}.should_not raise_error ArgumentError
+      end
+
+      it 'ensure console failures do not stop app exiting gracefully' do
+        @mock_ssh.should_receive(:exec!).with('check').and_raise Exception.new
+        AppConf.console.stub(:log)
+        AppConf.console.should_receive(:log).with('100% RUN    command', :success => false).and_raise ArgumentError
+        lambda {subject.run}.should_not raise_error ArgumentError
+      end
     end
 
     it 'wraps command execution in sudo with a password' do
