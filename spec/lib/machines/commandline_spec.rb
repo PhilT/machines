@@ -37,22 +37,36 @@ describe 'CommandLine' do
 
   describe 'generate' do
     it 'copies the template' do
-      FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template", AppConf.project_dir)
-      FileUtils.should_receive(:mkdir).with(File.join(AppConf.project_dir, 'packages'))
+      FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template/.", AppConf.project_dir)
+      FileUtils.should_receive(:mkdir_p).with(File.join(AppConf.project_dir, 'packages'))
       generate nil
     end
 
     it 'copies the template within dir' do
-      FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template", AppConf.project_dir + '/dir')
-      FileUtils.should_receive(:mkdir).with(File.join(AppConf.project_dir, 'dir', 'packages'))
+      FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template/.", AppConf.project_dir + '/dir')
+      FileUtils.should_receive(:mkdir_p).with(File.join(AppConf.project_dir, 'dir', 'packages'))
       should_receive(:say).with('Project created at /prj/dir')
       generate 'dir'
     end
 
-    it 'displays message and terminates when directory exists' do
-      FileUtils.mkdir_p('/prj/dir')
-      should_receive(:say).with('Directory already exists')
-      generate 'dir'
+    context 'when directory exists' do
+      before(:each) do
+        FileUtils.mkdir_p('/prj/dir')
+      end
+
+      it 'is overwritten after user confirmation' do
+        should_receive(:ask).with('Directory already exists. Overwrite?').and_return 'y'
+        FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template/.", AppConf.project_dir + '/dir')
+        FileUtils.should_receive(:mkdir_p).with(File.join(AppConf.project_dir, 'dir', 'packages'))
+        generate 'dir'
+      end
+
+      it 'generation is aborted at user request' do
+        should_receive(:ask).with('Directory already exists. Overwrite?').and_return 'n'
+        FileUtils.should_not_receive(:cp_r)
+        FileUtils.should_not_receive(:mkdir_p)
+        generate 'dir'
+      end
     end
   end
 

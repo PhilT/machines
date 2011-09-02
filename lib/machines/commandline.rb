@@ -30,9 +30,12 @@ module Machines
 
     def generate dir
       AppConf.project_dir = File.join(AppConf.project_dir, dir) if dir
-      return say 'Directory already exists' if File.exists? AppConf.project_dir
-      FileUtils.cp_r(File.join(AppConf.application_dir, 'template'), AppConf.project_dir)
-      FileUtils.mkdir(File.join(AppConf.project_dir, 'packages'))
+      if File.exists? AppConf.project_dir
+        confirm = ask 'Directory already exists. Overwrite?'
+        return unless confirm.downcase == 'y'
+      end
+      FileUtils.cp_r(File.join(AppConf.application_dir, 'template', '/.'), AppConf.project_dir)
+      FileUtils.mkdir_p(File.join(AppConf.project_dir, 'packages'))
       say "Project created at #{AppConf.project_dir}"
     end
 
