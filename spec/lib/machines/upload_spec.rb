@@ -40,6 +40,14 @@ describe Command do
       "100% UPLOAD local to remote\n".should be_displayed
     end
 
+    it 'logs with return when log_only not specified' do
+      @mock_scp.stub(:upload!)
+      AppConf.log_only = nil
+      subject.run
+
+      "100% UPLOAD local to remote\r".should be_displayed
+    end
+
     it 'uploads a directory source' do
       FileUtils.mkdir_p('local')
       @mock_scp.should_receive(:upload!).with('local', 'remote', {:recursive => true})

@@ -38,6 +38,13 @@ describe Command do
         "100% RUN    command\n".should be_displayed
       end
 
+      it 'defaults screen logging to return' do
+        AppConf.log_only = nil
+        subject.run
+
+        "100% RUN    command\r".should be_displayed
+      end
+
       it 'successful command to screen and file' do
         subject.run
 
