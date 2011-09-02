@@ -32,7 +32,7 @@ module Machines
       message ||= '(no message)'
       message = merge_multiple_lines_of message if @truncate
       message = blank_out_passwords message
-      color = options[:color] || {nil => nil, true => :success, false => :failure}[options[:success]]
+      color = options[:color]
       message = $terminal.color(message, color) if color
       options[:newline] = true if options[:newline].nil?
       message += newline_or_return options[:newline]

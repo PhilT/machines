@@ -32,6 +32,10 @@ describe Command do
         AppConf.commands = [subject]
         @mock_ssh.should_not_receive(:exec!).with(nil)
         subject.run
+
+        "100% RUN    command\r".should be_displayed
+        "100% RUN    command\n".should be_displayed as_warning
+
         "RUN    command\n".should be_logged as_highlight
         "result\n".should be_logged
         "NOT CHECKED\n".should be_logged as_warning
@@ -117,7 +121,7 @@ describe Command do
       it 'ensure console failures do not stop app exiting gracefully' do
         @mock_ssh.should_receive(:exec!).with('check').and_raise Exception.new
         AppConf.console.stub(:log)
-        AppConf.console.should_receive(:log).with('100% RUN    command', :success => false).and_raise ArgumentError
+        AppConf.console.should_receive(:log).with('100% RUN    command', :color => :failure).and_raise ArgumentError
         lambda {subject.run}.should_not raise_error ArgumentError
       end
     end

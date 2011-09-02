@@ -36,16 +36,6 @@ describe 'Helpers' do
       "command\n".should be_logged
     end
 
-    it 'displays message in success colour' do
-      AppConf.file.log 'command', :success => true
-      "command\n".should be_logged as_success
-    end
-
-    it 'displays message in failure colour' do
-      AppConf.file.log 'command', :success => false
-      "command\n".should be_logged as_failure
-    end
-
     it 'displays message in specified color' do
       AppConf.file.log 'command', :color => :yellow
       "command\n".should be_logged in_yellow
