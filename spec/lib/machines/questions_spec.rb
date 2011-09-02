@@ -17,7 +17,7 @@ MACHINESFILE
     end
 
     it 'prompts user to select machine' do
-      @mock_menu.should_receive(:prompt=).with('Select machine to build:')
+      @mock_menu.should_receive(:prompt=).with('Select machine to build: ')
       should_receive(:choose).and_yield @mock_menu
       choose_machine
     end

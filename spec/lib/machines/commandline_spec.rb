@@ -55,14 +55,14 @@ describe 'CommandLine' do
       end
 
       it 'is overwritten after user confirmation' do
-        should_receive(:ask).with('Directory already exists. Overwrite?').and_return 'y'
+        should_receive(:ask).with('Directory already exists. Overwrite (y/n)? ').and_return 'y'
         FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template/.", AppConf.project_dir + '/dir')
         FileUtils.should_receive(:mkdir_p).with(File.join(AppConf.project_dir, 'dir', 'packages'))
         generate 'dir'
       end
 
       it 'generation is aborted at user request' do
-        should_receive(:ask).with('Directory already exists. Overwrite?').and_return 'n'
+        should_receive(:ask).with('Directory already exists. Overwrite (y/n)? ').and_return 'n'
         FileUtils.should_not_receive(:cp_r)
         FileUtils.should_not_receive(:mkdir_p)
         generate 'dir'

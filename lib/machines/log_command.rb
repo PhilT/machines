@@ -8,9 +8,9 @@ module Machines
     end
 
     def run
-      AppConf.console.log "\n"
+      AppConf.console.log ''
       AppConf.console.log '     ' + info, :color => :info, :progress => progress
-      AppConf.file.log "\n"
+      AppConf.file.log ''
       AppConf.file.log info, :color => :info
     end
 
