@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'aws-sdk'
 
 describe 'Ec2Machine' do
   include Ec2Machine
@@ -8,7 +9,7 @@ describe 'Ec2Machine' do
       :connection => nil,
       :access_key_id => 'access_key_id',
       :secret_access_key => 'secret_access_key',
-      :url => 'url',
+      :endpoint => 'url',
       :private_key_file => 'certs/private_key_file.key',
       :security_group => 'security_group',
       :type => 'type',
@@ -18,10 +19,10 @@ describe 'Ec2Machine' do
 
   describe 'connect' do
     it 'ensure settings are correctly passed to API' do
-      AWS::EC2::Base.should_receive(:new).with(
+      AWS::EC2.should_receive(:new).with(
         :access_key_id => 'access_key_id',
         :secret_access_key => 'secret_access_key',
-        :server => 'url'
+        :ec2_endpoint => 'url'
       ).and_return 'ec2_connection'
       connect_to_ec2
       AppConf.ec2.connection.should == 'ec2_connection'

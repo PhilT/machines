@@ -9,7 +9,10 @@ end
 
 only :roles => :db do
   task :mysql, 'Install MySQL' do
-    sudo install %w(libmysqld-dev mysql-server)
+    sudo install %w(debconf-utils)
+    sudo "echo mysql-server-5.1 mysql-server/root_password password #{AppConf.db.pass} | debconf-set-selections"
+    sudo "echo mysql-server-5.1 mysql-server/root_password_again password #{AppConf.db.pass} | debconf-set-selections"
+    sudo install %w(mysql-server)
     set_mysql_root_password AppConf.db.pass
     run restart 'mysqld'
   end

@@ -1,10 +1,18 @@
 module Machines
   module Ec2Machine
     def connect_to_ec2
-      AppConf.ec2.connection = AWS::EC2::Base.new(
+      begin
+        require 'aws-sdk'
+      rescue LoadError
+        say 'aws_sdk gem required to use ec2/s3 features', :red
+        say 'please gem install aws-sdk', :red
+        raise
+      end
+
+      AppConf.ec2.connection = AWS::EC2.new(
         :access_key_id => AppConf.ec2.access_key_id,
         :secret_access_key => AppConf.ec2.secret_access_key,
-        :server => AppConf.ec2.url
+        :ec2_endpoint => AppConf.ec2.endpoint
       )
     end
 

@@ -13,14 +13,13 @@ Gem::Specification.new do |s|
   s.rubyforge_project         = 'machines'
 
   s.add_dependency 'activesupport'
-  s.add_dependency 'amazon-ec2'
   s.add_dependency 'app_conf'
   s.add_dependency 'highline'
   s.add_dependency 'i18n'
   s.add_dependency 'net-ssh'
   s.add_dependency 'net-scp'
-  s.add_dependency 's3'
 
+  s.add_development_dependency 'aws-sdk'
   s.add_development_dependency 'bluecloth'
   s.add_development_dependency 'guard'
   s.add_development_dependency 'guard-bundler'

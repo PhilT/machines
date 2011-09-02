@@ -91,7 +91,7 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to File to write to
     def write line, options
-      Command.new("echo \"#{line}\" > #{options[:to]}", check_string(line, options[:to]))
+      Command.new("echo \"#{line.gsub(/([\$"])/, '\\1')}\" > #{options[:to]}", check_string(line, options[:to]))
     end
   end
 end

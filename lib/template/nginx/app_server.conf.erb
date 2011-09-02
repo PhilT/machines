@@ -1,7 +1,7 @@
 # Redirect from www
 server {
   server_name www.<%= server_name %>;
-  rewrite ^ https://\$server_name\$uri permanent
+  rewrite ^ https://$server_name$uri permanent
 }
 
 server {

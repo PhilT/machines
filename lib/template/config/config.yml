@@ -6,7 +6,7 @@ ec2:
   # 64 bit instances - m1.large, m1.xlarge, c1.xlarge, cc1.4xlarge, cg1.4xlarge, m2.xlarge, m2.2xlarge, m2.4xlarge
   type: m1.large
   ami: ami-379ea943 # EU WEST 1 Ubuntu x64 11.04 EBS - Choose your preferred AMI at http://alestic.com/
-  url: eu-west-1.ec2.amazonaws.com
+  endpoint: ec2.eu-west-1.amazonaws.com
   private_key_file: certificates/amazon.key
   security_group: eu-public
 
