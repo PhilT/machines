@@ -16,6 +16,7 @@ describe 'Machines' do
 
   describe 'init' do
     it 'initializes some AppConf settings and loads configs' do
+      AppConf.file = nil
       subject.init
       AppConf.machines.should == {}
       AppConf.passwords.should == []

@@ -13,7 +13,7 @@ describe 'Development Machine Build' do
     stop_vm
   end
 
-  it 'does a dry run then real build' do
+  it 'does a dry run then real build', :vm => true do
     generates_template
     runs_build
   end

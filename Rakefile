@@ -3,13 +3,17 @@ require 'yard'
 require 'rspec/core/rake_task'
 require 'highline/import'
 
-task :default => [:coverage, :integration, :yard, :install] do
+task :default => [:coverage, 'integration:non_vm', :yard, :install, :done]
+task :all => [:coverage, 'integration:all', :yard, :install, :done]
+
+task :done do
   puts '', $terminal.color('Done.', :bold, :blue)
 end
 
 YARD::Rake::YardocTask.new
 RSpec::Core::RakeTask.new do |t|
   t.pattern = './spec/{support_specs,lib}/**/*_spec.rb'
+  t.rspec_opts = '-t ~vm'
 end
 
 desc 'Generate code coverage'
@@ -20,10 +24,17 @@ task :coverage do
   ENV['COVERAGE'] = nil
 end
 
-desc 'Run integration specs'
-task :integration do
-  puts '', $terminal.color('Running integration specs', :bold, :blue)
-  system('rspec spec/integration')
+desc 'Run integration specs that require a VM'
+namespace :integration do
+  task :non_vm do
+    puts '', $terminal.color('Running non VM integration specs', :bold, :blue)
+    system('rspec spec/integration -t ~vm')
+  end
+
+  task :all do
+    puts '', $terminal.color('Running all integration specs', :bold, :blue)
+    system('rspec spec/integration')
+  end
 end
 
 desc 'Build and install the gem'

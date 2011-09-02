@@ -37,8 +37,8 @@ module Machines
 
       path = File.join(AppConf.project_dir, 'log', 'output.log')
       FileUtils.mkdir_p File.dirname(path)
-      AppConf.file = Machines::Logger.new File.open(path, 'w')
-      AppConf.console = Machines::Logger.new STDOUT, :truncate => true
+      AppConf.file ||= Machines::Logger.new File.open(path, 'w')
+      AppConf.console ||= Machines::Logger.new STDOUT, :truncate => true
     end
 
     def dryrun
