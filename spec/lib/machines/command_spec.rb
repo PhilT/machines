@@ -26,13 +26,25 @@ describe Command do
       subject.run
     end
 
+    describe 'check_result' do
+      it 'returns NOT CHECKED when nothing to execute' do
+        subject = Command.new('command', nil)
+        AppConf.commands = [subject]
+        @mock_ssh.should_not_receive(:exec!).with(nil)
+        subject.run
+        "RUN    command\n".should be_logged as_highlight
+        "result\n".should be_logged
+        "NOT CHECKED\n".should be_logged as_warning
+      end
+    end
+
     describe 'logs' do
       before(:each) do
         AppConf.log_only = false
       end
 
       it 'to screen using newline instead of return when logging only' do
-      AppConf.log_only = true
+        AppConf.log_only = true
         subject.run
 
         "100% RUN    command\n".should be_displayed

@@ -15,21 +15,12 @@ module Machines
       end
     end
 
-    def enter_and_confirm_password(message = 'Enter a new password: ')
-      begin
-        password = ask(message) { |question| question.echo = false }
-        password_confirmation = ask('Confirm the password: ') { |question| question.echo = false }
-        say "Passwords do not match, please re-enter" unless password == password_confirmation
-      end while password != password_confirmation
-      password
-    end
-
     def htpasswd ignored = nil
       conf_dir = File.join(AppConf.project_dir, AppConf.webserver, 'conf')
       path = File.join(conf_dir, 'htpasswd')
       say "Generate BasicAuth password and add to #{path}"
       username = ask('Username: ')
-      password = enter_and_confirm_password
+      password = enter_password 'users'
 
       crypted_pass = password.crypt(WEBrick::Utils.random_string(2))
       FileUtils.mkdir_p conf_dir

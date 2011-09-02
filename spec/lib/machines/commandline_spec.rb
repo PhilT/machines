@@ -1,9 +1,6 @@
 require 'spec_helper'
 
 describe 'CommandLine' do
-  include Core
-  include Commandline
-
   describe 'execute' do
     it 'calls specified command' do
       %w(htpasswd check dryrun build).each do |command|
@@ -26,28 +23,6 @@ describe 'CommandLine' do
     it 'calls help when no matching command' do
       execute('anything', nil)
       $output.should == Help.new.to_s
-    end
-  end
-
-  describe 'enter_and_confirm_password' do
-    it 'does not echo output' do
-      mock_question = mock HighLine::Question
-      mock_question.should_receive(:echo=).with(false).twice
-      stub!(:ask).and_yield mock_question
-      enter_and_confirm_password
-    end
-
-    it 'asks for a password and confirmation' do
-      should_receive(:ask).with('Enter a new password: ').once.and_return 'pass'
-      should_receive(:ask).with('Confirm the password: ').once.and_return 'pass'
-      enter_and_confirm_password.should == 'pass'
-    end
-
-    it 'repeats until password and confirmation match' do
-      should_receive(:ask).with('Enter a new password: ').twice.and_return 'pass'
-      should_receive(:ask).with('Confirm the password: ').twice.and_return 'pas', 'pass'
-      should_receive(:say).with('Passwords do not match, please re-enter')
-      enter_and_confirm_password.should == 'pass'
     end
   end
 

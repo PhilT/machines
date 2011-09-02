@@ -16,7 +16,6 @@ Select machine to build:
 2. www-data
 Select a user:
 Enter users password:
-Confirm the password:
 Hostname to set machine to (Shown on bash prompt if default .bashrc used):
 THIS
   end

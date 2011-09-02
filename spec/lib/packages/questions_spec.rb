@@ -21,7 +21,8 @@ describe 'packages/questions' do
     should_receive(:start_ec2_instance?).and_return false
     should_receive(:enter_target_address).twice
     should_receive(:choose_user).and_return 'user_name'
-    should_receive(:enter_password).twice
+    should_receive(:enter_password).with('users', false).once
+    should_receive(:enter_password).with('database root').once
     eval_package
   end
 

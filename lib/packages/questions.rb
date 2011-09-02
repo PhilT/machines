@@ -8,7 +8,7 @@ task :questions, 'Ask some questions' do
   thread = Thread.new { connect && run_instance } if AppConf.ec2.use
   AppConf.target_address = enter_target_address('machine') unless AppConf.ec2.use || AppConf.log_only
   AppConf.user.name = choose_user
-  AppConf.user.pass = enter_password('users') unless AppConf.ec2.use
+  AppConf.user.pass = enter_password('users', false) unless AppConf.ec2.use
   AppConf.user.home = File.join('/home', AppConf.user.name)
   AppConf.appsroot = AppConf.users[AppConf.user.name].appsroot
   load_app_settings(machine[:apps])

@@ -44,7 +44,8 @@ module Machines
       AppConf.file.log info, :color => :highlight
       unless AppConf.log_only
         yield
-        result = check_result(@@ssh.exec!(@check))
+        result = @@ssh.exec!(@check) if @check
+        result = check_result(result || '')
         AppConf.file.log result, :color => color_for(result)
         AppConf.console.log progress + info, :success => result != 'CHECK FAILED'
       end

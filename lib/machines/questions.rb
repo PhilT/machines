@@ -18,9 +18,15 @@ module Machines
       choose(*users) { |menu| menu.prompt = 'Select a user: ' }
     end
 
-    def enter_password(type)
-      AppConf.passwords << enter_and_confirm_password("Enter #{type} password: ")
-      AppConf.passwords.last
+    def enter_password(type, confirm = true)
+      begin
+        password = ask("Enter #{type} password: ") { |question| question.echo = false }
+        break unless confirm
+        password_confirmation = ask('Confirm the password: ') { |question| question.echo = false }
+        say "Passwords do not match, please re-enter" unless password == password_confirmation
+      end while password != password_confirmation
+      AppConf.passwords << password if AppConf.passwords
+      password
     end
 
     def enter_hostname
