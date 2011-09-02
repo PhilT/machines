@@ -12,7 +12,7 @@ task :webapps, 'Sets up Web apps in config/apps.yml using app_server.conf.erb' d
     end
   end
 
-  run mkdir File.join(AppConf.nginx.path, AppConf.nginx.servers_dir)
+  sudo mkdir File.join(AppConf.nginx.path, AppConf.nginx.servers_dir)
   AppConf.apps.each do |app_name, app|
     make_app_structure app.path unless AppConf.environment == :development
     run generate_template_for(app)
@@ -21,7 +21,7 @@ task :webapps, 'Sets up Web apps in config/apps.yml using app_server.conf.erb' d
       sudo upload "certificates/#{ssl_crt}", '/etc/ssl/certs/{ssl_crt}'
       sudo upload "certificates/#{ssl_key}", '/etc/ssl/private/#{ssl_key}'
     end
-    run write_database_yml :to => File.join(app.path, 'shared', 'config'), :for => app_name
+    run write_database_yml :to => File.join(app.path, 'shared', 'config'), :for => app_name unless AppConf.environment == :development
   end
 end
 
