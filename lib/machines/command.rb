@@ -23,7 +23,7 @@ module Machines
       command = "export TERM=linux && #{@command}"
       echo_password = "echo #{AppConf.user.pass} | " if AppConf.user.pass
       command = "#{echo_password}sudo -S sh -c '#{command}'" if @sudo
-      process {AppConf.file.log @@ssh.exec! command }
+      process {AppConf.file.log @@ssh.exec! command}
     end
 
     def info
@@ -43,11 +43,18 @@ module Machines
       AppConf.console.log progress + info, :newline => (AppConf.log_only || false)
       AppConf.file.log info, :color => :highlight
       unless AppConf.log_only
-        yield
-        result = @@ssh.exec!(@check) if @check
-        result = check_result(result || '')
-        AppConf.file.log result, :color => color_for(result)
-        AppConf.console.log progress + info, :success => result != 'CHECK FAILED'
+        begin
+          yield
+          result = @@ssh.exec!(@check) if @check
+          result = check_result(result || '')
+          AppConf.file.log result, :color => color_for(result)
+          AppConf.console.log progress + info, :success => result != 'CHECK FAILED'
+        rescue Exception => e
+          AppConf.file.log e.to_s, :color => :failure
+          AppConf.console.log progress + info, :success => false
+          raise
+        ensure
+        end
       end
     end
 

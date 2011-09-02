@@ -93,6 +93,19 @@ describe Command do
         "result\n".should be_logged
         "CHECK FAILED\n".should be_logged as_failure
       end
+
+      it 'ensure failures are always logged even when exceptions raised' do
+        @mock_ssh.should_receive(:exec!).with('check').and_raise Exception.new
+
+        lambda {subject.run}.should raise_error Exception
+
+        "100% RUN    command\r".should be_displayed
+        "100% RUN    command\n".should be_displayed as_failure
+
+        "RUN    command\n".should be_logged as_highlight
+        "result\n".should be_logged
+        "Exception\n".should be_logged as_failure
+      end
     end
 
     it 'wraps command execution in sudo with a password' do
