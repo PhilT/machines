@@ -16,7 +16,7 @@ describe 'packages/nginx' do
     AppConf.commands.map(&:info).should == [
       "TASK   nginx - Download and configure Nginx",
       "RUN    cd /tmp && wget nginx_url && tar -zxf nginx_url && rm nginx_url && cd -",
-      "UPLOAD init.d/nginx to upload#{@time.to_i}",
+      "UPLOAD nginx/initd to upload#{@time.to_i}",
       "SUDO   cp upload#{@time.to_i} /etc/init.d/nginx",
       "RUN    rm -f upload#{@time.to_i}",
       "SUDO   /usr/sbin/update-rc.d -f nginx defaults",

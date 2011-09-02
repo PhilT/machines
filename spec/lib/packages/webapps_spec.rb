@@ -23,7 +23,7 @@ describe 'packages/webapps' do
       "RUN    mkdir -p app_path/releases",
       "RUN    mkdir -p app_path/shared/config",
       "RUN    mkdir -p app_path/shared/system",
-      "RUN    echo \"the template\n\" > nginx_path/servers/application.conf",
+      "SUDO   echo \"the template\n\" > nginx_path/servers/application.conf",
       "RUN    echo \"---\nproduction:\n  adapter: mysql\n  database: application\n  username: application\n  password: pa$$\n  host: db_master\n  encoding: utf8\n\" > app_path/shared/config/database.yml"
     ]
   end
@@ -34,7 +34,7 @@ describe 'packages/webapps' do
     AppConf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.should == [
       "TASK   webapps - Sets up Web apps in config/apps.yml using app_server.conf.erb",
       "SUDO   mkdir -p nginx_path/servers",
-      "RUN    echo \"the template\n\" > nginx_path/servers/application.conf",
+      "SUDO   echo \"the template\n\" > nginx_path/servers/application.conf",
     ]
   end
 end

@@ -4,7 +4,7 @@ module Machines
     # @param [String] name init.d script to upload and register
     def add_init_d name
       [
-        upload("init.d/#{name}", "/etc/init.d/#{name}"),
+        upload(File.join(name, 'initd'), "/etc/init.d/#{name}"),
         Command.new("/usr/sbin/update-rc.d -f #{name} defaults", check_init_d(name))
       ]
     end

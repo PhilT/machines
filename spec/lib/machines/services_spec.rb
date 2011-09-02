@@ -7,10 +7,10 @@ describe 'Services' do
 
   describe 'add_init_d' do
     before { Time.stub(:now).and_return Time.new(2011, 4, 2, 16, 37) }
-    subject { add_init_d 'script_name' }
-    it { subject.first.local.should == 'init.d/script_name' }
-    it { subject.first.remote.should == '/etc/init.d/script_name' }
-    it { subject.last.command.should == '/usr/sbin/update-rc.d -f script_name defaults' }
+    subject { add_init_d 'name' }
+    it { subject.first.local.should == 'name/initd' }
+    it { subject.first.remote.should == '/etc/init.d/name' }
+    it { subject.last.command.should == '/usr/sbin/update-rc.d -f name defaults' }
   end
 
   describe 'restart' do

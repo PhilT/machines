@@ -1,5 +1,5 @@
 task :webapps, 'Sets up Web apps in config/apps.yml using app_server.conf.erb' do
-  def generate_template_for(app, enable_ssl = false)
+  def generate_server_template_for(app, enable_ssl = false)
     app.enable_ssl = enable_ssl
     server_settings = AppConf[AppConf.webserver]
     path = File.join(server_settings.path, server_settings.servers_dir, "#{app.name}#{enable_ssl ? '_ssl' : ''}.conf")
@@ -15,7 +15,7 @@ task :webapps, 'Sets up Web apps in config/apps.yml using app_server.conf.erb' d
   sudo mkdir File.join(AppConf.nginx.path, AppConf.nginx.servers_dir)
   AppConf.apps.each do |app_name, app|
     make_app_structure app.path unless AppConf.environment == :development
-    run generate_template_for(app)
+    sudo generate_server_template_for(app)
     if app.ssl_key
       run generate_template_for(app, true)
       sudo upload "certificates/#{ssl_crt}", '/etc/ssl/certs/{ssl_crt}'
