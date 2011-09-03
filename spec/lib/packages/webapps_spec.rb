@@ -24,7 +24,7 @@ describe 'packages/webapps' do
       "RUN    mkdir -p app_path/shared/config",
       "RUN    mkdir -p app_path/shared/system",
       "SUDO   echo \"the template\n\" > nginx_path/servers/application.conf",
-      "RUN    echo \"---\nproduction:\n  adapter: mysql\n  database: application\n  username: application\n  password: pa$$\n  host: db_master\n  encoding: utf8\n\" > app_path/shared/config/database.yml"
+      "RUN    echo \"---\nproduction:\n  adapter: mysql\n  database: application\n  username: application\n  password: pa\\$\\$\n  host: db_master\n  encoding: utf8\n\" > app_path/shared/config/database.yml"
     ]
   end
 

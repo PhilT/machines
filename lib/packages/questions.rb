@@ -22,10 +22,10 @@ task :questions, 'Ask some questions' do
   end
 
   AppConf.db.address = 'localhost'
-  AppConf.db.pass = 'password'
+  AppConf.db.root_pass = 'password'
   except :roles => [:db] do
     AppConf.db.address = enter_target_address('database master machine')
-    AppConf.db.pass = enter_password('database root')
+    AppConf.db.root_pass = enter_password('database root')
   end
 
   thread.join if thread

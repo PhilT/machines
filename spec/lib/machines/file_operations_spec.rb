@@ -74,9 +74,34 @@ describe 'FileOperations' do
   end
 
   describe 'write' do
-    it 'overwrites a file with specified content' do
-      subject = write 'some string', :to => 'a_file'
-      subject.command.should == 'echo "some string" > a_file'
+    it 'escapes backslashes (\\)' do
+      subject = write '\\', :to => 'file'
+      subject.command.should =~ /"\\\\"/
+    end
+
+    it 'escapes dollar sign ($)' do
+      subject = write '$', :to => 'file'
+      subject.command.should =~ /"\\\$\"/
+    end
+
+    it 'escapes quotes (")' do
+      subject = write '"', :to => 'file'
+      subject.command.should =~ /"\\""/
+    end
+
+    it 'escapes backticks (`)' do
+      subject = write '`', :to => 'file'
+      subject.command.should =~ /"\\`"/
+    end
+
+    it 'overwrites a file' do
+      subject = write 'string', :to => 'file'
+      subject.command.should =~ /echo ".*" > file/
+    end
+
+    it 'overwrites a file with specified content including escaped characters' do
+      subject = write '\\$"`', :to => 'file'
+      subject.command.should == 'echo "\\\\\\$\\"\\`" > file'
     end
   end
 end

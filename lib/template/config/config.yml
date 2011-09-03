@@ -12,9 +12,10 @@ ec2:
 
 timezone: GB
 webserver: nginx
-database:
+db:
   adapter: mysql
   encoding: utf8
+  root_pass: Uf6h3HzU4q
   replication_pass: tzIrh2eKjH
 
 gmate:

@@ -3,8 +3,7 @@ require 'spec_helper'
 describe 'packages/mysql' do
   before(:each) do
     load_package('mysql')
-    AppConf.from_hash(:db => {:address => 'DBIP', :pass => 'DBPASS'})
-    AppConf.from_hash(:database => {:replication_pass => 'REPL_PASS'})
+    AppConf.from_hash(:db => {:address => 'DBIP', :root_pass => 'DBPASS', :replication_pass => 'REPL_PASS'})
     AppConf.from_hash(:target => {:address => 'TARGET'})
     AppConf.from_hash(:dbmaster => {:address => 'DBMASTER'})
     @time = Time.now
@@ -19,10 +18,9 @@ describe 'packages/mysql' do
       AppConf.commands.map(&:info).should == [
         "TASK   mysql - Install MySQL",
         "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install debconf-utils",
-        "SUDO   echo mysql-server-5.1 mysql-server/root_password password #{AppConf.db.pass} | debconf-set-selections",
-        "SUDO   echo mysql-server-5.1 mysql-server/root_password_again password #{AppConf.db.pass} | debconf-set-selections",
+        "SUDO   echo mysql-server-5.1 mysql-server/root_password password DBPASS | debconf-set-selections",
+        "SUDO   echo mysql-server-5.1 mysql-server/root_password_again password DBPASS | debconf-set-selections",
         "SUDO   apt-get -q -y install mysql-server",
-        "RUN    mysqladmin -u root password DBPASS",
         "RUN    service mysqld restart"
       ]
     end

@@ -1,11 +1,11 @@
 module Machines
   module FileOperations
     # Add some text to the end of a file
-    # @param [String] line Line of text to add
+    # @param [String] text Text to add
     # @param [Hash] options
     # @option options [String] :to File to append to
-    def append line, options
-      Command.new("echo \"#{line}\" >> #{options[:to]}", check_string(line, options[:to]))
+    def append text, options
+      write text, options.merge(:append => true)
     end
 
     # Change permissions of a path
@@ -87,11 +87,13 @@ module Machines
     end
 
     # Overwrite a file with the specified content
-    # @param [String] line Line of text to add
+    # @param [String] text Text to add
     # @param [Hash] options
     # @option options [String] :to File to write to
-    def write line, options
-      Command.new("echo \"#{line.gsub(/([\$"])/, '\\1')}\" > #{options[:to]}", check_string(line, options[:to]))
+    def write text, options
+      text = text.gsub(/([\\$"`])/, '\\\\\1')
+      append_overwrite = options[:append] ? '>>' : '>'
+      Command.new("echo \"#{text}\" #{append_overwrite} #{options[:to]}", check_string(text, options[:to]))
     end
   end
 end
