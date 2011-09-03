@@ -164,14 +164,6 @@ describe 'Configuration' do
     end
   end
 
-  describe 'rvmsudo' do
-    it 'wraps a command in a rvmsudo with password call' do
-      AppConf.user.pass = 'password'
-      @command1.should_receive(:use_rvmsudo)
-      rvmsudo @command1
-    end
-  end
-
   describe 'upload' do
     subject { upload 'source', 'dest' }
     it { subject.local.should == 'source' }

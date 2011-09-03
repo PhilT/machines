@@ -140,15 +140,6 @@ describe Command do
       subject.use_sudo
       subject.run
     end
-
-    it 'wraps command execution in rvmsudo with a password' do
-      AppConf.user.pass = 'userpass'
-      @mock_ssh.should_receive(:exec!).with("echo userpass | rvmsudo -S sh -c 'export TERM=linux && command'").and_return "result"
-
-      subject.use_rvmsudo
-      subject.run
-      "100% RVMSUDO command\r".should be_displayed
-    end
   end
 
   describe 'info' do

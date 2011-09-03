@@ -63,7 +63,6 @@ module Machines
     # Queue up command(s) using SUDO to run remotely
     # @param [Array] *commands Command(s) to run
     def sudo *commands
-      commands.last == true ? (rvm = true && commands.pop) : rvm = false
       commands = command_from_string commands
       commands.flatten.each do |command|
         if command.is_a?(Upload)
@@ -75,17 +74,10 @@ module Machines
           sudo copy(temp_path, remote_dest)
           run remove temp_path
         else
-          rvm ? command.use_rvmsudo : command.use_sudo
+          command.use_sudo
           run command
         end
       end
-    end
-
-    # Queue up command(s) using RVMSUDO to run remotely
-    # @param [Array] *commands Command(s) to run
-    def rvmsudo *commands
-      commands = command_from_string commands
-      sudo commands, true
     end
 
     # Upload a file or directory using SCP and optionally set permissions.

@@ -19,19 +19,15 @@ module Machines
       @sudo = 'sudo'
     end
 
-    def use_rvmsudo
-      @sudo = 'rvmsudo'
-    end
-
     def run
       command = "export TERM=linux && #{@command}"
       echo_password = "echo #{AppConf.user.pass} | " if AppConf.user.pass
-      command = "#{echo_password}#{@sudo} -S sh -c '#{command}'" if @sudo
+      command = "#{echo_password}sudo -S sh -c '#{command}'" if @sudo
       process {AppConf.file.log @@ssh.exec! command}
     end
 
     def info
-      ("%-6s " % (@sudo ? @sudo.upcase : 'RUN')) + command
+      ("%-6s " % (@sudo ? 'SUDO' : 'RUN')) + command
     end
 
     def == other
