@@ -14,15 +14,9 @@ describe 'Database' do
       AppConf.db.address = 'dbhost'
       AppConf.apps = {'app' => AppBuilder.new(:db_password => 'password')}
 
+      yml = "---\ntest:\n  adapter: mysql\n  database: app\n  username: app\n  password: password\n  host: dbhost\n  encoding: utf8\n"
+      should_receive(:write).with(yml, :to => 'dir/database.yml', :name => 'database.yml')
       subject = write_database_yml :for => 'app', :to => 'dir'
-      command = subject.command
-      command.should match /echo "---.*" > dir\/database.yml/m
-      command.should match /test:/m
-      command.should match /adapter: mysql/m
-      command.should match /database: app/m
-      command.should match /username: app/m
-      command.should match /password: password/m
-      command.should match /host: dbhost/m
     end
   end
 end

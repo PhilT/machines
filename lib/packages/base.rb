@@ -1,7 +1,6 @@
 task :hosts, 'Set /etc/hosts' do
   # Sets hostname according to the following: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=316099
-  sudo write "127.0.0.1 localhost.localdomain localhost", :to => '/etc/hosts'
-  sudo append "127.0.1.1 #{AppConf.hostname}", :to => '/etc/hosts'
+  sudo write "127.0.0.1 localhost.localdomain localhost\n127.0.1.1 #{AppConf.hostname}", :to => '/etc/hosts'
   only :enviroments => :development do
     hosts_config = 'config/hosts.yml'
     if File.exist?(hosts_config)

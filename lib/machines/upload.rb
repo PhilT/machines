@@ -22,7 +22,15 @@ module Machines
     end
 
     def info
-      "UPLOAD #{local.is_a?(NamedBuffer) ? "buffer from #{local.name}" : local} to #{remote}"
+      name = local
+      if local.is_a?(NamedBuffer)
+        if local.name
+          name = "buffer from #{local.name}"
+        else
+          name = "unnamed buffer"
+        end
+      end
+      "UPLOAD #{name} to #{remote}"
     end
   end
 end

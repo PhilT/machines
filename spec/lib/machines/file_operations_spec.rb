@@ -2,9 +2,34 @@ require 'spec_helper'
 
 describe 'FileOperations' do
   describe 'append' do
-    it 'echos a string to a file' do
-      subject = append 'some string', :to => 'a_file'
-      subject.command.should == 'echo "some string" >> a_file'
+    it 'escapes backslashes (\\)' do
+      subject = append '\\', :to => 'file'
+      subject.command.should =~ /"\\\\"/
+    end
+
+    it 'escapes dollar sign ($)' do
+      subject = append '$', :to => 'file'
+      subject.command.should =~ /"\\\$\"/
+    end
+
+    it 'escapes double quotes (")' do
+      subject = append '"', :to => 'file'
+      subject.command.should =~ /"\\""/
+    end
+
+    it 'escapes backticks (`)' do
+      subject = append '`', :to => 'file'
+      subject.command.should =~ /"\\`"/
+    end
+
+    it 'appends to a file' do
+      subject = append 'string', :to => 'file'
+      subject.command.should =~ /echo ".*" >> file/
+    end
+
+    it 'adds to a file with specified content including escaped characters' do
+      subject = append '\\$"`', :to => 'file'
+      subject.command.should == 'echo "\\\\\\$\\"\\`" >> file'
     end
   end
 
@@ -74,34 +99,11 @@ describe 'FileOperations' do
   end
 
   describe 'write' do
-    it 'escapes backslashes (\\)' do
-      subject = write '\\', :to => 'file'
-      subject.command.should =~ /"\\\\"/
-    end
-
-    it 'escapes dollar sign ($)' do
-      subject = write '$', :to => 'file'
-      subject.command.should =~ /"\\\$\"/
-    end
-
-    it 'escapes double quotes (")' do
-      subject = write '"', :to => 'file'
-      subject.command.should =~ /"\\""/
-    end
-
-    it 'escapes backticks (`)' do
-      subject = write '`', :to => 'file'
-      subject.command.should =~ /"\\`"/
-    end
-
-    it 'overwrites a file' do
-      subject = write 'string', :to => 'file'
-      subject.command.should =~ /echo ".*" > file/
-    end
-
-    it 'overwrites a file with specified content including escaped characters' do
-      subject = write '\\$"`', :to => 'file'
-      subject.command.should == 'echo "\\\\\\$\\"\\`" > file'
+    it 'uploads from a buffer' do
+      mock_named_buffer = mock NamedBuffer
+      NamedBuffer.should_receive(:new).with('name', 'something').and_return mock_named_buffer
+      subject = write('something', :to => 'a_file', :name => 'name')
+      subject.local.should == mock_named_buffer
     end
   end
 end

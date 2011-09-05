@@ -42,6 +42,7 @@ module Machines
     def create_from erb_path, options
       erb = ERB.new(File.read(erb_path))
       binding = options[:settings] ? options[:settings].get_binding : nil
+      options[:name] = erb_path
       write erb.result(binding), options
     end
 
@@ -91,10 +92,9 @@ module Machines
     # @param [String] text Text to add
     # @param [Hash] options
     # @option options [String] :to File to write to
+    # @option options [String] :name Give the buffer a displayable name (e.g. when generated from a template)
     def write text, options
-      text = text.gsub(/([\\$"`])/, '\\\\\1')
-      append_overwrite = options[:append] ? '>>' : '>'
-      Command.new("echo \"#{text}\" #{append_overwrite} #{options[:to]}", check_string(text, options[:to]))
+      Upload.new(NamedBuffer.new(options[:name], text), options[:to], check_string(text, options[:to]))
     end
   end
 end

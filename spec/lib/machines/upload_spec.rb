@@ -66,6 +66,11 @@ describe Command do
       it 'contains name of the buffer' do
         subject.info.should == 'UPLOAD buffer from name to remote'
       end
+
+      it 'handles nil names' do
+        subject = Upload.new(NamedBuffer.new(nil, 'a buffer'), 'remote', 'check')
+        subject.info.should == "UPLOAD unnamed buffer to remote"
+      end
     end
   end
 

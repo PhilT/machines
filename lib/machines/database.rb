@@ -14,7 +14,7 @@ module Machines
         'password' => AppConf.apps[app].db_password,
         'host' => AppConf.db.address,
         'encoding' => 'utf8'}}.to_yaml
-      write yml, :to => File.join(options[:to], 'database.yml')
+      write yml, :to => File.join(options[:to], 'database.yml'), :name => 'database.yml'
     end
   end
 end
