@@ -84,7 +84,7 @@ describe 'FileOperations' do
       subject.command.should =~ /"\\\$\"/
     end
 
-    it 'escapes quotes (")' do
+    it 'escapes double quotes (")' do
       subject = write '"', :to => 'file'
       subject.command.should =~ /"\\""/
     end

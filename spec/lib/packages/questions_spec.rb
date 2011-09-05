@@ -5,7 +5,7 @@ describe 'packages/questions' do
     load_package('questions')
     AppConf.ec2 = AppConf.new
     AppConf.from_hash(:db => {})
-    AppConf.from_hash(:users => {:user_name => {:appsroot => 'appsroot'}})
+    AppConf.from_hash(:appsroots => {:user_name => 'appsroot'})
     AppConf.stub(:load)
     stub!(:choose_machine).and_return 'machine'
     stub!(:load_app_settings)

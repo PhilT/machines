@@ -49,7 +49,7 @@ MACHINESFILE
 
   describe 'choose_user' do
     before(:each) do
-      AppConf.from_hash(:users => {:a_user => {}, :another => {}})
+      AppConf.users = ['a_user', 'another']
       @mock_menu = mock(HighLine::Menu, :prompt= => nil)
     end
 

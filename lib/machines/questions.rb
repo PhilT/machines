@@ -14,8 +14,7 @@ module Machines
     end
 
     def choose_user
-      users = AppConf.users.keys
-      choose(*users) { |menu| menu.prompt = 'Select a user: ' }
+      choose(*AppConf.users) { |menu| menu.prompt = 'Select a user: ' }
     end
 
     def enter_password(type, confirm = true)

@@ -32,7 +32,7 @@ http {
 
   passenger_ruby <%= AppConf.user.home %>/.rvm/wrappers/default/ruby
   passenger_max_pool_size 8;                # Max number of simultaneous instances
-  passenger_pool_idle_time 0;               # Don't shutdown instances unless needed
+  passenger_pool_idle_time 0;               # Do not shutdown instances unless needed
   passenger_pre_start http://localhost;     # Prestart RiskPlatform
 
   include <%= File.join(AppConf.nginx.path, AppConf.nginx.servers_dir, '*.conf') %>;

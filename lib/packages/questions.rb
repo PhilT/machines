@@ -3,6 +3,7 @@ task :questions, 'Ask some questions' do
   machine = AppConf.machines[AppConf.machine]
   AppConf.environment = AppConf.environments = machine[:environment]
   AppConf.roles = machine[:roles]
+  AppConf.users = AppConf.appsroots.keys
 
   AppConf.ec2.use = start_ec2_instance? unless AppConf.machine == 'Desktop'
   thread = Thread.new { connect && run_instance } if AppConf.ec2.use
@@ -10,7 +11,7 @@ task :questions, 'Ask some questions' do
   AppConf.user.name = choose_user
   AppConf.user.pass = enter_password('users', false) unless AppConf.ec2.use
   AppConf.user.home = File.join('/home', AppConf.user.name)
-  AppConf.appsroot = AppConf.users[AppConf.user.name].appsroot
+  AppConf.appsroot = AppConf.appsroots[AppConf.user.name]
   load_app_settings(machine[:apps])
 
   only :environments => [:staging, :production] do
