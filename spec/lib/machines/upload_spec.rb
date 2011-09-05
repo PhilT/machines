@@ -19,7 +19,7 @@ describe Command do
       @mock_ssh = mock Net::SSH
       @mock_scp = mock Net::SCP, :session => @mock_ssh
       Command.scp = @mock_scp
-      @mock_ssh.stub(:exec!).with('check').and_return "CHECK PASSED"
+      @mock_ssh.stub(:exec!).with('export TERM=linux && check').and_return "CHECK PASSED"
     end
 
     it 'uploads local to remote with logging' do

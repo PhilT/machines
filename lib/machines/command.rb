@@ -20,10 +20,7 @@ module Machines
     end
 
     def run
-      command = "export TERM=linux && #{@command}"
-      echo_password = "echo #{AppConf.user.pass} | " if AppConf.user.pass
-      command = "#{echo_password}sudo -S sh -c \"#{command}\"" if @sudo
-      process {AppConf.file.log @@ssh.exec! command}
+      process {AppConf.file.log @@ssh.exec! wrap_in_export_and_sudo(@command)}
     end
 
     def info
@@ -45,7 +42,7 @@ module Machines
       unless AppConf.log_only
         begin
           yield
-          result = @@ssh.exec!(@check) if @check
+          result = @@ssh.exec!(wrap_in_export_and_sudo(@check))
           result = check_result(result || '')
           color = color_for(result)
           AppConf.file.log result, :color => color
@@ -56,6 +53,13 @@ module Machines
           raise e
         end
       end
+    end
+
+    def wrap_in_export_and_sudo command
+      command = "export TERM=linux && #{command}"
+      echo_password = "echo #{AppConf.user.pass} | " if AppConf.user.pass
+      command = "#{echo_password}sudo -S sh -c \"#{command}\"" if @sudo
+      command
     end
 
     def check_result result
