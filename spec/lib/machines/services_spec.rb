@@ -6,7 +6,6 @@ describe 'Services' do
   include Machines::Services
 
   describe 'add_init_d' do
-    before { Time.stub(:now).and_return Time.new(2011, 4, 2, 16, 37) }
     subject { add_init_d 'name' }
     it { subject.first.local.should == 'name/initd' }
     it { subject.first.remote.should == '/etc/init.d/name' }

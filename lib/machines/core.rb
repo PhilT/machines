@@ -66,7 +66,7 @@ module Machines
       commands = command_from_string commands
       commands.flatten.each do |command|
         if command.is_a?(Upload)
-          temp_path = "/tmp/upload#{Time.now.to_i}"
+          temp_path = "/tmp/#{File.basename(command.remote)}"
           remote_dest = command.remote
           command.remote = temp_path
           command.check = check_file(temp_path)

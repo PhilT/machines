@@ -4,20 +4,18 @@ describe 'packages/base' do
   before(:each) do
     load_package('base')
     AppConf.hostname = 'hostname'
-    @time = Time.now
-    Time.stub(:now).and_return @time
   end
 
   it 'adds the following commands' do
     eval_package
     AppConf.commands.map(&:info).should == [
       "TASK   hosts - Set /etc/hosts",
-      "UPLOAD unnamed buffer to /tmp/upload#{@time.to_i}",
-      "SUDO   cp /tmp/upload#{@time.to_i} /etc/hosts",
-      "RUN    rm -f /tmp/upload#{@time.to_i}",
-      "UPLOAD unnamed buffer to /tmp/upload#{@time.to_i}",
-      "SUDO   cp /tmp/upload#{@time.to_i} /etc/hostname",
-      "RUN    rm -f /tmp/upload#{@time.to_i}",
+      "UPLOAD unnamed buffer to /tmp/hosts",
+      "SUDO   cp /tmp/hosts /etc/hosts",
+      "RUN    rm -f /tmp/hosts",
+      "UPLOAD unnamed buffer to /tmp/hostname",
+      "SUDO   cp /tmp/hostname /etc/hostname",
+      "RUN    rm -f /tmp/hostname",
       "SUDO   service hostname start",
       "TASK   base - Install base packages",
       "SUDO   apt-get -q -y update",

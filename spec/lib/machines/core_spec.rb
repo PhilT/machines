@@ -171,17 +171,15 @@ describe 'Configuration' do
   end
 
   describe 'sudo upload' do
-    before { Time.stub(:now).and_return Time.new(2011, 4, 2, 16, 37) }
-
     it 'modifies Upload to send it to a temp file and sudos to copy it to destination' do
       sudo upload 'source', 'dest'
 
-      copy_command = Command.new("cp /tmp/upload1301758620 dest", check_file('dest'))
+      copy_command = Command.new("cp /tmp/dest dest", check_file('dest'))
       copy_command.use_sudo
       AppConf.commands.should == [
-        Upload.new('source', '/tmp/upload1301758620', check_file('/tmp/upload1301758620')),
+        Upload.new('source', '/tmp/dest', check_file('/tmp/dest')),
         copy_command,
-        Command.new("rm -f /tmp/upload1301758620", check_file('/tmp/upload1301758620', false))
+        Command.new("rm -f /tmp/dest", check_file('/tmp/dest', false))
       ]
     end
   end

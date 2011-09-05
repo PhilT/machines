@@ -17,7 +17,6 @@ describe 'Machines' do
   describe 'init' do
     it 'initializes some AppConf settings and loads configs' do
       AppConf.file = nil
-      Time.stub(:now).and_return(Time.new(2011, 9, 5, 9, 46))
       subject.init
       AppConf.machines.should == {}
       AppConf.passwords.should == []

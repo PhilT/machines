@@ -7,24 +7,22 @@ describe 'packages/nginx_logrotate' do
     FileUtils.mkdir_p '/prj/logrotate'
     File.open('/prj/logrotate/nginx.erb', 'w') {|f| f.puts 'nginx template' }
     File.open('/prj/logrotate/app.erb', 'w') {|f| f.puts 'app template' }
-    @time = Time.now
-    Time.stub(:now).and_return @time
   end
 
   it 'generates command' do
     eval_package
     AppConf.commands.map(&:info).should == [
       'TASK   logrotate_nginx - Logrotate nginx access and error logs and optionally generate stats',
-      "UPLOAD buffer from /prj/logrotate/nginx.erb to /tmp/upload#{@time.to_i}",
-      "SUDO   cp /tmp/upload#{@time.to_i} /etc/logrotate.d/appname_nginx_access_log",
-      "RUN    rm -f /tmp/upload#{@time.to_i}",
-      "UPLOAD buffer from /prj/logrotate/nginx.erb to /tmp/upload#{@time.to_i}",
-      "SUDO   cp /tmp/upload#{@time.to_i} /etc/logrotate.d/appname_nginx_error_log",
-      "RUN    rm -f /tmp/upload#{@time.to_i}",
+      "UPLOAD buffer from /prj/logrotate/nginx.erb to /tmp/appname_nginx_access_log",
+      "SUDO   cp /tmp/appname_nginx_access_log /etc/logrotate.d/appname_nginx_access_log",
+      "RUN    rm -f /tmp/appname_nginx_access_log",
+      "UPLOAD buffer from /prj/logrotate/nginx.erb to /tmp/appname_nginx_error_log",
+      "SUDO   cp /tmp/appname_nginx_error_log /etc/logrotate.d/appname_nginx_error_log",
+      "RUN    rm -f /tmp/appname_nginx_error_log",
       'TASK   logrotate_apps - Logrotate Rails app logs',
-      "UPLOAD buffer from /prj/logrotate/app.erb to /tmp/upload#{@time.to_i}",
-      "SUDO   cp /tmp/upload#{@time.to_i} /etc/logrotate.d/appname_app_log",
-      "RUN    rm -f /tmp/upload#{@time.to_i}",
+      "UPLOAD buffer from /prj/logrotate/app.erb to /tmp/appname_app_log",
+      "SUDO   cp /tmp/appname_app_log /etc/logrotate.d/appname_app_log",
+      "RUN    rm -f /tmp/appname_app_log",
     ]
   end
 
