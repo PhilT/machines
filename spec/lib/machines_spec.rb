@@ -17,6 +17,7 @@ describe 'Machines' do
   describe 'init' do
     it 'initializes some AppConf settings and loads configs' do
       AppConf.file = nil
+      Time.stub(:now).and_return(Time.new(2011, 9, 5, 9, 46))
       subject.init
       AppConf.machines.should == {}
       AppConf.passwords.should == []
@@ -26,7 +27,7 @@ describe 'Machines' do
       AppConf.user.should be_a AppConf
       AppConf.db.should be_a AppConf
       AppConf.timezone.should == 'GB'
-      File.should exist '/prj/log/output.log'
+      File.should exist '/prj/output.log'
       AppConf.file.should be_a Machines::Logger
       AppConf.console.should be_a Machines::Logger
     end
