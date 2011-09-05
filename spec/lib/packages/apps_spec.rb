@@ -9,7 +9,7 @@ describe 'packages/apps' do
     eval_package
     AppConf.commands.map(&:info).should == [
       "TASK   apps - Install apps for minimal development machine",
-      "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install abiword",
+      "SUDO   apt-get -q -y install abiword",
       "SUDO   apt-get -q -y install audacious",
       "SUDO   apt-get -q -y install brasero",
       "SUDO   apt-get -q -y install evince",

@@ -19,7 +19,7 @@ describe 'packages/mysql' do
         "TASK   mysql - Install MySQL",
         "SUDO   echo mysql-server-5.1 mysql-server/root_password password DBPASS | debconf-set-selections",
         "SUDO   echo mysql-server-5.1 mysql-server/root_password_again password DBPASS | debconf-set-selections",
-        "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install mysql-server",
+        "SUDO   apt-get -q -y install mysql-server",
         "RUN    service mysqld restart"
       ]
     end

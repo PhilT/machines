@@ -11,7 +11,7 @@ describe 'packages/rvm' do
     eval_package
     AppConf.commands.map(&:info).should == [
       "TASK   rvm - Install RVM",
-      "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install curl",
+      "SUDO   apt-get -q -y install curl",
       "RUN    bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)",
       'RUN    echo "[[ -s \\"\\$HOME/.rvm/scripts/rvm\\" ]] && . \\"\\$HOME/.rvm/scripts/rvm\\" # Load RVM function" >> user_home/.bashrc',
       "RUN    source user_home/.bashrc",

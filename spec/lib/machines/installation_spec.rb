@@ -41,7 +41,7 @@ describe 'Installation' do
   describe 'update' do
     it 'instaniates a command to update apt' do
       subject = update
-      subject.command.should == 'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y update'
+      subject.command.should == 'apt-get -q -y update'
     end
   end
 
@@ -49,7 +49,7 @@ describe 'Installation' do
     it 'instaniates a command to upgrade apt' do
       subject = upgrade
       subject.map(&:command).should == [
-        'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y update',
+        'apt-get -q -y update',
         'apt-get -q -y upgrade',
         'apt-get -q -y autoremove',
         'apt-get -q -y autoclean'
@@ -84,13 +84,13 @@ describe 'Installation' do
 
     it 'instaniates a command to install a single apt package' do
       subject = install 'package1'
-      subject.map(&:command).should == ['export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install package1']
+      subject.map(&:command).should == ['apt-get -q -y install package1']
     end
 
     it 'instaniates a command to install multiple apt packages' do
       subject = install %w(package1 package2)
       subject.map(&:command).should == [
-        'export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install package1',
+        'apt-get -q -y install package1',
         'apt-get -q -y install package2'
       ]
     end
@@ -99,7 +99,7 @@ describe 'Installation' do
   describe 'uninstall' do
     it 'instaniates a command to uninstall a package' do
       subject = uninstall %w(apackage)
-      subject.map(&:command).should == ['export DEBIAN_FRONTEND=noninteractive && apt-get -q -y remove apackage']
+      subject.map(&:command).should == ['apt-get -q -y remove apackage']
     end
   end
 

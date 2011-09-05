@@ -1,15 +1,6 @@
 module Machines
   module Installation
     APTGET_QUIET = 'apt-get -q -y'
-    @noninteractive_set = false
-    def aptget_quiet
-      if @noninteractive_set
-        APTGET_QUIET
-      else
-        @noninteractive_set = true
-        'export DEBIAN_FRONTEND=noninteractive && ' + APTGET_QUIET
-      end
-    end
 
     # Adds a DEB source
     # @param [String] source URL of the package. If DISTRIB_CODENAME is included then it
@@ -52,13 +43,13 @@ module Machines
     end
 
     def update
-      Command.new("#{aptget_quiet} update", nil)
+      Command.new("#{APTGET_QUIET} update", nil)
     end
 
     # Update, upgrade, autoremove, autoclean apt packages
     def upgrade
       %w(update upgrade autoremove autoclean).map do |command|
-        Command.new("#{aptget_quiet} #{command}", nil)
+        Command.new("#{APTGET_QUIET} #{command}", nil)
       end
     end
 
@@ -107,7 +98,7 @@ module Machines
 
       if packages.is_a?(Array)
         commands = packages.map do |package|
-          Command.new("#{aptget_quiet} install #{package}", check_package(package))
+          Command.new("#{APTGET_QUIET} install #{package}", check_package(package))
         end
       end
       commands
@@ -117,7 +108,7 @@ module Machines
     # @param [Array] packages Packages to remove
     def uninstall packages
       packages.map do |package|
-        Command.new("#{aptget_quiet} remove #{package}", check_package(package, false))
+        Command.new("#{APTGET_QUIET} remove #{package}", check_package(package, false))
       end
     end
 

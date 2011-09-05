@@ -10,7 +10,7 @@ describe 'packages/firefox' do
     AppConf.commands.map(&:info).should == [
       "TASK   firefox - add the Firefox repo and install",
       "SUDO   add-apt-repository ppa:mozillateam/firefox-stable",
-      "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y update",
+      "SUDO   apt-get -q -y update",
       "SUDO   apt-get -q -y install firefox"
     ]
   end

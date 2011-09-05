@@ -15,7 +15,7 @@ describe 'packages/base' do
       "SUDO   echo \"hostname\" > /etc/hostname",
       "SUDO   service hostname start",
       "TASK   base - Install base packages",
-      "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install build-essential",
+      "SUDO   apt-get -q -y install build-essential",
       "SUDO   apt-get -q -y install zlib1g-dev",
       "SUDO   apt-get -q -y install libpcre3-dev",
       "SUDO   apt-get -q -y install debconf-utils",

@@ -9,7 +9,7 @@ describe 'packages/docky' do
     eval_package
     AppConf.commands.map(&:info).should == [
       "TASK   docky - Install and configure Docky a dock and app launcher",
-      "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install docky",
+      "SUDO   apt-get -q -y install docky",
       "RUN    gconftool-2 --set \"/apps/docky-2/Docky/Interface/DockPreferences/Dock1/ZoomPercent\" --type float 1.5",
       "RUN    gconftool-2 --set \"/apps/docky-2/Docky/Interface/DockPreferences/Dock1/Autohide\" --type string \"Intellihide\"",
       "RUN    gconftool-2 --set \"/apps/docky-2/Docky/Interface/DockPreferences/Dock1/FadeOnHide\" --type bool true",
