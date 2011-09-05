@@ -2,7 +2,7 @@ require 'machines/logger'
 
 module Machines
   class Command
-    attr_accessor :line, :command, :check
+    attr_accessor :command, :check
 
     def self.scp= scp
       @@scp = scp
