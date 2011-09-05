@@ -17,7 +17,7 @@ describe 'packages/openbox' do
       "SUDO   apt-get -q -y install obconf",
       "SUDO   apt-get -q -y install openbox",
       "SUDO   apt-get -q -y install pcmanfm",
-      "SUDO   apt-get -q -y install slock",
+      "SUDO   apt-get -q -y install suckless",
       "SUDO   apt-get -q -y install ttf-ubuntu-font-family",
       "SUDO   apt-get -q -y install ttf-mscorefonts-installer",
       "SUDO   apt-get -q -y install xautolock",

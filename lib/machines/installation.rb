@@ -69,8 +69,10 @@ module Machines
     #     Git clone URL and run `./install.sh` (or ./install)
     #   URL::
     #     Download from the specified URL and run `dpkg`
-    #   Array or no URL string::
-    #     Run `apt` to install specified packages in the array (or string) (installed separately to aid progress feedback)
+    #   Array or string (with no URL)::
+    #     Run `apt` to install specified packages in the array or string
+    #       Packages are installed separately to aid progress feedback
+    #       Ensure this is the main package as dpkg get-selections is used to validate installation
     # @param [Hash] options
     # @option options [String] :to Switch to specified directory to install. Used by Git installer
     # @option options [String] :options Add extra options to `./install.sh`
