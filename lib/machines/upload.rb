@@ -9,10 +9,7 @@ module Machines
 
     def run
       process do
-        begin
-          @@scp.upload!(local, remote, {:recursive => File.directory?(local)})
-        rescue
-        end
+        @@scp.upload!(local, remote, {:recursive => local.is_a?(String) && File.directory?(local)})
       end
     end
 

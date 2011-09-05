@@ -54,6 +54,14 @@ describe Command do
 
       subject.run
     end
+
+    it 'uploads an in memory buffer' do
+      buffer = NamedBuffer.new('name', 'a buffer')
+      subject = Upload.new(buffer, 'remote', 'check')
+      AppConf.commands = [subject]
+      @mock_scp.should_receive(:upload!).with(buffer, 'remote', {:recursive => false})
+      subject.run
+    end
   end
 
   describe 'info' do
