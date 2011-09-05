@@ -9,7 +9,6 @@ end
 
 only :roles => :db do
   task :mysql, 'Install MySQL' do
-    sudo install %w(debconf-utils)
     sudo debconf 'mysql-server-5.1', 'mysql-server/root_password', 'password', AppConf.db.root_pass
     sudo debconf 'mysql-server-5.1', 'mysql-server/root_password_again', 'password', AppConf.db.root_pass
     sudo install %w(mysql-server)

@@ -30,6 +30,8 @@ Features
 * Tested on Ubuntu i386/amd64 11.04 minimal
 * Minimal Ubuntu ISO/IMG used for increased security, stability and speed
 * Commands abstracted to provide a consistent configuration syntax
+* Full automated test suite to ensure correct commands are generated (Using RSpec)
+* Extra checks done to ensure command generates the correct result and avoids false positives (e.g. successful return values)
 
 
 Motivation

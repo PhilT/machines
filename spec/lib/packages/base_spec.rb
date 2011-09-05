@@ -18,6 +18,7 @@ describe 'packages/base' do
       "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install build-essential",
       "SUDO   apt-get -q -y install zlib1g-dev",
       "SUDO   apt-get -q -y install libpcre3-dev",
+      "SUDO   apt-get -q -y install debconf-utils",
       "SUDO   apt-get -q -y install libreadline5-dev",
       "SUDO   apt-get -q -y install libxml2-dev",
       "SUDO   apt-get -q -y install libxslt1-dev",
