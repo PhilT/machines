@@ -113,6 +113,36 @@ describe 'Machines' do
       AppConf.log_only = true
       subject.build
     end
+
+    describe 'interrupts' do
+      before(:each) do
+        mock_command = mock Command
+        AppConf.commands = [mock_command]
+        mock_scp = mock Net::SCP, :session => nil
+
+        Net::SCP.stub(:start).with('target', 'username', :password => 'userpass').and_yield(mock_scp)
+        mock_command.stub(:run)
+      end
+
+      it 'handles CTRL+C and calls handler' do
+        subject.should_receive(:prepare_to_exit)
+        Kernel.should_receive(:trap).with('INT').and_yield
+        subject.build
+      end
+
+      it 'sets exit flag and displays message' do
+        subject.prepare_to_exit
+        $exit_requested.should be_true
+        "\nEXITING after current command completes...\n".should be_displayed as_warning
+      end
+
+      it 'exits when exit requested' do
+        $exit_requested = true
+        subject.should_receive(:exit)
+
+        subject.build
+      end
+    end
   end
 end
 

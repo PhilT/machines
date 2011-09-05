@@ -25,6 +25,7 @@ module Machines
     end
 
     def init
+      $exit_requested = false
       AppConf.machines = {}
       AppConf.passwords = []
       AppConf.commands = []
@@ -66,10 +67,12 @@ module Machines
           command.run
         end
       else
+        Kernel.trap("INT") { prepare_to_exit }
         Net::SCP.start AppConf.target_address, username, scp_options do |scp|
           Command.scp = scp
           AppConf.commands.each do |command|
             command.run
+            exit if $exit_requested
           end
         end
       end
@@ -79,6 +82,11 @@ module Machines
       else
         raise
       end
+    end
+
+    def prepare_to_exit
+      $exit_requested = true
+      AppConf.console.log("\nEXITING after current command completes...", :color => :warning)
     end
   end
 end

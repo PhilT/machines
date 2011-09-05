@@ -19,7 +19,6 @@ module Machines
     # @param [String] message Message to display
     # @param [Hash] options
     # @option options [String] :progress Prepends number of commands completed
-    # @option options [String] :success True displays text in green, false in red
     # @option options [String] :color Color the text (overrides :success)
     # @option options [Bool] :newline Set to false to print on same line and return to start of it (:color not supported)
     def log message, options = {}
