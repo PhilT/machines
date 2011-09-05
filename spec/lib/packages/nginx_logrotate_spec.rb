@@ -15,16 +15,16 @@ describe 'packages/nginx_logrotate' do
     eval_package
     AppConf.commands.map(&:info).should == [
       'TASK   logrotate_nginx - Logrotate nginx access and error logs and optionally generate stats',
-      "UPLOAD buffer from /prj/logrotate/nginx.erb to upload#{@time.to_i}",
-      "SUDO   cp upload#{@time.to_i} /etc/logrotate.d/appname_nginx_access_log",
-      "RUN    rm -f upload#{@time.to_i}",
-      "UPLOAD buffer from /prj/logrotate/nginx.erb to upload#{@time.to_i}",
-      "SUDO   cp upload#{@time.to_i} /etc/logrotate.d/appname_nginx_error_log",
-      "RUN    rm -f upload#{@time.to_i}",
+      "UPLOAD buffer from /prj/logrotate/nginx.erb to /tmp/upload#{@time.to_i}",
+      "SUDO   cp /tmp/upload#{@time.to_i} /etc/logrotate.d/appname_nginx_access_log",
+      "RUN    rm -f /tmp/upload#{@time.to_i}",
+      "UPLOAD buffer from /prj/logrotate/nginx.erb to /tmp/upload#{@time.to_i}",
+      "SUDO   cp /tmp/upload#{@time.to_i} /etc/logrotate.d/appname_nginx_error_log",
+      "RUN    rm -f /tmp/upload#{@time.to_i}",
       'TASK   logrotate_apps - Logrotate Rails app logs',
-      "UPLOAD buffer from /prj/logrotate/app.erb to upload#{@time.to_i}",
-      "SUDO   cp upload#{@time.to_i} /etc/logrotate.d/appname_app_log",
-      "RUN    rm -f upload#{@time.to_i}",
+      "UPLOAD buffer from /prj/logrotate/app.erb to /tmp/upload#{@time.to_i}",
+      "SUDO   cp /tmp/upload#{@time.to_i} /etc/logrotate.d/appname_app_log",
+      "RUN    rm -f /tmp/upload#{@time.to_i}",
     ]
   end
 

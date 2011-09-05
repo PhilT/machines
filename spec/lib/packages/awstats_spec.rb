@@ -14,9 +14,9 @@ describe 'packages/awstats' do
     AppConf.commands.map(&:info).should == [
       "TASK   awstats - Download and install AWStats",
       "SUDO   cd /tmp && wget awstats_url && tar -zxf awstats_url && mv awstats_url awstats_path && rm awstats_url && cd -",
-      "UPLOAD buffer from /prj/awstats/awstats.conf.erb to upload#{@time.to_i}",
-      "SUDO   cp upload#{@time.to_i} awstats_path/conf/awstats.conf",
-      "RUN    rm -f upload#{@time.to_i}",
+      "UPLOAD buffer from /prj/awstats/awstats.conf.erb to /tmp/upload#{@time.to_i}",
+      "SUDO   cp /tmp/upload#{@time.to_i} awstats_path/conf/awstats.conf",
+      "RUN    rm -f /tmp/upload#{@time.to_i}",
     ]
   end
 end

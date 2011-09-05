@@ -66,9 +66,9 @@ describe 'packages/mysql' do
       eval_package
       AppConf.commands.map(&:info).should == [
         "TASK   replication - Setup database replication",
-        "UPLOAD mysql/dbmaster.cnf to upload#{@time.to_i}",
-        "SUDO   cp upload#{@time.to_i} /etc/mysql/conf.d/dbmaster.cnf",
-        "RUN    rm -f upload#{@time.to_i}",
+        "UPLOAD mysql/dbmaster.cnf to /tmp/upload#{@time.to_i}",
+        "SUDO   cp /tmp/upload#{@time.to_i} /etc/mysql/conf.d/dbmaster.cnf",
+        "RUN    rm -f /tmp/upload#{@time.to_i}",
         "RUN    echo \"GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%' IDENTIFIED BY 'REPL_PASS';\" | mysql -u root -pDBPASS -h TARGET"
       ]
     end
@@ -80,9 +80,9 @@ describe 'packages/mysql' do
       eval_package
       AppConf.commands.map(&:info).should == [
         "TASK   replication - Setup database replication",
-        "UPLOAD mysql/dbslave.cnf to upload#{@time.to_i}",
-        "SUDO   cp upload#{@time.to_i} /etc/mysql/conf.d/dbslave.cnf",
-        "RUN    rm -f upload#{@time.to_i}",
+        "UPLOAD mysql/dbslave.cnf to /tmp/upload#{@time.to_i}",
+        "SUDO   cp /tmp/upload#{@time.to_i} /etc/mysql/conf.d/dbslave.cnf",
+        "RUN    rm -f /tmp/upload#{@time.to_i}",
         "RUN    echo \"CHANGE MASTER TO MASTER_HOST='DBMASTER', MASTER_USER='repl' MASTER_PASSWORD='REPL_PASS';\" | mysql -u root -pDBPASS -h TARGET"
       ]
     end

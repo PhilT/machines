@@ -16,17 +16,17 @@ describe 'packages/nginx' do
     AppConf.commands.map(&:info).should == [
       "TASK   nginx - Download and configure Nginx",
       "RUN    cd /tmp && wget nginx_url && tar -zxf nginx_url && rm nginx_url && cd -",
-      "UPLOAD nginx/initd to upload#{@time.to_i}",
-      "SUDO   cp upload#{@time.to_i} /etc/init.d/nginx",
-      "RUN    rm -f upload#{@time.to_i}",
+      "UPLOAD nginx/initd to /tmp/upload#{@time.to_i}",
+      "SUDO   cp /tmp/upload#{@time.to_i} /etc/init.d/nginx",
+      "RUN    rm -f /tmp/upload#{@time.to_i}",
       "SUDO   /usr/sbin/update-rc.d -f nginx defaults",
-      "UPLOAD buffer from /prj/nginx/nginx.conf.erb to upload#{@time.to_i}",
-      "SUDO   cp upload#{@time.to_i} nginx_path/conf/nginx.conf",
-      "RUN    rm -f upload#{@time.to_i}",
+      "UPLOAD buffer from /prj/nginx/nginx.conf.erb to /tmp/upload#{@time.to_i}",
+      "SUDO   cp /tmp/upload#{@time.to_i} nginx_path/conf/nginx.conf",
+      "RUN    rm -f /tmp/upload#{@time.to_i}",
       "TASK   htpasswd - Upload htpasswd file",
-      "UPLOAD nginx/conf/htpasswd to upload#{@time.to_i}",
-      "SUDO   cp upload#{@time.to_i} nginx_path/conf/htpasswd",
-      "RUN    rm -f upload#{@time.to_i}",
+      "UPLOAD nginx/conf/htpasswd to /tmp/upload#{@time.to_i}",
+      "SUDO   cp /tmp/upload#{@time.to_i} nginx_path/conf/htpasswd",
+      "RUN    rm -f /tmp/upload#{@time.to_i}",
       "SUDO   chmod 400 nginx_path/conf/htpasswd"
     ]
   end

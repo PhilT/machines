@@ -12,12 +12,12 @@ describe 'packages/base' do
     eval_package
     AppConf.commands.map(&:info).should == [
       "TASK   hosts - Set /etc/hosts",
-      "UPLOAD unnamed buffer to upload#{@time.to_i}",
-      "SUDO   cp upload#{@time.to_i} /etc/hosts",
-      "RUN    rm -f upload#{@time.to_i}",
-      "UPLOAD unnamed buffer to upload#{@time.to_i}",
-      "SUDO   cp upload#{@time.to_i} /etc/hostname",
-      "RUN    rm -f upload#{@time.to_i}",
+      "UPLOAD unnamed buffer to /tmp/upload#{@time.to_i}",
+      "SUDO   cp /tmp/upload#{@time.to_i} /etc/hosts",
+      "RUN    rm -f /tmp/upload#{@time.to_i}",
+      "UPLOAD unnamed buffer to /tmp/upload#{@time.to_i}",
+      "SUDO   cp /tmp/upload#{@time.to_i} /etc/hostname",
+      "RUN    rm -f /tmp/upload#{@time.to_i}",
       "SUDO   service hostname start",
       "TASK   base - Install base packages",
       "SUDO   apt-get -q -y install build-essential",

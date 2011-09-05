@@ -14,9 +14,9 @@ describe 'packages/timezone' do
       "TASK   timezone - Set timezone from config.yml and update time daily using NTP",
       "SUDO   ln -sf /etc/localtime /usr/share/zoneinfo/GB",
       "SUDO   sed -i \"s/UTC=yes/UTC=no/\" /etc/default/rcS",
-      "UPLOAD unnamed buffer to upload#{@time.to_i}",
-      "SUDO   cp upload#{@time.to_i} /etc/cron.daily/ntpdate",
-      "RUN    rm -f upload#{@time.to_i}",
+      "UPLOAD unnamed buffer to /tmp/upload#{@time.to_i}",
+      "SUDO   cp /tmp/upload#{@time.to_i} /etc/cron.daily/ntpdate",
+      "RUN    rm -f /tmp/upload#{@time.to_i}",
       "SUDO   chmod 755 /etc/cron.daily/ntpdate"
     ]
   end
