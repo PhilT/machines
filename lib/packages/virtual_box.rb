@@ -4,7 +4,6 @@ task :virtual_box, 'Install VirtualBox' do
   sudo deb 'http://download.virtualbox.org/virtualbox/debian DISTRIB_CODENAME contrib',
     :key => 'http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc',
     :name => 'VirtualBox'
-  sudo update
 
   sudo install 'virtualbox-4.0'
 end

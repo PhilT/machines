@@ -72,6 +72,7 @@ module Machines
           Command.scp = scp
           AppConf.commands.each do |command|
             command.run
+            AppConf.file.flush
             exit if $exit_requested
           end
         end

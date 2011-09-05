@@ -17,10 +17,6 @@ module Machines
     def info
       "TASK   #{@name} - #{@description}"
     end
-
-    def == other
-      other.is_a?(LogCommand) && @name == other.name && @description == other.description
-    end
   end
 end
 

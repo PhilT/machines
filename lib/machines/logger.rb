@@ -26,6 +26,10 @@ module Machines
       @to.print message
     end
 
+    def flush
+      @to.flush
+    end
+
   private
     def format_message message, options
       message ||= '(no message)'

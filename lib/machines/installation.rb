@@ -18,7 +18,8 @@ module Machines
       end
       [
         Command.new(command, check_string(source.gsub(/ .*$/, ''), '/etc/apt/sources.list')),
-        Command.new("wget -q #{options[:key]} -O - | apt-key add -", "apt-key list | grep -i #{options[:name]} #{echo_result}")
+        Command.new("wget -q #{options[:key]} -O - | apt-key add -", "apt-key list | grep -i #{options[:name]} #{echo_result}"),
+        update
       ]
     end
 
@@ -39,7 +40,10 @@ module Machines
     # @param [String] key_name What to check in apt-key list to ensure it installed
     #     add_ppa 'mozillateam/firefox-stable', 'mozilla'
     def add_ppa name, key_name
-      Command.new("add-apt-repository ppa:#{name}", "apt-key list | grep -i #{key_name} #{echo_result}")
+      [
+        Command.new("add-apt-repository ppa:#{name}", "apt-key list | grep -i #{key_name} #{echo_result}"),
+        update
+      ]
     end
 
     def update

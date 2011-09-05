@@ -51,6 +51,13 @@ describe 'Helpers' do
       AppConf.file.log ''
       "\n".should be_logged
     end
+
+    it 'flushes the file' do
+      mock_file = mock File
+      subject = Machines::Logger.new(mock_file)
+      mock_file.should_receive(:flush)
+      subject.flush
+    end
   end
 end
 

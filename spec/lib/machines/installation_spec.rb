@@ -10,11 +10,13 @@ describe 'Installation' do
       subject = deb 'source', :key => 'gpg', :name => 'name'
       subject.map(&:command).should == [
         "echo deb source >> /etc/apt/sources.list",
-        "wget -q gpg -O - | apt-key add -"
+        "wget -q gpg -O - | apt-key add -",
+        "apt-get -q -y update"
       ]
       subject.map(&:check).should == [
         "grep \"source\" /etc/apt/sources.list #{echo_result}",
-        "apt-key list | grep -i name #{echo_result}"
+        "apt-key list | grep -i name #{echo_result}",
+        nil
       ]
     end
 
@@ -34,7 +36,7 @@ describe 'Installation' do
   describe 'add_ppa' do
     it 'adds a ppa' do
       subject = add_ppa 'user/name', 'key'
-      subject.command.should == 'add-apt-repository ppa:user/name'
+      subject.map(&:command).should == ['add-apt-repository ppa:user/name', 'apt-get -q -y update']
     end
   end
 

@@ -93,6 +93,19 @@ describe 'Machines' do
       subject.build
     end
 
+    it 'flushes log file after running command' do
+      AppConf.log_only = false
+      mock_command = mock Command
+      AppConf.commands = [mock_command]
+      mock_scp = mock Net::SCP, :session => nil
+
+      Net::SCP.stub(:start).and_yield(mock_scp)
+      Command.stub(:scp=)
+      mock_command.stub(:run)
+      AppConf.file.should_receive(:flush)
+      subject.build
+    end
+
     it 'runs single task when supplied' do
       mock_scp = mock Net::SCP, :session => nil
       Net::SCP.stub(:start).and_yield(mock_scp)

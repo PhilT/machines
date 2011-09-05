@@ -163,19 +163,5 @@ describe Command do
       subject.info.should == 'RUN    command'
     end
   end
-
-  describe '==' do
-    it 'matches when line, command and check are the same' do
-      subject.should == Command.new('command', 'check')
-    end
-
-    it 'does not match when command is different' do
-      subject.should_not == Command.new('comm', 'check')
-    end
-
-    it 'does not match when check is different' do
-      subject.should_not == Command.new('command', 'ch')
-    end
-  end
 end
 

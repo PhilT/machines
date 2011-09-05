@@ -144,7 +144,8 @@ describe 'Configuration' do
     context 'when commands are two strings' do
       it 'creates a Command' do
         run 'command', 'check'
-        AppConf.commands.should == [Command.new('command', 'check')]
+        AppConf.commands.first.command.should == 'command'
+        AppConf.commands.first.check.should == 'check'
       end
     end
   end
@@ -159,7 +160,8 @@ describe 'Configuration' do
     context 'when commands are two strings' do
       it 'creates a Command' do
         sudo 'command', 'check'
-        AppConf.commands.should == [Command.new('command', 'check')]
+        AppConf.commands.first.command.should == 'command'
+        AppConf.commands.first.check.should == 'check'
       end
     end
   end
@@ -174,12 +176,11 @@ describe 'Configuration' do
     it 'modifies Upload to send it to a temp file and sudos to copy it to destination' do
       sudo upload 'source', 'dest'
 
-      copy_command = Command.new("cp /tmp/dest dest", check_file('dest'))
-      copy_command.use_sudo
-      AppConf.commands.should == [
-        Upload.new('source', '/tmp/dest', check_file('/tmp/dest')),
-        copy_command,
-        Command.new("rm -f /tmp/dest", check_file('/tmp/dest', false))
+      AppConf.commands.map(&:command).should == [nil, "cp /tmp/dest dest", "rm -f /tmp/dest"]
+      AppConf.commands.map(&:check).should == [
+        "test -s /tmp/dest && echo CHECK PASSED || echo CHECK FAILED",
+        "test -s dest && echo CHECK PASSED || echo CHECK FAILED",
+        "test ! -s /tmp/dest && echo CHECK PASSED || echo CHECK FAILED"
       ]
     end
   end

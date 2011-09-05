@@ -8,7 +8,7 @@ task :openbox, 'Install Openbox window manager and associated fonts, themes, etc
     'obconf',                    # Set openbox themes - Set to onyx black
     'openbox',                   # Openbox lightweight Window Manager
     'pcmanfm',                   # Lightweight File manager
-    'suckless',                  # Installed for slock - Locks screen. Password unlocks - no prompt. Can be used with xautolock
+    'suckless-tools',            # Installed for slock - Locks screen. Password unlocks - no prompt. Can be used with xautolock
     'ttf-ubuntu-font-family',    # The new ubuntu font
     'ttf-mscorefonts-installer', # Microsoft fonts
     'xautolock',                 # Locks screen after idle

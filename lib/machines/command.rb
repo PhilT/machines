@@ -27,10 +27,6 @@ module Machines
       ("%-6s " % (@sudo ? 'SUDO' : 'RUN')) + command
     end
 
-    def == other
-      other.is_a?(Command) && @command == other.command && @check == other.check
-    end
-
   protected
     def progress
       "%3d%% " % (AppConf.commands.index(self) + 1 / AppConf.commands.count.to_f * 100).round

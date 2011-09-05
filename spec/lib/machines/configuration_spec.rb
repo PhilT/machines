@@ -22,13 +22,13 @@ describe 'Configuration' do
 
     it 'supports different types' do
       actual = configure @options
-      actual.should == [
-        Command.new('gconftool-2 --set "string" --type string "str"', nil),
-        Command.new('gconftool-2 --set "number" --type int 123', nil),
-        Command.new('gconftool-2 --set "t" --type bool true', nil),
-        Command.new('gconftool-2 --set "f" --type bool false', nil),
-        Command.new('gconftool-2 --set "float" --type float 1.1', nil),
-        Command.new('gconftool-2 --set "array" --type list --list-type=string ["item 1","item 2"]', nil)
+      actual.map(&:command).should == [
+        'gconftool-2 --set "string" --type string "str"',
+        'gconftool-2 --set "number" --type int 123',
+        'gconftool-2 --set "t" --type bool true',
+        'gconftool-2 --set "f" --type bool false',
+        'gconftool-2 --set "float" --type float 1.1',
+        'gconftool-2 --set "array" --type list --list-type=string ["item 1","item 2"]'
       ]
     end
 

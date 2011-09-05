@@ -14,5 +14,9 @@ class FakeOut
   def next
     @buffer.delete_at(0)
   end
+
+
+  def flush
+  end
 end
 

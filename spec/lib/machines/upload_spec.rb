@@ -81,27 +81,5 @@ describe Command do
       end
     end
   end
-
-  describe '==' do
-    it 'matches when line, command and check are the same' do
-      subject.should == Upload.new('local', 'remote', 'check')
-    end
-
-    it 'does not match when local is different' do
-      subject.should_not == Upload.new('loca', 'remote', 'check')
-    end
-
-    it 'does not match when remote is different' do
-      subject.should_not == Upload.new('local', 'reote', 'check')
-    end
-
-    it 'does not match when check is different' do
-      subject.should_not == Upload.new('local', 'remote', 'ch')
-    end
-
-    it 'does not match when not an Upload' do
-      subject.should_not == Object.new
-    end
-  end
 end
 
