@@ -1,4 +1,5 @@
 task :openbox, 'Install Openbox window manager and associated fonts, themes, etc' do
+  sudo debconf 'ttf-mscorefonts-installer', 'msttcorefonts/accepted-mscorefonts-eula', 'boolean', true
   sudo install [
     'dmz-cursor-theme',          # Mouse cursor theme
     'elementary-icon-theme',     # An icon theme

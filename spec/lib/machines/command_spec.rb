@@ -128,14 +128,14 @@ describe Command do
 
     it 'wraps command execution in sudo with a password' do
       AppConf.user.pass = 'userpass'
-      @mock_ssh.should_receive(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && command'").and_return "result"
+      @mock_ssh.should_receive(:exec!).with("echo userpass | sudo -S sh -c \"export TERM=linux && command\"").and_return "result"
 
       subject.use_sudo
       subject.run
     end
 
     it 'wraps command execution in sudo with no password' do
-      @mock_ssh.should_receive(:exec!).with("sudo -S sh -c 'export TERM=linux && command'").and_return "result"
+      @mock_ssh.should_receive(:exec!).with("sudo -S sh -c \"export TERM=linux && command\"").and_return "result"
 
       subject.use_sudo
       subject.run

@@ -31,6 +31,17 @@ module Machines
       ]
     end
 
+    # Preseed debconf to allow silent installs
+    # @param [String] app Name of application to configure
+    # @param [String] setting The setting to set
+    # @param [String] type Data type of the value
+    # @param value The value to set (Ruby types supported)
+    def debconf app, setting, type, value
+      command = "echo #{app} #{setting} #{type} #{value} | debconf-set-selections"
+      check = "debconf-get-selections | grep #{app} #{echo_result}"
+      Command.new(command, check)
+    end
+
     # Adds a PPA source
     # @param [String] user The user of the PPA
     # @param [String] name Name of the PPA

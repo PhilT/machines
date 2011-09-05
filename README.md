@@ -29,6 +29,7 @@ Features
 * Several deb sources added making it easier to keep up-to-date with the latest versions
 * Tested on Ubuntu i386/amd64 11.04 minimal
 * Minimal Ubuntu ISO/IMG used for increased security, stability and speed
+* Commands abstracted to provide a consistent configuration syntax
 
 
 Motivation
@@ -259,6 +260,12 @@ Limitations
 * The system has been designed to allow a certain flexibility in the configuration although some things
   may not yet be totally configurable it should be possible to add or modify the relevant package.
 * We are currently focused on Ruby 1.9.2, Rails 3 and Passenger 3.
+
+
+Planned
+---------------------------------------
+
+Supporting versions of Ubuntu from 11.04 onwards is planned.
 
 
 Warnings

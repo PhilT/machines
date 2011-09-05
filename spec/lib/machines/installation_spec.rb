@@ -6,7 +6,7 @@ describe 'Installation' do
   include Machines::Configuration
 
   describe 'deb' do
-    it 'should add to /etc/apt/sources and add a key' do
+    it 'adds to /etc/apt/sources and add a key' do
       subject = deb 'source', :key => 'gpg', :name => 'name'
       subject.map(&:command).should == [
         "echo deb source >> /etc/apt/sources.list",
@@ -24,8 +24,15 @@ describe 'Installation' do
     end
   end
 
+  describe 'debconf' do
+    it 'sends args to debconf-set-selections' do
+      subject = debconf 'app', 'setting', 'boolean', true
+      subject.command.should == 'echo app setting boolean true | debconf-set-selections'
+    end
+  end
+
   describe 'add_ppa' do
-    it 'should add a ppa' do
+    it 'adds a ppa' do
       subject = add_ppa 'user/name', 'key'
       subject.command.should == 'add-apt-repository ppa:user/name'
     end

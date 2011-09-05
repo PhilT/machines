@@ -9,6 +9,7 @@ describe 'packages/openbox' do
     eval_package
     AppConf.commands.map(&:info).should == [
       "TASK   openbox - Install Openbox window manager and associated fonts, themes, etc",
+      "SUDO   echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula boolean true | debconf-set-selections",
       "SUDO   export DEBIAN_FRONTEND=noninteractive && apt-get -q -y install dmz-cursor-theme",
       "SUDO   apt-get -q -y install elementary-icon-theme",
       "SUDO   apt-get -q -y install feh",
