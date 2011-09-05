@@ -20,6 +20,7 @@ describe 'packages/base' do
       "RUN    rm -f /tmp/upload#{@time.to_i}",
       "SUDO   service hostname start",
       "TASK   base - Install base packages",
+      "SUDO   apt-get -q -y update",
       "SUDO   apt-get -q -y install build-essential",
       "SUDO   apt-get -q -y install zlib1g-dev",
       "SUDO   apt-get -q -y install libpcre3-dev",
@@ -27,7 +28,8 @@ describe 'packages/base' do
       "SUDO   apt-get -q -y install libreadline5-dev",
       "SUDO   apt-get -q -y install libxml2-dev",
       "SUDO   apt-get -q -y install libxslt1-dev",
-      "SUDO   apt-get -q -y install libssl-dev"
+      "SUDO   apt-get -q -y install libssl-dev",
+      "SUDO   apt-get -q -y install python-software-properties"
     ]
   end
 end

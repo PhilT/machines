@@ -20,6 +20,7 @@ describe 'packages/nginx' do
       "SUDO   cp /tmp/upload#{@time.to_i} /etc/init.d/nginx",
       "RUN    rm -f /tmp/upload#{@time.to_i}",
       "SUDO   /usr/sbin/update-rc.d -f nginx defaults",
+      "SUDO   mkdir -p nginx_path/conf",
       "UPLOAD buffer from /prj/nginx/nginx.conf.erb to /tmp/upload#{@time.to_i}",
       "SUDO   cp /tmp/upload#{@time.to_i} nginx_path/conf/nginx.conf",
       "RUN    rm -f /tmp/upload#{@time.to_i}",

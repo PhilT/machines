@@ -1,7 +1,9 @@
 task :gmate, 'install gmate for gEdit and set some preferences and plugins' do
   dir = File.join AppConf.appsroot, 'gmate'
 
-  sudo install 'git://github.com/gmate/gmate.git', :to => dir, :args => '-n'
+  sudo add_ppa 'ubuntu-on-rails/ppa', 'Rails'
+  sudo install 'gedit-gmate'
+
   run configure '/apps/gedit-2/plugins/active-plugins' => %w(text_tools smart_indent align rails_hotkeys trailsave gemini rubyonrailsloader gedit_openfiles quickhighlightmode completion time docinfo filebrowser snippets spell indent)
 
   indent = '/apps/gedit-2/plugins/smart_indent'

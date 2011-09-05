@@ -10,7 +10,8 @@ describe 'packages/gmate' do
     eval_package
     AppConf.commands.map(&:info).should == [
       "TASK   gmate - install gmate for gEdit and set some preferences and plugins",
-      'SUDO   rm -rf apps_root/gmate && git clone git://github.com/gmate/gmate.git apps_root/gmate && cd apps_root/gmate && find . -maxdepth 1 -name install* | xargs -I xxx bash xxx -n',
+      "SUDO   add-apt-repository ppa:ubuntu-on-rails/ppa",
+      "SUDO   apt-get -q -y install gedit-gmate",
       'RUN    gconftool-2 --set "/apps/gedit-2/plugins/active-plugins" --type list --list-type=string ["text_tools","smart_indent","align","rails_hotkeys","trailsave","gemini","rubyonrailsloader","gedit_openfiles","quickhighlightmode","completion","time","docinfo","filebrowser","snippets","spell","indent"]',
       'RUN    gconftool-2 --set "/apps/gedit-2/plugins/smart_indent/haml_tab_size" --type int 2',
       'RUN    gconftool-2 --set "/apps/gedit-2/plugins/smart_indent/js_tab_size" --type int 2',
