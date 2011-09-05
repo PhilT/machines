@@ -158,6 +158,13 @@ describe Command do
     end
   end
 
+  describe 'progress' do
+    it 'returns correct percentage' do
+      AppConf.commands = 200.times.map { Command.new('command', 'check') }
+      AppConf.commands[10].send('progress').should == '  6% '
+    end
+  end
+
   describe 'info' do
     it 'returns the command' do
       subject.info.should == 'RUN    command'

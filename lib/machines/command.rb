@@ -29,7 +29,7 @@ module Machines
 
   protected
     def progress
-      "%3d%% " % (AppConf.commands.index(self) + 1 / AppConf.commands.count.to_f * 100).round
+      "%3d%% " % ((AppConf.commands.index(self) + 1) / AppConf.commands.count.to_f * 100).round
     end
 
     def process &block
