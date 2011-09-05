@@ -5,7 +5,7 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to File to append to
     def append text, options
-      write text, options.merge(:append => true)
+      Command.new("echo \"#{text}\" >> #{options[:to]}", check_string(text, options[:to]))
     end
 
     # Change permissions of a path

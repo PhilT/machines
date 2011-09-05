@@ -22,7 +22,7 @@ module Machines
     end
 
     def info
-      "UPLOAD #{local} to #{remote}"
+      "UPLOAD #{local.is_a?(NamedBuffer) ? "buffer from #{local.name}" : local} to #{remote}"
     end
   end
 end

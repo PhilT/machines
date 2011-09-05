@@ -57,8 +57,15 @@ describe Command do
   end
 
   describe 'info' do
-    it 'returns the command' do
+    it 'contains source and destination paths and UPLOAD' do
       subject.info.should == 'UPLOAD local to remote'
+    end
+
+    context 'when local is a buffer' do
+      subject { Upload.new(NamedBuffer.new('name', 'a buffer'), 'remote', 'check') }
+      it 'contains name of the buffer' do
+        subject.info.should == 'UPLOAD buffer from name to remote'
+      end
     end
   end
 
