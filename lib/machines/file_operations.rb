@@ -5,6 +5,7 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to File to append to
     def append text, options
+      text = text.gsub(/([\\$"`])/, '\\\\\1')
       Command.new("echo \"#{text}\" >> #{options[:to]}", check_string(text, options[:to]))
     end
 
