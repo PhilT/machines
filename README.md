@@ -262,7 +262,7 @@ Limitations
 * The system has been designed to allow a certain flexibility in the configuration although some things
   may not yet be totally configurable it should be possible to add or modify the relevant package.
 * We are currently focused on Ruby 1.9.2, Rails 3 and Passenger 3.
-
+* Some commands may not properly escape quotes when used with sudo (e.g. append and replace). This may be addressed in a future release.
 
 Planned
 ---------------------------------------
