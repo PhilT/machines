@@ -47,7 +47,7 @@ module Machines
     end
 
     def update
-      Command.new("#{APTGET_QUIET} update", nil)
+      Command.new("#{APTGET_QUIET} update > /tmp/apt-update.log", check_string('Reading package lists', '/tmp/apt-update.log'))
     end
 
     # Update, upgrade, autoremove, autoclean apt packages

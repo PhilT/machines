@@ -18,7 +18,7 @@ describe 'packages/base' do
       "RUN    rm -f /tmp/hostname",
       "SUDO   service hostname start",
       "TASK   base - Install base packages",
-      "SUDO   apt-get -q -y update",
+      "SUDO   apt-get -q -y update > /tmp/apt-update.log",
       "SUDO   apt-get -q -y install build-essential",
       "SUDO   apt-get -q -y install zlib1g-dev",
       "SUDO   apt-get -q -y install libpcre3-dev",

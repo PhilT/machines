@@ -31,6 +31,11 @@ describe 'FileOperations' do
       subject = append '\\$"`', :to => 'file'
       subject.command.should == 'echo "\\\\\\$\\"\\`" >> file'
     end
+
+    it 'checks text was added' do
+      subject = append 'something', :to => 'file'
+      subject.check.should == "grep \"something\" file #{echo_result}"
+    end
   end
 
   describe 'chmod' do

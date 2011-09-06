@@ -11,12 +11,12 @@ describe 'Installation' do
       subject.map(&:command).should == [
         "echo deb source >> /etc/apt/sources.list",
         "wget -q gpg -O - | apt-key add -",
-        "apt-get -q -y update"
+        "apt-get -q -y update > /tmp/apt-update.log"
       ]
       subject.map(&:check).should == [
         "grep \"source\" /etc/apt/sources.list #{echo_result}",
         "apt-key list | grep -i name #{echo_result}",
-        nil
+        "grep \"Reading package lists\" /tmp/apt-update.log #{echo_result}"
       ]
     end
 
@@ -36,14 +36,14 @@ describe 'Installation' do
   describe 'add_ppa' do
     it 'adds a ppa' do
       subject = add_ppa 'user/name', 'key'
-      subject.map(&:command).should == ['add-apt-repository ppa:user/name', 'apt-get -q -y update']
+      subject.map(&:command).should == ['add-apt-repository ppa:user/name', 'apt-get -q -y update > /tmp/apt-update.log']
     end
   end
 
   describe 'update' do
     it 'instaniates a command to update apt' do
       subject = update
-      subject.command.should == 'apt-get -q -y update'
+      subject.command.should == 'apt-get -q -y update > /tmp/apt-update.log'
     end
   end
 

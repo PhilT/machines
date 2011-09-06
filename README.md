@@ -137,10 +137,18 @@ If not a DB Server:
     Enter the IP address or DNS name of the database this app server will connect to:
     Enter the root password of the database (Used to create permissions for each of the apps):
 
+Console output:
+
+* Running commands are displayed in gray
+* Tasks show in blue
+* Completed commands change to:
+* Successfully completed commands are displayed in green
+* Failures show in red
+* Yellow indicates there was no check for the command
 
 While running open another terminal to view detailed output:
 
-    tail -f log/output.log
+    tail -f output.log
 
 
 Commandline Options

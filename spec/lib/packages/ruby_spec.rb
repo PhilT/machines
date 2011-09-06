@@ -13,7 +13,9 @@ describe 'packages/ruby' do
       "TASK   ruby - Install Ruby",
       "RUN    rvm install 1.9.2",
       "RUN    rvm 1.9.2 --default",
-      "SUDO   echo \"gem: --no-rdoc --no-ri\" >> /etc/gemrc"
+      "UPLOAD buffer from gemrc to /tmp/gemrc",
+      "SUDO   cp /tmp/gemrc /etc/gemrc",
+      "RUN    rm -f /tmp/gemrc"
     ]
   end
 end
