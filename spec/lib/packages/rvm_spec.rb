@@ -11,8 +11,9 @@ describe 'packages/rvm' do
     eval_package
     AppConf.commands.map(&:info).should == [
       "TASK   rvm - Install RVM",
+      "SUDO   apt-get -q -y install git-core",
       "SUDO   apt-get -q -y install curl",
-      "RUN    bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)",
+      "RUN    curl -s https://rvm.beginrescueend.com/install/rvm -o rvm-installer ; chmod +x rvm-installer ; ./rvm-installer --version 1.8.0",
       'RUN    echo "[[ -s \\"\\$HOME/.rvm/scripts/rvm\\" ]] && . \\"\\$HOME/.rvm/scripts/rvm\\" # Load RVM function" >> user_home/.bashrc',
       "RUN    source user_home/.bashrc",
       "TASK   rvm_prompt_off - turn off trust prompting for new .rvmrc files",

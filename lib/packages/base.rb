@@ -1,6 +1,8 @@
 task :hosts, 'Set /etc/hosts' do
   # Sets hostname according to the following: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=316099
-  sudo write "127.0.0.1 localhost.localdomain localhost\n127.0.1.1 #{AppConf.hostname}", :to => '/etc/hosts'
+  fqdn = AppConf.hostname
+  hostname = AppConf.hostname.split('.').first
+  sudo write "127.0.0.1 #{fqdn} localhost.localdomain localhost\n127.0.1.1 #{hostname}", :to => '/etc/hosts'
   only :enviroments => :development do
     hosts_config = 'config/hosts.yml'
     if File.exist?(hosts_config)
@@ -12,9 +14,7 @@ task :hosts, 'Set /etc/hosts' do
 end
 
 task :base, 'Install base packages' do
-  sudo update
-  sudo install %w(build-essential zlib1g-dev libpcre3-dev debconf-utils)
+  sudo install %w(build-essential zlib1g-dev libpcre3-dev)
   sudo install %w(libreadline5-dev libxml2-dev libxslt1-dev libssl-dev)
-  sudo install %w(python-software-properties)   # needed for add-apt-repository
 end
 

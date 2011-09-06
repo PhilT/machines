@@ -133,7 +133,7 @@ MACHINESFILE
 
   describe 'enter_hostname' do
     it 'accepts hostname' do
-      should_receive(:ask).with('Hostname to set machine to (Shown on bash prompt if default .bashrc used): ').and_return 'host'
+      should_receive(:ask).with('Enter a hostname (can be fully qualified domain): ').and_return 'host'
       enter_hostname.should == 'host'
     end
   end

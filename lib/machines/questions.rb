@@ -29,7 +29,7 @@ module Machines
     end
 
     def enter_hostname
-      ask 'Hostname to set machine to (Shown on bash prompt if default .bashrc used): '
+      ask 'Enter a hostname (can be fully qualified domain): '
     end
   end
 end
