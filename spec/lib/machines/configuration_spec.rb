@@ -3,15 +3,15 @@ require 'spec_helper'
 describe 'Configuration' do
   describe 'add_user' do
     it do
-      subject = add_user 'login'
-      subject.command.should == 'useradd -s /bin/bash -d /home/login -m login'
-      subject.check.should == "test -d /home/login #{echo_result}"
+      command = add_user 'login'
+      command.command.should == 'useradd -s /bin/bash -d /home/login -m login'
+      command.check.should == "test -d /home/login #{echo_result}"
     end
 
     it do
-      subject = add_user 'a_user', :password => 'password', :admin => true
-      subject.command.should match /useradd -s \/bin\/bash -d \/home\/a_user -m -p .* -G admin a_user/
-      subject.check.should == "test -d /home/a_user #{echo_result}"
+      command = add_user 'a_user', :password => 'password', :admin => true
+      command.command.should match /useradd -s \/bin\/bash -d \/home\/a_user -m -p .* -G admin a_user/
+      command.check.should == "test -d /home/a_user #{echo_result}"
     end
   end
 
@@ -21,8 +21,8 @@ describe 'Configuration' do
     end
 
     it 'supports different types' do
-      actual = configure @options
-      actual.map(&:command).should == [
+      commands = configure @options
+      commands.map(&:command).should == [
         'gconftool-2 --set "string" --type string "str"',
         'gconftool-2 --set "number" --type int 123',
         'gconftool-2 --set "t" --type bool true',
@@ -30,6 +30,11 @@ describe 'Configuration' do
         'gconftool-2 --set "float" --type float 1.1',
         'gconftool-2 --set "array" --type list --list-type=string ["item 1","item 2"]'
       ]
+    end
+
+    it 'checks value has been set' do
+      command = configure 'key' => 'value'
+      command.first.check.should == 'gconftool-2 --get "key" | grep "value" ' + echo_result
     end
 
     it { lambda{ configure(:invalid_type => Object.new) }.should raise_error }

@@ -32,6 +32,7 @@ Features
 * Commands abstracted to provide a consistent configuration syntax
 * Full automated test suite to ensure correct commands are generated (Using RSpec)
 * Extra checks done to ensure command generates the correct result and avoids false positives (e.g. successful return values)
+* A lightweight Ubuntu install
 
 
 Motivation
