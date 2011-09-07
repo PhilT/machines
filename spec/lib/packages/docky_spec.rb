@@ -21,7 +21,7 @@ describe 'packages/docky' do
       "RUN    gconftool-2 --set \"/apps/docky-2/Clock/ClockDockItem/ShowDigital\" --type bool true",
       "RUN    gconftool-2 --set \"/apps/docky-2/Clock/ClockDockItem/ShowMilitary\" --type bool true",
       "RUN    gconftool-2 --set \"/apps/docky-2/GMail/GMailPreferences/RefreshRate\" --type int 10",
-      "RUN    gconftool-2 --set \"/apps/docky-2/GMail/GMailPreferences/User\" --type string \"phil@example.com\"",
+      "RUN    gconftool-2 --set \"/apps/docky-2/GMail/GMailPreferences/User\" --type string \"phil@\"",
       "RUN    gconftool-2 --set \"/apps/docky-2/WeatherDocklet/WeatherPreferences/Location\" --type list --list-type=string [\"UKXX0085\"]",
       "RUN    gconftool-2 --set \"/apps/docky-2/WeatherDocklet/WeatherPreferences/Metric\" --type bool true"
     ]

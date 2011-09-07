@@ -8,8 +8,9 @@ task :docky, 'Install and configure Docky a dock and app launcher' do
   run configure '/apps/docky-2/Docky/Interface/DockPreferences/Dock1/FadeOpacity' => 50.0
 
   # Launchers
-  run configure '/apps/docky-2/Docky/Interface/DockPreferences/Dock1/Launchers' =>
-    %w(terminator abiword gnumeric firefox gimp inkscape audacious2 gedit).map{|app| "file:///usr/share/applications/#{app}.desktop" }
+  apps = %w(terminator abiword gnumeric firefox gimp inkscape audacious2 gedit)
+  key = '/apps/docky-2/Docky/Interface/DockPreferences/Dock1/Launchers'
+  run configure key => apps.map {|app| "file:///usr/share/applications/#{app}.desktop"}
 
   run configure '/apps/docky-2/Docky/Interface/DockPreferences/Dock1/Plugins' => %w(Trash Clock GMail Weather SessionManager)
 
@@ -36,7 +37,7 @@ task :docky, 'Install and configure Docky a dock and app launcher' do
 
   # GMail
   run configure '/apps/docky-2/GMail/GMailPreferences/RefreshRate' => 10
-  run configure '/apps/docky-2/GMail/GMailPreferences/User' => "phil@example.com"
+  run configure '/apps/docky-2/GMail/GMailPreferences/User' => "phil@"
 
   # Weather
   run configure '/apps/docky-2/WeatherDocklet/WeatherPreferences/Location' => ['UKXX0085']

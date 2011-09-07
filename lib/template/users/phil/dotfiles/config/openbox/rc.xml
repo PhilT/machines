@@ -37,19 +37,19 @@
     </font>
     <font place="MenuHeader">
       <name>Ubuntu Light</name>
-      <size>9</size>
+      <size>8</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
     <font place="MenuItem">
       <name>Ubuntu Light</name>
-      <size>9</size>
+      <size>8</size>
       <weight>Normal</weight>
       <slant>Normal</slant>
     </font>
     <font place="OnScreenDisplay">
       <name>Ubuntu</name>
-      <size>9</size>
+      <size>8</size>
       <weight>Bold</weight>
       <slant>Normal</slant>
     </font>
