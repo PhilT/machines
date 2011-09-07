@@ -12,6 +12,7 @@ package :timezone
 package :base
 
 only :roles => :app do
+  package :monit
   package :dotfiles
   package :webapps
   package :git
@@ -21,6 +22,7 @@ only :roles => :app do
   package :passenger
   package :nginx_passenger
   package :nginx_logrotate
+  package :postfix
 end
 
 only :roles => :db do

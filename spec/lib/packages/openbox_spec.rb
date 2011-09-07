@@ -27,11 +27,11 @@ describe 'packages/openbox' do
       "SUDO   echo \"ALL   ALL=NOPASSWD:/sbin/shutdown\" >> /etc/sudoers",
       "SUDO   echo \"ALL   ALL=NOPASSWD:/sbin/reboot\" >> /etc/sudoers",
       "TASK   fonts - Set openbox and Gnome interface fonts",
-      "RUN    gconftool-2 --set \"/apps/metacity/general/titlebar_font\" --type string \"Ubuntu Bold 9\"",
-      "RUN    gconftool-2 --set \"/apps/nautilus/preferences/desktop_font\" --type string \"Ubuntu Light 9\"",
+      "RUN    gconftool-2 --set \"/apps/metacity/general/titlebar_font\" --type string \"Ubuntu Bold 8\"",
+      "RUN    gconftool-2 --set \"/apps/nautilus/preferences/desktop_font\" --type string \"Ubuntu Light 8\"",
       "RUN    gconftool-2 --set \"/apps/nautilus/preferences/default_folder_viewer\" --type string \"compact_view\"",
-      "RUN    gconftool-2 --set \"/desktop/gnome/interface/font_name\" --type string \"Ubuntu Light 9\"",
-      "RUN    gconftool-2 --set \"/desktop/gnome/interface/document_font_name\" --type string \"Ubuntu Light 9\"",
+      "RUN    gconftool-2 --set \"/desktop/gnome/interface/font_name\" --type string \"Ubuntu Light 8\"",
+      "RUN    gconftool-2 --set \"/desktop/gnome/interface/document_font_name\" --type string \"Ubuntu Light 8\"",
       "RUN    gconftool-2 --set \"/desktop/gnome/interface/monospace_font_name\" --type string \"Monospace 8\""
     ]
   end

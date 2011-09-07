@@ -5,7 +5,7 @@ describe 'packages/webapps' do
     load_package('webapps')
 
     AppConf.from_hash(:user => {:name => 'username', :home => 'home_dir'}, :ruby => {:version => 'ruby_version'})
-    AppConf.apps = {'application' => AppBuilder.new('name' => 'application', 'path' => 'app_path', 'enable_ssl' => nil, 'db_password' => 'pa$$')}
+    AppConf.apps = {'application' => AppBuilder.new('name' => 'application', 'url' => 'github url', 'path' => 'app_path', 'enable_ssl' => nil, 'db_password' => 'pa$$')}
     AppConf.from_hash(:awstats => {:path => 'stats_path'})
     AppConf.webserver = 'nginx'
     AppConf.from_hash(:nginx => {:path => 'nginx_path', :servers_dir => 'servers'})
@@ -24,7 +24,7 @@ describe 'packages/webapps' do
       "RUN    mkdir -p app_path/shared/config",
       "RUN    mkdir -p app_path/shared/system",
       "UPLOAD buffer from /prj/nginx/app_server.conf.erb to /tmp/application.conf",
-      "SUDO   cp /tmp/application.conf nginx_path/servers/application.conf",
+      "SUDO   cp -f /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -f /tmp/application.conf",
       "UPLOAD buffer from database.yml to app_path/shared/config/database.yml",
     ]
@@ -37,7 +37,7 @@ describe 'packages/webapps' do
       "TASK   webapps - Sets up Web apps in config/apps.yml using app_server.conf.erb",
       "SUDO   mkdir -p nginx_path/servers",
       "UPLOAD buffer from /prj/nginx/app_server.conf.erb to /tmp/application.conf",
-      "SUDO   cp /tmp/application.conf nginx_path/servers/application.conf",
+      "SUDO   cp -f /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -f /tmp/application.conf",
     ]
   end

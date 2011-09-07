@@ -44,3 +44,13 @@ appsroots:
   phil: /home/phil/workspace
   www-data: /var/www/nginx
 
+mail:
+  domain: electricvisions.com
+
+monit:
+  mailto: admin@electricvisions.com
+  check:
+    paths: /
+  webserver:
+    address: 192.168.1.0/255.255.255.0
+

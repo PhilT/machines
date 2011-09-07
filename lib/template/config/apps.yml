@@ -1,25 +1,25 @@
-application:
-  path: application
+velocity:
+  path: velocity
   development:
-    server_name: example.local *.example.local
+    server_name: velocity.local *.velocity.local
   staging:
-    server_name: staging.example.com *.staging.example.com
+    server_name: staging.velocityapp.com *.staging.velocityapp.com
     ssl: selfsigned
     basic_auth: true
     db_password: s126A6ljU2
   production:
-    server_name: example.com *.example.com
-    ssl: example.com
+    server_name: velocityapp.com *.velocityapp.com
+    ssl: velocityapp.com
     db_password: jOPM534rCJ
 
-wiki:
-  path: velocity
+fountain:
+  path: fountain
   development:
-    server_name: wiki.example.local
+    server_name: wiki.local
   staging:
-    server_name: wiki.staging.example.com
+    server_name: staging.fountainwiki.com
     db_password: lcpPQSHEs9
   production:
-    server_name: wiki.example.com
+    server_name: fountainwiki.com
     db_password: tnVlsFw9GV
 

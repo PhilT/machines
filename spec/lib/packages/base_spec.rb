@@ -11,10 +11,10 @@ describe 'packages/base' do
     AppConf.commands.map(&:info).should == [
       "TASK   hosts - Set /etc/hosts",
       "UPLOAD unnamed buffer to /tmp/hosts",
-      "SUDO   cp /tmp/hosts /etc/hosts",
+      "SUDO   cp -f /tmp/hosts /etc/hosts",
       "RUN    rm -f /tmp/hosts",
       "UPLOAD unnamed buffer to /tmp/hostname",
-      "SUDO   cp /tmp/hostname /etc/hostname",
+      "SUDO   cp -f /tmp/hostname /etc/hostname",
       "RUN    rm -f /tmp/hostname",
       "SUDO   service hostname start",
       "TASK   base - Install base packages",

@@ -26,12 +26,12 @@ module Machines
       Command.new("chown #{recursive}#{user}:#{user} #{path}", check_owner(user, path))
     end
 
-    # Copy a remote file or directory
+    # Copy a remote file or directory (will overwrite)
     # @param [String] from Existing path
     # @param [String] to Path to copy to
     def copy from, to
       recursive = '-R ' if File.directory?(from)
-      Command.new("cp #{recursive}#{from} #{to}", check_file(to))
+      Command.new("cp -f #{recursive}#{from} #{to}", check_file(to))
     end
 
     # Write a file from an ERB template

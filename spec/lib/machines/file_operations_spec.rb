@@ -55,12 +55,12 @@ describe 'FileOperations' do
 
   describe 'copy' do
     subject { copy('from', 'to') }
-    it { subject.command.should == 'cp from to' }
+    it { subject.command.should == 'cp -f from to' }
 
     context 'when source is a directory' do
       before { FileUtils.mkdir_p 'from' }
       subject { copy('from', 'to') }
-      it { subject.command.should == 'cp -R from to'}
+      it { subject.command.should == 'cp -f -R from to'}
     end
   end
 

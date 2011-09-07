@@ -13,7 +13,7 @@ describe 'packages/timezone' do
       "SUDO   ln -sf /etc/localtime /usr/share/zoneinfo/GB",
       "SUDO   sed -i \"s/UTC=yes/UTC=no/\" /etc/default/rcS",
       "UPLOAD unnamed buffer to /tmp/ntpdate",
-      "SUDO   cp /tmp/ntpdate /etc/cron.daily/ntpdate",
+      "SUDO   cp -f /tmp/ntpdate /etc/cron.daily/ntpdate",
       "RUN    rm -f /tmp/ntpdate",
       "SUDO   chmod 755 /etc/cron.daily/ntpdate"
     ]

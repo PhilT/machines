@@ -18,6 +18,8 @@ describe 'packages/dotfiles' do
       "UPLOAD /prj/users/username/dotfiles/bashrc to home_dir/.bashrc",
       "RUN    sed -i \"s/export RAILS_ENV=/export RAILS_ENV=railsenv/\" home_dir/.bashrc",
       "RUN    sed -i \"s/export CDPATH=/export CDPATH=appsroot/\" home_dir/.bashrc",
+      "TASK   wallpaper - Copy wallpaper",
+      "UPLOAD /prj/users/username/wallpaper to ~/wallpaper",
       "TASK   keyfiles - Upload authorized_keys file",
       "RUN    mkdir -p home_dir/.ssh",
       "RUN    chmod 700 home_dir/.ssh",

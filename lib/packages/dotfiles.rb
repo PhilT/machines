@@ -14,6 +14,10 @@ task :dotfiles, "Upload files in users/name/#{username}/dotfiles, prepend a dot 
   end
 end
 
+task :wallpaper, 'Copy wallpaper' do
+  run upload File.join(AppConf.project_dir, 'users', username, 'wallpaper'), '~/wallpaper'
+end
+
 authorized_key_file = File.join(AppConf.project_dir, 'users', username, 'authorized_keys')
 if File.exists?(authorized_key_file)
   task :keyfiles, 'Upload authorized_keys file' do

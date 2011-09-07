@@ -13,7 +13,7 @@ describe 'packages/awstats' do
       "TASK   awstats - Download and install AWStats",
       "SUDO   cd /tmp && wget awstats_url && tar -zxf awstats_url && mv awstats_url awstats_path && rm awstats_url && cd -",
       "UPLOAD buffer from /prj/awstats/awstats.conf.erb to /tmp/awstats.conf",
-      "SUDO   cp /tmp/awstats.conf awstats_path/conf/awstats.conf",
+      "SUDO   cp -f /tmp/awstats.conf awstats_path/conf/awstats.conf",
       "RUN    rm -f /tmp/awstats.conf",
     ]
   end

@@ -80,7 +80,7 @@ module Machines
       end
     end
 
-    # Upload a file or directory using SCP and optionally set permissions.
+    # Upload a file or directory using SCP
     # Can be used with sudo or run
     # @param [String] local_source File or directory on the local machine
     # @param [String] remote_dest Directory on the remote machine to copy to
