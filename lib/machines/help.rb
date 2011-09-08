@@ -6,6 +6,7 @@ module Machines
         'new <DIR>' => 'Creates a directory called DIR and generates an example machines project in it',
         'check' => 'Checks Machinesfile for syntax issues',
         'dryrun' => 'Runs through Machinesfile logging all commands to log/output.log but does not acutally run them',
+        'tasks' => 'Lists the available tasks after asking for machine and user',
         'build [TASK]' => 'Asks some questions then builds your chosen machine. If TASK is specified just builds that',
         'packages' => 'lists the available packages',
         'override <PACKAGE>' => 'copies the default package into project/packages so it can be edited/overidden'

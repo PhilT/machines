@@ -32,6 +32,46 @@ describe 'Machines' do
     end
   end
 
+  describe 'load_machinesfile' do
+    it 'raises LoadError with custom message when no Machinesfile' do
+      File.should_receive(:read).with("#{AppConf.project_dir}/Machinesfile").and_raise LoadError.new('Machinesfile not found')
+
+      begin
+        subject.load_machinesfile
+      rescue LoadError => e
+        e.message.should == 'Machinesfile does not exist. Use `machines new <DIR>` to create a template.'
+      end
+    end
+
+    it 'raises normal LoadError on other files' do
+      File.should_receive(:read).with("#{AppConf.project_dir}/Machinesfile").and_raise LoadError
+
+      begin
+        subject.load_machinesfile
+      rescue LoadError => e
+        e.message.should == 'LoadError'
+      end
+    end
+  end
+
+  describe 'tasks' do
+    it 'displays a list of tasks' do
+      subject.should_receive(:init)
+      subject.should_receive(:load_machinesfile)
+      AppConf.tasks = {
+        :task1 => {:description => 'description 1'},
+        :task2 =>  {:description => 'description 2'},
+        :task3 => {:description => 'description 3'}
+      }
+      subject.tasks
+      $output.should == 'Tasks
+  task1                description 1
+  task2                description 2
+  task3                description 3
+'
+    end
+  end
+
   describe 'dryrun' do
     it 'asks build to only log commands' do
       subject.should_receive(:build)
@@ -46,26 +86,6 @@ describe 'Machines' do
       AppConf.target_address = 'target'
       AppConf.user.name = 'username'
       AppConf.user.pass = 'userpass'
-    end
-
-    it 'raises LoadError with custom message when no Machinesfile' do
-      File.should_receive(:read).with("#{AppConf.project_dir}/Machinesfile").and_raise LoadError.new('Machinesfile not found')
-
-      begin
-        subject.build
-      rescue LoadError => e
-        e.message.should == 'Machinesfile does not exist. Use `machines new <DIR>` to create a template.'
-      end
-    end
-
-    it 'raises normal LoadError on other files' do
-      File.should_receive(:read).with("#{AppConf.project_dir}/Machinesfile").and_raise LoadError
-
-      begin
-        subject.build
-      rescue LoadError => e
-        e.message.should == 'LoadError'
-      end
     end
 
     it 'starts an SCP session using password authentication' do

@@ -9,7 +9,8 @@ task :questions, 'Ask some questions' do
   thread = Thread.new { connect && run_instance } if AppConf.ec2.use
   AppConf.target_address = enter_target_address('machine') unless AppConf.ec2.use || AppConf.log_only
   AppConf.user.name = choose_user
-  AppConf.user.pass = enter_password('users', false) unless AppConf.ec2.use
+  AppConf.passwords << AppConf.user.pass = 'password'
+  AppConf.user.pass = enter_password('users', false) unless AppConf.ec2.use || AppConf.log_only
   AppConf.user.home = File.join('/home', AppConf.user.name)
   AppConf.appsroot = AppConf.appsroots[AppConf.user.name]
   load_app_settings(machine[:apps])
@@ -19,7 +20,7 @@ task :questions, 'Ask some questions' do
   end
 
   only :environment => :development do
-    AppConf.hostname = enter_hostname
+    AppConf.hostname = AppConf.log_only ? 'hostname' : enter_hostname
   end
 
   AppConf.db.address = 'localhost'

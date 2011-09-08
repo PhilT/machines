@@ -41,6 +41,27 @@ module Machines
       AppConf.console ||= Machines::Logger.new STDOUT, :truncate => true
     end
 
+    def load_machinesfile
+      machinesfile = File.join(AppConf.project_dir, 'Machinesfile')
+      eval File.read(machinesfile), nil, "eval: #{machinesfile}"
+    rescue LoadError => e
+      if e.message =~ /Machinesfile/
+        raise LoadError, "Machinesfile does not exist. Use `machines new <DIR>` to create a template."
+      else
+        raise
+      end
+    end
+
+    def tasks
+      AppConf.log_only = true
+      init
+      load_machinesfile
+      say 'Tasks'
+      AppConf.tasks.each do |task_name, settings|
+        say "  %-20s #{settings[:description]}" % task_name
+      end
+    end
+
     def dryrun
       AppConf.log_only = true
       build
@@ -48,9 +69,9 @@ module Machines
 
     # Loads Machinesfile, opens an SCP connection and runs all commands and file uploads
     def build task_name = nil
+      AppConf.building = true
       init
-      machinesfile = File.join(AppConf.project_dir, 'Machinesfile')
-      eval File.read(machinesfile), nil, "eval: #{machinesfile}"
+      load_machinesfile
 
       task task_name.to_sym if task_name
 
@@ -76,12 +97,6 @@ module Machines
             exit if $exit_requested
           end
         end
-      end
-    rescue LoadError => e
-      if e.message =~ /Machinesfile/
-        raise LoadError, "Machinesfile does not exist. Use `machines new <DIR>` to create a template."
-      else
-        raise
       end
     end
 

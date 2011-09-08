@@ -15,8 +15,6 @@ Select machine to build:
 1. phil
 2. www-data
 Select a user:
-Enter users password:
-Enter a hostname (can be fully qualified domain):
 THIS
   end
 end
