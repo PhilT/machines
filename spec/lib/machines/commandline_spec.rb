@@ -45,7 +45,7 @@ describe 'CommandLine' do
     it 'copies the template within dir' do
       FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template/.", 'dir')
       FileUtils.should_receive(:mkdir_p).with(File.join('dir', 'packages'))
-      should_receive(:say).with('Project created at dir')
+      should_receive(:say).with('Project created at dir/')
       generate 'dir'
     end
 

@@ -3,8 +3,6 @@ require 'integration/common_steps'
 
 Dir['spec/support/*.rb'].each {|file| require File.join('support', File.basename(file)) }
 
-
-
 RSpec.configure do |c|
   c.include(Matchers)
   c.include(CommonSteps)

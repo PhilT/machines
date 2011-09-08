@@ -233,10 +233,7 @@ Some of the settings set and used by *machines* are:
 
 Take a look at `template/config/*.yml` for more.
 
-### Two shortcuts are available to packages.
-
-1. Local relative paths will be from `AppConf.project_dir`
-1. Specifying `$HOME/rest/of/path` for a local path expands to `#{AppConf.project_dir}/users/#{AppConf.user.name}/rest/of/path`
+1. Specifying `$HOME/rest/of/path` for a local path expands to `users/#{AppConf.user.name}/rest/of/path`
 
 
 Setting up the test Machines virtual machine

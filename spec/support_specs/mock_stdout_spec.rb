@@ -6,11 +6,6 @@ describe MockStdout do
     $output.should == "something\n"
   end
 
-  it 'cleans directories' do
-    say("something with #{AppConf.project_dir}/in")
-    $output.should == "something with in\n"
-  end
-
   it 'cleans extra trailing carriage returns' do
     say("something\n\n\nand something else\n\n")
     $output.should == "something\nand something else\n"

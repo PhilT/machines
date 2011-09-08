@@ -7,7 +7,7 @@ module StagingMachineSteps
 
     machines.execute('htpasswd', nil)
     $output.should == <<-THIS
-Project created at /home/phil/workspace/machines/tmp/project
+Project created at project/
 Generate BasicAuth password and add to nginx/conf/htpasswd
 Username:
 Enter users password:

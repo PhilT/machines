@@ -5,7 +5,7 @@ module DryrunSteps
 
     machines.execute('dryrun', nil)
     $output.should == <<-THIS
-Project created at /home/phil/workspace/machines/tmp/project
+Project created at project/
 1. Desktop
 2. Staging
 3. Production

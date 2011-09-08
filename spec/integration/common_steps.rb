@@ -47,7 +47,7 @@ module CommonSteps
       %w(mysql nginx packages users Machinesfile)
 
     files.each do |name|
-      File.should exist File.join(AppConf.project_dir, name)
+      File.should exist name
     end
   end
 end

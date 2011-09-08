@@ -24,7 +24,6 @@ RSpec.configure do |c|
     AppConf.tasks = {}
     AppConf.from_hash(:user => {})
     AppConf.application_dir = application_dir
-    AppConf.project_dir = '/prj'
 
     $file = FakeOut.new
     $console = FakeOut.new

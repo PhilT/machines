@@ -35,7 +35,7 @@ module Machines
       end
       FileUtils.cp_r(File.join(AppConf.application_dir, 'template', '/.'), dir)
       FileUtils.mkdir_p(File.join(dir, 'packages'))
-      say "Project created at #{dir}"
+      say "Project created at #{dir}/"
     end
 
     def packages

@@ -28,7 +28,6 @@ class MockStdout
 
 private
   def sanitize string
-    string.gsub!(AppConf.project_dir + '/', '')
     string << "\n"
     string.gsub!(/ ?\n+/, "\n")
     string == "\n" ? '' : string
