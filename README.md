@@ -218,6 +218,27 @@ Default structure created by running `machines new example`:
       * confi
   * Machinesfile
 
+Global settings
+---------------------------------------
+
+*machines* uses a gem I wrote called [app_conf](https://github.com/PhilT/app_conf). It's used to load global settings
+from YAML files as well as add further settings in Ruby. *machines* uses both internally and for package settings.
+Some of the settings set and used by *machines* are:
+
+* `AppConf.commands` - All the commands that are to be run
+* `AppConf.tasks` - Names of the tasks - Used to check dependencies and display tasks the help
+* `AppConf.project_dir` - The local project directory, mostly likely the current working directory
+* `AppConf.file` - The file logger
+* `appConf.console` - The console logger
+* `AppConf.user` - The selected user settings
+
+Take a look at `template/config/*.yml` for more.
+
+### Two shortcuts are available to packages.
+
+1. Local relative paths will be from `AppConf.project_dir`
+1. Specifying `$HOME/rest/of/path` for a local path expands to `#{AppConf.project_dir}/users/#{AppConf.user.name}/rest/of/path`
+
 
 Setting up the test Machines virtual machine
 ---------------------------------------
