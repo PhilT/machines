@@ -12,7 +12,7 @@ describe 'Configuration' do
   describe 'task' do
     it 'yields' do
       yielded = false
-      task 'description' do
+      task :name do
         yielded = true
       end
       yielded.should be_true
@@ -30,12 +30,71 @@ describe 'Configuration' do
       AppConf.tasks.should == {:name => {:description => 'description', :block => block}}
     end
 
-    it 'sets commands to only those of the specified task' do
+    it 'sets commands to only run those from the specified task' do
       block_ran = false
       block = Proc.new { block_ran = true }
       AppConf.tasks[:name] = {:block => block}
-      task :name
+      task :name, nil
       block_ran.should be_true
+    end
+
+    context 'when dependent task' do
+      before(:each) do
+        @yielded = false
+        @block = Proc.new { @yielded = true }
+      end
+
+      context 'exists' do
+        before(:each) do
+          store_task :dependent_task, nil
+          task :name, nil, :if => :dependent_task, &@block
+        end
+
+        it { @yielded.should be_true }
+        it 'task stored' do
+          AppConf.tasks.should include :name
+        end
+      end
+
+      context 'does not exist' do
+        before(:each) { task :name, nil, :if => :dependent_task, &@block }
+        it { @yielded.should be_false }
+        it 'task not stored' do
+          AppConf.tasks.should_not include :name
+        end
+      end
+    end
+
+    context 'when multiple dependent tasks' do
+      before(:each) do
+        @yielded = false
+        @block = Proc.new { @yielded = true }
+      end
+
+      context 'all exist' do
+        before(:each) do
+          store_task :dependent_task, nil
+          store_task :another_dependent, nil
+          task :name, nil, :if => [:dependent_task, :another_dependent], &@block
+        end
+
+        it { @yielded.should be_true }
+        it 'task stored' do
+          AppConf.tasks.should include :name
+        end
+      end
+
+      context 'all but one exist' do
+        before(:each) do
+          store_task :another_dependent, nil
+          task :name, nil, :if => [:dependent_task, :another_dependent], &@block
+        end
+
+        it { @yielded.should be_false }
+        it 'task not stored' do
+          AppConf.tasks.should_not include :name
+        end
+      end
     end
   end
 

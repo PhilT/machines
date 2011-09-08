@@ -2,9 +2,15 @@ module Machines
   module Core
     # If a block is given, store the task, describe it and log it
     # If no block is given, sets commands to only those of the specified task so they can be run standalone
-    def task name, description = nil, &block
+    # @param [Symbol] name Name of the task
+    # @param [String] description Describe the task
+    # @param [Hash] options
+    # @option options [Symbol, Array] :if Dependent tasks that must already have been added for this task to be added
+    def task name, description = nil, options = {}, &block
       if block
-        store_task name, description, &block if name.is_a?(Symbol)
+        dependencies = [options[:if]].flatten
+        return if options[:if] && (dependencies - AppConf.tasks.keys).any?
+        store_task name, description, &block
         AppConf.commands << LogCommand.new(name, description)
         yield
       else
