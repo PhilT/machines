@@ -14,3 +14,7 @@ only :environment => :staging do
   end
 end
 
+task :monit_nginx, 'Add monit configuration for Nginx', :if => [:monit, :nginx] do
+  sudo upload AppConf.project_dir + '/monit/conf.d/nginx', '/etc/monit/conf.d/nginx'
+end
+

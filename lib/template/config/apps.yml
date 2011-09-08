@@ -1,5 +1,6 @@
 velocity:
   path: velocity
+  uses_delayed_job: false
   development:
     server_name: velocity.local *.velocity.local
   staging:
@@ -14,6 +15,7 @@ velocity:
 
 fountain:
   path: fountain
+  uses_delayed_job: false
   development:
     server_name: wiki.local
   staging:

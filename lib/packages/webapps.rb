@@ -27,3 +27,7 @@ task :webapps, 'Sets up Web apps in config/apps.yml using app_server.conf.erb' d
   end
 end
 
+task :monit_delayed_job, 'Add monit config for each delayed_job app', :if => [:monit] do
+  sudo create_from AppConf.project_dir + '/monit/conf.d/delayed_job.erb',
+end
+
