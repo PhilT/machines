@@ -2,7 +2,7 @@
 	whitespace = nowarn
 [user]
 	name = Phil Thompson
-	email = phil@electricvisions.com
+	email = phil@example.com
 [color]
   ui = true
 [alias]
@@ -20,6 +20,6 @@
 [core]
 	whitespace = -trailing-space
 [github]
-	token = 9c827c14ed652739bd8a7d538a916abf
+	token = 1234567890abcdef
 	user = PhilT
 

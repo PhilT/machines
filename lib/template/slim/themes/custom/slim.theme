@@ -1,0 +1,39 @@
+# Custom SLiM theme
+
+# Messages (ie: shutdown)
+msg_color               #AAAAAA
+msg_font                Ubuntu:size=18:bold:dpi=75
+
+# valid values: stretch, tile
+background_style        stretch
+
+# Input controls
+input_panel_x           50%
+input_panel_y           50%
+input_name_x            160
+input_name_y            107
+input_pass_x            160
+input_pass_y            163
+input_font              Ubuntu:size=14:dpi=75
+input_fgcolor           #444444
+
+# Username / password request
+username_font           Ubuntu:size=16:bold:dpi=75
+username_color          #cccccc
+username_x              35
+username_y		        110
+username_shadow_xoffset 	-1
+username_shadow_yoffset 	-1
+username_shadow_color   	#333333
+
+password_font           Ubuntu:size=16:bold:dpi=75
+password_color          #cccccc
+password_x              35
+password_y              165
+password_shadow_xoffset 	-1
+password_shadow_yoffset 	-1
+password_shadow_color   	#333333
+
+username_msg            Username:
+password_msg            Password:
+

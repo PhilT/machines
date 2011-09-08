@@ -14,10 +14,6 @@ task :dotfiles, "Upload files in users/name/#{username}/dotfiles, prepend a dot 
   end
 end
 
-task :wallpaper, 'Copy wallpaper' do
-  run upload File.join(AppConf.project_dir, 'users', username, 'wallpaper'), '~/wallpaper'
-end
-
 authorized_key_file = File.join(AppConf.project_dir, 'users', username, 'authorized_keys')
 if File.exists?(authorized_key_file)
   task :keyfiles, 'Upload authorized_keys file' do
@@ -28,4 +24,6 @@ if File.exists?(authorized_key_file)
     run chmod 600, remote_authorized_key_file
   end
 end
+
+run upload File.join(AppConf.project_dir, 'users', 'username', 'Pictures'), '$HOME/Pictures' # Pictures/wallpaper.jpg used by openbox autostart.sh
 

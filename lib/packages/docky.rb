@@ -1,20 +1,22 @@
 task :docky, 'Install and configure Docky a dock and app launcher' do
   sudo install %w(docky) # Panel/Dock launcher
 
+  root = '/apps/docky-2/Docky/Interface/DockPreferences/Dock1'
+
   # Preferences
-  run configure '/apps/docky-2/Docky/Interface/DockPreferences/Dock1/ZoomPercent' => 1.5
-  run configure '/apps/docky-2/Docky/Interface/DockPreferences/Dock1/Autohide' => 'Intellihide'
-  run configure '/apps/docky-2/Docky/Interface/DockPreferences/Dock1/FadeOnHide' =>  true
-  run configure '/apps/docky-2/Docky/Interface/DockPreferences/Dock1/FadeOpacity' => 50.0
+  run configure "#{root}/ZoomPercent" => 1.5
+  run configure "#{root}/Autohide" => 'Intellihide'
+  run configure "#{root}/FadeOnHide" =>  true
+  run configure "#{root}/FadeOpacity" => 50.0
 
   # Launchers
   apps = %w(terminator abiword gnumeric firefox gimp inkscape audacious2 gedit)
-  key = '/apps/docky-2/Docky/Interface/DockPreferences/Dock1/Launchers'
+  key = "#{root}/Launchers"
   run configure key => apps.map {|app| "file:///usr/share/applications/#{app}.desktop"}
 
-  run configure '/apps/docky-2/Docky/Interface/DockPreferences/Dock1/Plugins' => %w(Trash Clock GMail Weather SessionManager)
+  run configure "#{root}/Plugins" => %w(Trash Clock GMail Weather SessionManager)
 
-  run configure '/schemas/apps/docky-2/Docky/Interface/DockPreferences/Dock1/SortList' => [
+  run configure "#{root}/SortList" => [
     '/usr/share/applications/firefox.desktop',
     'TrashCan',
     'Clock',

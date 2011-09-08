@@ -12,7 +12,7 @@ package :timezone
 package :base
 
 only :roles => :app do
-  package :monit
+  package :monit unless AppConf.environment == :development
   package :dotfiles
   package :webapps
   package :git
@@ -22,7 +22,7 @@ only :roles => :app do
   package :passenger
   package :nginx_passenger
   package :nginx_logrotate
-  package :postfix
+  package :postfix unless AppConf.environment == :development
 end
 
 only :roles => :db do
@@ -32,6 +32,7 @@ end
 only :users => 'phil' do
   package :openbox
   package :docky
+  package :slim
   package :apps
   package :chrome
   package :firefox

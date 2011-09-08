@@ -45,12 +45,14 @@ appsroots:
   www-data: /var/www/nginx
 
 mail:
-  domain: electricvisions.com
+  domain: example.com
 
 monit:
-  mailto: admin@electricvisions.com
+  mailto: admin@example.com
   check:
     paths: /
   webserver:
     address: 192.168.1.0/255.255.255.0
+
+theme: custom
 

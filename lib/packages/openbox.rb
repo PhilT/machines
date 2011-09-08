@@ -22,7 +22,7 @@ task :sudo_no_password, 'Ensure we can shutdown/reboot without needing a passwor
   sudo append 'ALL   ALL=NOPASSWD:/sbin/reboot', :to => '/etc/sudoers'
 end
 
-task :fonts, 'Set openbox and Gnome interface fonts' do
+task :fonts, 'Set openbox and Gnome interface fonts (See also rc.xml, fonts.conf, gtkrc-2.0)' do
   # NOT NEEDED?
   #configure /desktop/gnome/font_rendering/antialiasing, rgba
   #configure /desktop/gnome/font_rendering/dpi --type float 96

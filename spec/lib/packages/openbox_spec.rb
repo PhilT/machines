@@ -26,7 +26,7 @@ describe 'packages/openbox' do
       "TASK   sudo_no_password - Ensure we can shutdown/reboot without needing a password for sudo",
       "SUDO   echo \"ALL   ALL=NOPASSWD:/sbin/shutdown\" >> /etc/sudoers",
       "SUDO   echo \"ALL   ALL=NOPASSWD:/sbin/reboot\" >> /etc/sudoers",
-      "TASK   fonts - Set openbox and Gnome interface fonts",
+      "TASK   fonts - Set openbox and Gnome interface fonts (See also rc.xml, fonts.conf, gtkrc-2.0)",
       "RUN    gconftool-2 --set \"/apps/metacity/general/titlebar_font\" --type string \"Ubuntu Bold 8\"",
       "RUN    gconftool-2 --set \"/apps/nautilus/preferences/desktop_font\" --type string \"Ubuntu Light 8\"",
       "RUN    gconftool-2 --set \"/apps/nautilus/preferences/default_folder_viewer\" --type string \"compact_view\"",
