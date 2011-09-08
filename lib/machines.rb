@@ -12,7 +12,6 @@ require 'tempfile'
 require 'webrick/utils'
 require 'yaml'
 
-AppConf.project_dir = Dir.pwd
 AppConf.application_dir = File.dirname(__FILE__)
 
 module Machines
@@ -33,17 +32,16 @@ module Machines
       AppConf.tasks = {}
       AppConf.from_hash(:user => {})
       AppConf.from_hash(:db => {})
-      AppConf.load(File.join(AppConf.project_dir, 'config/config.yml'))
+      AppConf.load('config/config.yml')
 
-      path = File.join(AppConf.project_dir, 'output.log')
+      path = 'output.log'
       FileUtils.mkdir_p File.dirname(path)
       AppConf.file ||= Machines::Logger.new File.open(path, 'w')
       AppConf.console ||= Machines::Logger.new STDOUT, :truncate => true
     end
 
     def load_machinesfile
-      machinesfile = File.join(AppConf.project_dir, 'Machinesfile')
-      eval File.read(machinesfile), nil, "eval: #{machinesfile}"
+      eval File.read('Machinesfile'), nil, "eval: Machinesfile"
     rescue LoadError => e
       if e.message =~ /Machinesfile/
         raise LoadError, "Machinesfile does not exist. Use `machines new <DIR>` to create a template."

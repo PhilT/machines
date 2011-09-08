@@ -4,8 +4,8 @@ describe 'packages/nginx' do
   before(:each) do
     load_package('nginx')
     AppConf.from_hash(:nginx => {:version => '1.0.2', :path => 'nginx_path', :url => 'nginx_url'})
-    FileUtils.mkdir_p '/prj/nginx'
-    File.open('/prj/nginx/nginx.conf.erb', 'w') {|f| f.puts 'the template' }
+    FileUtils.mkdir_p 'nginx'
+    File.open('nginx/nginx.conf.erb', 'w') {|f| f.puts 'the template' }
   end
 
   it 'adds the following commands' do
@@ -19,7 +19,7 @@ describe 'packages/nginx' do
       "RUN    rm -f /tmp/nginx",
       "SUDO   /usr/sbin/update-rc.d -f nginx defaults",
       "SUDO   mkdir -p nginx_path/conf",
-      "UPLOAD buffer from /prj/nginx/nginx.conf.erb to /tmp/nginx.conf",
+      "UPLOAD buffer from nginx/nginx.conf.erb to /tmp/nginx.conf",
       "SUDO   cp -f /tmp/nginx.conf nginx_path/conf/nginx.conf",
       "RUN    rm -f /tmp/nginx.conf",
       "TASK   htpasswd - Upload htpasswd file",

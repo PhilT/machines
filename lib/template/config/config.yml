@@ -22,18 +22,15 @@ gmate:
   git://github.com/gmate/gmate.git
 
 awstats:
-  version: 7.0
-  url: http://prdownloads.sourceforge.net/awstats/awstats-7.0.tar.gz
-  path: /opt/awstats/
   stats_path: /var/www/nginx/webstats
 
 # Latest version including preferred nginx version:
 # https://github.com/FooBarWidget/passenger/blob/master/NEWS
 passenger:
-  version: 3.0.8
+  version: 3.0.9
 nginx:
-  version: 1.0.5
-  url: http://nginx.org/download/nginx-1.0.5.tar.gz
+  version: 1.0.6
+  url: http://nginx.org/download/nginx-1.0.6.tar.gz
   path: /opt/nginx/
   servers_dir: servers
 

@@ -2,8 +2,7 @@ task :nginx, 'Download and configure Nginx' do
   run extract AppConf.nginx.url
   sudo add_init_d 'nginx'
   sudo mkdir File.join(AppConf.nginx.path, 'conf')
-  nginx_conf_erb = File.join(AppConf.project_dir, 'nginx', 'nginx.conf.erb')
-  sudo create_from nginx_conf_erb, :to => "#{AppConf.nginx.path}/conf/nginx.conf"
+  sudo create_from 'nginx/nginx.conf.erb', :to => "#{AppConf.nginx.path}/conf/nginx.conf"
 end
 
 only :environment => :staging do
@@ -15,6 +14,6 @@ only :environment => :staging do
 end
 
 task :monit_nginx, 'Add monit configuration for Nginx', :if => [:monit, :nginx] do
-  sudo upload AppConf.project_dir + '/monit/conf.d/nginx', '/etc/monit/conf.d/nginx'
+  sudo upload 'monit/conf.d/nginx', '/etc/monit/conf.d/nginx'
 end
 

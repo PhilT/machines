@@ -42,6 +42,6 @@ only :roles => :dbslave do
 end
 
 task :monit_mysql, 'Configure monit for MySQL', :if => [:monit, :mysql] do
-  sudo create_from "#{AppConf.project_dir}/monit/conf.d/mysql.erb", :to => '/etc/monit/conf.d/mysql'
+  sudo create_from 'monit/conf.d/mysql.erb', :to => '/etc/monit/conf.d/mysql'
 end
 

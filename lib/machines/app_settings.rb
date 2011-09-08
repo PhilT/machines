@@ -8,8 +8,7 @@ module Machines
 
     # Loads application settings from config/apps.yml and makes them available in AppConf.apps
     def load_app_settings(apps)
-      path = File.join(AppConf.project_dir, 'config/apps.yml')
-      yaml = YAML.load(File.open(path))
+      yaml = YAML.load(File.open('config/apps.yml'))
       yaml.select{|name| apps.include?(name) }.each do |app_name, settings|
         environment = settings[AppConf.environment.to_s] || raise(ArgumentError, 'No setttings for specified environment')
         environment['db_password'] ||= app_name

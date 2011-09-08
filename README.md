@@ -227,7 +227,6 @@ Some of the settings set and used by *machines* are:
 
 * `AppConf.commands` - All the commands that are to be run
 * `AppConf.tasks` - Names of the tasks - Used to check dependencies and display tasks the help
-* `AppConf.project_dir` - The local project directory, mostly likely the current working directory
 * `AppConf.file` - The file logger
 * `appConf.console` - The console logger
 * `AppConf.user` - The selected user settings

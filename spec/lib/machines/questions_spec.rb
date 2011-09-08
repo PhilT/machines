@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'Questions' do
   describe 'choose_machine' do
     before(:each) do
-      File.stub(:read).with("#{AppConf.project_dir}/Machinesfile").and_return <<-MACHINESFILE
+      File.stub(:read).with("Machinesfile").and_return <<-MACHINESFILE
 machine 'Desktop', :development, :roles => [:app, :db], :apps => ['main', 'wiki']
 machine 'Staging', :staging, :roles => [:app, :db], :apps => ['main', 'wiki']
 machine 'Production', :production, :roles => :app, :apps => ['main', 'wiki']

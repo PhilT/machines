@@ -10,8 +10,8 @@ describe 'packages/webapps' do
     AppConf.webserver = 'nginx'
     AppConf.from_hash(:nginx => {:path => 'nginx_path', :servers_dir => 'servers'})
     AppConf.from_hash(:db => {:address => 'db_master'})
-    FileUtils.mkdir_p '/prj/nginx'
-    File.open('/prj/nginx/app_server.conf.erb', 'w') {|f| f.puts 'the template' }
+    FileUtils.mkdir_p 'nginx'
+    File.open('nginx/app_server.conf.erb', 'w') {|f| f.puts 'the template' }
   end
 
   it 'adds the following commands' do
@@ -23,7 +23,7 @@ describe 'packages/webapps' do
       "RUN    mkdir -p app_path/releases",
       "RUN    mkdir -p app_path/shared/config",
       "RUN    mkdir -p app_path/shared/system",
-      "UPLOAD buffer from /prj/nginx/app_server.conf.erb to /tmp/application.conf",
+      "UPLOAD buffer from nginx/app_server.conf.erb to /tmp/application.conf",
       "SUDO   cp -f /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -f /tmp/application.conf",
       "UPLOAD buffer from database.yml to app_path/shared/config/database.yml",
@@ -36,7 +36,7 @@ describe 'packages/webapps' do
     AppConf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.should == [
       "TASK   webapps - Sets up Web apps in config/apps.yml using app_server.conf.erb",
       "SUDO   mkdir -p nginx_path/servers",
-      "UPLOAD buffer from /prj/nginx/app_server.conf.erb to /tmp/application.conf",
+      "UPLOAD buffer from nginx/app_server.conf.erb to /tmp/application.conf",
       "SUDO   cp -f /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -f /tmp/application.conf",
     ]

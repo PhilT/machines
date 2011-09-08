@@ -4,23 +4,23 @@ describe 'packages/nginx_logrotate' do
   before(:each) do
     load_package('nginx_logrotate')
     AppConf.apps = {'name' => AppBuilder.new({:name => 'appname', :path => 'apppath'})}
-    FileUtils.mkdir_p '/prj/logrotate'
-    File.open('/prj/logrotate/nginx.erb', 'w') {|f| f.puts 'nginx template' }
-    File.open('/prj/logrotate/app.erb', 'w') {|f| f.puts 'app template' }
+    FileUtils.mkdir_p 'logrotate'
+    File.open('logrotate/nginx.erb', 'w') {|f| f.puts 'nginx template' }
+    File.open('logrotate/app.erb', 'w') {|f| f.puts 'app template' }
   end
 
   it 'generates command' do
     eval_package
     AppConf.commands.map(&:info).should == [
       'TASK   logrotate_nginx - Logrotate nginx access and error logs and optionally generate stats',
-      "UPLOAD buffer from /prj/logrotate/nginx.erb to /tmp/appname_nginx_access_log",
+      "UPLOAD buffer from logrotate/nginx.erb to /tmp/appname_nginx_access_log",
       "SUDO   cp -f /tmp/appname_nginx_access_log /etc/logrotate.d/appname_nginx_access_log",
       "RUN    rm -f /tmp/appname_nginx_access_log",
-      "UPLOAD buffer from /prj/logrotate/nginx.erb to /tmp/appname_nginx_error_log",
+      "UPLOAD buffer from logrotate/nginx.erb to /tmp/appname_nginx_error_log",
       "SUDO   cp -f /tmp/appname_nginx_error_log /etc/logrotate.d/appname_nginx_error_log",
       "RUN    rm -f /tmp/appname_nginx_error_log",
       'TASK   logrotate_apps - Logrotate Rails app logs',
-      "UPLOAD buffer from /prj/logrotate/app.erb to /tmp/appname_app_log",
+      "UPLOAD buffer from logrotate/app.erb to /tmp/appname_app_log",
       "SUDO   cp -f /tmp/appname_app_log /etc/logrotate.d/appname_app_log",
       "RUN    rm -f /tmp/appname_app_log",
     ]
@@ -40,8 +40,9 @@ describe 'packages/nginx_logrotate' do
       it 'generates stats command' do
         mock_settings = mock AppBuilder
         command = <<-COMMAND
+  sharedscripts
   prerotate
-    path/tools/awstats_buildstaticpages.pl -update -config=appname stats_path/appname -awstatsprog=/usr/local/awstats/wwwroot/cgi-bin/awstats.pl > /dev/null
+    /usr/lib/cgi-bin/awstats.pl -update -config=appname stats_path/appname > /dev/null
   endscript
   COMMAND
         options = {:log_path => '/var/log/nginx/appname.access.log', :stats_command => command}
@@ -49,7 +50,7 @@ describe 'packages/nginx_logrotate' do
         options = {:log_path => '/var/log/nginx/appname.error.log', :stats_command => nil}
         AppBuilder.should_receive(:new).with(options).and_return mock_settings
         options = {:settings => mock_settings, :to => '/etc/logrotate.d/appname_nginx_access_log'}
-        should_receive(:create_from).with('/prj/logrotate/nginx.erb', options).and_return Command.new 'command', 'check'
+        should_receive(:create_from).with('logrotate/nginx.erb', options).and_return Command.new 'command', 'check'
         eval_package
       end
     end
@@ -60,7 +61,7 @@ describe 'packages/nginx_logrotate' do
         options = {:log_path => '/var/log/nginx/appname.access.log', :stats_command => nil}
         AppBuilder.should_receive(:new).with(options).and_return mock_settings
         options = {:settings => mock_settings, :to => '/etc/logrotate.d/appname_nginx_access_log'}
-        should_receive(:create_from).with('/prj/logrotate/nginx.erb', options).and_return Command.new 'command', 'check'
+        should_receive(:create_from).with('logrotate/nginx.erb', options).and_return Command.new 'command', 'check'
         eval_package
       end
     end
@@ -72,7 +73,7 @@ describe 'packages/nginx_logrotate' do
       AppBuilder.stub(:new)
       AppBuilder.should_receive(:new).with(:log_path => 'apppath/shared/log/*.log').and_return mock_settings
       options = {:settings => mock_settings, :to => '/etc/logrotate.d/appname_app_log'}
-      should_receive(:create_from).with('/prj/logrotate/app.erb', options).and_return Command.new 'command', 'check'
+      should_receive(:create_from).with('logrotate/app.erb', options).and_return Command.new 'command', 'check'
       eval_package
     end
   end

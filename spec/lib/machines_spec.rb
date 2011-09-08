@@ -10,8 +10,8 @@ describe 'Machines' do
     AppConf.ec2 = AppConf.new unless AppConf.ec2
     AppConf.ec2.use = nil
     AppConf.log_only = false
-    FileUtils.mkdir_p '/prj/config'
-    File.open('/prj/config/config.yml', 'w') { |f| f.puts "timezone: GB" }
+    FileUtils.mkdir_p 'config'
+    File.open('config/config.yml', 'w') { |f| f.puts "timezone: GB" }
   end
 
   describe 'init' do
@@ -26,7 +26,7 @@ describe 'Machines' do
       AppConf.user.should be_a AppConf
       AppConf.db.should be_a AppConf
       AppConf.timezone.should == 'GB'
-      File.should exist '/prj/output.log'
+      File.should exist 'output.log'
       AppConf.file.should be_a Machines::Logger
       AppConf.console.should be_a Machines::Logger
     end
@@ -34,7 +34,7 @@ describe 'Machines' do
 
   describe 'load_machinesfile' do
     it 'raises LoadError with custom message when no Machinesfile' do
-      File.should_receive(:read).with("#{AppConf.project_dir}/Machinesfile").and_raise LoadError.new('Machinesfile not found')
+      File.should_receive(:read).with("Machinesfile").and_raise LoadError.new('Machinesfile not found')
 
       begin
         subject.load_machinesfile
@@ -44,7 +44,7 @@ describe 'Machines' do
     end
 
     it 'raises normal LoadError on other files' do
-      File.should_receive(:read).with("#{AppConf.project_dir}/Machinesfile").and_raise LoadError
+      File.should_receive(:read).with("Machinesfile").and_raise LoadError
 
       begin
         subject.load_machinesfile

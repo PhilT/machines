@@ -41,6 +41,7 @@ module CommonSteps
 
   def generates_template
     Machines::Base.new.execute('new', 'project')
+    FileUtils.cd 'project'
     files = %w(certificates) +
       %w(config/apps.yml config/config.yml) +
       %w(mysql nginx packages users Machinesfile)

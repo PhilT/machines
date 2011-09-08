@@ -16,27 +16,26 @@ module Machines
     end
 
     def htpasswd ignored = nil
-      conf_dir = File.join(AppConf.project_dir, AppConf.webserver, 'conf')
-      path = File.join(conf_dir, 'htpasswd')
+      path = File.join(AppConf.webserver, 'conf', 'htpasswd')
       say "Generate BasicAuth password and add to #{path}"
       username = ask('Username: ')
       password = enter_password 'users'
 
       crypted_pass = password.crypt(WEBrick::Utils.random_string(2))
-      FileUtils.mkdir_p conf_dir
+      FileUtils.mkdir_p File.dirname(path)
       File.open(path, 'a') {|file| file.puts "#{username}:#{crypted_pass}" }
       say "Password encrypted and added to #{path}"
     end
 
     def generate dir
-      AppConf.project_dir = File.join(AppConf.project_dir, dir) if dir
-      if File.exists? AppConf.project_dir
+      dir ||= '.'
+      if File.exists? dir
         confirm = ask 'Directory already exists. Overwrite (y/n)? '
         return unless confirm.downcase == 'y'
       end
-      FileUtils.cp_r(File.join(AppConf.application_dir, 'template', '/.'), AppConf.project_dir)
-      FileUtils.mkdir_p(File.join(AppConf.project_dir, 'packages'))
-      say "Project created at #{AppConf.project_dir}"
+      FileUtils.cp_r(File.join(AppConf.application_dir, 'template', '/.'), dir)
+      FileUtils.mkdir_p(File.join(dir, 'packages'))
+      say "Project created at #{dir}"
     end
 
     def packages
@@ -47,14 +46,14 @@ module Machines
       say ''
 
       say 'Project packages'
-      Dir[File.join(AppConf.project_dir, 'packages', '**/*.rb')].each do |package|
+      Dir[File.join('packages', '**/*.rb')].each do |package|
         say " * #{File.basename(package, '.rb')}"
       end
     end
 
     def override package
-      destination = File.join(AppConf.project_dir, 'packages', "#{package}.rb")
-      answer = File.exists?(destination) ? ask('Package already exists. Overwrite? (y/n)') : 'y'
+      destination = File.join('packages', "#{package}.rb")
+      answer = File.exists?(destination) ? ask('Project package already exists. Overwrite? (y/n)') : 'y'
       if answer == 'y'
         FileUtils.cp(File.join(AppConf.application_dir, 'packages', "#{package}.rb"), destination)
         say "Package copied to #{destination}"

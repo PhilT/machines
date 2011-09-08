@@ -5,6 +5,6 @@ task :postfix, 'Install postfix mail' do
 end
 
 task :monit_postfix, 'Configure monit for postfix', :if => [:monit, :postfix] do
-  sudo upload AppConf.project_dir + '/monit/conf.d/postfix', '/etc/monit/conf.d/postfix'
+  sudo upload 'monit/conf.d/postfix', '/etc/monit/conf.d/postfix'
 end
 

@@ -17,7 +17,7 @@ Enter users password:
 Confirm the password:
 Password encrypted and added to nginx/conf/htpasswd
 THIS
-    File.read("#{AppConf.project_dir}/nginx/conf/htpasswd").should =~ /user:.{13}/
+    File.read("nginx/conf/htpasswd").should =~ /user:.{13}/
   end
 end
 

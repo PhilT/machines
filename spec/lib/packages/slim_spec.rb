@@ -11,7 +11,7 @@ describe 'packages/slim' do
     AppConf.commands.map(&:info).should == [
       "TASK   slim - Install SLiM desktop manager",
       "SUDO   apt-get -q -y install slim",
-      "UPLOAD /prj/slim/themes to /tmp/themes",
+      "UPLOAD slim/themes to /tmp/themes",
       "SUDO   cp -f /tmp/themes /usr/share/slim/themes",
       "RUN    rm -f /tmp/themes",
       "SUDO   sed -i \"s/debian-spacefun/custom/\" /etc/slim.conf",

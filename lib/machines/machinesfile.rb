@@ -11,14 +11,13 @@ module Machines
       else
         error = "Cannot find custom or built-in package #{name}."
       end
-      package = load_and_eval(AppConf.project_dir, name)
-      package ||= load_and_eval(AppConf.application_dir, name)
+      package = load_and_eval File.join('packages', "#{name}.rb")
+      package ||= load_and_eval File.join(AppConf.application_dir, 'packages', "#{name}.rb")
       package || raise(LoadError, error, caller)
     end
 
   private
-    def load_and_eval base_dir, name
-      package_name = File.join(base_dir, 'packages', "#{name}.rb")
+    def load_and_eval package_name
       if File.exists?(package_name)
         eval(File.read(package_name), nil, "eval: #{package_name}")
         true

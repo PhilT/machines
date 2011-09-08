@@ -19,7 +19,7 @@ describe 'Machinesfile' do
     end
 
     it 'loads custom package when it exists' do
-      custom_package = "#{AppConf.project_dir}/packages/custom_package.rb"
+      custom_package = "packages/custom_package.rb"
       File.new custom_package, 'w'
       File.should_receive(:read).with(custom_package).and_return ''
       package :custom_package
@@ -27,7 +27,7 @@ describe 'Machinesfile' do
 
     it 'loads built-in package when no custom package' do
       @builtin_package = "#{AppConf.application_dir}/packages/builtin_package.rb"
-      File.new @builtin_package, 'w'
+      File.open(@builtin_package, 'w') {}
       File.should_receive(:read).with(@builtin_package).and_return ''
       package :builtin_package
     end

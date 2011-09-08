@@ -3,8 +3,7 @@ task :webapps, 'Sets up Web apps in config/apps.yml using app_server.conf.erb' d
     app.enable_ssl = enable_ssl
     webserver = AppConf[AppConf.webserver]
     path = File.join(webserver.path, webserver.servers_dir, "#{app.name}#{enable_ssl ? '_ssl' : ''}.conf")
-    server_template = File.join(AppConf.project_dir, AppConf.webserver, 'app_server.conf.erb')
-    sudo create_from server_template, :settings => app, :to => path
+    sudo create_from "#{AppConf.webserver}/app_server.conf.erb", :settings => app, :to => path
   end
 
   def make_app_structure where
