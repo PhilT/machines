@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'packages/base' do
   before(:each) do
     load_package('base')
+    AppConf.localhosts = ['host1.local', 'host2.local']
     AppConf.hostname = 'hostname'
   end
 
@@ -26,6 +27,13 @@ describe 'packages/base' do
       "SUDO   apt-get -q -y install libxslt1-dev",
       "SUDO   apt-get -q -y install libssl-dev",
     ]
+  end
+
+  it 'adds localhosts to /etc/hosts' do
+    AppConf.environment = :development
+    eval_package
+    AppConf.commands.map(&:info).should include 'SUDO   echo "127.0.0.1 host1.local" >> /etc/hosts'
+    AppConf.commands.map(&:info).should include 'SUDO   echo "127.0.0.1 host2.local" >> /etc/hosts'
   end
 end
 

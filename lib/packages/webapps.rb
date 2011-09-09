@@ -13,7 +13,7 @@ task :webapps, 'Sets up Web apps in config/apps.yml using app_server.conf.erb' d
   end
 
   sudo mkdir File.join(AppConf.nginx.path, AppConf.nginx.servers_dir)
-  AppConf.apps.each do |app_name, app|
+  AppConf.webapps.each do |app_name, app|
     make_app_structure app.path unless AppConf.environment == :development
 
     generate_server_template_for app

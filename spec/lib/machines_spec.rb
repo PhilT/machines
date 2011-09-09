@@ -21,7 +21,7 @@ describe 'Machines' do
       AppConf.machines.should == {}
       AppConf.passwords.should == []
       AppConf.commands.should == []
-      AppConf.apps.should == {}
+      AppConf.webapps.should == {}
       AppConf.tasks.should == {}
       AppConf.user.should be_a AppConf
       AppConf.db.should be_a AppConf

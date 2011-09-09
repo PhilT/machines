@@ -18,7 +18,7 @@ end
 
 only :roles => :app do
   task :dbperms, 'Set app permissions to database' do
-    AppConf.apps.values.each do |app|
+    AppConf.webapps.values.each do |app|
       run_mysql_statement "GRANT ALL ON *.* TO '#{app.name}'@'%' IDENTIFIED BY '#{app.db_password}';",
         :on => AppConf.db.address, :password => AppConf.db.root_pass
     end

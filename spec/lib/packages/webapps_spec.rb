@@ -5,7 +5,7 @@ describe 'packages/webapps' do
     load_package('webapps')
 
     AppConf.from_hash(:user => {:name => 'username', :home => 'home_dir'}, :ruby => {:version => 'ruby_version'})
-    AppConf.apps = {'application' => AppBuilder.new('name' => 'application', 'url' => 'github url', 'path' => 'app_path', 'enable_ssl' => nil, 'db_password' => 'pa$$')}
+    AppConf.webapps = {'application' => AppBuilder.new('name' => 'application', 'url' => 'github url', 'path' => 'app_path', 'enable_ssl' => nil, 'db_password' => 'pa$$')}
     AppConf.from_hash(:awstats => {:path => 'stats_path'})
     AppConf.webserver = 'nginx'
     AppConf.from_hash(:nginx => {:path => 'nginx_path', :servers_dir => 'servers'})

@@ -26,7 +26,7 @@ describe 'packages/mysql' do
   context 'app role' do
     before(:each) do
       AppConf.roles = :app
-      AppConf.apps = {'name' => AppBuilder.new({:name => 'name', :db_password => 'PASSWORD'})}
+      AppConf.webapps = {'name' => AppBuilder.new({:name => 'name', :db_password => 'PASSWORD'})}
     end
 
     context 'development, test' do

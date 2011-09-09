@@ -5,7 +5,7 @@ describe 'AppSettings' do
   include Machines::Configuration
 
   before(:each) do
-    AppConf.apps = {}
+    AppConf.webapps = {}
     AppConf.environment = :test
     AppConf.appsroot = '/home/user'
     @settings = {'app' => {
@@ -17,7 +17,7 @@ describe 'AppSettings' do
 
   describe 'load_app_settings' do
     it 'loads settings from apps.yaml' do
-      File.should_receive(:open).with('config/apps.yml').and_return 'file'
+      File.should_receive(:open).with('config/webapps.yml').and_return 'file'
       YAML.should_receive(:load).with('file').and_return({})
       load_app_settings ['app']
     end
@@ -25,14 +25,14 @@ describe 'AppSettings' do
     it 'loads the app settings for selected apps' do
       YAML.stub(:load).and_return(@settings)
       load_app_settings ['app']
-      AppConf.apps.should == {'app' => AppBuilder.new(:name => 'app', :path => '/home/user/path', :setting => 'setting', :db_password => 'app')}
+      AppConf.webapps.should == {'app' => AppBuilder.new(:name => 'app', :path => '/home/user/path', :setting => 'setting', :db_password => 'app')}
     end
 
     it 'handles ssl settings' do
       @settings['app']['test']['ssl'] = 'signed'
       YAML.stub(:load).and_return(@settings)
       load_app_settings ['app']
-      AppConf.apps.should == {
+      AppConf.webapps.should == {
         'app' => AppBuilder.new(
           :name => 'app',
           :path => '/home/user/path',

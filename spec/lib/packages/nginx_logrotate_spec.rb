@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'packages/nginx_logrotate' do
   before(:each) do
     load_package('nginx_logrotate')
-    AppConf.apps = {'name' => AppBuilder.new({:name => 'appname', :path => 'apppath'})}
+    AppConf.webapps = {'name' => AppBuilder.new({:name => 'appname', :path => 'apppath'})}
     FileUtils.mkdir_p 'logrotate'
     File.open('logrotate/nginx.erb', 'w') {|f| f.puts 'nginx template' }
     File.open('logrotate/app.erb', 'w') {|f| f.puts 'app template' }

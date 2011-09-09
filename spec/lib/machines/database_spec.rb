@@ -12,7 +12,7 @@ describe 'Database' do
       AppConf.environment = 'test'
       AppConf.db = AppConf.new
       AppConf.db.address = 'dbhost'
-      AppConf.apps = {'app' => AppBuilder.new(:db_password => 'password')}
+      AppConf.webapps = {'app' => AppBuilder.new(:db_password => 'password')}
 
       yml = "---\ntest:\n  adapter: mysql\n  database: app\n  username: app\n  password: password\n  host: dbhost\n  encoding: utf8\n"
       should_receive(:write).with(yml, :to => 'dir/database.yml', :name => 'database.yml')

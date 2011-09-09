@@ -28,7 +28,7 @@ module Machines
       AppConf.machines = {}
       AppConf.passwords = []
       AppConf.commands = []
-      AppConf.apps = {}
+      AppConf.webapps = {}
       AppConf.tasks = {}
       AppConf.from_hash(:user => {})
       AppConf.from_hash(:db => {})

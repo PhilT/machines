@@ -15,10 +15,10 @@ Run commands like:
 Status
 ---------------------------------------
 
-It is currently under development but I am very close to rolling out a beta.
+(September 2011)
 
-`machines dryrun` is now running and generating the commands. Will be testing shortly (Aug 2011)
-
+First release will be out shortly. This release has focused more on development builds but a lot of server packages
+have also been and added and the next release will finish off the EC2 and server builds.
 
 Features
 ---------------------------------------
@@ -33,6 +33,7 @@ Features
 * Full automated test suite to ensure correct commands are generated (Using RSpec)
 * Extra checks done to ensure command generates the correct result and avoids false positives (e.g. successful return values)
 * A lightweight Ubuntu install
+* Working documentation for Ubuntu commands
 
 
 Motivation
@@ -46,8 +47,9 @@ to reinstall development machines usually when upgrading Ubuntu or adding/changi
 
 There are a few configuration management tools on the market such as Puppet and Chef but they try to cater for every
 possible server environment. They also do a very good job of configuration change management. Machines narrows the
-scope to a single platform and framework and does not try to manage change, instead opting for reinstallation. As
-cloud computing instances can be brought up on a whim, I find this an acceptable compromise to further aid simplicity.
+scope to a single platform and framework (others could be added) and does not try to manage change (small changes
+are possible), instead opting for reinstallation. As cloud computing instances can be brought up on a whim, I find
+this an acceptable compromise to further aid simplicity.
 
 
 Description
@@ -74,16 +76,22 @@ Installation and Configuration
 
     machines new <directory>
 
-Running `machines new example` creates the `example` directory and copies in a default template
-(a bit like `rails new`).
+e.g. Running `machines new example` creates the `example` directory and copies in an example template.
 
 ### Configure your deployment
 
+Take a look at the generated project. It contains several folders and the main `Machinesfile`:
+
+* certificates - Amazon EC2 and your website certificates
+* config - machine and application settings and EC2 credentials
+* users - user preferences and configuration files
+* a number of application specific folders containing configuration files
+
 1. Edit the build script (`Machinesfile`)
-1. Add your certificates and amazon private key
+1. Add your websites certificates and amazon private key (if required)
 1. Edit settings in `config/`
-1. Alter, add or remove `nginx`, `mysql` and custom `packages`
-1. Setup `users/`
+1. Run `machines override <package>` to copy a default package to your project for alteration (Use `machines packages` to see a list)
+1. Setup your `users/` folders
 1. Add `~/.ssh/id_rsa.pub` public key from all users machines that need access, to the `users/www/authorized_keys` file
 
 ### If installing a development machine
@@ -232,8 +240,6 @@ Some of the settings set and used by *machines* are:
 * `AppConf.user` - The selected user settings
 
 Take a look at `template/config/*.yml` for more.
-
-1. Specifying `$HOME/rest/of/path` for a local path expands to `users/#{AppConf.user.name}/rest/of/path`
 
 
 Setting up the test Machines virtual machine

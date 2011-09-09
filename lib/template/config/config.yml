@@ -10,6 +10,13 @@ ec2:
   private_key_file: certificates/amazon.key
   security_group: eu-public
 
+# These are added to /etc/hosts file as 127.0.0.1 hosts for use on development installs
+localhosts:
+  - wiki.local
+  - todo.local
+  - example.local
+  - admin.example.local
+
 timezone: GB
 webserver: nginx
 db:
