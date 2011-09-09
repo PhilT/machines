@@ -31,11 +31,11 @@ http {
   # client_max_body_size 1M;      # Max content that will be served. Increase if media content is to be served
   # client_body_timeout 60;       # Time allowed to respond within in seconds. Increase if requests are expected to take a long time
 
-  passenger_ruby <%= AppConf.user.home %>/.rvm/wrappers/default/ruby
+  passenger_ruby $HOME/.rvm/wrappers/default/ruby
   passenger_max_pool_size 8;                # Max number of simultaneous instances
   passenger_pool_idle_time 0;               # Do not shutdown instances unless needed
   passenger_pre_start http://localhost;     # Prestart RiskPlatform
 
-  include <%= File.join(AppConf.nginx.path, AppConf.nginx.servers_dir, '*.conf') %>;
+  include <%= "#{AppConf.nginx.path}/#{AppConf.nginx.servers_dir}/*.conf" %>;
 }
 

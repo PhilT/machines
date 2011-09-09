@@ -11,7 +11,6 @@ task :questions, 'Ask some questions' do
   AppConf.user.name = choose_user
   AppConf.passwords << AppConf.user.pass = 'password'
   AppConf.user.pass = enter_password('users', false) unless AppConf.ec2.use || AppConf.log_only
-  AppConf.user.home = File.join('/home', AppConf.user.name)
   AppConf.appsroot = AppConf.appsroots[AppConf.user.name]
   load_app_settings(machine[:apps])
 

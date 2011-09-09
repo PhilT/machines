@@ -3,8 +3,7 @@ require 'spec_helper'
 describe 'packages/rvm' do
   before(:each) do
     load_package('rvm')
-    AppConf.user.home = 'user_home'
-    AppConf.from_hash(:rvm => {:url => 'rvm_url'})
+    AppConf.from_hash(:rvm => {:url => 'rvm_url', :version => '1.0'})
   end
 
   it 'adds the following commands' do
@@ -13,11 +12,11 @@ describe 'packages/rvm' do
       "TASK   rvm - Install RVM",
       "SUDO   apt-get -q -y install git-core",
       "SUDO   apt-get -q -y install curl",
-      "RUN    curl -s https://rvm.beginrescueend.com/install/rvm -o rvm-installer ; chmod +x rvm-installer ; ./rvm-installer --version 1.8.0",
-      'RUN    echo "[[ -s \\"\\$HOME/.rvm/scripts/rvm\\" ]] && . \\"\\$HOME/.rvm/scripts/rvm\\" # Load RVM function" >> user_home/.bashrc',
-      "RUN    source user_home/.bashrc",
+      "RUN    curl -s rvm_url -o rvm-installer ; chmod +x rvm-installer ; ./rvm-installer --version 1.0",
+      'RUN    echo "[[ -s \\"\\$HOME/.rvm/scripts/rvm\\" ]] && . \\"\\$HOME/.rvm/scripts/rvm\\" # Load RVM function" >> .bashrc',
+      "RUN    source .bashrc",
       "TASK   rvm_prompt_off - turn off trust prompting for new .rvmrc files",
-      "RUN    echo \"export rvm_trust_rvmrcs_flag=1\" >> user_home/.rvmrc",
+      "RUN    echo \"export rvm_trust_rvmrcs_flag=1\" >> .rvmrc",
     ]
   end
 end

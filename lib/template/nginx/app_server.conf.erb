@@ -7,7 +7,7 @@ server {
 server {
   listen <%= enable_ssl ? 443 : 80 %>;
   server_name <%= server_name %>;
-  root <%= File.join(AppConf.user.home, name, 'public') %>;
+  root <%= File.join(AppConf.appsroot, name, 'public') %>;
   rails_env <%= AppConf.environment %>;
   passenger_enabled on;
   add_header  Cache-Control public;             # Ensure browsers cache secure pages

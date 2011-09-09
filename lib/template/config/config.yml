@@ -34,6 +34,10 @@ nginx:
   path: /opt/nginx/
   servers_dir: servers
 
+rvm:
+  url: https://rvm.beginrescueend.com/install/rvm
+  version: 1.8.0
+
 ruby:
   version: 1.9.2
 
