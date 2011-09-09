@@ -55,13 +55,7 @@ describe 'FileOperations' do
 
   describe 'copy' do
     subject { copy('from', 'to') }
-    it { subject.command.should == 'cp -f from to' }
-
-    context 'when source is a directory' do
-      before { FileUtils.mkdir_p 'from' }
-      subject { copy('from', 'to') }
-      it { subject.command.should == 'cp -f -R from to'}
-    end
+    it { subject.command.should == 'cp -rf from to' }
   end
 
   describe 'create_from' do
@@ -89,7 +83,7 @@ describe 'FileOperations' do
 
   describe 'remove' do
     subject { remove 'file' }
-    it { subject.command.should == 'rm -f file' }
+    it { subject.command.should == 'rm -rf file' }
   end
 
   describe 'remove_version_info' do

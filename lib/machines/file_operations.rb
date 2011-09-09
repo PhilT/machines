@@ -30,8 +30,7 @@ module Machines
     # @param [String] from Existing path
     # @param [String] to Path to copy to
     def copy from, to
-      recursive = '-R ' if File.directory?(from)
-      Command.new("cp -f #{recursive}#{from} #{to}", check_file(to))
+      Command.new("cp -rf #{from} #{to}", check_file(to))
     end
 
     # Write a file from an ERB template
@@ -68,7 +67,7 @@ module Machines
     # Remove a remote file
     # @param [String] file to remove (uses rm with -f which ignore non-existent files)
     def remove file
-      Command.new("rm -f #{file}", check_file(file, false))
+      Command.new("rm -rf #{file}", check_file(file, false))
     end
 
     # Take off the version numbers from a path name

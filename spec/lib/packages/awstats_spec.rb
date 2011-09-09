@@ -14,8 +14,8 @@ describe 'packages/awstats' do
       "TASK   awstats - Install AWStats",
       "SUDO   apt-get -q -y install awstats",
       "UPLOAD buffer from awstats/awstats.conf.erb to /tmp/awstats.conf",
-      "SUDO   cp -f /tmp/awstats.conf awstats_path/conf/awstats.conf",
-      "RUN    rm -f /tmp/awstats.conf",
+      "SUDO   cp -rf /tmp/awstats.conf awstats_path/conf/awstats.conf",
+      "RUN    rm -rf /tmp/awstats.conf",
     ]
   end
 end

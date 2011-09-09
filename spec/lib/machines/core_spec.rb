@@ -235,7 +235,7 @@ describe 'Configuration' do
     it 'modifies Upload to send it to a temp file and sudos to copy it to destination' do
       sudo upload 'source', 'dest'
 
-      AppConf.commands.map(&:command).should == [nil, "cp -f /tmp/dest dest", "rm -f /tmp/dest"]
+      AppConf.commands.map(&:command).should == [nil, "cp -rf /tmp/dest dest", "rm -rf /tmp/dest"]
       AppConf.commands.map(&:check).should == [
         "test -s /tmp/dest && echo CHECK PASSED || echo CHECK FAILED",
         "test -s dest && echo CHECK PASSED || echo CHECK FAILED",

@@ -14,8 +14,8 @@ describe 'packages/ruby' do
       "RUN    rvm install 1.9.2",
       "RUN    rvm 1.9.2 --default",
       "UPLOAD buffer from gemrc to /tmp/gemrc",
-      "SUDO   cp -f /tmp/gemrc /etc/gemrc",
-      "RUN    rm -f /tmp/gemrc"
+      "SUDO   cp -rf /tmp/gemrc /etc/gemrc",
+      "RUN    rm -rf /tmp/gemrc"
     ]
   end
 end

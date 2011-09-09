@@ -24,8 +24,8 @@ describe 'packages/webapps' do
       "RUN    mkdir -p app_path/shared/config",
       "RUN    mkdir -p app_path/shared/system",
       "UPLOAD buffer from nginx/app_server.conf.erb to /tmp/application.conf",
-      "SUDO   cp -f /tmp/application.conf nginx_path/servers/application.conf",
-      "RUN    rm -f /tmp/application.conf",
+      "SUDO   cp -rf /tmp/application.conf nginx_path/servers/application.conf",
+      "RUN    rm -rf /tmp/application.conf",
       "UPLOAD buffer from database.yml to app_path/shared/config/database.yml",
     ]
   end
@@ -37,8 +37,8 @@ describe 'packages/webapps' do
       "TASK   webapps - Sets up Web apps in config/apps.yml using app_server.conf.erb",
       "SUDO   mkdir -p nginx_path/servers",
       "UPLOAD buffer from nginx/app_server.conf.erb to /tmp/application.conf",
-      "SUDO   cp -f /tmp/application.conf nginx_path/servers/application.conf",
-      "RUN    rm -f /tmp/application.conf",
+      "SUDO   cp -rf /tmp/application.conf nginx_path/servers/application.conf",
+      "RUN    rm -rf /tmp/application.conf",
     ]
   end
 end

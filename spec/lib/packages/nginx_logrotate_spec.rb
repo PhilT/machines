@@ -14,15 +14,15 @@ describe 'packages/nginx_logrotate' do
     AppConf.commands.map(&:info).should == [
       'TASK   logrotate_nginx - Logrotate nginx access and error logs and optionally generate stats',
       "UPLOAD buffer from logrotate/nginx.erb to /tmp/appname_nginx_access_log",
-      "SUDO   cp -f /tmp/appname_nginx_access_log /etc/logrotate.d/appname_nginx_access_log",
-      "RUN    rm -f /tmp/appname_nginx_access_log",
+      "SUDO   cp -rf /tmp/appname_nginx_access_log /etc/logrotate.d/appname_nginx_access_log",
+      "RUN    rm -rf /tmp/appname_nginx_access_log",
       "UPLOAD buffer from logrotate/nginx.erb to /tmp/appname_nginx_error_log",
-      "SUDO   cp -f /tmp/appname_nginx_error_log /etc/logrotate.d/appname_nginx_error_log",
-      "RUN    rm -f /tmp/appname_nginx_error_log",
+      "SUDO   cp -rf /tmp/appname_nginx_error_log /etc/logrotate.d/appname_nginx_error_log",
+      "RUN    rm -rf /tmp/appname_nginx_error_log",
       'TASK   logrotate_apps - Logrotate Rails app logs',
       "UPLOAD buffer from logrotate/app.erb to /tmp/appname_app_log",
-      "SUDO   cp -f /tmp/appname_app_log /etc/logrotate.d/appname_app_log",
-      "RUN    rm -f /tmp/appname_app_log",
+      "SUDO   cp -rf /tmp/appname_app_log /etc/logrotate.d/appname_app_log",
+      "RUN    rm -rf /tmp/appname_app_log",
     ]
   end
 

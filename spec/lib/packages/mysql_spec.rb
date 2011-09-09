@@ -65,8 +65,8 @@ describe 'packages/mysql' do
       AppConf.commands.map(&:info).should == [
         "TASK   replication - Setup database replication",
         "UPLOAD mysql/dbmaster.cnf to /tmp/dbmaster.cnf",
-        "SUDO   cp -f /tmp/dbmaster.cnf /etc/mysql/conf.d/dbmaster.cnf",
-        "RUN    rm -f /tmp/dbmaster.cnf",
+        "SUDO   cp -rf /tmp/dbmaster.cnf /etc/mysql/conf.d/dbmaster.cnf",
+        "RUN    rm -rf /tmp/dbmaster.cnf",
         "RUN    echo \"GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%' IDENTIFIED BY 'REPL_PASS';\" | mysql -u root -pDBPASS -h TARGET"
       ]
     end
@@ -79,8 +79,8 @@ describe 'packages/mysql' do
       AppConf.commands.map(&:info).should == [
         "TASK   replication - Setup database replication",
         "UPLOAD mysql/dbslave.cnf to /tmp/dbslave.cnf",
-        "SUDO   cp -f /tmp/dbslave.cnf /etc/mysql/conf.d/dbslave.cnf",
-        "RUN    rm -f /tmp/dbslave.cnf",
+        "SUDO   cp -rf /tmp/dbslave.cnf /etc/mysql/conf.d/dbslave.cnf",
+        "RUN    rm -rf /tmp/dbslave.cnf",
         "RUN    echo \"CHANGE MASTER TO MASTER_HOST='DBMASTER', MASTER_USER='repl' MASTER_PASSWORD='REPL_PASS';\" | mysql -u root -pDBPASS -h TARGET"
       ]
     end
