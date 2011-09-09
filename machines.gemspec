@@ -2,7 +2,7 @@ require 'base64'
 
 Gem::Specification.new do |s|
   s.name        = 'machines'
-  s.version     = '0.3.0'
+  s.version     = '0.4.0'
   s.author      = 'Phil Thompson'
   s.email       = Base64.decode64("cGhpbEBlbGVjdHJpY3Zpc2lvbnMuY29t\n")
   s.homepage    = 'http://github.com/PhilT/machines'

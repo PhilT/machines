@@ -23,7 +23,7 @@ describe 'packages/dotfiles' do
       "RUN    chmod 700 .ssh",
       "UPLOAD users/username/authorized_keys to .ssh/authorized_keys",
       "RUN    chmod 600 .ssh/authorized_keys",
-      "UPLOAD users/username/Pictures to $HOME/Pictures"
+      "UPLOAD users/username/Pictures to Pictures"
     ]
   end
 end

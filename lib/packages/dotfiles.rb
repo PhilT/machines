@@ -21,5 +21,5 @@ if File.exists?(authorized_key_file)
   end
 end
 
-run upload "users/#{username}/Pictures", '$HOME/Pictures' # Pictures/wallpaper.jpg used by openbox autostart.sh
+run upload "users/#{username}/Pictures", 'Pictures' # Pictures/wallpaper.jpg used by openbox autostart.sh
 

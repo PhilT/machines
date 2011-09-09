@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    machines (0.3.0)
+    machines (0.4.0)
       activesupport
       app_conf
       highline
