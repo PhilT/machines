@@ -25,9 +25,6 @@ db:
   root_pass: Uf6h3HzU4q
   replication_pass: tzIrh2eKjH
 
-gmate:
-  git://github.com/gmate/gmate.git
-
 awstats:
   stats_path: /var/www/nginx/webstats
 

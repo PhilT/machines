@@ -60,15 +60,6 @@ describe 'Installation' do
   end
 
   describe 'install' do
-    it 'instaniates a command to install from an install script' do
-      should_receive(:required_options).with({:to => '~/installer'}, [:to])
-      subject = install 'git://url', :to => '~/installer'
-      subject.command.should == 'rm -rf ~/installer && ' +
-        'git clone git://url ~/installer && ' +
-        'cd ~/installer && ' +
-        'find . -maxdepth 1 -name install* | xargs -I xxx bash xxx '
-    end
-
     it 'instaniates commands to download, install and remove a DEB package ' do
       subject = install "http://some.url/package_name.deb"
       subject.map(&:command).should == [
@@ -147,7 +138,7 @@ describe 'Installation' do
   describe 'git_clone' do
     it 'instaniates a command to clone a git repository' do
       subject = git_clone 'http://git_url.git'
-      subject.command.should == 'git clone -q http://git_url.git '
+      subject.command.should == 'git clone -q http://git_url.git'
     end
 
     it 'instaniates a command to clone a git repository to a specified folder' do

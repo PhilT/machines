@@ -6,7 +6,6 @@ Setup Ubuntu development and server **Machines** locally or on Amazon EC2 for ho
 Run commands like:
 
     sudo install %w(build-essential zlib1g-dev libpcre3-dev)
-    sudo install 'git://github.com/gmate/gmate.git', :to => dir, :args => '-n'
     sudo write "127.0.1.1\t#{AppConf.hostname}", :to => '/etc/hosts'
     sudo append "192.168.1.2\tserver", :to => '/etc/hosts'
     run download AppConf.nginx.url

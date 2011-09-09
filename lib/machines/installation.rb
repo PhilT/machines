@@ -60,8 +60,6 @@ module Machines
     # Installs one or more packages using apt, deb or git clone and install.sh (Ignores architecture differences)
     # (See `extract` to just uncompress tar.gz or zip files)
     # @param [Symbol, String, Array] packages can be:
-    #   Git URL::
-    #     Git clone URL and run `./install.sh` (or ./install)
     #   URL::
     #     Download from the specified URL and run `dpkg`
     #   Array or string (with no URL)::
@@ -71,20 +69,11 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to Switch to specified directory to install. Used by Git installer
     # @option options [String] :options Add extra options to `./install.sh`
-    #     install 'git://github.com/gmate/gmate.git', :to => dir, :args => '-n' #=> git clones and runs install with -n
     #     install %w(build-essential libssl-dev mysql-server) #=> Installs apt packages
     #     install 'http://example.com/my_package.deb', :cleanup => true #=> Installs a deb using dpkg then removes the deb
     def install packages, options = {}
       if packages.is_a?(String)
-        if packages.scan(/^git/).any?
-          required_options options, [:to]
-          command = "rm -rf #{options[:to]} && " +
-            "git clone #{packages} #{options[:to]} && " +
-            "cd #{options[:to]} && " +
-            "find . -maxdepth 1 -name install* | xargs -I xxx bash xxx #{options[:args]}"
-          check = "find #{options[:to]} -maxdepth 1 -name install* | grep install #{echo_result}"
-          commands = Command.new(command, check)
-        elsif packages.scan(/^http:\/\//).any?
+        if packages.scan(/^http:\/\//).any?
           commands = []
           if packages.scan(/\.deb$/i).empty?
             commands << extract(packages)
@@ -149,7 +138,9 @@ module Machines
     # @param [Hash] options
     # @option options [Optional String] :to directory to clone to
     def git_clone url, options = {}
-      Command.new("git clone -q #{url} #{options[:to]}", check_dir(options[:to]))
+      command = "git clone -q #{url}"
+      command << " #{options[:to]}" if options[:to]
+      Command.new(command, check_dir(options[:to]))
     end
   end
 end
