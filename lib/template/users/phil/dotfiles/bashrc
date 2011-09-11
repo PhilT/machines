@@ -1,5 +1,6 @@
 . /etc/bash_completion
 
+export PATH=$PATH:/sbin:/usr/sbin
 export EDITOR=nano
 export HISTCONTROL=ignoreboth
 export HISTSIZE=500
