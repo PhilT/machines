@@ -14,7 +14,7 @@ task :docky, 'Install and configure Docky a dock and app launcher' do
   key = "#{root}/Launchers"
   run configure key => apps.map {|app| "file:///usr/share/applications/#{app}.desktop"}
 
-  run configure "#{root}/Plugins" => %w(Trash Clock GMail Weather SessionManager)
+  run configure "#{root}/Plugins" => %w(Trash Clock GMail Weather)
 
   run configure "#{root}/SortList" => [
     '/usr/share/applications/firefox.desktop',
@@ -22,7 +22,6 @@ task :docky, 'Install and configure Docky a dock and app launcher' do
     'Clock',
     'GMailDockItem#Inbox',
     'WeatherDockItem',
-    'SessionManager',
     '/usr/share/applications/terminator.desktop',
     '/usr/share/applications/gedit.desktop',
     '/usr/share/applications/abiword.desktop',
