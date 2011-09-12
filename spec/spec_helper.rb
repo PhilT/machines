@@ -25,8 +25,10 @@ RSpec.configure do |c|
     AppConf.from_hash(:user => {})
     AppConf.application_dir = application_dir
 
+    $debug = FakeOut.new
     $file = FakeOut.new
     $console = FakeOut.new
+    AppConf.debug = Machines::Logger.new $debug
     AppConf.file = Machines::Logger.new $file
     AppConf.console = Machines::Logger.new $console, :truncate => true
 

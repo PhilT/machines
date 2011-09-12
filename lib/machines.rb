@@ -34,9 +34,8 @@ module Machines
       AppConf.from_hash(:db => {})
       AppConf.load('config/config.yml')
 
-      path = 'output.log'
-      FileUtils.mkdir_p File.dirname(path)
-      AppConf.file ||= Machines::Logger.new File.open(path, 'w')
+      AppConf.file ||= Machines::Logger.new File.open('output.log', 'w')
+      AppConf.debug ||= Machines::Logger.new File.open('debug.log', 'w')
       AppConf.console ||= Machines::Logger.new STDOUT, :truncate => true
     end
 

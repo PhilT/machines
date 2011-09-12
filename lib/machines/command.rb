@@ -55,6 +55,7 @@ module Machines
       command = "export TERM=linux && #{command}"
       echo_password = "echo #{AppConf.user.pass} | " if AppConf.user.pass
       command = "#{echo_password}sudo -S sh -c \"#{command}\"" if @sudo
+      AppConf.debug.log command
       command
     end
 
