@@ -35,11 +35,17 @@ module Machines
       message ||= '(no message)'
       message = merge_multiple_lines_of message if @truncate
       message = blank_out_passwords message
+      message = truncate message if @truncate
       color = options[:color]
       message = $terminal.color(message, color) if color
       options[:newline] = true if options[:newline].nil?
       message += newline_or_return options[:newline]
       message
+    end
+
+    def truncate message
+      width = $terminal.output_cols
+      message.size >= width ? message[0..(width - 5)] + '...' : message
     end
 
     def merge_multiple_lines_of message

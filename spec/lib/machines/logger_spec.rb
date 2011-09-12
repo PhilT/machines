@@ -11,6 +11,12 @@ describe 'Helpers' do
       AppConf.console.log %(something with "some text\nsome more\nand "lets quote" this one" > and some output)
       %(something with "some text..." > and some output\n).should be_displayed
     end
+
+    it 'truncates lines longer than screen width' do
+      $terminal.stub(:output_cols).and_return 10
+      AppConf.console.log "A line that's longer than the screen width", :newline => false
+      "A line...\r".should be_displayed
+    end
   end
 
   context 'logging to file' do

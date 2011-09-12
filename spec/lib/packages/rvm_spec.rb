@@ -15,6 +15,7 @@ describe 'packages/rvm' do
       "RUN    curl -s rvm_url -o rvm-installer ; chmod +x rvm-installer ; ./rvm-installer --version 1.0",
       'RUN    echo "[[ -s \\"\\$HOME/.rvm/scripts/rvm\\" ]] && . \\"\\$HOME/.rvm/scripts/rvm\\" # Load RVM function" >> .bashrc',
       "RUN    source .bashrc",
+      "RUN    rm -rf rvm-installer",
       "TASK   rvm_prompt_off - turn off trust prompting for new .rvmrc files",
       "RUN    echo \"export rvm_trust_rvmrcs_flag=1\" >> .rvmrc",
     ]

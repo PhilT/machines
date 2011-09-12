@@ -4,6 +4,7 @@ task :rvm, 'Install RVM' do
   run installer, check_file('~/.rvm/bin/rvm')
   run append '[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function', :to => '.bashrc'
   run "source .bashrc", "type rvm | head -1 | grep 'rvm is a function' #{echo_result}"
+  run remove 'rvm-installer'
 end
 
 task :rvm_prompt_off, 'turn off trust prompting for new .rvmrc files' do
