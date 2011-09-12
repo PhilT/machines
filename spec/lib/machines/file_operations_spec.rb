@@ -78,7 +78,7 @@ describe 'FileOperations' do
 
   describe 'rename' do
     subject { rename('oldname', 'newname') }
-    it { subject.command.should == 'mv oldname newname' }
+    it { subject.command.should == 'mv -f oldname newname' }
   end
 
   describe 'remove' do

@@ -6,7 +6,7 @@ task :docky, 'Install and configure Docky a dock and app launcher' do
   # Preferences
   run configure "#{root}/ZoomPercent" => 1.5
   run configure "#{root}/Autohide" => 'Intellihide'
-  run configure "#{root}/FadeOnHide" =>  true
+  run configure "#{root}/FadeOnHide" => true
   run configure "#{root}/FadeOpacity" => 50.0
 
   # Launchers

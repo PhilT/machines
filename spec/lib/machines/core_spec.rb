@@ -233,6 +233,7 @@ describe 'Configuration' do
 
   describe 'sudo upload' do
     it 'modifies Upload to send it to a temp file and sudos to copy it to destination' do
+      File.stub(:directory?).and_return false
       sudo upload 'source', 'dest'
 
       AppConf.commands.map(&:command).should == [nil, "cp -rf /tmp/dest dest", "rm -rf /tmp/dest"]
@@ -241,6 +242,12 @@ describe 'Configuration' do
         "test -s dest && echo CHECK PASSED || echo CHECK FAILED",
         "test ! -s /tmp/dest && echo CHECK PASSED || echo CHECK FAILED"
       ]
+    end
+
+    it 'adds /. to the end of directory paths' do
+      File.stub(:directory?).with('source').and_return true
+      sudo upload 'source', 'dest'
+      AppConf.commands.map(&:command).should == [nil, "cp -rf /tmp/dest/. dest", "rm -rf /tmp/dest"]
     end
   end
 

@@ -73,11 +73,12 @@ module Machines
       commands.flatten.each do |command|
         if command.is_a?(Upload)
           temp_path = "/tmp/#{File.basename(command.remote)}"
+          dir_suffix = command.local.is_a?(String) && File.directory?(command.local) ? '/.' : ''
           remote_dest = command.remote
           command.remote = temp_path
           command.check = check_file(temp_path)
           run command
-          sudo copy(temp_path, remote_dest)
+          sudo copy(temp_path + dir_suffix, remote_dest)
           run remove temp_path
         else
           command.use_sudo

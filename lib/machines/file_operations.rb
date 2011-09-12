@@ -61,7 +61,7 @@ module Machines
     # @param [String] oldname Existing filename
     # @param [String] newname Rename to this =
     def rename oldname, newname
-      Command.new("mv #{oldname} #{newname}", check_file(newname))
+      Command.new("mv -f #{oldname} #{newname}", check_file(newname))
     end
 
     # Remove a remote file
