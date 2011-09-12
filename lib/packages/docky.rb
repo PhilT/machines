@@ -7,7 +7,7 @@ task :docky, 'Install and configure Docky a dock and app launcher' do
   run configure "#{root}/ZoomPercent" => 1.5
   run configure "#{root}/Autohide" => 'Intellihide'
   run configure "#{root}/FadeOnHide" => true
-  run configure "#{root}/FadeOpacity" => 50.0
+  run configure "#{root}/FadeOpacity" => 50
 
   # Launchers
   apps = %w(terminator abiword gnumeric firefox gimp inkscape audacious2 gedit)

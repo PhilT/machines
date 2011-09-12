@@ -5,7 +5,7 @@ task :questions, 'Ask some questions' do
   AppConf.roles = machine[:roles]
   AppConf.users = AppConf.appsroots.keys
 
-  AppConf.ec2.use = start_ec2_instance? unless AppConf.machine == 'Desktop'
+  AppConf.ec2.use = start_ec2_instance? unless AppConf.environment == :development
   thread = Thread.new { connect && run_instance } if AppConf.ec2.use
   AppConf.target_address = enter_target_address('machine') unless AppConf.ec2.use || AppConf.log_only
   AppConf.user.name = choose_user
