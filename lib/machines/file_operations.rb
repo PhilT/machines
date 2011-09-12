@@ -84,7 +84,7 @@ module Machines
     def replace regex, options
       required_options options, [:with, :in]
       with = options[:with].to_s.gsub('/', '\/').gsub("\n", "\\n").gsub('"', '\\"')
-      Command.new("sed -i \"s/#{regex}/#{with}/\" #{options[:in]}", check_string(options[:with], options[:in]))
+      Command.new("sed -i s/#{regex}/#{with}/ #{options[:in]}", check_string(options[:with], options[:in]))
     end
 
     # Overwrite a file with the specified content
