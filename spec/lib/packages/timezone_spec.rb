@@ -11,7 +11,7 @@ describe 'packages/timezone' do
     AppConf.commands.map(&:info).should == [
       "TASK   timezone - Set timezone from config.yml and update time daily using NTP",
       "SUDO   ln -sf /etc/localtime /usr/share/zoneinfo/GB",
-      "SUDO   sed -i s/UTC=yes/UTC=no/ /etc/default/rcS",
+      "SUDO   sed -i \"s/UTC=yes/UTC=no/\" /etc/default/rcS",
       "UPLOAD unnamed buffer to /tmp/ntpdate",
       "SUDO   cp -rf /tmp/ntpdate /etc/cron.daily/ntpdate",
       "RUN    rm -rf /tmp/ntpdate",

@@ -93,7 +93,7 @@ describe 'FileOperations' do
 
   describe 'replace' do
     subject { replace('something', :with => 'some/path', :in => 'file') }
-    it { subject.command.should == "sed -i s/something/some\\/path/ file" }
+    it { subject.command.should == "sed -i \"s/something/some\\/path/\" file" }
     it { lambda{replace('something')}.should raise_error ArgumentError }
   end
 

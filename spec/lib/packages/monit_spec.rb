@@ -24,7 +24,7 @@ describe 'packages/monit' do
       "SUDO   cp -rf /tmp/ssh /etc/monit/conf.d/ssh",
       "RUN    rm -rf /tmp/ssh",
       "SUDO   echo dummy",
-      "SUDO   sed -i s/startup=0/startup=1/ /etc/default/monit"
+      "SUDO   sed -i \"s/startup=0/startup=1/\" /etc/default/monit"
     ]
   end
 end

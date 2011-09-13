@@ -1,5 +1,6 @@
 all_apps = %w(application wiki)
 machine 'Desktop', :development, :roles => [:app, :db], :apps => all_apps
+machine 'Laptop', :development, :roles => [:app, :db], :apps => all_apps
 machine 'Staging', :staging, :roles => [:app, :db], :apps => all_apps
 machine 'Production', :production, :roles => [:app], :apps => all_apps
 machine 'DBmaster', :production, :roles => [:db, :dbmaster]
@@ -10,6 +11,13 @@ package :questions
 package :dependencies
 package :timezone
 package :base
+
+only :machine => 'Laptop' do
+  task :nomodeset, 'Add nomodeset to grub' do
+    sudo replace 'GRUB_CMDLINE_LINUX_DEFAULT=.*', :with => 'GRUB_CMDLINE_LINUX_DEFAULT="quiet nomodeset"', :in => '/etc/default/grub'
+    sudo 'echo', "update-grub #{echo_result}"
+  end
+end
 
 only :roles => :app do
   package :monit unless AppConf.environment == :development

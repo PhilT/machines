@@ -15,7 +15,7 @@ describe 'packages/slim' do
       "UPLOAD slim/themes to /tmp/themes",
       "SUDO   cp -rf /tmp/themes/. /usr/share/slim/themes",
       "RUN    rm -rf /tmp/themes",
-      "SUDO   sed -i s/debian-spacefun/custom/ /etc/slim.conf"
+      "SUDO   sed -i \"s/debian-spacefun/custom/\" /etc/slim.conf"
     ]
   end
 end
