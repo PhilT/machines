@@ -1,9 +1,11 @@
 module Machines
   module Configuration
-    # Add a new user (uses a lowlevel add so doesn't set a password. Used to handle authorized_keys files)
+    # Add a new user
+    # (uses the lowlevel useradd so doesn't set a password unless specified)
     # @param [String] login User name to create
     # @param [Hash] options
     # @option options [String] :password
+    # @option options [Boolean] :admin Adds the user to the admin group when true
     def add_user login, options = {}
       password = "-p #{`openssl passwd #{options[:password]}`.gsub("\n", '')} " if options[:password]
       admin = "-G admin " if options[:admin]
@@ -11,6 +13,15 @@ module Machines
         "useradd -s /bin/bash -d /home/#{login} -m #{password}#{admin}#{login}",
         check_dir("/home/#{login}")
       )
+    end
+
+    # Add an existing user to a secondary group
+    # @param [Hash] options
+    # @option options [String] :user The user to add
+    # @option options [String] :to Adds an existing user to the specified group
+    def add options
+      required_options options, [:user, :to]
+      Command.new("usermod -a -G #{options[:user]} #{options[:to]}", check_string('', ''))
     end
 
     # Sets gconf key value pairs

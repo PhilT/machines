@@ -5,6 +5,7 @@ task :virtual_box, 'Install VirtualBox' do
     :key => 'http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc',
     :name => 'VirtualBox'
 
-  sudo install 'virtualbox-4.0'
+  sudo install 'virtualbox-4.1'
+  sudo add :user => 'phil', :to => 'vboxusers'
 end
 

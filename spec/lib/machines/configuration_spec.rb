@@ -15,6 +15,13 @@ describe 'Configuration' do
     end
   end
 
+  describe 'add' do
+    it 'add an existing user to a group' do
+      command = add :user => 'phil', :to => 'group'
+      command.command.should == 'usermod -a -G phil group'
+    end
+  end
+
   describe 'configure' do
     before(:each) do
       @options = {:string => 'str', :number => 123, :t => true, :f => false, :float => 1.1, :array => ['item 1', 'item 2']}

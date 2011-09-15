@@ -1,4 +1,4 @@
-Machines
+Machines - Test Driven Deployment
 =======================================
 
 Setup Ubuntu development and server **Machines** locally or on Amazon EC2 for hosting Ruby on Rails 3 applications.
@@ -33,6 +33,7 @@ Features
 * Extra checks done to ensure command generates the correct result and avoids false positives (e.g. successful return values)
 * A lightweight configurable Ubuntu install
 * Working documentation for Ubuntu commands
+* Customizable Ubuntu distribution
 
 
 Motivation

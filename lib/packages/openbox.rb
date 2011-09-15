@@ -18,12 +18,9 @@ task :openbox, 'Install Openbox window manager and associated fonts, themes, etc
 end
 
 task :sudo_no_password, 'Ensure we can shutdown/reboot without needing a password for sudo' do
-  sudo copy '/etc/sudoers', '/etc/new_sudoers'
-  sudo chmod 600, '/etc/new_sudoers'
-  sudo append 'ALL   ALL=NOPASSWD:/sbin/shutdown', :to => '/etc/new_sudoers'
-  sudo append 'ALL   ALL=NOPASSWD:/sbin/reboot', :to => '/etc/new_sudoers'
-  sudo chmod 440, '/etc/new_sudoers'
-  sudo rename '/etc/new_sudoers', '/etc/sudoers'
+  sudo append 'ALL   ALL=NOPASSWD:/sbin/shutdown', :to => '/etc/sudoers.d/shutdown'
+  sudo append 'ALL   ALL=NOPASSWD:/sbin/reboot', :to => '/etc/sudoers.d/shutdown'
+  sudo chmod 440, '/etc/sudoers.d/shutdown'
 end
 
 task :fonts, 'Set openbox and Gnome interface fonts (See also rc.xml, fonts.conf, gtkrc-2.0)' do
