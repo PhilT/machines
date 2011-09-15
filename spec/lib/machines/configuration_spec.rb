@@ -18,7 +18,7 @@ describe 'Configuration' do
   describe 'add' do
     it 'add an existing user to a group' do
       command = add :user => 'phil', :to => 'group'
-      command.command.should == 'usermod -a -G phil group'
+      command.command.should == 'usermod -a -G group phil'
     end
   end
 
