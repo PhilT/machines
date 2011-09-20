@@ -1,5 +1,6 @@
 task :docky, 'Install and configure Docky a dock and app launcher' do
-  sudo install %w(docky) # Panel/Dock launcher
+  sudo install 'docky'                  # Panel/Dock launcher
+  sudo install 'gnome-system-monitor'   # System info, processes, resources, file system usage
 
   root = '/apps/docky-2/Docky/Interface/DockPreferences/Dock1'
 
@@ -10,7 +11,7 @@ task :docky, 'Install and configure Docky a dock and app launcher' do
   run configure "#{root}/FadeOpacity" => 50
 
   # Launchers
-  apps = %w(terminator abiword gnumeric firefox gimp inkscape audacious2 gedit)
+  apps = %w(terminator abiword gnumeric firefox google-chrome gimp inkscape audacious2 gedit)
   key = "#{root}/Launchers"
   run configure key => apps.map {|app| "file:///usr/share/applications/#{app}.desktop"}
 
@@ -18,6 +19,7 @@ task :docky, 'Install and configure Docky a dock and app launcher' do
 
   run configure "#{root}/SortList" => [
     '/usr/share/applications/firefox.desktop',
+    '/usr/share/applications/google-chrome.desktop',
     'TrashCan',
     'Clock',
     'GMailDockItem#Inbox',
@@ -41,7 +43,7 @@ task :docky, 'Install and configure Docky a dock and app launcher' do
   run configure '/apps/docky-2/GMail/GMailPreferences/User' => "phil@"
 
   # Weather
-  run configure '/apps/docky-2/WeatherDocklet/WeatherPreferences/Location' => ['UKXX0085']
+  run configure '/apps/docky-2/WeatherDocklet/WeatherPreferences/Location' => ['London, United Kingdom']
   run configure '/apps/docky-2/WeatherDocklet/WeatherPreferences/Metric' => true
 end
 

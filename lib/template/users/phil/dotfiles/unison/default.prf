@@ -1,0 +1,11 @@
+root = /home/phil
+root = ssh://phil/home
+
+path = Documents
+path = Pictures
+path = Videos
+
+ignore = Name temp.*
+ignore = Path */something
+ignore = Name AlbumArt*.jpg
+

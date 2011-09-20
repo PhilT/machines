@@ -41,7 +41,7 @@ module Machines
     #     add_ppa 'mozillateam/firefox-stable', 'mozilla'
     def add_ppa name, key_name
       [
-        Command.new("add-apt-repository ppa:#{name}", "apt-key list | grep -i #{key_name} #{echo_result}"),
+        Command.new("add-apt-repository -y ppa:#{name}", "apt-key list | grep -i #{key_name} #{echo_result}"),
         update
       ]
     end
@@ -66,9 +66,6 @@ module Machines
     #     Run `apt` to install specified packages in the array or string
     #       Packages are installed separately to aid progress feedback
     #       Ensure this is the main package as dpkg get-selections is used to validate installation
-    # @param [Hash] options
-    # @option options [String] :to Switch to specified directory to install. Used by Git installer
-    # @option options [String] :options Add extra options to `./install.sh`
     #     install %w(build-essential libssl-dev mysql-server) #=> Installs apt packages
     #     install 'http://example.com/my_package.deb', :cleanup => true #=> Installs a deb using dpkg then removes the deb
     def install packages, options = {}

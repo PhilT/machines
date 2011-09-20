@@ -10,7 +10,8 @@ describe 'packages/optional' do
     eval_package
     AppConf.commands.map(&:info).should == [
       "TASK   workspace - Copies everything from local workspace folder to new machine",
-      'UPLOAD ~/workspace to workspace'
+      'UPLOAD ~/workspace to workspace',
+      'RUN    mkdir -p Documents Downloads Music Pictures Videos'
     ]
   end
 end

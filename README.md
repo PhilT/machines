@@ -1,7 +1,7 @@
 Machines - Test Driven Deployment
 =======================================
 
-Setup Ubuntu development and server **Machines** locally or on Amazon EC2 for hosting Ruby on Rails 3 applications.
+Setup Ubuntu development and server **Machines** locally or on Amazon EC2 for hosting and developing Ruby on Rails 3 applications.
 
 Run commands like:
 
@@ -94,24 +94,15 @@ Take a look at the generated project. It contains several folders and the main `
 1. Setup your `users/` folders
 1. Add `~/.ssh/id_rsa.pub` public key from all users machines that need access, to the `users/www/authorized_keys` file
 
-### If installing a development machine
+### Prepare the target machine
 
-If testing on a VM see **Setting up the test Machines virtual machine** below.
-
-* Download and prepare the Ubuntu USB image. Replace `/dev/sdX` with your USB device name (use dmesg)
-
-  For i386 do:
-
-      wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/boot.img.gz -O ~/Downloads/Ubuntu11.04_i386.img.gz
-      gunzip ~/Downloads/Ubuntu11.04_i386.img.gz
-      sudo dd if=~/Downloads/Ubuntu11.04_i386.img of=/dev/sdX
-
-  or for amd64 do:
-
-      wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/boot.img.gz -O ~/Downloads/Ubuntu11.04_amd64.img.gz
-      gunzip ~/Downloads/Ubuntu11.04_amd64.img.gz
-      sudo dd if=~/Downloads/Ubuntu11.04_amd64.img of=/dev/sdX
-
+* Download the image or ISO:
+** (Ubuntu 11.04 Minimal i386 ISO)[http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/mini.iso]
+** (Ubuntu 11.04 Minimal x64 ISO)[http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/mini.iso]
+** (Ubuntu 11.04 Minimal i386 IMG)[http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/boot.img.gz]
+** (Ubuntu 11.04 Minimal x64 IMG)[http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/boot.img.gz]
+* Images can be written to USB with:
+** `gunzip boot.img.gz && sudo dd if=boot.img of=/dev/sdX` where `sdX` is your USB device (use `dmesg` to get this)
 * Insert the USB stick and boot from it to install Ubuntu
 * Install SSH Server & note the IP address
 
@@ -244,16 +235,6 @@ Take a look at `template/config/*.yml` for more.
 
 Setting up the test Machines virtual machine
 ---------------------------------------
-
-* Grab the Minimal CD Image
-
-  For i386 do:
-
-      wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/mini.iso -O ~/Downloads/Ubuntu11.04_i386.iso
-
-  or for amd64 do:
-
-      wget http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/mini.iso -O ~/Downloads/Ubuntu11.04_amd64.iso
 
 * Start your virtualization software (I use VirtualBox).
   * Create a new VM with the name of machinesvm (used in the rake tasks and tests)

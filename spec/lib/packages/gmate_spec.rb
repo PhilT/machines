@@ -9,11 +9,10 @@ describe 'packages/gmate' do
   it 'adds the following commands' do
     eval_package
     AppConf.commands.map(&:info).should == [
-      "TASK   gmate - install gmate for gEdit and set some preferences and plugins",
-      "SUDO   add-apt-repository ppa:ubuntu-on-rails/ppa",
-      'SUDO   apt-get -q -y update > /tmp/apt-update.log',
-      "SUDO   apt-get -q -y install gedit-gmate",
-      'RUN    gconftool-2 --set "/apps/gedit-2/plugins/active-plugins" --type list --list-type=string ["text_tools","smart_indent","align","rails_hotkeys","trailsave","gemini","rubyonrailsloader","gedit_openfiles","quickhighlightmode","completion","time","docinfo","filebrowser","snippets","spell","indent"]',
+      "TASK   gmate - Clone gmate for gEdit from Github and set some preferences and plugins",
+      "SUDO   git clone -q git://github.com/gmate/gmate.git workspace/gmate",
+      "SUDO   cd workspace/gmate && ./install.sh",
+      'RUN    gconftool-2 --set "/apps/gedit-2/plugins/active-plugins" --type list --list-type=string ["text_tools","smart_indent","align","rails_hotkeys","trailsave","gemini","rubyonrailsloader","gedit_openfiles","quickhighlightmode","completion","time","docinfo","filebrowser","snippets","spell","indent","tabswitch"]',
       'RUN    gconftool-2 --set "/apps/gedit-2/plugins/smart_indent/haml_tab_size" --type int 2',
       'RUN    gconftool-2 --set "/apps/gedit-2/plugins/smart_indent/js_tab_size" --type int 2',
       'RUN    gconftool-2 --set "/apps/gedit-2/plugins/smart_indent/markdown_tab_size" --type int 2',

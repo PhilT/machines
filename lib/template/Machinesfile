@@ -46,6 +46,7 @@ only :users => 'phil' do
   package :firefox
   package :gmate
   package :amazon_mp3
+  package :unison
 end
 
 sudo upgrade

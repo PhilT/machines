@@ -1,10 +1,10 @@
-task :gmate, 'install gmate for gEdit and set some preferences and plugins' do
+task :gmate, 'Clone gmate for gEdit from Github and set some preferences and plugins' do
   dir = File.join AppConf.appsroot, 'gmate'
 
-  sudo add_ppa 'ubuntu-on-rails/ppa', 'Rails'
-  sudo install 'gedit-gmate'
+  sudo git_clone 'git://github.com/gmate/gmate.git', :to => 'workspace/gmate'
+  sudo 'cd workspace/gmate && ./install.sh'
 
-  run configure '/apps/gedit-2/plugins/active-plugins' => %w(text_tools smart_indent align rails_hotkeys trailsave gemini rubyonrailsloader gedit_openfiles quickhighlightmode completion time docinfo filebrowser snippets spell indent)
+  run configure '/apps/gedit-2/plugins/active-plugins' => %w(text_tools smart_indent align rails_hotkeys trailsave gemini rubyonrailsloader gedit_openfiles quickhighlightmode completion time docinfo filebrowser snippets spell indent tabswitch)
 
   indent = '/apps/gedit-2/plugins/smart_indent'
   run configure "#{indent}/haml_tab_size" => 2,
