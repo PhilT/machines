@@ -14,7 +14,9 @@ describe 'packages/virtual_box' do
       "SUDO   wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O - | apt-key add -",
       "SUDO   apt-get -q -y update > /tmp/apt-update.log",
       "SUDO   apt-get -q -y install virtualbox-4.1",
-      "SUDO   usermod -a -G vboxusers phil"
+      "SUDO   usermod -a -G vboxusers phil",
+      "SUDO   echo \"application/x-virtualbox-vbox-extpack=virtualbox.desktop\" >> .local/share/applications/mimeapps.list",
+      "SUDO   echo \"application/x-virtualbox-ova=virtualbox.desktop\" >> .local/share/applications/mimeapps.list"
     ]
   end
 end

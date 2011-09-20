@@ -38,8 +38,9 @@ describe 'packages/openbox' do
       "UPLOAD config/udisks.policy to /tmp/org.freedesktop.udisks.policy",
       "SUDO   cp -rf /tmp/org.freedesktop.udisks.policy /usr/share/polkit-1/actions/org.freedesktop.udisks.policy",
       "RUN    rm -rf /tmp/org.freedesktop.udisks.policy",
-      "SUDO   chmod 644 /usr/share/polkit-1/actions/org.freedesktop.udisks.policy"
-    ]
+      "SUDO   chmod 644 /usr/share/polkit-1/actions/org.freedesktop.udisks.policy",
+      "SUDO   echo \"inode/directory=pcmanfm.desktop\" >> .local/share/applications/mimeapps.list"
+     ]
   end
 end
 

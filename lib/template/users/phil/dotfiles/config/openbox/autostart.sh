@@ -6,8 +6,8 @@ xautolock -time 5 -locker slock &
 # Set a background image
 feh --bg-scale $HOME/Pictures/wallpaper.jpg
 
-# Run the compositing manager with drop shadows
-xcompmgr -cC -t-3 -l-5 -r5 &
+# Run the compositing manager
+xcompmgr &
 
 # Start Docky the dock launcher
 docky &

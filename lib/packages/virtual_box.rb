@@ -7,5 +7,7 @@ task :virtual_box, 'Install VirtualBox' do
 
   sudo install 'virtualbox-4.1'
   sudo add :user => 'phil', :to => 'vboxusers'
+  sudo append 'application/x-virtualbox-vbox-extpack=virtualbox.desktop', :to => '.local/share/applications/mimeapps.list'
+  sudo append 'application/x-virtualbox-ova=virtualbox.desktop', :to => '.local/share/applications/mimeapps.list'
 end
 

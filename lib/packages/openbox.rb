@@ -43,3 +43,5 @@ task :usb_policy, 'Allow users to mount USB drives' do
   sudo chmod 644, '/usr/share/polkit-1/actions/org.freedesktop.udisks.policy'
 end
 
+sudo append 'inode/directory=pcmanfm.desktop', :to => '.local/share/applications/mimeapps.list'
+
