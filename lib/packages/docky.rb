@@ -14,7 +14,7 @@ task :docky, 'Install and configure Docky a dock and app launcher' do
   run configure "#{root}/FadeOpacity" => 50
 
   # Launchers
-  apps = %w(google-chrome firefox terminator gedit abiword gnumeric gimp inkscape audacious2)
+  apps = %w(pcmanfm google-chrome firefox terminator gedit abiword gnumeric gimp inkscape audacious2)
   run configure "#{root}/Launchers" => apps.map {|app| "file:///usr/share/applications/#{app}.desktop"}
   run configure "#{root}/SortList" => apps.map {|app| "/usr/share/applications/#{app}.desktop"}
 

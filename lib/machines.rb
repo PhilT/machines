@@ -98,8 +98,10 @@ module Machines
     end
 
     def prepare_to_exit
+      exit if $exit_requested
       $exit_requested = true
       AppConf.console.log("\nEXITING after current command completes...", :color => :warning)
+      AppConf.console.log("(Press again to terminate immediately)...", :color => :warning)
     end
   end
 end

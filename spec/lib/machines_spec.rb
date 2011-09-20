@@ -168,6 +168,12 @@ describe 'Machines' do
         "\nEXITING after current command completes...\n".should be_displayed as_warning
       end
 
+      it 'second request to exit exits immediately' do
+        $exit_requested = true
+        subject.should_receive(:exit)
+        subject.prepare_to_exit
+      end
+
       it 'exits when exit requested' do
         $exit_requested = true
         subject.should_receive(:exit)
