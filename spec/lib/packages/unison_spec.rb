@@ -10,8 +10,7 @@ describe 'packages/unison' do
     AppConf.commands.map(&:info).should == [
       "TASK   unison - Install unison two way file sync and set it to run hourly. Config in users/user/.unison/default.prf",
       "SUDO   apt-get -q -y install unison",
-      "SUDO   ln -sf /usr/bin/unison /etc/cron.hourly/unison",
-      "SUDO   chmod 644 /etc/cron.hourly/unison"
+      "SUDO   ln -sf /usr/bin/unison /etc/cron.hourly/unison"
     ]
   end
 end

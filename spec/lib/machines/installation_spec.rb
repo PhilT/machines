@@ -92,7 +92,7 @@ describe 'Installation' do
   describe 'uninstall' do
     it 'instaniates a command to uninstall a package' do
       subject = uninstall %w(apackage)
-      subject.map(&:command).should == ['apt-get -q -y remove apackage']
+      subject.map(&:command).should == ['apt-get -q -y purge apackage']
     end
   end
 

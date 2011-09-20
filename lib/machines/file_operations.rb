@@ -57,15 +57,15 @@ module Machines
       Command.new("mkdir -p #{dir}", check_dir(dir))
     end
 
-    # Rename a remote file
+    # Rename a remote file or folder
     # @param [String] oldname Existing filename
     # @param [String] newname Rename to this =
     def rename oldname, newname
       Command.new("mv -f #{oldname} #{newname}", check_file(newname))
     end
 
-    # Remove a remote file
-    # @param [String] file to remove (uses rm with -f which ignore non-existent files)
+    # Remove a remote file or folder
+    # @param [String] file or folder to remove (uses rm with -rf which ignores non-existent files and is recursive)
     def remove file
       Command.new("rm -rf #{file}", check_file(file, false))
     end

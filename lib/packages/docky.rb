@@ -2,6 +2,9 @@ task :docky, 'Install and configure Docky a dock and app launcher' do
   sudo install 'docky'                  # Panel/Dock launcher
   sudo install 'gnome-system-monitor'   # System info, processes, resources, file system usage
 
+  # Ensure Docky does not try to reset preferences
+  run configure '/apps/docky-2/Docky/Interface/DockPreferences/FirstRun' => false
+
   root = '/apps/docky-2/Docky/Interface/DockPreferences/Dock1'
 
   # Preferences
@@ -11,27 +14,11 @@ task :docky, 'Install and configure Docky a dock and app launcher' do
   run configure "#{root}/FadeOpacity" => 50
 
   # Launchers
-  apps = %w(terminator abiword gnumeric firefox google-chrome gimp inkscape audacious2 gedit)
-  key = "#{root}/Launchers"
-  run configure key => apps.map {|app| "file:///usr/share/applications/#{app}.desktop"}
+  apps = %w(google-chrome firefox terminator gedit abiword gnumeric gimp inkscape audacious2)
+  run configure "#{root}/Launchers" => apps.map {|app| "file:///usr/share/applications/#{app}.desktop"}
+  run configure "#{root}/SortList" => apps.map {|app| "/usr/share/applications/#{app}.desktop"}
 
   run configure "#{root}/Plugins" => %w(Trash Clock GMail Weather)
-
-  run configure "#{root}/SortList" => [
-    '/usr/share/applications/firefox.desktop',
-    '/usr/share/applications/google-chrome.desktop',
-    'TrashCan',
-    'Clock',
-    'GMailDockItem#Inbox',
-    'WeatherDockItem',
-    '/usr/share/applications/terminator.desktop',
-    '/usr/share/applications/gedit.desktop',
-    '/usr/share/applications/abiword.desktop',
-    '/usr/share/applications/gnumeric.desktop',
-    '/usr/share/applications/gimp.desktop',
-    '/usr/share/applications/inkscape.desktop',
-    '/usr/share/applications/audacious2.desktop'
-  ]
 
   # Clock
   run configure '/apps/docky-2/Clock/ClockDockItem/ShowDate' => true
@@ -43,7 +30,7 @@ task :docky, 'Install and configure Docky a dock and app launcher' do
   run configure '/apps/docky-2/GMail/GMailPreferences/User' => "phil@"
 
   # Weather
-  run configure '/apps/docky-2/WeatherDocklet/WeatherPreferences/Location' => ['London, United Kingdom']
+  run configure '/apps/docky-2/WeatherDocklet/WeatherPreferences/Location' => ['London\\, United Kingdom']
   run configure '/apps/docky-2/WeatherDocklet/WeatherPreferences/Metric' => true
 end
 

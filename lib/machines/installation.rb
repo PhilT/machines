@@ -98,7 +98,7 @@ module Machines
     # @param [Array] packages Packages to remove
     def uninstall packages
       packages.map do |package|
-        Command.new("#{APTGET_QUIET} remove #{package}", check_package(package, false))
+        Command.new("#{APTGET_QUIET} purge #{package}", check_package(package, false))
       end
     end
 
