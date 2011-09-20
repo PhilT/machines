@@ -24,6 +24,7 @@ task :apps, 'Install apps for minimal development machine' do
   sudo append 'image/png=gimp.desktop', :to => '.local/share/applications/mimeapps.list'
   sudo append 'image/jpeg=gimp.desktop', :to => '.local/share/applications/mimeapps.list'
   sudo append 'image/svg=inkscape.desktop', :to => '.local/share/applications/mimeapps.list'
+sudo append 'application/pdf=evince.desktop', :to => '.local/share/applications/mimeapps.list'
 end
 
 task :file_roller_associations, 'Setup file associations for file-roller' do
@@ -44,13 +45,6 @@ task :abiword_associations, 'Setup file associations for Abiword' do
   mimetypes = 'application/x-abiword;application/msword;application/rtf;'
   mimetypes.split(';').each do |mimetype|
     sudo append "#{mimetype}=abiword.desktop", :to => '.local/share/applications/mimeapps.list'
-  end
-end
-
-task :evince_associations, 'Setup file associations for Evince' do
-  mimetypes = 'application/pdf;application/x-bzpdf;application/x-gzpdf;application/postscript;application/x-bzpostscript;application/x-gzpostscript;image/x-eps;image/x-bzeps;image/x-gzeps;application/x-dvi;application/x-bzdvi;application/x-gzdvi;image/vnd.djvu;image/tiff;application/x-cbr;application/x-cbz;application/x-cb7;application/x-cbt;image/*;application/vnd.sun.xml.impress;application/vnd.oasis.opendocument.presentation;'
-  mimetypes.split(';').each do |mimetype|
-    sudo append "#{mimetype}=evince.desktop", :to => '.local/share/applications/mimeapps.list'
   end
 end
 

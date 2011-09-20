@@ -31,6 +31,7 @@ describe 'packages/apps' do
       "SUDO   echo \"image/png=gimp.desktop\" >> .local/share/applications/mimeapps.list",
       "SUDO   echo \"image/jpeg=gimp.desktop\" >> .local/share/applications/mimeapps.list",
       "SUDO   echo \"image/svg=inkscape.desktop\" >> .local/share/applications/mimeapps.list",
+      "SUDO   echo \"application/pdf=evince.desktop\" >> .local/share/applications/mimeapps.list",
       "TASK   file_roller_associations - Setup file associations for file-roller",
       "SUDO   echo \"application/x-7z-compressed=file-roller.desktop\" >> .local/share/applications/mimeapps.list",
       "SUDO   echo \"application/x-7z-compressed-tar=file-roller.desktop\" >> .local/share/applications/mimeapps.list",
@@ -87,29 +88,7 @@ describe 'packages/apps' do
       "TASK   abiword_associations - Setup file associations for Abiword",
       "SUDO   echo \"application/x-abiword=abiword.desktop\" >> .local/share/applications/mimeapps.list",
       "SUDO   echo \"application/msword=abiword.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/rtf=abiword.desktop\" >> .local/share/applications/mimeapps.list",
-      "TASK   evince_associations - Setup file associations for Evince",
-      "SUDO   echo \"application/pdf=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/x-bzpdf=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/x-gzpdf=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/postscript=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/x-bzpostscript=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/x-gzpostscript=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"image/x-eps=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"image/x-bzeps=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"image/x-gzeps=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/x-dvi=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/x-bzdvi=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/x-gzdvi=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"image/vnd.djvu=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"image/tiff=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/x-cbr=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/x-cbz=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/x-cb7=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/x-cbt=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"image/*=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/vnd.sun.xml.impress=evince.desktop\" >> .local/share/applications/mimeapps.list",
-      "SUDO   echo \"application/vnd.oasis.opendocument.presentation=evince.desktop\" >> .local/share/applications/mimeapps.list"
+      "SUDO   echo \"application/rtf=abiword.desktop\" >> .local/share/applications/mimeapps.list"
     ]
   end
 end
