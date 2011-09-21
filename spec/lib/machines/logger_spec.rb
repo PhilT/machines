@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'Helpers' do
   before(:each) do
-    AppConf.user.name = 'www'
+    AppConf.user = 'www'
     AppConf.commands = [1,2,3]
   end
 

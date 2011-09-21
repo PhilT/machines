@@ -4,7 +4,7 @@ describe 'packages/nginx_passenger' do
   before(:each) do
     load_package('nginx_passenger')
     AppConf.from_hash(:nginx => {:path => 'nginx_dest', :version => '1.0.2'})
-    AppConf.user.pass = 'pass'
+    AppConf.password = 'pass'
   end
 
   it 'adds the following commands' do

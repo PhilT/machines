@@ -211,7 +211,7 @@ describe 'Configuration' do
 
   describe 'sudo' do
     it 'wraps a command in a sudo with password call' do
-      AppConf.user.pass = 'password'
+      AppConf.password = 'password'
       @command1.should_receive(:use_sudo)
       sudo @command1
     end

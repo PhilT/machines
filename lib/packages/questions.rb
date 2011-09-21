@@ -8,10 +8,10 @@ task :questions, 'Ask some questions' do
   AppConf.ec2.use = start_ec2_instance? unless AppConf.environment == :development
   thread = Thread.new { connect && run_instance } if AppConf.ec2.use
   AppConf.target_address = enter_target_address('machine') unless AppConf.ec2.use || AppConf.log_only
-  AppConf.user.name = choose_user
-  AppConf.passwords << AppConf.user.pass = 'password'
-  AppConf.user.pass = enter_password('users', false) unless AppConf.ec2.use || AppConf.log_only
-  AppConf.appsroot = AppConf.appsroots[AppConf.user.name]
+  AppConf.user = choose_user
+  AppConf.passwords << AppConf.password = 'password'
+  AppConf.password = enter_password('users', false) unless AppConf.ec2.use || AppConf.log_only
+  AppConf.appsroot = AppConf.appsroots[AppConf.user]
   load_app_settings(machine[:apps])
 
   only :environments => [:staging, :production] do

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'packages/dotfiles' do
   before(:each) do
     load_package('dotfiles')
-    AppConf.from_hash(:user => {:name => 'username', :appsroot => 'appsroot'})
+    AppConf.user = 'username'
     AppConf.appsroot = 'appsroot'
     AppConf.environment = 'railsenv'
     FileUtils.mkdir_p 'users/username/dotfiles'

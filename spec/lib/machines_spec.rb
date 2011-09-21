@@ -23,7 +23,6 @@ describe 'Machines' do
       AppConf.commands.should == []
       AppConf.webapps.should == {}
       AppConf.tasks.should == {}
-      AppConf.user.should be_a AppConf
       AppConf.db.should be_a AppConf
       AppConf.timezone.should == 'GB'
       File.should exist 'output.log'
@@ -84,8 +83,8 @@ describe 'Machines' do
     before(:each) do
       subject.stub(:init)
       AppConf.target_address = 'target'
-      AppConf.user.name = 'username'
-      AppConf.user.pass = 'userpass'
+      AppConf.user = 'username'
+      AppConf.password = 'userpass'
     end
 
     it 'starts an SCP session using password authentication' do

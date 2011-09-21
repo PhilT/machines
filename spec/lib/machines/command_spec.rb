@@ -73,7 +73,7 @@ describe Command do
       end
 
       it 'successful sudo command to screen and file' do
-        AppConf.user.pass = 'userpass'
+        AppConf.password = 'userpass'
         @mock_ssh.stub(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && check'").and_return 'CHECK PASSED'
         subject.use_sudo
         subject.run
@@ -128,7 +128,7 @@ describe Command do
     end
 
     it 'wraps command execution in sudo with a password' do
-      AppConf.user.pass = 'userpass'
+      AppConf.password = 'userpass'
       @mock_ssh.should_receive(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && command'").and_return "result"
 
       subject.use_sudo
@@ -143,7 +143,7 @@ describe Command do
     end
 
     it 'wraps check execution in sudo with a password' do
-      AppConf.user.pass = 'userpass'
+      AppConf.password = 'userpass'
       @mock_ssh.should_receive(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && check'").and_return 'CHECK PASSED'
 
       subject.use_sudo

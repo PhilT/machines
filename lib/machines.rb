@@ -30,7 +30,6 @@ module Machines
       AppConf.commands = []
       AppConf.webapps = {}
       AppConf.tasks = {}
-      AppConf.from_hash(:user => {})
       AppConf.from_hash(:db => {})
       AppConf.load('config/config.yml')
 
@@ -76,8 +75,8 @@ module Machines
         username = 'ubuntu'
         scp_options = {:keys => [AppConf.ec2.private_key_file]}
       else
-        username = AppConf.user.name
-        scp_options = {:password => AppConf.user.pass}
+        username = AppConf.user
+        scp_options = {:password => AppConf.password}
       end
 
       if AppConf.log_only
