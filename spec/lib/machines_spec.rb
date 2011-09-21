@@ -73,9 +73,18 @@ describe 'Machines' do
 
   describe 'dryrun' do
     it 'asks build to only log commands' do
-      subject.should_receive(:build)
-      subject.dryrun
+      options = []
+      subject.should_receive(:build).with options
+      subject.dryrun options
       AppConf.log_only.should be_true
+    end
+  end
+
+  describe 'set_defaults_from' do
+    it 'sets AppConf from name/value pairs' do
+      subject.set_defaults_from ["a_name=value", "another_name=another_value"]
+      AppConf.a_name.should == 'value'
+      AppConf.another_name.should == 'another_value'
     end
   end
 
@@ -89,7 +98,7 @@ describe 'Machines' do
 
     it 'starts an SCP session using password authentication' do
       Net::SCP.should_receive(:start).with('target', 'username', :password => 'userpass')
-      subject.build
+      subject.build []
     end
 
     it 'starts an SCP session using key based authentication' do
@@ -97,7 +106,7 @@ describe 'Machines' do
       AppConf.ec2.private_key_file = 'private_key_file'
       Net::SCP.should_receive(:start).with('target', 'ubuntu', :keys => ['private_key_file'])
 
-      subject.build
+      subject.build []
     end
 
     it 'runs each command' do
@@ -109,7 +118,7 @@ describe 'Machines' do
       Command.should_receive(:scp=).with(mock_scp)
       mock_command.should_receive(:run)
 
-      subject.build
+      subject.build []
     end
 
     it 'flushes log file after running command' do
@@ -122,7 +131,7 @@ describe 'Machines' do
       Command.stub(:scp=)
       mock_command.stub(:run)
       AppConf.file.should_receive(:flush)
-      subject.build
+      subject.build []
     end
 
     it 'runs single task when supplied' do
@@ -134,7 +143,7 @@ describe 'Machines' do
       mock_command_from_task.should_receive(:run)
       AppConf.tasks = { :task => {:block => Proc.new { run mock_command_from_task }} }
 
-      subject.build 'task'
+      subject.build ['task=task']
     end
 
     it 'logs instead of SSHing and running commands' do
@@ -142,7 +151,7 @@ describe 'Machines' do
       AppConf.commands = [mock(Command)]
       AppConf.commands.first.should_receive(:run)
       AppConf.log_only = true
-      subject.build
+      subject.build []
     end
 
     describe 'interrupts' do
@@ -158,7 +167,7 @@ describe 'Machines' do
       it 'handles CTRL+C and calls handler' do
         subject.should_receive(:prepare_to_exit)
         Kernel.should_receive(:trap).with('INT').and_yield
-        subject.build
+        subject.build []
       end
 
       it 'sets exit flag and displays message' do
@@ -177,7 +186,7 @@ describe 'Machines' do
         $exit_requested = true
         subject.should_receive(:exit)
 
-        subject.build
+        subject.build []
       end
     end
   end

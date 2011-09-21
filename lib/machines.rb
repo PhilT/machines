@@ -58,18 +58,26 @@ module Machines
       end
     end
 
-    def dryrun
+    def dryrun options
       AppConf.log_only = true
-      build
+      build options
+    end
+
+    def set_defaults_from options
+      options.each do |option|
+        name, value = option.split('=')
+        AppConf[name.to_sym] = value
+      end
     end
 
     # Loads Machinesfile, opens an SCP connection and runs all commands and file uploads
-    def build task_name = nil
+    def build options
       AppConf.building = true
       init
+      set_defaults_from options
       load_machinesfile
 
-      task task_name.to_sym if task_name
+      task AppConf.task.to_sym if AppConf.task
 
       if AppConf.ec2.use
         username = 'ubuntu'

@@ -2,26 +2,26 @@ require 'spec_helper'
 
 describe 'CommandLine' do
   describe 'execute' do
-    it 'calls specified command' do
-      %w(htpasswd check dryrun build).each do |command|
-        should_receive command
-        execute command, nil
-        AppConf.action.should == command
+    it 'calls specified action' do
+      %w(htpasswd check dryrun build).each do |action|
+        should_receive action
+        execute [action]
+        AppConf.action.should == action
       end
     end
 
     it 'calls generate with directory' do
-      should_receive(:generate).with('dir')
-      execute 'new', 'dir'
+      should_receive(:generate).with(['dir'])
+      execute ['new', 'dir']
     end
 
     it 'calls generate without directory' do
-      should_receive(:generate).with(no_args)
-      execute 'new', nil
+      should_receive(:generate).with([])
+      execute ['new']
     end
 
     it 'calls help when no matching command' do
-      execute('anything', nil)
+      execute ['anything']
       $output.should == Help.new.to_s
     end
   end
@@ -30,7 +30,7 @@ describe 'CommandLine' do
     it 'htpasswd is generated and saved' do
       AppConf.webserver = 'server'
       $input.answers = %w(user pass pass)
-      htpasswd
+      htpasswd nil
       File.read('server/conf/htpasswd').should =~ /user:.{13}/
     end
   end
@@ -39,14 +39,14 @@ describe 'CommandLine' do
     it 'copies the template' do
       FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template/.", '.')
       FileUtils.should_receive(:mkdir_p).with('./packages')
-      generate nil
+      generate []
     end
 
     it 'copies the template within dir' do
       FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template/.", 'dir')
       FileUtils.should_receive(:mkdir_p).with(File.join('dir', 'packages'))
       should_receive(:say).with('Project created at dir/')
-      generate 'dir'
+      generate ['dir']
     end
 
     context 'when directory exists' do
@@ -58,14 +58,14 @@ describe 'CommandLine' do
         should_receive(:ask).with('Directory already exists. Overwrite (y/n)? ').and_return 'y'
         FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template/.", 'dir')
         FileUtils.should_receive(:mkdir_p).with(File.join('dir', 'packages'))
-        generate 'dir'
+        generate ['dir']
       end
 
       it 'generation is aborted at user request' do
         should_receive(:ask).with('Directory already exists. Overwrite (y/n)? ').and_return 'n'
         FileUtils.should_not_receive(:cp_r)
         FileUtils.should_not_receive(:mkdir_p)
-        generate 'dir'
+        generate ['dir']
       end
     end
   end

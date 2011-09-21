@@ -40,7 +40,7 @@ module CommonSteps
   end
 
   def generates_template
-    Machines::Base.new.execute('new', 'project')
+    Machines::Base.new.execute ['new', 'project']
     FileUtils.cd 'project'
     files = %w(certificates) +
       %w(config/webapps.yml config/config.yml) +

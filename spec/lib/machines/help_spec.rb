@@ -2,24 +2,31 @@ require 'spec_helper'
 
 describe 'Help' do
   subject { Help.new }
-  describe 'commands' do
-    it { subject.commands.should == ['htpasswd', 'new', 'check', 'dryrun', 'tasks', 'build', 'packages', 'override'] }
+  describe 'actions' do
+    it { subject.actions.should == ['htpasswd', 'new', 'check', 'dryrun', 'tasks', 'build', 'help', 'packages', 'override'] }
   end
 
   describe 'to_s' do
     it { subject.to_s.should == <<-HELP
-machines COMMAND
-COMMAND can be:
+machines ACTION
+ACTION can be:
   htpasswd                 Asks for a username and password and generates basic auth in webserver/conf/htpasswd
   new <DIR>                Creates a directory called DIR and generates an example machines project in it
   check                    Checks Machinesfile for syntax issues
   dryrun                   Runs through Machinesfile logging all commands to log/output.log but does not acutally run them
   tasks                    Lists the available tasks after asking for machine and user
-  build [TASK]             Asks some questions then builds your chosen machine. If TASK is specified just builds that
+  build [TASK] [OPTIONS]   Asks some questions then builds your chosen machine. Use OPTIONS to skip questions. Specifying a TASK just builds that one task
+  help                     Provides more detailed help including OPTIONS for build
   packages                 lists the available packages
   override <PACKAGE>       copies the default package into project/packages so it can be edited/overidden
     HELP
     }
+  end
+
+  describe 'detailed' do
+    it 'outputs detailed help' do
+      Help.detailed.should =~ /machines build \[TASK\] \[OPTIONS\]/
+    end
   end
 end
 

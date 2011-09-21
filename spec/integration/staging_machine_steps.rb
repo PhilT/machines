@@ -5,7 +5,7 @@ module StagingMachineSteps
     AppConf.webserver = 'nginx'
     machines = Machines::Base.new
 
-    machines.execute('htpasswd', nil)
+    machines.execute ['htpasswd']
     $output.should == <<-THIS
 Project created at project/
 Generate BasicAuth password and add to nginx/conf/htpasswd

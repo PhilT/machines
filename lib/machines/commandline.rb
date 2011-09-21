@@ -1,21 +1,21 @@
 module Machines
   module Commandline
-    def execute(command, option)
+    def execute(options)
       help = Help.new
-      if help.commands.include?(command)
-        AppConf.action = command
-        command = 'generate' if command == 'new'
-        if option
-          send command, option
-        else
-          send command
-        end
+      AppConf.action = options.shift
+      if help.actions.include?(AppConf.action)
+        AppConf.action = 'generate' if AppConf.action == 'new'
+        send AppConf.action, options
       else
         say help.to_s
       end
     end
 
-    def htpasswd ignored = nil
+    def help options
+      say Help.detailed
+    end
+
+    def htpasswd options
       path = File.join(AppConf.webserver, 'conf', 'htpasswd')
       say "Generate BasicAuth password and add to #{path}"
       username = ask('Username: ')
@@ -27,8 +27,8 @@ module Machines
       say "Password encrypted and added to #{path}"
     end
 
-    def generate dir
-      dir ||= '.'
+    def generate options
+      dir = options.first || '.'
       if File.exists? dir
         confirm = ask 'Directory already exists. Overwrite (y/n)? '
         return unless confirm.downcase == 'y'

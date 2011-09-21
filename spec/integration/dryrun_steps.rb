@@ -3,7 +3,7 @@ module DryrunSteps
     $input.answers = %w(Desktop phil pa$$ pa$$ host)
     machines = Machines::Base.new
 
-    machines.execute('dryrun', nil)
+    machines.execute ['dryrun']
     $output.should == <<-THIS
 Project created at project/
 1. Desktop
