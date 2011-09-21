@@ -10,7 +10,7 @@
   ci = commit
   br = branch
   co = checkout
-  df = diff
+  df = diff HEAD
   lg = log -p
 
 [branch]
