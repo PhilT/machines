@@ -10,8 +10,8 @@ describe 'packages/gmate' do
     eval_package
     AppConf.commands.map(&:info).should == [
       "TASK   gmate - Clone gmate for gEdit from Github and set some preferences and plugins",
-      "RUN    git clone -q git@github.com:PhilT/gmate.git workspace/gmate",
-      "SUDO   cd workspace/gmate && ./install.sh",
+      "RUN    git clone -q git://github.com/gmate/gmate.git workspace/gmate",
+      "RUN    cd workspace/gmate && echo \\n | ./install.sh",
       'RUN    gconftool-2 --set "/apps/gedit-2/plugins/active-plugins" --type list --list-type=string ["text_tools","smart_indent","align","rails_hotkeys","trailsave","gemini","rubyonrailsloader","gedit_openfiles","quickhighlightmode","completion","time","docinfo","filebrowser","snippets","spell","indent","tabswitch"]',
       'RUN    gconftool-2 --set "/apps/gedit-2/plugins/smart_indent/haml_tab_size" --type int 2',
       'RUN    gconftool-2 --set "/apps/gedit-2/plugins/smart_indent/js_tab_size" --type int 2',

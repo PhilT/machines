@@ -1,9 +1,8 @@
 task :gmate, 'Clone gmate for gEdit from Github and set some preferences and plugins' do
   dir = File.join AppConf.appsroot, 'gmate'
 
-  # Silent install fork of gmate
-  run git_clone 'git@github.com:PhilT/gmate.git', :to => 'workspace/gmate'
-  sudo 'cd workspace/gmate && ./install.sh'
+  run git_clone 'git://github.com/gmate/gmate.git', :to => 'workspace/gmate'
+  run 'cd workspace/gmate && echo \n | ./install.sh'
 
   run configure '/apps/gedit-2/plugins/active-plugins' => %w(text_tools smart_indent align rails_hotkeys trailsave gemini rubyonrailsloader gedit_openfiles quickhighlightmode completion time docinfo filebrowser snippets spell indent tabswitch)
 
