@@ -7,7 +7,7 @@ module Machines
         'check' => 'Checks Machinesfile for syntax issues',
         'dryrun' => 'Runs through Machinesfile logging all commands to log/output.log but does not acutally run them',
         'tasks' => 'Lists the available tasks after asking for machine and user',
-        'build [TASK] [OPTIONS]' => 'Asks some questions then builds your chosen machine. Use OPTIONS to skip questions. Specifying a TASK just builds that one task',
+        'build [OPTIONS]' => 'Asks some questions then builds your chosen machine. Use OPTIONS to skip questions. Use task=TASK to build just that task',
         'help' => 'Provides more detailed help including OPTIONS for build',
         'packages' => 'lists the available packages',
         'override <PACKAGE>' => 'copies the default package into project/packages so it can be edited/overidden'
@@ -28,8 +28,8 @@ HELP
 
     def self.detailed
       <<-EOS
-      machines build [TASK] [OPTIONS]
-        TASK      - When specified only build that task
+      machines build [OPTIONS]
+        task=TASK - When specified only build that task
         OPTIONS   - Sets AppConf settings (overrides questions)
           machines build machine=Desktop host=192.168.1.4 user=phil hostname=workstation # Machines will only prompt for a password
       EOS

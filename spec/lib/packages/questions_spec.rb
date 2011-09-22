@@ -26,6 +26,21 @@ describe 'packages/questions' do
     eval_package
   end
 
+  it 'does not ask questions when already set' do
+    AppConf.machine = 'machine'
+    AppConf.host = 'host'
+    AppConf.user = 'user'
+    AppConf.password = 'password'
+    AppConf.machines = {'machine' => {:environment => :unknown, :apps => nil, :roles => nil}}
+    should_not_receive(:choose_machine)
+    should_not_receive(:start_ec2_instance?)
+    should_not_receive(:enter_target_address)
+    should_not_receive(:choose_user)
+    should_not_receive(:enter_password)
+    should_not_receive(:enter_password)
+    eval_package
+  end
+
   it 'loads app settings' do
     AppConf.machines = {'machine' => {:environment => :unknown, :apps => ['app1', 'app2'], :roles => nil}}
     should_receive(:load_app_settings).with(['app1', 'app2'])

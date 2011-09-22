@@ -15,7 +15,7 @@ ACTION can be:
   check                    Checks Machinesfile for syntax issues
   dryrun                   Runs through Machinesfile logging all commands to log/output.log but does not acutally run them
   tasks                    Lists the available tasks after asking for machine and user
-  build [TASK] [OPTIONS]   Asks some questions then builds your chosen machine. Use OPTIONS to skip questions. Specifying a TASK just builds that one task
+  build [OPTIONS]          Asks some questions then builds your chosen machine. Use OPTIONS to skip questions. Use task=TASK to build just that task
   help                     Provides more detailed help including OPTIONS for build
   packages                 lists the available packages
   override <PACKAGE>       copies the default package into project/packages so it can be edited/overidden
@@ -25,7 +25,7 @@ ACTION can be:
 
   describe 'detailed' do
     it 'outputs detailed help' do
-      Help.detailed.should =~ /machines build \[TASK\] \[OPTIONS\]/
+      Help.detailed.should =~ /machines build \[OPTIONS\]/
     end
   end
 end

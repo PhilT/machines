@@ -154,6 +154,13 @@ describe 'Machines' do
       subject.build []
     end
 
+    it 'sets AppConf settings from options' do
+      Net::SCP.stub(:start)
+      subject.build ['some_option=a_value', 'another_option=another_value']
+      AppConf.some_option.should == 'a_value'
+      AppConf.another_option.should == 'another_value'
+    end
+
     describe 'interrupts' do
       before(:each) do
         mock_command = mock Command
