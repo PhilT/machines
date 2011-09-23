@@ -1,14 +1,14 @@
 require 'spec_helper'
 
-describe 'packages/virtual_box' do
+describe 'packages/virtualbox' do
   before(:each) do
-    load_package('virtual_box')
+    load_package('virtualbox')
   end
 
   it 'adds the following commands' do
     eval_package
     AppConf.commands.map(&:info).should == [
-      "TASK   virtual_box - Install VirtualBox",
+      "TASK   virtualbox - Install VirtualBox",
       "SUDO   apt-get -q -y install dkms",
       "SUDO   expr substr `cat /etc/lsb-release | grep DISTRIB_CODENAME` 18 20 | xargs -I DISTRIB_CODENAME echo deb http://download.virtualbox.org/virtualbox/debian DISTRIB_CODENAME contrib >> /etc/apt/sources.list",
       "SUDO   wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O - | apt-key add -",

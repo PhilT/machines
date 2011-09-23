@@ -283,19 +283,6 @@ Planned
 Supporting versions of Ubuntu from 11.04 onwards is planned.
 
 
-Warnings
----------------------------------------
-
-[NEED TO CHECK THIS IS STILL HAPPENING]
-
-You might see one of the following while upgrading/installing packages:
-    debconf: Unable to initialise frontend: Dialog
-    WARNING: Failed to parse default value
-    update-rc.d: warning: unattended-upgrades start runlevel arguments
-
-These are known issues and nothing to worry about.
-
-
 Development, Patches, Pull Requests
 ---------------------------------------
 
@@ -306,6 +293,7 @@ Development, Patches, Pull Requests
 
 Currently adding package tests and integration test.
 Feel free to add/enhance packages and submit pull requests.
+Package tests are a bit of a bind now. They need to be more flexible to but do catch a lot of potential issues.
 
 
 References

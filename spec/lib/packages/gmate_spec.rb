@@ -10,6 +10,7 @@ describe 'packages/gmate' do
     eval_package
     AppConf.commands.map(&:info).should == [
       "TASK   gmate - Clone gmate for gEdit from Github and set some preferences and plugins",
+      "SUDO   apt-get -q -y install python-pyinotify",
       "RUN    git clone -q git://github.com/gmate/gmate.git workspace/gmate",
       "RUN    cd workspace/gmate && echo \\n | ./install.sh",
       'RUN    gconftool-2 --set "/apps/gedit-2/plugins/active-plugins" --type list --list-type=string ["text_tools","smart_indent","align","rails_hotkeys","trailsave","gemini","rubyonrailsloader","gedit_openfiles","quickhighlightmode","completion","time","docinfo","filebrowser","snippets","spell","indent","tabswitch"]',

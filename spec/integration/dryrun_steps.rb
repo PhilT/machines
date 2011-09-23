@@ -7,10 +7,11 @@ module DryrunSteps
     $output.should == <<-THIS
 Project created at project/
 1. Desktop
-2. Staging
-3. Production
-4. DBmaster
-5. DBslave
+2. Laptop VM
+3. Staging
+4. Production
+5. DBmaster
+6. DBslave
 Select machine to build:
 1. phil
 2. www-data
