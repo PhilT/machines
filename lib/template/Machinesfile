@@ -2,9 +2,9 @@ all_apps = %w(application wiki)
 machine 'Desktop', :development, :roles => [:app, :db], :apps => all_apps
 machine 'Laptop VM', :development, :roles => [:app, :db], :apps => all_apps
 machine 'Staging', :staging, :roles => [:app, :db], :apps => all_apps
-machine 'Production', :production, :roles => [:app], :apps => all_apps
-machine 'DBmaster', :production, :roles => [:db, :dbmaster]
-machine 'DBslave', :production, :roles => [:db, :dbslave]
+machine 'Production', :production, :roles => [:app], :apps => all_apps, :ec2 => true
+machine 'DBmaster', :production, :roles => [:db, :dbmaster], :ec2 => true
+machine 'DBslave', :production, :roles => [:db, :dbslave], :ec2 => true
 
 package :questions
 

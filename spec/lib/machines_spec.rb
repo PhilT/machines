@@ -91,7 +91,7 @@ describe 'Machines' do
   describe 'build' do
     before(:each) do
       subject.stub(:init)
-      AppConf.target_address = 'target'
+      AppConf.host = 'target'
       AppConf.user = 'username'
       AppConf.password = 'userpass'
     end

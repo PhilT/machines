@@ -28,22 +28,10 @@ MACHINESFILE
     end
   end
 
-  describe 'start_ec2_instance' do
-    it 'returns true' do
-      should_receive(:agree).with('Would you like to start a new EC2 instance (y/n)? ').and_return true
-      start_ec2_instance?.should be_true
-    end
-
-    it 'returns false' do
-      should_receive(:agree).with('Would you like to start a new EC2 instance (y/n)? ').and_return false
-      start_ec2_instance?.should be_false
-    end
-  end
-
-  describe 'target_address' do
+  describe 'enter_host' do
     it 'accepts IP or DNS address of target machine' do
       should_receive(:ask).with('Enter the IP or DNS address of the target machine (EC2, VM or LAN address): ').and_return 'target ip'
-      enter_target_address('machine').should == 'target ip'
+      enter_host('machine').should == 'target ip'
     end
   end
 

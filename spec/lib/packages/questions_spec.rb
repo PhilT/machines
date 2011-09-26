@@ -9,8 +9,7 @@ describe 'packages/questions' do
     AppConf.stub(:load)
     stub!(:choose_machine).and_return 'machine'
     stub!(:load_app_settings)
-    stub!(:start_ec2_instance?).and_return false
-    stub!(:enter_target_address)
+    stub!(:enter_host)
     stub!(:choose_user).and_return 'user_name'
     stub!(:enter_password)
   end
@@ -18,8 +17,7 @@ describe 'packages/questions' do
   it 'asks questions' do
     AppConf.machines = {'machine' => {:environment => :unknown, :apps => nil, :roles => nil}}
     should_receive(:choose_machine).and_return 'machine'
-    should_receive(:start_ec2_instance?).and_return false
-    should_receive(:enter_target_address).twice
+    should_receive(:enter_host).twice
     should_receive(:choose_user).and_return 'user_name'
     should_receive(:enter_password).with('users', false).once
     should_receive(:enter_password).with('database root').once
@@ -28,13 +26,13 @@ describe 'packages/questions' do
 
   it 'does not ask questions when already set' do
     AppConf.machine = 'machine'
+    AppConf.ec2.use = false
     AppConf.host = 'host'
     AppConf.user = 'user'
     AppConf.password = 'password'
-    AppConf.machines = {'machine' => {:environment => :unknown, :apps => nil, :roles => nil}}
+    AppConf.machines = {'machine' => {:environment => :unknown, :apps => nil, :roles => :db}}
     should_not_receive(:choose_machine)
-    should_not_receive(:start_ec2_instance?)
-    should_not_receive(:enter_target_address)
+    should_not_receive(:enter_host)
     should_not_receive(:choose_user)
     should_not_receive(:enter_password)
     should_not_receive(:enter_password)
@@ -74,7 +72,7 @@ describe 'packages/questions' do
   describe 'db role' do
     it 'does not ask for db host or password' do
       AppConf.machines = {'machine' => {:environment => :staging, :apps => nil, :roles => :db}}
-      should_receive(:enter_target_address).once
+      should_receive(:enter_host).once
       should_receive(:enter_password).once
       eval_package
     end

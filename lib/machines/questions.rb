@@ -5,11 +5,7 @@ module Machines
       choose(*machines) { |menu| menu.prompt = 'Select machine to build: ' }
     end
 
-    def start_ec2_instance?
-      agree 'Would you like to start a new EC2 instance (y/n)? '
-    end
-
-    def enter_target_address(type)
+    def enter_host(type)
       ask "Enter the IP or DNS address of the target #{type} (EC2, VM or LAN address): "
     end
 
