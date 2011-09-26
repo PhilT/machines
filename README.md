@@ -1,4 +1,4 @@
-Machines - Test Driven Deployment
+Machines - Generate. Customize. Deploy.
 =======================================
 
 Setup Ubuntu development and server **Machines** locally or on Amazon EC2 for hosting and developing Ruby on Rails 3 applications.
@@ -16,7 +16,7 @@ Status
 
 (September 2011)
 
-First release will be out shortly. This release has focused more on development builds but a lot of server packages
+This release has focused more on development builds but a lot of server packages
 have also been and added and the next release will finish off the EC2 and server builds.
 
 Features
@@ -97,12 +97,12 @@ Take a look at the generated project. It contains several folders and the main `
 ### Prepare the target machine
 
 * Download the image or ISO:
-** (Ubuntu 11.04 Minimal i386 ISO)[http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/mini.iso]
-** (Ubuntu 11.04 Minimal x64 ISO)[http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/mini.iso]
-** (Ubuntu 11.04 Minimal i386 IMG)[http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/boot.img.gz]
-** (Ubuntu 11.04 Minimal x64 IMG)[http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/boot.img.gz]
+  * [Ubuntu 11.04 Minimal i386 ISO](http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/mini.iso)
+  * [Ubuntu 11.04 Minimal x64 ISO](http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/mini.iso)
+  * [Ubuntu 11.04 Minimal i386 IMG](http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/boot.img.gz)
+  * [Ubuntu 11.04 Minimal x64 IMG](http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/boot.img.gz)
 * Images can be written to USB with:
-** `gunzip boot.img.gz && sudo dd if=boot.img of=/dev/sdX` where `sdX` is your USB device (use `dmesg` to get this)
+* `gunzip boot.img.gz && sudo dd if=boot.img of=/dev/sdX` where `sdX` is your USB device (use `dmesg` to get this)
 * Insert the USB stick and boot from it to install Ubuntu
 * Install SSH Server & note the IP address
 
@@ -283,19 +283,6 @@ Planned
 Supporting versions of Ubuntu from 11.04 onwards is planned.
 
 
-Warnings
----------------------------------------
-
-[NEED TO CHECK THIS IS STILL HAPPENING]
-
-You might see one of the following while upgrading/installing packages:
-    debconf: Unable to initialise frontend: Dialog
-    WARNING: Failed to parse default value
-    update-rc.d: warning: unattended-upgrades start runlevel arguments
-
-These are known issues and nothing to worry about.
-
-
 Development, Patches, Pull Requests
 ---------------------------------------
 
@@ -306,6 +293,7 @@ Development, Patches, Pull Requests
 
 Currently adding package tests and integration test.
 Feel free to add/enhance packages and submit pull requests.
+Package tests are a bit of a bind now. They need to be more flexible to but do catch a lot of potential issues.
 
 
 References

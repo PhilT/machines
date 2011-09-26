@@ -1,6 +1,7 @@
 task :gmate, 'Clone gmate for gEdit from Github and set some preferences and plugins' do
   dir = File.join AppConf.appsroot, 'gmate'
 
+  sudo install 'python-pyinotify' # Required for gEdit Open
   run git_clone 'git://github.com/gmate/gmate.git', :to => 'workspace/gmate'
   run 'cd workspace/gmate && echo \n | ./install.sh'
 

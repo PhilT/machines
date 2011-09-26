@@ -1,4 +1,4 @@
-task :virtual_box, 'Install VirtualBox' do
+task :virtualbox, 'Install VirtualBox' do
   sudo install %w(dkms) # Ensures kernal modules are updated when upgrading virtual box
 
   sudo deb 'http://download.virtualbox.org/virtualbox/debian DISTRIB_CODENAME contrib',
