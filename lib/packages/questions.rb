@@ -7,7 +7,6 @@ task :questions, 'Ask some questions' do
   AppConf.ec2.use = machine[:ec2]
 
   thread = Thread.new { connect && run_instance } if AppConf.ec2.use
-  puts AppConf.log_only
   AppConf.host ||= enter_host('machine') unless AppConf.ec2.use || AppConf.log_only
   AppConf.user ||= choose_user
 
@@ -21,7 +20,7 @@ task :questions, 'Ask some questions' do
   end
 
   only :environment => :development do
-    AppConf.hostname = 'hostname' if AppConf.log_only?
+    AppConf.hostname = 'hostname' if AppConf.log_only
     AppConf.hostname ||= enter_hostname
   end
 
