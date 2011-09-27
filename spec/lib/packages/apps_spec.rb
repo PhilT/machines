@@ -85,6 +85,7 @@ describe 'packages/apps' do
       "RUN    echo \"application/x-gnumeric=gnumeric.desktop\" >> .local/share/applications/mimeapps.list",
       "RUN    echo \"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet=gnumeric.desktop\" >> .local/share/applications/mimeapps.list",
       "RUN    echo \"text/csv=gnumeric.desktop\" >> .local/share/applications/mimeapps.list",
+      "RUN    echo \"application/msexcel=gnumeric.desktop\" >> .local/share/applications/mimeapps.list",
       "TASK   abiword_associations - Setup file associations for Abiword",
       "RUN    echo \"application/x-abiword=abiword.desktop\" >> .local/share/applications/mimeapps.list",
       "RUN    echo \"application/msword=abiword.desktop\" >> .local/share/applications/mimeapps.list",

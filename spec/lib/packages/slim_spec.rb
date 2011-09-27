@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'packages/slim' do
   before(:each) do
-    AppConf.theme = 'custom'
+    AppConf.login_theme = 'custom'
     load_package('slim')
     FileUtils.mkdir_p 'slim/themes'
   end
