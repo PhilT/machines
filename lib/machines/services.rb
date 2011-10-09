@@ -9,6 +9,11 @@ module Machines
       ]
     end
 
+    # Stop a daemon
+    def stop daemon
+      Command.new("service #{daemon} stop", check_daemon(daemon, false))
+    end
+
     # Start a daemon
     # @param [String] daemon Name of the service to start
     def start daemon

@@ -77,7 +77,11 @@ describe 'Checks' do
 
   describe 'check_daemon' do
     it do
-      check_daemon('daemon').should == "ps aux | grep daemon #{echo_result}"
+      check_daemon('daemon').should == "ps aux | grep daemon | grep -v grep #{echo_result}"
+    end
+
+    it do
+      check_daemon('daemon', false).should == "ps aux | grep daemon | grep -v grep | grep -v daemon #{echo_result}"
     end
   end
 

@@ -12,6 +12,7 @@ export RAILS_ENV=
 
 alias ls='ls --color=auto'
 alias less='less -R'
+alias slide='feh -F -Z -x -D 5 -S name'
 
 # Search a Rails project excluding non-source directories
 function s {

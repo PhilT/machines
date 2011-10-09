@@ -1,7 +1,3 @@
-def set_mysql_root_password password
-  run "mysqladmin -u root password #{password}", "mysqladmin -u root -p#{password} ping | grep alive #{echo_result}"
-end
-
 def run_mysql_statement(sql, options)
   required_options options, [:on, :password]
   run "echo \"#{sql}\" | mysql -u root -p#{options[:password]} -h #{options[:on]}", nil
@@ -11,12 +7,13 @@ only :roles => :db do
   task :mysql, 'Install MySQL' do
     sudo debconf 'mysql-server-5.1', 'mysql-server/root_password', 'password', AppConf.db.root_pass
     sudo debconf 'mysql-server-5.1', 'mysql-server/root_password_again', 'password', AppConf.db.root_pass
-    sudo install %w(mysql-server)
+    sudo install 'mysql-server'
     run restart 'mysqld'
   end
 end
 
 only :roles => :app do
+  sudo install 'libmysqlclient-dev'
   task :dbperms, 'Set app permissions to database' do
     AppConf.webapps.values.each do |app|
       run_mysql_statement "GRANT ALL ON *.* TO '#{app.name}'@'%' IDENTIFIED BY '#{app.db_password}';",

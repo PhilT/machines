@@ -39,8 +39,12 @@ module Machines
       "grep \"#{string}\" #{file} #{echo_result}"
     end
 
-    def check_daemon daemon
-      "ps aux | grep #{daemon} #{echo_result}"
+    def check_daemon daemon, exists = true
+      command = 'ps aux'
+      search_for = "| grep #{daemon}"
+      remove_grep = '| grep -v grep'
+      negative = "| grep -v #{daemon} " unless exists
+      "#{command} #{search_for} #{remove_grep} #{negative}#{echo_result}"
     end
 
     def check_init_d name
