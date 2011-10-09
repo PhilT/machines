@@ -33,7 +33,7 @@ describe 'packages/openbox' do
       "RUN    gconftool-2 --set \"/apps/nautilus/preferences/default_folder_viewer\" --type string \"compact_view\"",
       "RUN    gconftool-2 --set \"/desktop/gnome/interface/font_name\" --type string \"Ubuntu Light 8\"",
       "RUN    gconftool-2 --set \"/desktop/gnome/interface/document_font_name\" --type string \"Ubuntu Light 8\"",
-      "RUN    gconftool-2 --set \"/desktop/gnome/interface/monospace_font_name\" --type string \"Monospace 8\"",
+      "RUN    gconftool-2 --set \"/desktop/gnome/interface/monospace_font_name\" --type string \"Monospace 10\"",
       "TASK   usb_policy - Allow users to mount USB drives",
       "UPLOAD config/udisks.policy to /tmp/org.freedesktop.udisks.policy",
       "SUDO   cp -rf /tmp/org.freedesktop.udisks.policy /usr/share/polkit-1/actions/org.freedesktop.udisks.policy",

@@ -13,9 +13,7 @@ describe 'packages/ruby' do
       "TASK   ruby - Install Ruby",
       "RUN    rvm install 1.9.2",
       "RUN    rvm 1.9.2 --default",
-      "UPLOAD buffer from gemrc to /tmp/gemrc",
-      "SUDO   cp -rf /tmp/gemrc /etc/gemrc",
-      "RUN    rm -rf /tmp/gemrc"
+      "UPLOAD buffer from .gemrc to .gemrc"
     ]
   end
 end

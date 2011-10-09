@@ -3,8 +3,8 @@
 [profiles]
   [[default]]
     scrollback_lines = 100000
-    background_darkness = 0.79
+    background_darkness = 0.9
     scroll_on_output = False
     background_type = transparent
-    window_state = maximise
+    window_state = maximised
 

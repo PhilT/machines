@@ -17,6 +17,11 @@ localhosts:
   - example.local
   - admin.example.local
 
+# Extra hosts added to /etc/hosts for build servers, live servers etc
+hosts:
+  - 192.168.1.4 build
+  - 192.168.1.30 prod
+
 timezone: GB
 webserver: nginx
 db:

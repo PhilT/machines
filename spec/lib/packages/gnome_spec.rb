@@ -15,7 +15,7 @@ describe 'packages/gnome' do
       'RUN    gconftool-2 --set "/apps/nautilus/preferences/default_folder_viewer" --type string "compact_view"',
       'RUN    gconftool-2 --set "/desktop/gnome/interface/font_name" --type string "Sans 9"',
       'RUN    gconftool-2 --set "/desktop/gnome/interface/document_font_name" --type string "Sans 9"',
-      'RUN    gconftool-2 --set "/desktop/gnome/interface/monospace_font_name" --type string "Monospace 9"'
+      'RUN    gconftool-2 --set "/desktop/gnome/interface/monospace_font_name" --type string "Monospace 10"'
     ]
   end
 end

@@ -24,18 +24,12 @@ task :sudo_no_password, 'Ensure we can shutdown/reboot without needing a passwor
 end
 
 task :fonts, 'Set openbox and Gnome interface fonts (See also rc.xml, fonts.conf, gtkrc-2.0)' do
-  # NOT NEEDED?
-  #configure /desktop/gnome/font_rendering/antialiasing, rgba
-  #configure /desktop/gnome/font_rendering/dpi --type float 96
-  #configure /desktop/gnome/font_rendering/hinting, slight
-  #configure /desktop/gnome/font_rendering/rgba_order, rgb
-
   run configure "/apps/metacity/general/titlebar_font" => "Ubuntu Bold 8"
   run configure "/apps/nautilus/preferences/desktop_font" => "Ubuntu Light 8"
   run configure "/apps/nautilus/preferences/default_folder_viewer" => 'compact_view'
   run configure "/desktop/gnome/interface/font_name" => "Ubuntu Light 8"
   run configure "/desktop/gnome/interface/document_font_name" => "Ubuntu Light 8"
-  run configure "/desktop/gnome/interface/monospace_font_name" => "Monospace 8"
+  run configure "/desktop/gnome/interface/monospace_font_name" => "Monospace 10"
 end
 
 task :usb_policy, 'Allow users to mount USB drives' do
