@@ -40,7 +40,7 @@ passenger:
 nginx:
   version: 1.0.6
   url: http://nginx.org/download/nginx-1.0.6.tar.gz
-  path: /opt/nginx/
+  path: /opt/nginx
   servers_dir: servers
 
 rvm:

@@ -1,7 +1,13 @@
 task :nginx, 'Download and configure Nginx' do
   run extract AppConf.nginx.url
-  sudo add_init_d 'nginx'
+  sudo add_upstart 'nginx',
+    :description => 'Nginx HTTP Server',
+    :start => 'on filesystem',
+    :stop => 'on runlevel [!2345]',
+    :respawn => true,
+    :exec => "#{AppConf.nginx.path}/sbin/nginx -g \"daemon off;\""
   sudo mkdir File.join(AppConf.nginx.path, 'conf')
+  sudo mkdir File.join(AppConf.nginx.path, AppConf.nginx.servers_dir) if AppConf.nginx.servers_dir
   sudo create_from 'nginx/nginx.conf.erb', :to => "#{AppConf.nginx.path}/conf/nginx.conf"
 end
 

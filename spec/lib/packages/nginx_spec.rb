@@ -14,10 +14,9 @@ describe 'packages/nginx' do
     AppConf.commands.map(&:info).should == [
       "TASK   nginx - Download and configure Nginx",
       "RUN    cd /tmp && wget nginx_url && tar -zxf nginx_url && rm nginx_url && cd -",
-      "UPLOAD nginx/initd to /tmp/nginx",
-      "SUDO   cp -rf /tmp/nginx /etc/init.d/nginx",
-      "RUN    rm -rf /tmp/nginx",
-      "SUDO   /usr/sbin/update-rc.d -f nginx defaults",
+      "UPLOAD buffer from nginx upstart to /tmp/nginx.conf",
+      "SUDO   cp -rf /tmp/nginx.conf /etc/init/nginx.conf",
+      "RUN    rm -rf /tmp/nginx.conf",
       "SUDO   mkdir -p nginx_path/conf",
       "UPLOAD buffer from nginx/nginx.conf.erb to /tmp/nginx.conf",
       "SUDO   cp -rf /tmp/nginx.conf nginx_path/conf/nginx.conf",

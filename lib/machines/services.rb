@@ -1,12 +1,14 @@
 module Machines
   module Services
-    # Upload an /etc/init.d script and run update-rc.d. Must be called with `sudo`
-    # @param [String] name init.d script to upload and register
-    def add_init_d name
-      [
-        upload(File.join(name, 'initd'), "/etc/init.d/#{name}"),
-        Command.new("/usr/sbin/update-rc.d -f #{name} defaults", check_init_d(name))
-      ]
+    # Create an Upstart configuration file
+    def add_upstart name, options = {}
+      required_options options, [:description]
+      options[:description] = %("#{options[:description]}")
+      configuration = options.map do |option, value|
+        value = value.is_a?(TrueClass) ? '' : " #{value}"
+        "#{option}#{value}\n"
+      end.join
+      write configuration, :to => "/etc/init/#{name}.conf", :name => "#{name} upstart"
     end
 
     # Stop a daemon

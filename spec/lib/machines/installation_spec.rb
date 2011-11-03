@@ -5,6 +5,20 @@ describe 'Installation' do
   include Machines::Installation
   include Machines::Configuration
 
+  describe 'add_ppa' do
+    it 'adds a ppa' do
+      subject = add_ppa 'user/name', 'key'
+      subject.map(&:command).should == ['add-apt-repository ppa:user/name', 'apt-get -q -y update > /tmp/apt-update.log']
+    end
+  end
+
+  describe 'bundle' do
+    it 'runs bundle command on specified project' do
+      subject = bundle '/home/user/project'
+      subject.command.should == 'cd /home/user/project && bundle'
+    end
+  end
+
   describe 'deb' do
     it 'adds to /etc/apt/sources and add a key' do
       subject = deb 'source', :key => 'gpg', :name => 'name'
@@ -33,29 +47,59 @@ describe 'Installation' do
     end
   end
 
-  describe 'add_ppa' do
-    it 'adds a ppa' do
-      subject = add_ppa 'user/name', 'key'
-      subject.map(&:command).should == ['add-apt-repository ppa:user/name', 'apt-get -q -y update > /tmp/apt-update.log']
+  describe 'extract' do
+    it 'instaniates commands to download, extract and remove a tar archive' do
+      subject = extract 'http://url/package.tar'
+      subject.command.should == 'cd /tmp && wget http://url/package.tar && tar -zxf package.tar && rm package.tar && cd -'
+      subject.check.should == 'test -d /tmp/package && echo CHECK PASSED || echo CHECK FAILED'
+    end
+
+    it 'instaniates commands to download, extract and remove a zip archive' do
+      subject = extract 'http://url/package.zip'
+      subject.command.should == 'cd /tmp && wget http://url/package.zip && unzip -qq package.zip && rm package.zip && cd -'
+      subject.check.should == 'test -d /tmp/package && echo CHECK PASSED || echo CHECK FAILED'
+    end
+
+    it 'moves extracted contents to specified folder' do
+      subject = extract 'http://url/package-1.0.tar.gz', :to => '/opt/package'
+      subject.command.should == 'cd /tmp && wget http://url/package-1.0.tar.gz && tar -zxf package-1.0.tar.gz && mv package-1.0 /opt/package && rm package-1.0.tar.gz && cd -'
+      subject.check.should == 'test -d /opt/package && echo CHECK PASSED || echo CHECK FAILED'
     end
   end
 
-  describe 'update' do
-    it 'instaniates a command to update apt' do
-      subject = update
-      subject.command.should == 'apt-get -q -y update > /tmp/apt-update.log'
+  describe 'gem' do
+    it 'instaniates a command to install a gem' do
+      subject = gem 'package'
+      subject.command.should == 'gem install package'
+    end
+
+    it 'instaniates a command to install a gem with a specified version' do
+      subject = gem 'package', :version => '1'
+      subject.command.should == "gem install package -v \"1\""
     end
   end
 
-  describe 'upgrade' do
-    it 'instaniates a command to upgrade apt' do
-      subject = upgrade
-      subject.map(&:command).should == [
-        'apt-get -q -y update',
-        'apt-get -q -y upgrade',
-        'apt-get -q -y autoremove',
-        'apt-get -q -y autoclean'
-      ]
+  describe 'gem_update' do
+    it 'instaniates a command to update gems' do
+      subject = gem_update 'gem'
+      subject.command.should == 'gem update gem'
+    end
+  end
+
+  describe 'git_clone' do
+    it 'instaniates a command to clone a git repository' do
+      subject = git_clone 'http://git_url.git'
+      subject.command.should == 'git clone -q http://git_url.git'
+    end
+
+    it 'instaniates a command to clone a git repository to a specified folder' do
+      subject = git_clone 'http://git_url.git', :to => 'dir'
+      subject.command.should == 'git clone -q http://git_url.git dir'
+    end
+
+    it 'raises when no url supplied' do
+      lambda { git_clone '', :to => 'dir' }.should raise_error ArgumentError
+      lambda { git_clone nil, :to => 'dir' }.should raise_error ArgumentError
     end
   end
 
@@ -96,54 +140,22 @@ describe 'Installation' do
     end
   end
 
-  describe 'gem' do
-    it 'instaniates a command to install a gem' do
-      subject = gem 'package'
-      subject.command.should == 'gem install package'
-    end
-
-    it 'instaniates a command to install a gem with a specified version' do
-      subject = gem 'package', :version => '1'
-      subject.command.should == "gem install package -v \"1\""
+  describe 'update' do
+    it 'instaniates a command to update apt' do
+      subject = update
+      subject.command.should == 'apt-get -q -y update > /tmp/apt-update.log'
     end
   end
 
-  describe 'gem_update' do
-    it 'instaniates a command to update gems' do
-      subject = gem_update 'gem'
-      subject.command.should == 'gem update gem'
-    end
-  end
-
-  describe 'extract' do
-    it 'instaniates commands to download, extract and remove a tar archive' do
-      subject = extract 'http://url/package.tar'
-      subject.command.should == 'cd /tmp && wget http://url/package.tar && tar -zxf package.tar && rm package.tar && cd -'
-      subject.check.should == 'test -d /tmp/package && echo CHECK PASSED || echo CHECK FAILED'
-    end
-
-    it 'instaniates commands to download, extract and remove a zip archive' do
-      subject = extract 'http://url/package.zip'
-      subject.command.should == 'cd /tmp && wget http://url/package.zip && unzip -qq package.zip && rm package.zip && cd -'
-      subject.check.should == 'test -d /tmp/package && echo CHECK PASSED || echo CHECK FAILED'
-    end
-
-    it 'moves extracted contents to specified folder' do
-      subject = extract 'http://url/package-1.0.tar.gz', :to => '/opt/package'
-      subject.command.should == 'cd /tmp && wget http://url/package-1.0.tar.gz && tar -zxf package-1.0.tar.gz && mv package-1.0 /opt/package && rm package-1.0.tar.gz && cd -'
-      subject.check.should == 'test -d /opt/package && echo CHECK PASSED || echo CHECK FAILED'
-    end
-  end
-
-  describe 'git_clone' do
-    it 'instaniates a command to clone a git repository' do
-      subject = git_clone 'http://git_url.git'
-      subject.command.should == 'git clone -q http://git_url.git'
-    end
-
-    it 'instaniates a command to clone a git repository to a specified folder' do
-      subject = git_clone 'http://git_url.git', :to => 'dir'
-      subject.command.should == 'git clone -q http://git_url.git dir'
+  describe 'upgrade' do
+    it 'instaniates a command to upgrade apt' do
+      subject = upgrade
+      subject.map(&:command).should == [
+        'apt-get -q -y update',
+        'apt-get -q -y upgrade',
+        'apt-get -q -y autoremove',
+        'apt-get -q -y autoclean'
+      ]
     end
   end
 end

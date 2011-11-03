@@ -12,7 +12,11 @@ export RAILS_ENV=
 
 alias ls='ls --color=auto'
 alias less='less -R'
-alias slide='feh -F -Z -x -D 5 -S name'
+
+# Slideshow with feh image viewer
+# Press ENTER to load current image into Gimp. H to pause slideshow
+#   slide <file or folder>
+alias slide='feh --action "gimp '%f'" --fullscreen --auto-zoom --borderless --slideshow-delay 5 --sort name'
 
 # Search a Rails project excluding non-source directories
 function s {

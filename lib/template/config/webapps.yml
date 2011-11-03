@@ -1,4 +1,5 @@
 velocity:
+  scm: git@github.com:PhilT/velocity.git
   path: velocity
   uses_delayed_job: false
   development:
@@ -14,6 +15,7 @@ velocity:
     db_password: jOPM534rCJ
 
 fountain:
+  scm: git@github.com:PhilT/fountain.git
   path: fountain
   uses_delayed_job: false
   development:

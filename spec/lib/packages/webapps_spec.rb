@@ -5,7 +5,7 @@ describe 'packages/webapps' do
     load_package('webapps')
 
     AppConf.from_hash(:user => {:name => 'username', :home => 'home_dir'}, :ruby => {:version => 'ruby_version'})
-    AppConf.webapps = {'application' => AppBuilder.new('name' => 'application', 'url' => 'github url', 'path' => 'app_path', 'enable_ssl' => nil, 'db_password' => 'pa$$')}
+    AppConf.webapps = {'application' => AppBuilder.new('scm' => 'github.com/project', 'name' => 'application', 'url' => 'github url', 'path' => 'app_path', 'full_path' => '/home/users/app_path', 'enable_ssl' => nil, 'db_password' => 'pa$$')}
     AppConf.from_hash(:awstats => {:path => 'stats_path'})
     AppConf.webserver = 'nginx'
     AppConf.from_hash(:nginx => {:path => 'nginx_path', :servers_dir => 'servers'})
@@ -18,15 +18,15 @@ describe 'packages/webapps' do
     AppConf.environment = :production
     eval_package
     AppConf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.should == [
-      "TASK   webapps - Sets up Web apps in config/apps.yml using app_server.conf.erb",
-      "SUDO   mkdir -p nginx_path/servers",
-      "RUN    mkdir -p app_path/releases",
-      "RUN    mkdir -p app_path/shared/config",
-      "RUN    mkdir -p app_path/shared/system",
+      "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",
+      "RUN    mkdir -p /home/users/app_path/releases",
+      "RUN    mkdir -p /home/users/app_path/shared/config",
+      "RUN    mkdir -p /home/users/app_path/shared/system",
+      "UPLOAD buffer from database.yml to /home/users/app_path/shared/config/database.yml",
       "UPLOAD buffer from nginx/app_server.conf.erb to /tmp/application.conf",
       "SUDO   cp -rf /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -rf /tmp/application.conf",
-      "UPLOAD buffer from database.yml to app_path/shared/config/database.yml",
+      "SUDO   mkdir -p /var/log/nginx",
     ]
   end
 
@@ -34,11 +34,13 @@ describe 'packages/webapps' do
     AppConf.environment = :development
     eval_package
     AppConf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.should == [
-      "TASK   webapps - Sets up Web apps in config/apps.yml using app_server.conf.erb",
-      "SUDO   mkdir -p nginx_path/servers",
+      "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",
+      "RUN    git clone -q github.com/project /home/users/app_path",
+      "RUN    cd app_path && bundle",
       "UPLOAD buffer from nginx/app_server.conf.erb to /tmp/application.conf",
       "SUDO   cp -rf /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -rf /tmp/application.conf",
+      "SUDO   mkdir -p /var/log/nginx"
     ]
   end
 end

@@ -2,6 +2,24 @@ module Machines
   module Installation
     APTGET_QUIET = 'apt-get -q -y'
 
+    # Adds a PPA source
+    # @param [String] user The user of the PPA
+    # @param [String] name Name of the PPA
+    # @param [String] key_name What to check in apt-key list to ensure it installed
+    #     add_ppa 'mozillateam/firefox-stable', 'mozilla'
+    def add_ppa name, key_name
+      [
+        Command.new("add-apt-repository ppa:#{name}", "apt-key list | grep -i #{key_name} #{echo_result}"),
+        update
+      ]
+    end
+
+    # Runs bundle command in specified folder
+    # @param [String] path Full path to the project
+    def bundle path
+      Command.new("cd #{path} && bundle", "bundle check #{echo_result}")
+    end
+
     # Adds a DEB source
     # @param [String] source URL of the package. If DISTRIB_CODENAME is included then it
     #                 is replaced by the Ubuntu version name
@@ -34,27 +52,43 @@ module Machines
       Command.new(command, check)
     end
 
-    # Adds a PPA source
-    # @param [String] user The user of the PPA
-    # @param [String] name Name of the PPA
-    # @param [String] key_name What to check in apt-key list to ensure it installed
-    #     add_ppa 'mozillateam/firefox-stable', 'mozilla'
-    def add_ppa name, key_name
-      [
-        Command.new("add-apt-repository ppa:#{name}", "apt-key list | grep -i #{key_name} #{echo_result}"),
-        update
-      ]
+    # Download, extract, and remove an archive. Currently supports `zip` or `tar.gz`. Extracts into /tmp
+    # @param [String] package Package name to extract
+    # @param [Hash] options
+    # @option options [Optional String] :to directory to clone to
+    def extract package, options = {}
+      name = File.basename(package)
+      cmd = package[/.zip/] ? 'unzip -qq' : 'tar -zxf'
+      dir = cmd =~ /unzip/ ? File.basename(name, '.zip') : File.basename(name).gsub(/\.tar.*/, '')
+      dest = " mv #{dir} #{options[:to]} &&" if options[:to]
+      Command.new("cd /tmp && wget #{package} && #{cmd} #{name} &&#{dest} rm #{name} && cd -", check_dir("#{options[:to] || File.join('/tmp', dir)}"))
     end
 
-    def update
-      Command.new("#{APTGET_QUIET} update > /tmp/apt-update.log", check_string('Reading package lists', '/tmp/apt-update.log'))
+    # Install a gem
+    # @param [String] package Name of the gem
+    # @param [Hash] options
+    # @option options [String] :version Optional version number
+    def gem package, options = {}
+      version =  " -v \"#{options[:version]}\"" if options[:version]
+      Command.new("gem install #{package}#{version}", check_gem(package, options[:version]))
     end
 
-    # Update, upgrade, autoremove, autoclean apt packages
-    def upgrade
-      %w(update upgrade autoremove autoclean).map do |command|
-        Command.new("#{APTGET_QUIET} #{command}", nil)
-      end
+    # Update gems
+    # @example Update Rubygems
+    #     gem_update '--system'
+    def gem_update options = ''
+      Command.new("gem update #{options}", nil)
+    end
+
+    # Clone a project from a Git repository
+    # @param [String] url URL to clone
+    # @param [Hash] options
+    # @option options [Optional String] :to directory to clone to
+    def git_clone url, options = {}
+      raise ArgumentError.new('git_clone Must include a url and directory') if url.nil? || url.empty?
+      command = "git clone -q #{url}"
+      command << " #{options[:to]}" if options[:to]
+      Command.new(command, check_dir(options[:to]))
     end
 
     # Installs one or more packages using apt, deb or git clone and install.sh (Ignores architecture differences)
@@ -102,42 +136,15 @@ module Machines
       end
     end
 
-    # Install a gem
-    # @param [String] package Name of the gem
-    # @param [Hash] options
-    # @option options [String] :version Optional version number
-    def gem package, options = {}
-      version =  " -v \"#{options[:version]}\"" if options[:version]
-      Command.new("gem install #{package}#{version}", check_gem(package, options[:version]))
+    def update
+      Command.new("#{APTGET_QUIET} update > /tmp/apt-update.log", check_string('Reading package lists', '/tmp/apt-update.log'))
     end
 
-    # Update gems
-    # @example Update Rubygems
-    #     gem_update '--system'
-    def gem_update options = ''
-      Command.new("gem update #{options}", nil)
-    end
-
-    # Download, extract, and remove an archive. Currently supports `zip` or `tar.gz`. Extracts into /tmp
-    # @param [String] package Package name to extract
-    # @param [Hash] options
-    # @option options [Optional String] :to directory to clone to
-    def extract package, options = {}
-      name = File.basename(package)
-      cmd = package[/.zip/] ? 'unzip -qq' : 'tar -zxf'
-      dir = cmd =~ /unzip/ ? File.basename(name, '.zip') : File.basename(name).gsub(/\.tar.*/, '')
-      dest = " mv #{dir} #{options[:to]} &&" if options[:to]
-      Command.new("cd /tmp && wget #{package} && #{cmd} #{name} &&#{dest} rm #{name} && cd -", check_dir("#{options[:to] || File.join('/tmp', dir)}"))
-    end
-
-    # Clone a project from a Git repository
-    # @param [String] url URL to clone
-    # @param [Hash] options
-    # @option options [Optional String] :to directory to clone to
-    def git_clone url, options = {}
-      command = "git clone -q #{url}"
-      command << " #{options[:to]}" if options[:to]
-      Command.new(command, check_dir(options[:to]))
+    # Update, upgrade, autoremove, autoclean apt packages
+    def upgrade
+      %w(update upgrade autoremove autoclean).map do |command|
+        Command.new("#{APTGET_QUIET} #{command}", nil)
+      end
     end
   end
 end

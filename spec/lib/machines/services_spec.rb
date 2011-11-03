@@ -5,11 +5,11 @@ describe 'Services' do
   include Machines::FileOperations
   include Machines::Services
 
-  describe 'add_init_d' do
-    subject { add_init_d 'name' }
-    it { subject.first.local.should == 'name/initd' }
-    it { subject.first.remote.should == '/etc/init.d/name' }
-    it { subject.last.command.should == '/usr/sbin/update-rc.d -f name defaults' }
+  describe 'add_upstart' do
+    it 'writes a configuration' do
+      should_receive(:write).with(%(description "description"\nrespawn\nexec command\n), :to => '/etc/init/name.conf', :name => 'name upstart')
+      add_upstart 'name', :description => 'description', :respawn => true, :exec => 'command'
+    end
   end
 
   describe 'restart' do

@@ -14,6 +14,11 @@ Run commands like:
 Status
 ---------------------------------------
 
+(November 2011)
+
+Now a few more fixes and some tweaks to server builds and then a final push on the EC2 stuff should see a first release
+out by the end of the year.
+
 (September 2011)
 
 This release has focused more on development builds but a lot of server packages
@@ -22,18 +27,18 @@ have also been and added and the next release will finish off the EC2 and server
 Features
 ---------------------------------------
 
-* Preconfigured Ruby & Rails development environment including, Openbox, docky, gEdit with gmate and VirtualBox
+* Preconfigured Ruby & Rails light development environment (Openbox, docky, gEdit with gmate and VirtualBox)
 * Working default template supports Nginx, RVM, Passenger, Ruby, Rails apps, MySQL (+ replication), Git, Monit, Logrotate
 * Easily override the defaults with configuration options and custom ruby
 * Several deb sources added making it easier to keep up-to-date with the latest versions
 * Tested on Ubuntu i386/amd64 11.04 minimal
-* Minimal Ubuntu ISO/IMG used for increased security, stability and speed
+* Minimal Ubuntu ISO/IMG used for increased security and stability and low memory footprint
 * Commands abstracted to provide a consistent configuration syntax
 * Full automated test suite to ensure correct commands are generated (Using RSpec)
-* Extra checks done to ensure command generates the correct result and avoids false positives (e.g. successful return values)
+* Extra checks done to ensure commands generate the correct result and avoids false positives
 * A lightweight configurable Ubuntu install
 * Working documentation for Ubuntu commands
-* Customizable Ubuntu distribution
+* A Ubuntu distribution Customizable with Ruby
 
 
 Motivation
@@ -96,11 +101,16 @@ Take a look at the generated project. It contains several folders and the main `
 
 ### Prepare the target machine
 
-* Download the image or ISO:
-  * [Ubuntu 11.04 Minimal i386 ISO](http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/mini.iso)
-  * [Ubuntu 11.04 Minimal x64 ISO](http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/mini.iso)
-  * [Ubuntu 11.04 Minimal i386 IMG](http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-i386/current/images/netboot/boot.img.gz)
-  * [Ubuntu 11.04 Minimal x64 IMG](http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/current/images/netboot/boot.img.gz)
+* Download the latest image or ISO:
+  * [Ubuntu 11.10 Minimal i386 ISO](http://archive.ubuntu.com/ubuntu/dists/oneiric/main/installer-i386/current/images/netboot/mini.iso)
+  * [Ubuntu 11.10 Minimal x64 ISO](http://archive.ubuntu.com/ubuntu/dists/oneiric/main/installer-amd64/current/images/netboot/mini.iso)
+  * [Ubuntu 11.10 Minimal i386 IMG](http://archive.ubuntu.com/ubuntu/dists/oneiric/main/installer-i386/current/images/netboot/boot.img.gz)
+  * [Ubuntu 11.10 Minimal x64 IMG](http://archive.ubuntu.com/ubuntu/dists/oneiric/main/installer-amd64/current/images/netboot/boot.img.gz)
+* or Download the last LTS image or ISO:
+  * [Ubuntu 10.04 Minimal i386 ISO](http://archive.ubuntu.com/ubuntu/dists/lucid/main/installer-i386/current/images/netboot/mini.iso)
+  * [Ubuntu 10.04 Minimal x64 ISO](http://archive.ubuntu.com/ubuntu/dists/lucid/main/installer-amd64/current/images/netboot/mini.iso)
+  * [Ubuntu 10.04 Minimal i386 IMG](http://archive.ubuntu.com/ubuntu/dists/lucid/main/installer-i386/current/images/netboot/boot.img.gz)
+  * [Ubuntu 10.04 Minimal x64 IMG](http://archive.ubuntu.com/ubuntu/dists/lucid/main/installer-amd64/current/images/netboot/boot.img.gz)
 * Images can be written to USB with:
 * `gunzip boot.img.gz && sudo dd if=boot.img of=/dev/sdX` where `sdX` is your USB device (use `dmesg` to get this)
 * Insert the USB stick and boot from it to install Ubuntu
@@ -317,6 +327,7 @@ References
 * Nginx init.d script: <http://articles.slicehost.com/2007/10/17/ubuntu-lts-adding-an-nginx-init-script>
 * Bundler Deployment: <http://gembundler.com/deploying.html>
 * Free SSL Certificates: <http://www.startssl.com/>
+* Howto RVM, Nginx and Passenger <http://blog.ninjahideout.com/posts/a-guide-to-a-nginx-passenger-and-rvm-server>
 
 ### Ubuntu minimal install guides
 
