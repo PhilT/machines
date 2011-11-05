@@ -4,7 +4,6 @@ module Machines
       @actions = {
         'htpasswd' => 'Asks for a username and password and generates basic auth in webserver/conf/htpasswd',
         'new <DIR>' => 'Creates a directory called DIR and generates an example machines project in it',
-        'check' => 'Checks Machinesfile for syntax issues',
         'dryrun' => 'Runs through Machinesfile logging all commands to log/output.log but does not acutally run them',
         'tasks' => 'Lists the available tasks after asking for machine and user',
         'build [OPTIONS]' => 'Asks some questions then builds your chosen machine. Use OPTIONS to skip questions. Use task=TASK to build just that task',

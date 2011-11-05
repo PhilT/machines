@@ -1,4 +1,4 @@
-task :nginx_passenger, 'Install Passenger Nginx module' do
+task :passenger_nginx, 'Install Passenger Nginx module' do
   file_check = check_file(File.join(AppConf.nginx.path, 'sbin', 'nginx'))
   prefix = "--prefix=#{AppConf.nginx.path}"
   source_dir = "--nginx-source-dir=/tmp/nginx-#{AppConf.nginx.version}"

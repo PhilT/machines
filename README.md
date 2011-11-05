@@ -327,8 +327,11 @@ References
 * Nginx init.d script: <http://articles.slicehost.com/2007/10/17/ubuntu-lts-adding-an-nginx-init-script>
 * Bundler Deployment: <http://gembundler.com/deploying.html>
 * Free SSL Certificates: <http://www.startssl.com/>
-* Multiple RVM gemsets in passenger <http://blog.ninjahideout.com/posts/the-path-to-better-rvm-and-passenger-integration>
-* Howto RVM, Nginx and Passenger <http://blog.ninjahideout.com/posts/a-guide-to-a-nginx-passenger-and-rvm-server>
+
+### RVM
+
+* Multiple gemsets in passenger <http://blog.ninjahideout.com/posts/the-path-to-better-rvm-and-passenger-integration>
+* Nginx and Passenger <http://blog.ninjahideout.com/posts/a-guide-to-a-nginx-passenger-and-rvm-server>
 
 ### Ubuntu minimal install guides
 

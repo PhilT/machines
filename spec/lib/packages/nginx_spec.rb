@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'packages/nginx' do
   before(:each) do
     load_package('nginx')
-    AppConf.from_hash(:nginx => {:version => '1.0.2', :path => 'nginx_path', :url => 'nginx_url'})
+    AppConf.from_hash(:nginx => {:version => '1.0.2', :path => 'nginx_path', :url => 'nginx_url/package'})
     FileUtils.mkdir_p 'nginx'
     File.open('nginx/nginx.conf.erb', 'w') {|f| f.puts 'the template' }
   end
@@ -13,7 +13,7 @@ describe 'packages/nginx' do
     eval_package
     AppConf.commands.map(&:info).should == [
       "TASK   nginx - Download and configure Nginx",
-      "RUN    cd /tmp && wget nginx_url && tar -zxf nginx_url && rm nginx_url && cd -",
+      "RUN    cd /tmp && wget nginx_url/package && tar -zxf package && rm package && cd -",
       "UPLOAD buffer from nginx upstart to /tmp/nginx.conf",
       "SUDO   cp -rf /tmp/nginx.conf /etc/init/nginx.conf",
       "RUN    rm -rf /tmp/nginx.conf",

@@ -45,7 +45,7 @@ nginx:
 
 rvm:
   url: https://rvm.beginrescueend.com/install/rvm
-  version: 1.8.0
+  version: 1.9.2
 
 ruby:
   version: 1.9.2

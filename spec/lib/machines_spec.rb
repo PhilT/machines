@@ -7,8 +7,6 @@ describe 'Machines' do
 
   before(:each) do
     File.stub(:read).and_return ''
-    AppConf.ec2 = AppConf.new unless AppConf.ec2
-    AppConf.ec2.use = nil
     AppConf.log_only = false
     FileUtils.mkdir_p 'config'
     File.open('config/config.yml', 'w') { |f| f.puts "timezone: GB" }
@@ -91,6 +89,7 @@ describe 'Machines' do
   describe 'build' do
     before(:each) do
       subject.stub(:init)
+      AppConf.ec2 = AppConf.new
       AppConf.host = 'target'
       AppConf.user = 'username'
       AppConf.password = 'userpass'

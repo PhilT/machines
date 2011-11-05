@@ -16,13 +16,13 @@ package :virtualbox_guest if AppConf.machine = 'Laptop VM'
 only :roles => :app do
   package :monit unless AppConf.environment == :development
   package :dotfiles
-  package :webapps
   package :git
   package :rvm
   package :ruby
   package :nginx
   package :passenger
-  package :nginx_passenger
+  package :passenger_nginx
+  package :webapps
   package :nginx_logrotate
   package :postfix unless AppConf.environment == :development
 end

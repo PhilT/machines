@@ -30,7 +30,8 @@ module Machines
       AppConf.commands = []
       AppConf.webapps = {}
       AppConf.tasks = {}
-      AppConf.from_hash(:db => {})
+      AppConf.db = AppConf.new
+      AppConf.ec2 = AppConf.new
       AppConf.load('config/config.yml')
 
       AppConf.file ||= Machines::Logger.new File.open('output.log', 'w')

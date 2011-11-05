@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'CommandLine' do
   describe 'execute' do
     it 'calls specified action' do
-      %w(htpasswd check dryrun build).each do |action|
+      %w(htpasswd dryrun build).each do |action|
         should_receive action
         execute [action]
         AppConf.action.should == action

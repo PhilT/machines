@@ -6,7 +6,6 @@ def create_folders app
     %w(releases shared/config shared/system).each do |dir|
       run mkdir File.join(app.full_path, dir)
     end
-    run write_database_yml :to => File.join(app.full_path, 'shared', 'config'), :for => app.name
   end
 end
 
@@ -34,6 +33,6 @@ task :webapps, 'Sets up Web apps in config/webapps.yml using app_server.conf.erb
 end
 
 task :monit_delayed_job, 'Add monit config for each delayed_job app', :if => [:monit] do
-  sudo create_from 'monit/conf.d/delayed_job.erb',
+  sudo create_from 'monit/conf.d/delayed_job.erb', :to => '/etc/monit/conf.d/delayed_job'
 end
 
