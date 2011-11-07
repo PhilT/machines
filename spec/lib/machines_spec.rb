@@ -90,7 +90,7 @@ describe 'Machines' do
     before(:each) do
       subject.stub(:init)
       AppConf.ec2 = AppConf.new
-      AppConf.host = 'target'
+      AppConf.address = 'target'
       AppConf.user = 'username'
       AppConf.password = 'userpass'
     end

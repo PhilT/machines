@@ -94,7 +94,7 @@ module Machines
         end
       else
         Kernel.trap("INT") { prepare_to_exit }
-        Net::SCP.start AppConf.host, username, scp_options do |scp|
+        Net::SCP.start AppConf.address, username, scp_options do |scp|
           Command.scp = scp
           AppConf.commands.each do |command|
             command.run
