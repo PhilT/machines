@@ -1,8 +1,7 @@
 module Machines
   module Questions
     def choose_machine
-      machines = File.read('Machinesfile').scan(/^machine '(.*?)'/).flatten
-      choose(*machines) { |menu| menu.prompt = 'Select machine to build: ' }
+      choose(*AppConf.machines.keys) { |menu| menu.prompt = 'Select machine to build: ' }
     end
 
     def enter_password(type, confirm = true)

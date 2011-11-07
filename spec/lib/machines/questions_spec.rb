@@ -3,16 +3,12 @@ require 'spec_helper'
 describe 'Questions' do
   describe 'choose_machine' do
     before(:each) do
-      File.stub(:read).with("Machinesfile").and_return <<-MACHINESFILE
-machine 'Desktop', :development, :roles => [:app, :db], :apps => ['main', 'wiki']
-machine 'Staging', :staging, :roles => [:app, :db], :apps => ['main', 'wiki']
-machine 'Production', :production, :roles => :app, :apps => ['main', 'wiki']
-MACHINESFILE
+      AppConf.machines = {'desktop' => {'environment' => 'development', 'roles' => ['app', 'db']}}
       @mock_menu = mock HighLine::Menu, :prompt= => nil
     end
 
     it 'loads options from Machinesfile' do
-      should_receive(:choose).with('Desktop', 'Staging', 'Production').and_yield @mock_menu
+      should_receive(:choose).with('desktop').and_yield @mock_menu
       choose_machine
     end
 
@@ -23,8 +19,8 @@ MACHINESFILE
     end
 
     it 'sets the choice' do
-      should_receive(:choose).and_return 'Staging'
-      choose_machine.should == 'Staging'
+      should_receive(:choose).and_return 'desktop'
+      choose_machine.should == 'desktop'
     end
   end
 

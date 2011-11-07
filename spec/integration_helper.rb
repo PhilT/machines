@@ -21,5 +21,9 @@ RSpec.configure do |c|
     $output = MockStdout.new
     $terminal = HighLine.new($input, $output)
   end
+
+  c.after(:each) do
+    AppConf.clear
+  end
 end
 
