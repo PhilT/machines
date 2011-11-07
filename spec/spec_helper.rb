@@ -48,3 +48,9 @@ def eval_package
   eval @package, nil, @package_path
 end
 
+def save_yaml contents, path
+  File.open(path, 'w') do |f|
+    YAML.dump(contents, f)
+  end
+end
+
