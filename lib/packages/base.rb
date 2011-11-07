@@ -3,14 +3,6 @@ task :hosts, 'Set /etc/hosts' do
   fqdn = AppConf.hostname
   hostname = AppConf.hostname.split('.').first
   sudo write "127.0.0.1 #{fqdn} localhost.localdomain localhost\n127.0.1.1 #{hostname}\n", :to => '/etc/hosts'
-  only :environment => :development do
-    AppConf.localhosts.each do |host|
-      sudo append "127.0.0.1 #{host}", :to => '/etc/hosts'
-    end
-    AppConf.hosts.each do |ip_host|
-      sudo append "#{ip_host}", :to => '/etc/hosts'
-    end
-  end
   sudo write AppConf.hostname, :to => '/etc/hostname'
   sudo start 'hostname'
 end

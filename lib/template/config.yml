@@ -14,12 +14,6 @@ ec2:
   private_key_file: certificates/amazon.key
   security_group: eu-public
 
-# Extra hosts added to /etc/hosts for build servers, live servers etc
-hosts:
-  - 127.0.0.1
-  - 192.168.1.4 build
-  - 192.168.1.30 prod
-
 timezone: GB
 
 webserver:
@@ -28,7 +22,6 @@ webserver:
   url: http://nginx.org/download/nginx-1.0.6.tar.gz
   path: /opt/nginx
   servers_dir: servers
-
 
 db:
   adapter: mysql
