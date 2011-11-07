@@ -1,10 +1,5 @@
 module Machines
   module Machinesfile
-    # Add a machine configuration
-    def machine name, environment, options = {:apps => [], :roles => []}
-      AppConf.machines[name] = {:environment => environment, :apps => options[:apps], :roles => options[:roles]}
-    end
-
     def package name
       if name == 'Machinesfile'
         error = 'Cannot find Machinesfile. Use `machines generate` to create a template.'

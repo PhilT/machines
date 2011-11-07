@@ -18,13 +18,13 @@ def write_server_config(app, enable_ssl)
   else
     conf_name = "#{app.name}.conf"
   end
-  webserver = AppConf[AppConf.webserver]
-  path = File.join(webserver.path, webserver.servers_dir, conf_name)
-  sudo create_from "#{AppConf.webserver}/app_server.conf.erb", :settings => app, :to => path
-  sudo mkdir "/var/log/#{AppConf.webserver}"
+  path = File.join(AppConf.webserver.path, AppConf.webserver.servers_dir, conf_name)
+  sudo create_from "#{AppConf.webserver.name}/app_server.conf.erb", :settings => app, :to => path
+  sudo mkdir "/var/log/#{AppConf.webserver.name}"
 end
 
 task :webapps, 'Sets up Web apps in config/webapps.yml using app_server.conf.erb' do
+  sudo mkdir File.join(AppConf.webserver.path, AppConf.webserver.servers_dir) if AppConf.webserver.servers_dir
   AppConf.webapps.each do |app_name, app|
     create_folders app
     write_server_config app, false

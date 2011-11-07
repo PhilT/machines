@@ -1,3 +1,7 @@
+appsroots:
+  phil: /home/phil/workspace
+  www: /home/www
+
 ec2:
   access_key_id: 123
   secret_access_key: 456
@@ -10,25 +14,32 @@ ec2:
   private_key_file: certificates/amazon.key
   security_group: eu-public
 
-# These are added to /etc/hosts file as 127.0.0.1 hosts for use on development installs
-localhosts:
-  - wiki.local
-  - todo.local
-  - example.local
-  - admin.example.local
-
 # Extra hosts added to /etc/hosts for build servers, live servers etc
 hosts:
+  - 127.0.0.1
   - 192.168.1.4 build
   - 192.168.1.30 prod
 
 timezone: GB
-webserver: nginx
+
+webserver:
+  name: nginx
+  version: 1.0.6
+  url: http://nginx.org/download/nginx-1.0.6.tar.gz
+  path: /opt/nginx
+  servers_dir: servers
+
+
 db:
   adapter: mysql
   encoding: utf8
-  root_pass: Uf6h3HzU4q
-  replication_pass: tzIrh2eKjH
+  instances:
+    master:
+      root_pass: secure
+      replication_pass: secure
+    slave:
+      root_pass: secure
+      replication_pass: secure
 
 awstats:
   stats_path: /var/www/nginx/webstats
@@ -37,11 +48,6 @@ awstats:
 # https://github.com/FooBarWidget/passenger/blob/master/NEWS
 passenger:
   version: 3.0.9
-nginx:
-  version: 1.0.6
-  url: http://nginx.org/download/nginx-1.0.6.tar.gz
-  path: /opt/nginx
-  servers_dir: servers
 
 rvm:
   url: https://rvm.beginrescueend.com/install/rvm
@@ -49,10 +55,6 @@ rvm:
 
 ruby:
   version: 1.9.2
-
-appsroots:
-  phil: /home/phil/workspace
-  www-data: /var/www/nginx
 
 mail:
   domain: example.com

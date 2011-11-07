@@ -1,20 +1,23 @@
-all_apps = %w(application wiki)
-machine 'Desktop', :development, :roles => [:app, :db], :apps => all_apps
-machine 'Laptop VM', :development, :roles => [:app, :db], :apps => all_apps
-machine 'Staging', :staging, :roles => [:app, :db], :apps => all_apps
-machine 'Production', :production, :roles => [:app], :apps => all_apps, :ec2 => true
-machine 'DBmaster', :production, :roles => [:db, :dbmaster], :ec2 => true
-machine 'DBslave', :production, :roles => [:db, :dbslave], :ec2 => true
+# Take the name from the key unless name is specified
+# added project name plus .git to scm to git clone
+# use main key subdir for appsroot for given user
+# Add #{webapp}.local to localhosts on development environments
+# Set server configs to use staging.#{url} for staging environments
+# Set server configs to use #{url} for production environments
+# Use SSL by default
+# check why we were setting db_password for webapps
 
+package :load_machines
 package :questions
 
 package :dependencies
 package :timezone
 package :base
-package :virtualbox_guest if AppConf.machine = 'Laptop VM'
+package :virtualbox_guest if AppConf.machine = :philworkstation
 
 only :roles => :app do
   package :monit unless AppConf.environment == :development
+  package :webapps
   package :dotfiles
   package :git
   package :rvm
@@ -22,7 +25,6 @@ only :roles => :app do
   package :nginx
   package :passenger
   package :passenger_nginx
-  package :webapps
   package :nginx_logrotate
   package :postfix unless AppConf.environment == :development
 end
@@ -42,4 +44,6 @@ only :users => 'phil' do
 end
 
 sudo upgrade
+
+package :save_machines
 

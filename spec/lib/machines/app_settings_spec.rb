@@ -17,7 +17,7 @@ describe 'AppSettings' do
 
   describe 'load_app_settings' do
     it 'loads settings from apps.yaml' do
-      File.should_receive(:open).with('config/webapps.yml').and_return 'file'
+      File.should_receive(:open).with('webapps.yml').and_return 'file'
       YAML.should_receive(:load).with('file').and_return({})
       load_app_settings ['app']
     end

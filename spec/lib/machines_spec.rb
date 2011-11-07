@@ -9,7 +9,7 @@ describe 'Machines' do
     File.stub(:read).and_return ''
     AppConf.log_only = false
     FileUtils.mkdir_p 'config'
-    File.open('config/config.yml', 'w') { |f| f.puts "timezone: GB" }
+    File.open('config.yml', 'w') { |f| f.puts "timezone: GB" }
   end
 
   describe 'init' do

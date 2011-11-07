@@ -1,9 +1,7 @@
 task :dependencies, 'Dependencies required for various commands to run' do
   sudo update
 
-  sudo install [
-    # package                         # Required by command
-    # --------------------------------#--------------------
+  sudo install [                      # Needed by
     'debconf-utils',                  # debconf
     'python-software-properties',     # add_ppa
     'gconf2',                         # configure

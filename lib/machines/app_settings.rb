@@ -10,7 +10,7 @@ module Machines
     # as an AppBuilder (bindable OpenStruct) so it can be used an ERB templates to generate config files
     # @param [Array] apps Names of the apps to configure
     def load_app_settings(apps)
-      yaml = YAML.load(File.open('config/webapps.yml'))
+      yaml = YAML.load(File.open('webapps.yml'))
       yaml.select{|name| apps.include?(name) }.each do |app_name, settings|
         environment = settings[AppConf.environment.to_s] || raise(ArgumentError, 'No setttings for specified environment')
         environment['db_password'] ||= app_name

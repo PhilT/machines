@@ -1,17 +1,6 @@
 require 'spec_helper'
 
 describe 'Machinesfile' do
-  include Machines::Machinesfile
-  include Machines::AppSettings
-
-  describe 'machine' do
-    it 'adds the machine configuration to the machines hash' do
-      AppConf.machines = {}
-      machine 'machine', :test, :apps => ['app', 'another'], :roles => [:role]
-      AppConf.machines['machine'].should == {:environment => :test, :apps => ['app', 'another'], :roles => [:role]}
-    end
-  end
-
   describe 'package' do
     it 'raises specific error when failing to load Machinesfile' do
       File.should_not_receive(:read)

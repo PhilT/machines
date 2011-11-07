@@ -1,0 +1,49 @@
+private:
+  scm: phil@server:/media/data/git
+  merrol_website:
+    name: merrol
+    url: merrol.com
+    passwords:
+      development: merrol
+      staging: secure
+      production: secure
+
+public:
+  scm: git@github.com:/PhilT
+  cloudmachine:
+    url: cloud.electricvisions.com
+    passwords:
+      development: cloud
+      staging: secure
+      production: secure
+  eutopia:
+    url: eutopia.electricvisions.com
+    passwords:
+      development: eutopia
+      staging: secure
+      production: secure
+  fountain:
+    url: fountainwiki.com
+    passwords:
+      development: fountain
+      staging: secure
+      production: secure
+  sanity:
+    url: sanity.electricvisions.com
+    passwords:
+      development: sanity
+      staging: secure
+      production: secure
+  tvs:
+    url: tvs.electricvisions.com
+    passwords:
+      development: tvs
+      staging: secure
+      production: secure
+  velocity:
+    url: velocityprojects.com
+    passwords:
+      development: velocity
+      staging: secure
+      production: secure
+

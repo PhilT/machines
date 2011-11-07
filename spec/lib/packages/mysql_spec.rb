@@ -37,7 +37,7 @@ describe 'packages/mysql' do
           eval_package
           AppConf.commands.map(&:info).should == [
             "SUDO   apt-get -q -y install libmysqlclient-dev",
-            "TASK   dbperms - Set app permissions to database",
+            "TASK   dbperms - Grant database access to applications",
             %{RUN    echo "GRANT ALL ON *.* TO 'name'@'%' IDENTIFIED BY 'PASSWORD';" | mysql -u root -pDBPASS -h DBIP}
           ]
         end
@@ -52,7 +52,7 @@ describe 'packages/mysql' do
           eval_package
           AppConf.commands.map(&:info).should == [
             "SUDO   apt-get -q -y install libmysqlclient-dev",
-            "TASK   dbperms - Set app permissions to database",
+            "TASK   dbperms - Grant database access to applications",
             %{RUN    echo "GRANT ALL ON *.* TO 'name'@'%' IDENTIFIED BY 'PASSWORD';" | mysql -u root -pDBPASS -h DBIP},
           ]
         end

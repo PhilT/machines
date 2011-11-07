@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'packages/nginx' do
   before(:each) do
     load_package('nginx')
-    AppConf.from_hash(:nginx => {:version => '1.0.2', :path => 'nginx_path', :url => 'nginx_url/package'})
+    AppConf.from_hash(:webserver => {:name => 'nginx', :version => '1.0.2', :path => 'nginx_path', :url => 'nginx_url/package'})
     FileUtils.mkdir_p 'nginx'
     File.open('nginx/nginx.conf.erb', 'w') {|f| f.puts 'the template' }
   end

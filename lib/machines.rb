@@ -32,7 +32,7 @@ module Machines
       AppConf.tasks = {}
       AppConf.db = AppConf.new
       AppConf.ec2 = AppConf.new
-      AppConf.load('config/config.yml')
+      AppConf.load('config.yml')
 
       AppConf.file ||= Machines::Logger.new File.open('output.log', 'w')
       AppConf.debug ||= Machines::Logger.new File.open('debug.log', 'w')

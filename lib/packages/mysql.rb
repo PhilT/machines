@@ -14,7 +14,7 @@ end
 
 only :roles => :app do
   sudo install 'libmysqlclient-dev'
-  task :dbperms, 'Set app permissions to database' do
+  task :dbperms, 'Grant database access to applications' do
     AppConf.webapps.values.each do |app|
       run_mysql_statement "GRANT ALL ON *.* TO '#{app.name}'@'%' IDENTIFIED BY '#{app.db_password}';",
         :on => AppConf.db.address, :password => AppConf.db.root_pass
