@@ -1,6 +1,6 @@
 # BE CAREFUL: THIS FILE IS ALSO WRITTEN TO BY MACHINES
 # This config file is used to read and also write machine settings.
-
+#
 # Each machine represents a physical (or virtual) computer in your server architecture
 # This is used to determine where to point database connections from app servers. This
 # information is stored in the machines.yml file and used on subsequent calls to machines
@@ -14,17 +14,17 @@
 #     machines build dbmaster # creates the master database and sets address
 #   then:
 #     machines build production # creates the production app server and set db to point to address under dbmaster
-
+#
 # machine_name:
 #   hostname: Used to set the hostname of the machine (e.g. main.electricvisions.com)
+#   ec2: Set to true to tell machines to create a new ec2 instance (unless address is already set)
 #   address: IP or DNS name of the machine (this is populated automatically when creating EC2 machines)
 #   environment: Rails.env to use
 #   apps: An array of apps to setup on this machine (if nil sets up all)
 #   roles: Roles of the server (Roles known by standard template are: app, db, dbmaster, dbslave)
-#   ec2: Set to true to tell machines to create a new ec2 instance (unless address is already set)
 #
 
-
+---
 philworkstation:
   hostname: main.electricvisions.com
   address:
@@ -36,37 +36,40 @@ philworkstation:
 
 dbmaster:
   hostname: dbmaster.electricvisions.com
+  ec2: true
   address:
   environment: production
   apps:
   roles:
     - db
     - dbmaster
-  ec2: true
 
 dbslave:
-  address: dbslave.electricvisions.com
+  hostname: dbslave.electricvisions.com
+  ec2: true
+  address:
   environment: production
   apps:
   roles:
     - db
     - dbslave
-  ec2: true
 
 staging:
-  address: staging.electricvisions.com
+  hostname: staging.electricvisions.com
+  ec2: true
+  address:
   environment: staging
   apps:
   roles:
     - app
     - db
-  ec2: true
 
 production:
-  address: prod.electricvisions.com
+  hostname: prod.electricvisions.com
+  ec2: true
+  address:
   environment: production
   apps:
   roles:
     - app
-  ec2: true
 
