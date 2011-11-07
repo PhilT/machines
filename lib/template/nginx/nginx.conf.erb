@@ -38,6 +38,6 @@ http {
   passenger_pool_idle_time 0;               # Do not shutdown instances unless needed
   passenger_pre_start http://localhost;     # Prestart RiskPlatform
 
-  include <%= "#{AppConf.nginx.path}/#{AppConf.nginx.servers_dir}/*.conf" %>;
+  include <%= "#{AppConf.webserver.path}/#{AppConf.webserver.servers_dir}/*.conf" %>;
 }
 

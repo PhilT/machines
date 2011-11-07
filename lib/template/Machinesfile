@@ -13,7 +13,7 @@ package :questions
 package :dependencies
 package :timezone
 package :base
-package :virtualbox_guest if AppConf.machine = :philworkstation
+package :virtualbox_guest if AppConf.machine = 'philworkstation'
 
 only :roles => :app do
   package :monit unless AppConf.environment == :development
