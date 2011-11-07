@@ -45,6 +45,26 @@ app:
       File.open('webapps.yml', 'w') {|f| f.puts "---\napp:\n  path: path\n" }
       lambda{ load_app_settings(['app']) }.should raise_error(ArgumentError, 'No setttings for specified environment')
     end
+
+    it 'loads settings for all apps when none specified' do
+      settings = <<-EOF
+---
+app:
+  path: path
+  test:
+    setting: setting
+other:
+  path: path
+  test:
+    setting: other_setting
+      EOF
+      File.open('webapps.yml', 'w') {|f| f.puts settings }
+      load_app_settings nil
+      AppConf.webapps.should == {
+        'app' => AppBuilder.new(:name => 'app', :path => 'path', :full_path => '/home/user/path', :setting => 'setting', :db_password => 'app'),
+        'other' => AppBuilder.new(:name => 'other', :path => 'path', :full_path => '/home/user/path', :setting => 'other_setting', :db_password => 'other')
+      }
+    end
   end
 end
 

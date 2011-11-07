@@ -11,7 +11,8 @@ module Machines
     # @param [Array] apps Names of the apps to configure
     def load_app_settings(apps)
       yaml = YAML.load_file('webapps.yml')
-      yaml.select{|name| apps.include?(name) }.each do |app_name, settings|
+      yaml = yaml.select{|name| apps.include?(name) } if apps
+      yaml.each do |app_name, settings|
         environment = settings[AppConf.environment.to_s] || raise(ArgumentError, 'No setttings for specified environment')
         environment['db_password'] ||= app_name
         settings['name'] = app_name

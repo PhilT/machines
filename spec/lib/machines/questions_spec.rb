@@ -28,36 +28,6 @@ MACHINESFILE
     end
   end
 
-  describe 'enter_host' do
-    it 'accepts IP or DNS address of target machine' do
-      should_receive(:ask).with('Enter the IP or DNS address of the target machine (EC2, VM or LAN address): ').and_return 'target ip'
-      enter_host('machine').should == 'target ip'
-    end
-  end
-
-  describe 'choose_user' do
-    before(:each) do
-      AppConf.users = ['a_user', 'another']
-      @mock_menu = mock(HighLine::Menu, :prompt= => nil)
-    end
-
-    it 'loads options' do
-      should_receive(:choose).with('a_user', 'another').and_yield @mock_menu
-      choose_user
-    end
-
-    it 'prompt displayed to select a user' do
-      @mock_menu.should_receive(:prompt=).with('Select a user: ')
-      should_receive(:choose).and_yield @mock_menu
-      choose_user
-    end
-
-    it 'sets the choice' do
-      should_receive(:choose).and_return('a_user')
-      choose_user.should == 'a_user'
-    end
-  end
-
   describe 'enter_password' do
     before(:each) do
       stub!(:ask).and_return 'password'
@@ -116,13 +86,6 @@ MACHINESFILE
       AppConf.passwords = nil
       enter_password('type')
       AppConf.passwords.should be_nil
-    end
-  end
-
-  describe 'enter_hostname' do
-    it 'accepts hostname' do
-      should_receive(:ask).with('Enter a hostname (can be fully qualified domain): ').and_return 'host'
-      enter_hostname.should == 'host'
     end
   end
 end

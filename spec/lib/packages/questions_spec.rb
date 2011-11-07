@@ -9,73 +9,90 @@ describe 'packages/questions' do
     AppConf.stub(:load)
     stub!(:choose_machine).and_return 'machine'
     stub!(:load_app_settings)
-    stub!(:enter_host)
-    stub!(:choose_user).and_return 'user_name'
     stub!(:enter_password)
+    stub!(:connect)
+    stub!(:run_instance)
   end
 
   it 'asks questions' do
-    AppConf.machines = {'machine' => {:environment => :unknown, :apps => nil, :roles => nil}}
+    AppConf.machines = {'machine' => {'environment' => :n_a, 'apps' => nil, 'roles' => ['db'], 'address' => 'ip'}}
     should_receive(:choose_machine).and_return 'machine'
-    should_receive(:enter_host).twice
-    should_receive(:choose_user).and_return 'user_name'
-    should_receive(:enter_password).with('users', false).once
-    should_receive(:enter_password).with('database root').once
     eval_package
   end
 
   it 'does not ask questions when already set' do
     AppConf.machine = 'machine'
-    AppConf.ec2.use = false
-    AppConf.host = 'host'
-    AppConf.user = 'user'
     AppConf.password = 'password'
-    AppConf.machines = {'machine' => {:environment => :unknown, :apps => nil, :roles => :db}}
+    AppConf.machines = {'machine' => {'roles' => ['db'], 'address' => 'ip'}}
     should_not_receive(:choose_machine)
-    should_not_receive(:enter_host)
-    should_not_receive(:choose_user)
-    should_not_receive(:enter_password)
-    should_not_receive(:enter_password)
     eval_package
   end
 
+  describe 'setting host' do
+    it 'does not throw or connect to EC2 when set' do
+      AppConf.machines = {'machine' => {'ec2' => true, 'address' => 'address', 'roles' => ['db']}}
+      should_not_receive(:connect)
+      eval_package
+    end
+
+    context 'when nil' do
+      it 'starts a new instance when using EC2' do
+        AppConf.machines = {'machine' => {'ec2' => true, 'roles' => ['db']}}
+        should_receive(:connect).and_return true
+        should_receive(:run_instance)
+        eval_package
+      end
+
+      it 'raises an exception when not using EC2' do
+        AppConf.machines = {'machine' => {'roles' => ['db']}}
+        lambda { eval_package }.should raise_error NoHostAddressError
+      end
+    end
+  end
+
   it 'loads app settings' do
-    AppConf.machines = {'machine' => {:environment => :unknown, :apps => ['app1', 'app2'], :roles => nil}}
+    AppConf.machines = {'machine' => {'apps' => ['app1', 'app2'], 'roles' => ['db'], 'address' => 'ip'}}
     should_receive(:load_app_settings).with(['app1', 'app2'])
     eval_package
   end
 
-  describe 'staging' do
-    it 'sets hostname to environment' do
-      AppConf.machines = {'machine' => {:environment => :staging, :apps => nil, :roles => nil}}
+  it 'sets hostname' do
+    AppConf.machines = {'machine' => {'roles' => ['db'], 'address' => 'ip', 'hostname' => 'hostname'}}
+    eval_package
+    AppConf.hostname.should == 'hostname'
+  end
+
+  context 'when machine is a db server' do
+    before(:each) do
+      AppConf.machines = {'machine' => {'roles' => ['db'], 'address' => 'ip', 'db' => 'master'},
+        'master' => {'roles' => ['db'], 'replication_pass' => 'replpa55'}}
+    end
+
+    it 'address set to localhost as used for app servers connecting locally' do
       eval_package
-      AppConf.hostname.should == :staging
+      AppConf.db.address.should == 'localhost'
+    end
+
+    it 'replication password set when machine points to another db' do
+      eval_package
+      AppConf.db.replication_pass.should == 'replpa55'
+    end
+
+    it 'no replication when no db specified' do
+      AppConf.machines['machine']['db'] = nil
+      eval_package
+      AppConf.db.replication_pass.should be_nil
     end
   end
 
-  describe 'production' do
-    it 'sets hostname to environment' do
-      AppConf.machines = {'machine' => {:environment => :production, :apps => nil, :roles => nil}}
-      eval_package
-      AppConf.hostname.should == :production
-    end
+  it 'sets db address for db roles' do
+    AppConf.machines = {'machine' => {'roles' => ['db'], 'address' => 'ip'}}
+
   end
 
-  describe 'development' do
-    it 'asks for hostname' do
-    AppConf.machines = {'machine' => {:environment => :development, :apps => nil, :roles => nil}}
-      should_receive(:enter_hostname)
-      eval_package
-    end
+  it 'sets db address for non db roles' do
+    AppConf.machines = {'machine' => {'roles' => ['db'], 'address' => 'ip'}}
   end
 
-  describe 'db role' do
-    it 'does not ask for db host or password' do
-      AppConf.machines = {'machine' => {:environment => :staging, :apps => nil, :roles => :db}}
-      should_receive(:enter_host).once
-      should_receive(:enter_password).once
-      eval_package
-    end
-  end
 end
 

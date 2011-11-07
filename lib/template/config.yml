@@ -33,13 +33,6 @@ webserver:
 db:
   adapter: mysql
   encoding: utf8
-  instances:
-    master:
-      root_pass: secure
-      replication_pass: secure
-    slave:
-      root_pass: secure
-      replication_pass: secure
 
 awstats:
   stats_path: /var/www/nginx/webstats
