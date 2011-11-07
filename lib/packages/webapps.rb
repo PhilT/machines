@@ -1,7 +1,7 @@
 def create_folders app
   if AppConf.environment == :development
     run git_clone app.scm, :to => app.full_path
-    run bundle app.path
+    run bundle app.full_path
   else
     %w(releases shared/config shared/system).each do |dir|
       run mkdir File.join(app.full_path, dir)

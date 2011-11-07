@@ -8,7 +8,6 @@ describe 'Machines' do
   before(:each) do
     File.stub(:read).and_return ''
     AppConf.log_only = false
-    FileUtils.mkdir_p 'config'
     File.open('config.yml', 'w') { |f| f.puts "timezone: GB" }
   end
 

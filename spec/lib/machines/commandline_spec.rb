@@ -26,6 +26,13 @@ describe 'CommandLine' do
     end
   end
 
+  describe 'help' do
+    it 'delegates to Help class' do
+      Help.should_receive(:detailed).and_return 'help'
+      help 'required options'
+    end
+  end
+
   describe 'htpasswd' do
     it 'htpasswd is generated and saved' do
       AppConf.webserver = 'server'

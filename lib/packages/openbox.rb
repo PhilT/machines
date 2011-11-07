@@ -33,7 +33,7 @@ task :fonts, 'Set openbox and Gnome interface fonts (See also rc.xml, fonts.conf
 end
 
 task :usb_policy, 'Allow users to mount USB drives' do
-  sudo upload 'config/udisks.policy', '/usr/share/polkit-1/actions/org.freedesktop.udisks.policy'
+  sudo upload 'misc/udisks.policy', '/usr/share/polkit-1/actions/org.freedesktop.udisks.policy'
   sudo chmod 644, '/usr/share/polkit-1/actions/org.freedesktop.udisks.policy'
 end
 

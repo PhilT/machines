@@ -13,7 +13,7 @@ module Machines
       yaml = YAML.load_file('webapps.yml')
       yaml = yaml.select{|name| apps.include?(name) } if apps
       yaml.each do |app_name, settings|
-        environment = settings[AppConf.environment.to_s] || raise(ArgumentError, 'No setttings for specified environment')
+        environment = settings[AppConf.environment.to_s] || raise(ArgumentError, "#{app_name} has no settings for #{AppConf.environment} environment")
         environment['db_password'] ||= app_name
         settings['name'] = app_name
         settings['full_path'] = File.join(AppConf.appsroot, settings['path'])

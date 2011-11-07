@@ -36,7 +36,7 @@ describe 'packages/webapps' do
       "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",
       "SUDO   mkdir -p nginx_path/servers",
       "RUN    git clone -q github.com/project /home/users/app_path",
-      "RUN    cd app_path && bundle",
+      "RUN    cd /home/users/app_path && bundle",
       "UPLOAD buffer from nginx/app_server.conf.erb to /tmp/application.conf",
       "SUDO   cp -rf /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -rf /tmp/application.conf",
