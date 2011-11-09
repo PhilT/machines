@@ -56,6 +56,13 @@ scope to a single platform and framework (others could be added) and does not tr
 are possible), instead opting for reinstallation. As cloud computing instances can be brought up on a whim, I find
 this an acceptable compromise to further aid simplicity.
 
+Target Environment
+---------------------------------------
+
+Capistrano can do great stuff with mutli-server environments. This project is geared more towards multi-project
+environments. You have lots of apps that are setup on one or more servers.
+
+
 
 Description
 ---------------------------------------
@@ -67,7 +74,10 @@ The top level script is the `Machinesfile`. This contains the packages to includ
 run. Default packages are provided by *machines*. Default packages can be overridden and new ones created. Feel free to
 fork *machines* and your add packages. Send a pull request and if they are tested they'll be added to the next release.
 
-Commands are added to a queue with `sudo` or `run`. [Here is a list of the packages](https://github.com/PhilT/machines/tree/master/lib/packages) in *machines*. [TODO: List of commands]
+Commands are added to a queue with `sudo` or `run`.
+[Here is a list of the packages](https://github.com/PhilT/machines/tree/master/lib/packages) in *machines*.
+
+[TODO: List of commands]
 
 
 Installation and Configuration

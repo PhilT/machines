@@ -13,8 +13,8 @@ def write_server_config(app, enable_ssl)
   app.enable_ssl = enable_ssl
   if enable_ssl
     conf_name = "#{app.name}_ssl.conf"
-    sudo upload "certificates/#{app.ssl_crt}", '/etc/ssl/certs/#{app.ssl_crt}'
-    sudo upload "certificates/#{app.ssl_key}", '/etc/ssl/private/#{app.ssl_key}'
+    sudo upload "certificates/#{app.ssl_crt}", "/etc/ssl/certs/#{app.ssl_crt}"
+    sudo upload "certificates/#{app.ssl_key}", "/etc/ssl/private/#{app.ssl_key}"
   else
     conf_name = "#{app.name}.conf"
   end

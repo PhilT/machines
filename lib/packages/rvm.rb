@@ -2,7 +2,7 @@ task :rvm, 'Install RVM' do
   sudo install ['git-core', 'curl']
   installer = "curl -s #{AppConf.rvm.url} -o rvm-installer ; chmod +x rvm-installer ; ./rvm-installer --version #{AppConf.rvm.version}"
   run installer, check_file('~/.rvm/bin/rvm')
-  run append '[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function', :to => '.bashrc'
+#  run append '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM function', :to => '.bashrc'
   run "source .bashrc", "type rvm | head -1 | grep 'rvm is a function' #{echo_result}"
   run remove 'rvm-installer'
 end

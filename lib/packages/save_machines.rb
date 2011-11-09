@@ -1,10 +1,13 @@
 task :save_machines, 'Saves the machines.yml' do
-  File.open( 'machines.yml', 'r+') do |f|
-    line = '#'
-    while line == '#' do
-      line = f.readline
+  comments = ''
+  File.open('machines.yml') do |f|
+    while (line = f.readline) =~ /^#/ do
+      comments << line
     end
-    f.puts ''
+  end
+  File.open( 'machines.yml', 'w') do |f|
+    f.puts comments
+    f.puts "\n"
     YAML.dump(AppConf.machines, f)
   end
 end

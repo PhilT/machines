@@ -1,6 +1,16 @@
+# Base folder where webapps are installed for each user
 appsroots:
   phil: /home/phil/workspace
   www: /home/www
+
+# An array of IP hosts. These are added to /etc/hosts by the hosts package
+# Note: localhost and local domain hosts are added by base
+hosts:
+  - 127.0.0.1 localhost
+
+# Used to add entries in /etc/hosts for webapps on development boxes
+# Allows
+local_suffix: local
 
 ec2:
   access_key_id: 123
@@ -16,16 +26,13 @@ ec2:
 
 timezone: GB
 
+# Settings used in webserver packages such as nginx and apache
 webserver:
   name: nginx
   version: 1.0.6
   url: http://nginx.org/download/nginx-1.0.6.tar.gz
   path: /opt/nginx
   servers_dir: servers
-
-db:
-  adapter: mysql
-  encoding: utf8
 
 awstats:
   stats_path: /var/www/nginx/webstats

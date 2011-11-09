@@ -20,10 +20,11 @@ a_machine:
   end
 
   it 'preserves comments' do
-    File.open('machines.yml', 'w'){|f| f.puts "# Some comments\n\na_machine:\n  hostname:\n"}
+    File.open('machines.yml', 'w'){|f| f.puts "# Some\n# comments\n\na_machine:\n  hostname:\n"}
     eval_package
     File.read('machines.yml').should == <<-EOF
-# Some comments
+# Some
+# comments
 
 ---
 a_machine:

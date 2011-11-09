@@ -98,8 +98,22 @@ describe 'Installation' do
     end
 
     it 'raises when no url supplied' do
-      lambda { git_clone '', :to => 'dir' }.should raise_error ArgumentError
-      lambda { git_clone nil, :to => 'dir' }.should raise_error ArgumentError
+      lambda { git_clone '' }.should raise_error ArgumentError
+      lambda { git_clone nil }.should raise_error ArgumentError
+    end
+
+    context ':tag option' do
+      it 'checks out a specific tag' do
+        subject = git_clone 'http://git_url.git', :to => 'dir', :tag => 'v1.0'
+        subject.map(&:command).should == [
+          'git clone -q http://git_url.git dir',
+          'cd dir && git checkout v1.0'
+        ]
+      end
+
+      it 'raises when no dir' do
+        lambda { git_clone 'http://git_url.git', :tag => 'v1.0' }.should raise_error ArgumentError
+      end
     end
   end
 

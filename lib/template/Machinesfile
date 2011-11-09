@@ -33,7 +33,7 @@ only :roles => :db do
   package :mysql
 end
 
-only :users => 'phil' do
+only :user => 'phil' do
   package :openbox
   package :apps
   package :chrome

@@ -5,7 +5,10 @@ task :hosts, 'Set /etc/hosts' do
   sudo write "127.0.0.1 #{fqdn} localhost.localdomain localhost\n127.0.1.1 #{hostname}\n", :to => '/etc/hosts'
   sudo write AppConf.hostname, :to => '/etc/hostname'
   sudo start 'hostname'
+
+  AppConf.hosts.each {|ip_host| sudo append "#{ip_host}", :to => '/etc/hosts' } if AppConf.hosts.is_a?(Array)
 end
+
 
 task :base, 'Install base packages' do
   sudo install %w(build-essential zlib1g-dev libpcre3-dev)

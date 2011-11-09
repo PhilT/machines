@@ -83,12 +83,16 @@ module Machines
     # Clone a project from a Git repository
     # @param [String] url URL to clone
     # @param [Hash] options
-    # @option options [Optional String] :to directory to clone to
+    # @option options [Optional String] :to Folder to clone to
+    # @option options [Optional String] :tag Checkout this tag after cloning (requires :to)
     def git_clone url, options = {}
       raise ArgumentError.new('git_clone Must include a url and directory') if url.nil? || url.empty?
+      raise ArgumentError.new('specifying :tag also requires :to') if options[:tag] && options[:to].nil?
       command = "git clone -q #{url}"
       command << " #{options[:to]}" if options[:to]
-      Command.new(command, check_dir(options[:to]))
+      command = Command.new(command, check_dir(options[:to]))
+      command = [command, Command.new("cd #{options[:to]} && git checkout #{options[:tag]}", "git name-rev --name-only HEAD | grep #{options[:tag]}")] if options[:tag]
+      command
     end
 
     # Installs one or more packages using apt, deb or git clone and install.sh (Ignores architecture differences)
