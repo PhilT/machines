@@ -10,6 +10,11 @@ describe 'Services' do
       should_receive(:write).with(%(description "description"\nrespawn\nexec command\n), :to => '/etc/init/name.conf', :name => 'name upstart')
       add_upstart 'name', :description => 'description', :respawn => true, :exec => 'command'
     end
+
+    it 'adds a custom script to the configuration' do
+      should_receive(:write).with(%(description "description"\ncustom script\n), :to => '/etc/init/name.conf', :name => 'name upstart')
+      add_upstart 'name', :description => 'description', :custom => 'custom script'
+    end
   end
 
   describe 'restart' do

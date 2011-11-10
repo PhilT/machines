@@ -20,8 +20,16 @@ app:
   describe 'load_app_settings' do
     it 'loads the app settings for selected apps' do
       load_app_settings ['app']
-      AppConf.webapps.should == {'app' => AppBuilder.new(:name => 'app', :path => 'path',
-        :full_path => '/home/user/path', :setting => 'setting', :db_password => 'app')}
+      AppConf.webapps.should == {
+        'app' => AppBuilder.new(
+          :name => 'app',
+          :path => 'path',
+          :full_path => '/home/user/path',
+          :root => '/home/user/path/current/public',
+          :setting => 'setting',
+          :db_password => 'app'
+        )
+      }
     end
 
     it 'handles ssl settings' do
@@ -32,6 +40,7 @@ app:
           :name => 'app',
           :path => 'path',
           :full_path => '/home/user/path',
+          :root => '/home/user/path/current/public',
           :setting => 'setting',
           :ssl_key => 'signed.key',
           :ssl_crt => 'signed.crt',
@@ -54,15 +63,27 @@ app:
   test:
     setting: setting
 other:
-  path: path
+  path: other_path
   test:
     setting: other_setting
       EOF
       File.open('webapps.yml', 'w') {|f| f.puts settings }
       load_app_settings nil
       AppConf.webapps.should == {
-        'app' => AppBuilder.new(:name => 'app', :path => 'path', :full_path => '/home/user/path', :setting => 'setting', :db_password => 'app'),
-        'other' => AppBuilder.new(:name => 'other', :path => 'path', :full_path => '/home/user/path', :setting => 'other_setting', :db_password => 'other')
+        'app' => AppBuilder.new(
+          :name => 'app',
+          :path => 'path',
+          :full_path => '/home/user/path',
+          :root => '/home/user/path/current/public',
+          :setting => 'setting',
+          :db_password => 'app'),
+        'other' => AppBuilder.new(
+          :name => 'other',
+          :path => 'other_path',
+          :root => '/home/user/other_path/current/public',
+          :full_path => '/home/user/other_path',
+          :setting => 'other_setting',
+          :db_password => 'other')
       }
     end
   end

@@ -4,6 +4,7 @@ task :openbox, 'Install Openbox window manager and associated fonts, themes, etc
     'dmz-cursor-theme',           # Mouse cursor theme
     'elementary-icon-theme',      # An icon theme
     'feh',                        # Set the background image: feh --bg-scale
+    'gnome-screenshot',           # Press Print Screen to take a screen shot of the desktop
     'lxappearance',               # Set gtk themes, cursors and icons - Set to clearlooks
     'obconf',                     # Set openbox themes - Set to onyx black
     'openbox',                    # Openbox lightweight Window Manager

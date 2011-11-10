@@ -1,49 +1,72 @@
-private:
-  scm: phil@server:/media/data/git
-  merrol_website:
-    name: merrol
-    url: merrol.com
-    passwords:
-      development: merrol
-      staging: secure
-      production: secure
+merrol_website:
+  scm: phil@server:/media/data/git/merrol_website
+  path: private/merrol_website
+  url: merrol.com
+  development:
+    password: merrol
+  staging:
+    password: secure
+  production:
+    password: secure
 
-public:
-  scm: git@github.com:/PhilT
-  cloudmachine:
-    url: cloud.electricvisions.com
-    passwords:
-      development: cloud
-      staging: secure
-      production: secure
-  eutopia:
-    url: eutopia.electricvisions.com
-    passwords:
-      development: eutopia
-      staging: secure
-      production: secure
-  fountain:
-    url: fountainwiki.com
-    passwords:
-      development: fountain
-      staging: secure
-      production: secure
-  sanity:
-    url: sanity.electricvisions.com
-    passwords:
-      development: sanity
-      staging: secure
-      production: secure
-  tvs:
-    url: tvs.electricvisions.com
-    passwords:
-      development: tvs
-      staging: secure
-      production: secure
-  velocity:
-    url: velocityprojects.com
-    passwords:
-      development: velocity
-      staging: secure
-      production: secure
+cloudmachine:
+  scm: git@github.com:/PhilT/cloudmachine.git
+  path: public/cloudmachine
+  url: cloud.electricvisions.com
+  development:
+    password: cloudmachine
+  staging:
+    password: secure
+  production:
+    password: secure
+eutopia:
+  scm: git@github.com:/PhilT/eutopia.git
+  path: public/cloudmachine
+  url: eutopia.electricvisions.com
+  development:
+    password: eutopia
+  staging:
+    password: secure
+  production:
+    password: secure
+fountain:
+  scm: git@github.com:/PhilT/fountain.git
+  path: public/cloudmachine
+  url: fountainwiki.com
+  development:
+    password: fountain
+  staging:
+    password: secure
+  production:
+    password: secure
+sanity:
+  scm: git@github.com:/PhilT/sanity.git
+  path: public/cloudmachine
+  url: sanity.electricvisions.com
+  development:
+    password: sanity
+  staging:
+    password: secure
+  production:
+    password: secure
+tvs:
+  scm: git@github.com:/PhilT/tvs.git
+  path: public/cloudmachine
+  url: tvs.electricvisions.com
+  development:
+    password: tvs
+  staging:
+    password: secure
+  production:
+    password: secure
+velocity:
+  scm: git@github.com:/PhilT/velocity.git
+  path: public/cloudmachine
+  url: velocityprojects.com
+  development:
+    password: velocity
+  staging:
+    password: secure
+  production:
+    password: secure
 

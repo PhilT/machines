@@ -7,7 +7,7 @@ server {
 server {
   listen <%= enable_ssl ? 443 : 80 %>;
   server_name <%= server_name %>;
-  root <%= File.join(AppConf.appsroot, name, 'public') %>;
+  root <%= root %>;
   rails_env <%= AppConf.environment %>;
   passenger_enabled on;
   add_header  Cache-Control public;             # Ensure browsers cache secure pages
@@ -28,10 +28,6 @@ server {
   location ~ ^/(images|javascripts|stylesheets)/ {
     expires 10y;
   }
-
-  # send 404 and servers errors to 404 or 500
-  error_page 404 /404.html;
-  error_page 500 502 504 /500.html;
 
   # Rewrite all the requests to the maintenance.html page if it exists.
   if (-f $document_root/system/maintenance.html) {

@@ -7,7 +7,11 @@ task :nginx, 'Download and configure Nginx' do
     :respawn => true,
     :exec => "#{AppConf.webserver.path}/sbin/nginx -g \"daemon off;\"",
     :env => 'PID=/opt/nginx/logs/nginx.pid',
-    :post_stop => 'start-stop-daemon --stop --pidfile $PID --name nginx --exec $DAEMON --signal TERM'
+    :custom => <<-SCRIPT
+post-stop script
+  start-stop-daemon --stop --pidfile $PID --name nginx --exec $DAEMON --signal TERM
+end
+SCRIPT
   sudo mkdir File.join(AppConf.webserver.path, 'conf')
   sudo create_from 'nginx/nginx.conf.erb', :to => "#{AppConf.webserver.path}/conf/nginx.conf"
 end

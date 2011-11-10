@@ -13,6 +13,7 @@ describe 'packages/openbox' do
       "SUDO   apt-get -q -y install dmz-cursor-theme",
       "SUDO   apt-get -q -y install elementary-icon-theme",
       "SUDO   apt-get -q -y install feh",
+      "SUDO   apt-get -q -y install gnome-screenshot",
       "SUDO   apt-get -q -y install lxappearance",
       "SUDO   apt-get -q -y install obconf",
       "SUDO   apt-get -q -y install openbox",

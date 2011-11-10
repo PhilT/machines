@@ -5,7 +5,8 @@ module Machines
       required_options options, [:description]
       options[:description] = %("#{options[:description]}")
       configuration = options.map do |option, value|
-        value = value.is_a?(TrueClass) ? '' : " #{value}"
+        value = value.is_a?(TrueClass) ? '' : " #{value}" unless option == :custom
+        option = '' if option == :custom
         "#{option}#{value}\n"
       end.join
       write configuration, :to => "/etc/init/#{name}.conf", :name => "#{name} upstart"

@@ -17,6 +17,8 @@ module Machines
         environment['db_password'] ||= app_name
         settings['name'] = app_name
         settings['full_path'] = File.join(AppConf.appsroot, settings['path'])
+        public_path = "#{AppConf.environment == :development ? '' : 'current/'}public"
+        settings['root'] = File.join(settings['full_path'], public_path)
         if environment['ssl']
           settings['ssl_key'] = environment['ssl'] + '.key'
           settings['ssl_crt'] = environment['ssl'] + '.crt'
