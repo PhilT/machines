@@ -41,17 +41,19 @@ module Machines
 
     def matched options
       options.each do |key, value|
+        value = value.is_a?(Array) ? value.map{|o| o.to_s } : value.to_s
         if AppConf[key].is_a?(Array)
+          values = AppConf[key].map{|o| o.to_s }
           if value.is_a?(Array)
-            return unless AppConf[key].reject{ |symbol| !value.include?(symbol) }.any?
+            return unless values.reject{ |symbol| !value.include?(symbol.to_s) }.any?
           else
-            return unless AppConf[key].include?(value)
+            return unless values.include?(value)
           end
         else
           if value.is_a?(Array)
-            return unless value.include?(AppConf[key])
+            return unless value.include?(AppConf[key].to_s)
           else
-            return unless value == AppConf[key]
+            return unless value == AppConf[key].to_s
           end
         end
       end

@@ -155,14 +155,24 @@ describe 'Configuration' do
         AppConf.params_array = [:matched, :another]
       end
 
-      context 'options values are arrays' do
+      context 'options values are arrays of symbols' do
         it { matched({:params_array => [:matched]}).should be_true }
         it { matched({:params_array => [:unmatched]}).should be_false }
+      end
+
+      context 'options values are arrays of strings' do
+        it { matched({'params_array' => ['matched']}).should be_true }
+        it { matched({'params_array' => ['unmatched']}).should be_false }
       end
 
       context 'options values are symbols' do
         it { matched({:params_array => :matched}).should be_true }
         it { matched({:params_array => :unmatched}).should be_false }
+      end
+
+      context 'options values are strings' do
+        it { matched({:params_array => 'matched'}).should be_true }
+        it { matched({:params_array => 'unmatched'}).should be_false }
       end
     end
 
