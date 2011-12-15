@@ -254,7 +254,7 @@ describe 'Configuration' do
       ]
     end
 
-    it 'adds /. to the end of directory paths' do
+    it 'adds /. to the end of folder paths' do
       File.stub(:directory?).with('source').and_return true
       sudo upload 'source', 'dest'
       AppConf.commands.map(&:command).should == [nil, "cp -rf /tmp/dest/. dest", "rm -rf /tmp/dest"]

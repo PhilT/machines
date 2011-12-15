@@ -30,7 +30,7 @@ module Machines
     def generate options
       dir = options.first || '.'
       if File.exists? dir
-        confirm = ask 'Directory already exists. Overwrite (y/n)? '
+        confirm = ask 'Folder already exists. Overwrite (y/n)? '
         return unless confirm.downcase == 'y'
       end
       FileUtils.cp_r(File.join(AppConf.application_dir, 'template', '/.'), dir)

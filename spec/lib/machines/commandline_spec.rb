@@ -9,12 +9,12 @@ describe 'CommandLine' do
       end
     end
 
-    it 'calls generate with directory' do
+    it 'calls generate with folder' do
       should_receive(:generate).with(['dir'])
       execute ['new', 'dir']
     end
 
-    it 'calls generate without directory' do
+    it 'calls generate without folder' do
       should_receive(:generate).with([])
       execute ['new']
     end
@@ -55,20 +55,20 @@ describe 'CommandLine' do
       generate ['dir']
     end
 
-    context 'when directory exists' do
+    context 'when folder exists' do
       before(:each) do
         FileUtils.mkdir_p('dir')
       end
 
       it 'is overwritten after user confirmation' do
-        should_receive(:ask).with('Directory already exists. Overwrite (y/n)? ').and_return 'y'
+        should_receive(:ask).with('Folder already exists. Overwrite (y/n)? ').and_return 'y'
         FileUtils.should_receive(:cp_r).with("#{AppConf.application_dir}/template/.", 'dir')
         FileUtils.should_receive(:mkdir_p).with(File.join('dir', 'packages'))
         generate ['dir']
       end
 
       it 'generation is aborted at user request' do
-        should_receive(:ask).with('Directory already exists. Overwrite (y/n)? ').and_return 'n'
+        should_receive(:ask).with('Folder already exists. Overwrite (y/n)? ').and_return 'n'
         FileUtils.should_not_receive(:cp_r)
         FileUtils.should_not_receive(:mkdir_p)
         generate ['dir']
@@ -98,7 +98,7 @@ Project packages
       FileUtils.touch File.join(AppConf.application_dir, 'packages', 'base.rb')
     end
 
-    it 'copies package to project directory' do
+    it 'copies package to project folder' do
       override 'base'
       File.should exist 'packages/base.rb'
     end

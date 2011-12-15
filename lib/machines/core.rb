@@ -89,10 +89,10 @@ module Machines
       end
     end
 
-    # Upload a file or directory using SCP
+    # Upload a file or folder using SCP
     # Can be used with sudo or run
-    # @param [String] local_source File or directory on the local machine
-    # @param [String] remote_dest Directory on the remote machine to copy to
+    # @param [String] local_source File or folder on the local machine
+    # @param [String] remote_dest Folder on the remote machine to copy to
     #     upload 'source_dir', '~' #=> creates source_dir/subdir as ~/subdir
     def upload local_source, remote_dest
       Upload.new(local_source, remote_dest, check_file(remote_dest))

@@ -31,17 +31,8 @@ Need to ignore hostname server error (causes check to fail)
 set scm from app.scm
 add a package to evmachines to add the extra hosts
 Need to test ERB templates
-Would set :variable_name, value be better than AppConf.variable = value
-Need a better DSL to handle AppConf and also paths File.join is so verbose
-  For exmaple, instead of:
-    File.join(AppConf.appsroot, 'subfolder')
-  How about:
-    path :appsroot, 'subfolder'
-
-Change any references to 'directory' to 'folder'
 had to remove error_page 404 and 500 from nginx
 
-Test nginx start stop scripts. Works locally but not on servers - is custom bit needed? Possibly only for 10.04
 
 rvm ruby@gemset --rvmrc to generate passenger compatible .rvmrc
 
@@ -77,4 +68,11 @@ Ensure Machines is camelcase throughout docs
 Make template more generic
 Add CPU monitor to docky
 Better error messages
+
+Would set :variable_name, value be better than AppConf.variable = value
+Need a better DSL to handle AppConf and also paths File.join is so verbose
+  For exmaple, instead of:
+    File.join(AppConf.appsroot, 'subfolder')
+  How about:
+    path :appsroot, 'subfolder'
 

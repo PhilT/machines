@@ -89,9 +89,9 @@ Installation and Configuration
 
 ### Generate an example build script
 
-    machines new <directory>
+    machines new <folder>
 
-e.g. Running `machines new example` creates the `example` directory and copies in an example template.
+e.g. Running `machines new example` creates the `example` folder and copies in an example template.
 
 ### Configure your deployment
 
@@ -177,7 +177,7 @@ Commandline Options
     machines COMMAND
     COMMAND can be:
       htpasswd            - Asks for a username and password and generates basic auth in webserver/conf/htpasswd
-      new <DIR>           - Creates a directory called DIR and generates an example machines project in it
+      new <DIR>           - Creates a folder called DIR and generates an example machines project in it
       check               - Checks Machinesfile for syntax issues
       dryrun              - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them
       build               - Asks some questions then builds your chosen machine
@@ -284,7 +284,7 @@ What's happening under the hood
 * An ssh connection is established to send all commands and uploads
 * Ssh uses the specified user and then sudo is added to commands that require it
 * When sudo is needed for file uploads. The file is uploaded to /tmp then sudo cp'd to the destination
-* When `package` is called in the `Machinesfile` that file is loaded either from the projects packages directory
+* When `package` is called in the `Machinesfile` that file is loaded either from the projects packages folder
   or from the Machines packages if not found in the project
 
 

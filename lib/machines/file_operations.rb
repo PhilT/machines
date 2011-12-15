@@ -26,7 +26,7 @@ module Machines
       Command.new("chown #{recursive}#{user}:#{user} #{path}", check_owner(user, path))
     end
 
-    # Copy a remote file or directory (will overwrite)
+    # Copy a remote file or folder (will overwrite)
     # @param [String] from Existing path
     # @param [String] to Path to copy to
     def copy from, to

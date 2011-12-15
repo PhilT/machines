@@ -48,7 +48,7 @@ describe Command do
       "100% UPLOAD local to remote\r".should be_displayed
     end
 
-    it 'uploads a directory source' do
+    it 'uploads a folder source' do
       FileUtils.mkdir_p('local')
       @mock_scp.should_receive(:upload!).with('local', 'remote', {:recursive => true})
 

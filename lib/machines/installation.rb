@@ -55,7 +55,7 @@ module Machines
     # Download, extract, and remove an archive. Currently supports `zip` or `tar.gz`. Extracts into /tmp
     # @param [String] package Package name to extract
     # @param [Hash] options
-    # @option options [Optional String] :to directory to clone to
+    # @option options [Optional String] :to folder to clone to
     def extract package, options = {}
       name = File.basename(package)
       cmd = package[/.zip/] ? 'unzip -qq' : 'tar -zxf'
@@ -86,7 +86,7 @@ module Machines
     # @option options [Optional String] :to Folder to clone to
     # @option options [Optional String] :tag Checkout this tag after cloning (requires :to)
     def git_clone url, options = {}
-      raise ArgumentError.new('git_clone Must include a url and directory') if url.nil? || url.empty?
+      raise ArgumentError.new('git_clone Must include a url and folder') if url.nil? || url.empty?
       raise ArgumentError.new('specifying :tag also requires :to') if options[:tag] && options[:to].nil?
       command = "git clone -q #{url}"
       command << " #{options[:to]}" if options[:to]
