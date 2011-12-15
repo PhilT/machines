@@ -11,8 +11,8 @@ module Machines
         'adapter' => 'mysql',
         'database' => app,
         'username' => app,
-        'password' => AppConf.webapps[app].db_password,
-        'host' => AppConf.db.address,
+        'password' => AppConf.webapps[app].password,
+        'host' => AppConf.db_server.address,
         'encoding' => 'utf8'}}.to_yaml
       write yml, :to => File.join(options[:to], 'database.yml'), :name => 'database.yml'
     end

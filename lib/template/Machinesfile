@@ -1,12 +1,3 @@
-# Take the name from the key unless name is specified
-# added project name plus .git to scm to git clone
-# use main key subdir for appsroot for given user
-# Add #{webapp}.local to localhosts on development environments
-# Set server configs to use staging.#{url} for staging environments
-# Set server configs to use #{url} for production environments
-# Use SSL by default
-# check why we were setting db_password for webapps
-
 package :load_machines
 package :questions
 

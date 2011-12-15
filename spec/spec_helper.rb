@@ -27,9 +27,9 @@ RSpec.configure do |c|
     $debug = FakeOut.new
     $file = FakeOut.new
     $console = FakeOut.new
-    AppConf.debug = Machines::Logger.new $debug
-    AppConf.file = Machines::Logger.new $file
-    AppConf.console = Machines::Logger.new $console, :truncate => true
+    Command.debug = Machines::Logger.new $debug
+    Command.file = Machines::Logger.new $file
+    Command.console = Machines::Logger.new $console, :truncate => true
 
     $input = MockStdin.new
     $output = MockStdout.new

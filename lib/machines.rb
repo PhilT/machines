@@ -16,7 +16,7 @@ AppConf.application_dir = File.dirname(__FILE__)
 
 module Machines
   class Base
-    Dir[File.join(File.dirname(__FILE__), 'machines/**/*.rb')].sort.each do |lib|
+    Dir[File.join(AppConf.application_dir, 'machines/**/*.rb')].sort.each do |lib|
       require lib
       path = ActiveSupport::Inflector.camelize(File.basename(lib, '.rb'))
       module_or_class = eval(path, nil, "eval: #{path}")
@@ -25,18 +25,15 @@ module Machines
 
     def init
       $exit_requested = false
-      AppConf.machines = {}
       AppConf.passwords = []
       AppConf.commands = []
       AppConf.webapps = {}
       AppConf.tasks = {}
-      AppConf.db = AppConf.new
-      AppConf.ec2 = AppConf.new
       AppConf.load('config.yml')
 
-      AppConf.file ||= Machines::Logger.new File.open('output.log', 'w')
-      AppConf.debug ||= Machines::Logger.new File.open('debug.log', 'w')
-      AppConf.console ||= Machines::Logger.new STDOUT, :truncate => true
+      Command.file ||= Machines::Logger.new File.open('log/output.log', 'w')
+      Command.debug ||= Machines::Logger.new File.open('log/debug.log', 'w')
+      Command.console ||= Machines::Logger.new STDOUT, :truncate => true
     end
 
     def load_machinesfile
@@ -64,18 +61,11 @@ module Machines
       build options
     end
 
-    def set_defaults_from options
-      options.each do |option|
-        name, value = option.split('=')
-        AppConf[name.to_sym] = value
-      end
-    end
-
     # Loads Machinesfile, opens an SCP connection and runs all commands and file uploads
     def build options
-      AppConf.building = true
+      AppConf.machine_name = options.shift
+      AppConf.task = options.shift
       init
-      set_defaults_from options
       load_machinesfile
 
       task AppConf.task.to_sym if AppConf.task
@@ -98,7 +88,7 @@ module Machines
           Command.scp = scp
           AppConf.commands.each do |command|
             command.run
-            AppConf.file.flush
+            Command.file.flush
             exit if $exit_requested
           end
         end
@@ -108,8 +98,8 @@ module Machines
     def prepare_to_exit
       exit if $exit_requested
       $exit_requested = true
-      AppConf.console.log("\nEXITING after current command completes...", :color => :warning)
-      AppConf.console.log("(Press again to terminate immediately)...", :color => :warning)
+      Command.console.log("\nEXITING after current command completes...", :color => :warning)
+      Command.console.log("(Press again to terminate immediately)...", :color => :warning)
     end
   end
 end

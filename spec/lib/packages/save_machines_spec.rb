@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'packages/save_machines' do
   before(:each) do
     load_package('save_machines')
-    AppConf.machines = {'a_machine' => {'hostname' => 'something', 'environment' => 'development'}}
+    AppConf.from_hash({'machines' => {'a_machine' => {'hostname' => 'something', 'environment' => 'development'}}})
   end
 
   it 'loads the machines.yml file' do
@@ -11,11 +11,11 @@ describe 'packages/save_machines' do
     eval_package
     File.read('machines.yml').should == <<-EOF
 
-
 ---
-a_machine:
-  hostname: something
-  environment: development
+machines:
+  a_machine:
+    hostname: something
+    environment: development
     EOF
   end
 
@@ -27,14 +27,15 @@ a_machine:
 # comments
 
 ---
-a_machine:
-  hostname: something
-  environment: development
+machines:
+  a_machine:
+    hostname: something
+    environment: development
     EOF
   end
 
-  it 'raises when no machines.yml' do
-    lambda { eval_package }.should raise_error Errno::ENOENT
+  it 'does not raise when no machines.yml' do
+    lambda { eval_package }.should_not raise_error Errno::ENOENT
   end
 end
 

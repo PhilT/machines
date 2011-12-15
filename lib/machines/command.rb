@@ -2,6 +2,10 @@ require 'machines/logger'
 
 module Machines
   class Command
+    class << self
+      attr_accessor :file, :debug, :console
+    end
+
     attr_accessor :command, :check
 
     def self.scp= scp
@@ -20,7 +24,7 @@ module Machines
     end
 
     def run
-      process {AppConf.file.log @@ssh.exec! wrap_in_export_and_sudo(@command)}
+      process {Command.file.log @@ssh.exec! wrap_in_export_and_sudo(@command)}
     end
 
     def info
@@ -33,19 +37,19 @@ module Machines
     end
 
     def process &block
-      AppConf.console.log progress + info, :newline => (AppConf.log_only || false)
-      AppConf.file.log info, :color => :highlight
+      Command.console.log progress + info, :newline => (AppConf.log_only || false)
+      Command.file.log info, :color => :highlight
       unless AppConf.log_only
         begin
           yield
           result = @@ssh.exec!(wrap_in_export_and_sudo(@check))
           result = check_result(result || '')
           color = color_for(result)
-          AppConf.file.log result, :color => color
-          AppConf.console.log progress + info, :color => color
+          Command.file.log result, :color => color
+          Command.console.log progress + info, :color => color
         rescue Exception => e
-          AppConf.console.log(progress + info, :color => :failure) rescue nil
-          AppConf.file.log(e.to_s, :color => :failure) rescue nil
+          Command.console.log(progress + info, :color => :failure) rescue nil
+          Command.file.log(e.to_s, :color => :failure) rescue nil
           raise e
         end
       end
@@ -55,7 +59,7 @@ module Machines
       command = "export TERM=linux && #{command}"
       echo_password = "echo #{AppConf.password} | " if AppConf.password
       command = "#{echo_password}sudo -S sh -c '#{command}'" if @sudo
-      AppConf.debug.log command
+      Command.debug.log command
       command
     end
 

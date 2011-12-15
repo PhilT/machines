@@ -6,7 +6,6 @@ describe 'CommandLine' do
       %w(htpasswd dryrun build).each do |action|
         should_receive action
         execute [action]
-        AppConf.action.should == action
       end
     end
 

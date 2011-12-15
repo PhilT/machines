@@ -8,10 +8,10 @@ module Machines
     end
 
     def run
-      AppConf.console.log ''
-      AppConf.console.log '     ' + info, :color => :info, :progress => progress
-      AppConf.file.log ''
-      AppConf.file.log info, :color => :info
+      Command.console.log ''
+      Command.console.log '     ' + info, :color => :info, :progress => progress
+      Command.file.log ''
+      Command.file.log info, :color => :info
     end
 
     def info

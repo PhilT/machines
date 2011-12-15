@@ -1,72 +1,109 @@
-merrol_website:
-  scm: phil@server:/media/data/git/merrol_website
-  path: private/merrol_website
-  url: merrol.com
-  development:
-    password: merrol
-  staging:
-    password: secure
-  production:
-    password: secure
+# BE CAREFUL: THIS FILE IS ALSO WRITTEN TO BY MACHINES
+# This config file is used to read and also write application settings.
+# You can replace these comments with your own. Comment lines will be retained upto
+# the first non-comment line.
+#
+# THIS CONTAINS A NUMBER OF PASSWORDS. SETTING PROPER PERMISSIONS IS HIGHLY RECOMMENDED.
+#
+# password: Password for application database - Leave blank to generate one
+#
 
-cloudmachine:
-  scm: git@github.com:/PhilT/cloudmachine.git
-  path: public/cloudmachine
-  url: cloud.electricvisions.com
+electricvisions:
+  scm: phil@server:/media/data/git/electricvisions
+  path: private/electricvisions
   development:
-    password: cloudmachine
+    server_name: electricvisions.dev
+    password: electricvisions
   staging:
-    password: secure
+    server_name: staging.electricvisions.com
+    password: 
   production:
-    password: secure
-eutopia:
-  scm: git@github.com:/PhilT/eutopia.git
-  path: public/cloudmachine
-  url: eutopia.electricvisions.com
+    server_name: electricvisions.com
+    password: 
+
+condensd: # Fork of fountainwiki with stylesheet changes
+  scm: git@github.com:/PhilT/condensd.git
+  path: public/condensd
   development:
-    password: eutopia
+    server_name: condensd.dev
+    password: condensd
   staging:
-    password: secure
+    server_name: staging.condensd.com
+    password: 
   production:
-    password: secure
-fountain:
+    server_name: condensd.com
+    password: 
+
+fountainwiki:
   scm: git@github.com:/PhilT/fountain.git
-  path: public/cloudmachine
-  url: fountainwiki.com
+  path: public/fountain
   development:
+    server_name: fountainwiki.dev
     password: fountain
   staging:
-    password: secure
+    server_name: staging.fountainwiki.com
+    password: 
   production:
-    password: secure
+    server_name: fountainwiki.com
+    password: 
+
+merrol:
+  scm: phil@server:/media/data/git/merrol_website
+  path: private/merrol_website
+  development:
+    server_name: merrol.dev
+    password: merrol
+  staging:
+    server_name: staging.merrol.com
+    password: 
+  production:
+    server_name: merrol.com
+    password: 
+
+somafila:
+  scm: phil@server:/media/data/git/somafila
+  path: private/somafila
+  development:
+    server_name: somafila.dev
+    password: somafila
+  staging:
+    server_name: staging.somafila.com
+    password: 
+  production:
+    server_name: somafila.com
+    password: 
+
+velocitytracking:
+  scm: git@github.com:/PhilT/velocity.git
+  path: public/velocity
+  development:
+    server_name: velocitytracking.dev
+    password: velocity
+  staging:
+    server_name: staging.velocitytracking.com
+    password: 
+  production:
+    server_name: velocitytracking.com
+    password: 
+
+eutopia:
+  scm: git@github.com:/PhilT/eutopia.git
+  path: public/eutopia
+  development:
+    server_name: eutopia.dev
+    password: eutopia
+
 sanity:
   scm: git@github.com:/PhilT/sanity.git
-  path: public/cloudmachine
-  url: sanity.electricvisions.com
+  path: public/sanity
   development:
+    server_name: sanity.dev
     password: sanity
-  staging:
-    password: secure
-  production:
-    password: secure
+
 tvs:
   scm: git@github.com:/PhilT/tvs.git
   path: public/cloudmachine
-  url: tvs.electricvisions.com
   development:
+    server_name: tvs.dev
     password: tvs
-  staging:
-    password: secure
-  production:
-    password: secure
-velocity:
-  scm: git@github.com:/PhilT/velocity.git
-  path: public/cloudmachine
-  url: velocityprojects.com
-  development:
-    password: velocity
-  staging:
-    password: secure
-  production:
-    password: secure
 

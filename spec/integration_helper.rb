@@ -15,7 +15,7 @@ RSpec.configure do |c|
     FileUtils.rm_rf 'project'
 
     $console = FakeOut.new
-    AppConf.console = Machines::Logger.new $console, :truncate => true
+    Machines::Command.console = Machines::Logger.new $console, :truncate => true
 
     $input = MockStdin.new
     $output = MockStdout.new

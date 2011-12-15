@@ -26,8 +26,7 @@ app:
           :path => 'path',
           :full_path => '/home/user/path',
           :root => '/home/user/path/current/public',
-          :setting => 'setting',
-          :db_password => 'app'
+          :setting => 'setting'
         )
       }
     end
@@ -44,8 +43,7 @@ app:
           :setting => 'setting',
           :ssl_key => 'signed.key',
           :ssl_crt => 'signed.crt',
-          :ssl => 'signed',
-          :db_password => 'app'
+          :ssl => 'signed'
         )
       }
     end
@@ -75,15 +73,13 @@ other:
           :path => 'path',
           :full_path => '/home/user/path',
           :root => '/home/user/path/current/public',
-          :setting => 'setting',
-          :db_password => 'app'),
+          :setting => 'setting'),
         'other' => AppBuilder.new(
           :name => 'other',
           :path => 'other_path',
           :root => '/home/user/other_path/current/public',
           :full_path => '/home/user/other_path',
-          :setting => 'other_setting',
-          :db_password => 'other')
+          :setting => 'other_setting')
       }
     end
   end

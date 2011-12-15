@@ -31,13 +31,13 @@ http {
   # client_max_body_size 1M;      # Max content that will be served. Increase if media content is to be served
   # client_body_timeout 60;       # Time allowed to respond within in seconds. Increase if requests are expected to take a long time
 
-  passenger_root $HOME/.rvm/gems/ruby-1.9.2-p290@global/gems/passenger-3.0.9;
-  passenger_ruby $HOME/.rvm/wrappers/ruby-1.9.2-p290@global/ruby;
+  passenger_root <%= File.join(AppConf.user_home, '.rvm', 'gems', AppConf.ruby.full_version, '@global', 'gems', "passenger-#{AppConf.passenger.version}") %>;
+  passenger_root <%= File.join(AppConf.user_home, '.rvm', 'wrappers', AppConf.ruby.full_version, '@global', 'ruby') %>;
 
   passenger_max_pool_size 8;                # Max number of simultaneous instances
   passenger_pool_idle_time 0;               # Do not shutdown instances unless needed
   passenger_pre_start http://localhost;     # Prestart RiskPlatform
 
-  include <%= "#{AppConf.webserver.path}/#{AppConf.webserver.servers_dir}/*.conf" %>;
+  include <%= File.join(AppConf.webserver.path, AppConf.webserver.servers_dir, '*.conf') %>;
 }
 

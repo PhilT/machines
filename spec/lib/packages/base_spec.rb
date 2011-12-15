@@ -3,7 +3,8 @@ require 'spec_helper'
 describe 'packages/base' do
   before(:each) do
     load_package('base')
-    AppConf.hostname = 'hostname'
+    AppConf.machine = AppConf.new
+    AppConf.machine.hostname = 'hostname'
     AppConf.hosts = ['1.2.3.4 some.domain']
     @hosts = [
       "TASK   hosts - Set /etc/hosts",

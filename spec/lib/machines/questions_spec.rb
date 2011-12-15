@@ -1,29 +1,6 @@
 require 'spec_helper'
 
 describe 'Questions' do
-  describe 'choose_machine' do
-    before(:each) do
-      AppConf.machines = {'desktop' => {'environment' => 'development', 'roles' => ['app', 'db']}}
-      @mock_menu = mock HighLine::Menu, :prompt= => nil
-    end
-
-    it 'loads options from Machinesfile' do
-      should_receive(:choose).with('desktop').and_yield @mock_menu
-      choose_machine
-    end
-
-    it 'prompts user to select machine' do
-      @mock_menu.should_receive(:prompt=).with('Select machine to build: ')
-      should_receive(:choose).and_yield @mock_menu
-      choose_machine
-    end
-
-    it 'sets the choice' do
-      should_receive(:choose).and_return 'desktop'
-      choose_machine.should == 'desktop'
-    end
-  end
-
   describe 'enter_password' do
     before(:each) do
       stub!(:ask).and_return 'password'

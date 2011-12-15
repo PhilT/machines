@@ -1,40 +1,45 @@
-def run_mysql_statement(sql, options)
-  required_options options, [:on, :password]
-  run "echo \"#{sql}\" | mysql -u root -p#{options[:password]} -h #{options[:on]}", nil
+def mysql_execute(sql, options)
+  required_options options, [:password]
+  run "echo \"#{sql}\" | mysql -u root -p#{options[:password]}", nil
 end
 
 only :roles => :db do
   task :mysql, 'Install MySQL' do
-    sudo debconf 'mysql-server-5.1', 'mysql-server/root_password', 'password', AppConf.db.root_pass
-    sudo debconf 'mysql-server-5.1', 'mysql-server/root_password_again', 'password', AppConf.db.root_pass
-    sudo install 'mysql-server'
+    name = 'mysql-server-5.1'
+    key = 'mysql-server/root_password'
+    sudo debconf name, key, 'password', AppConf.machine.root_pass
+    sudo debconf name, "#{key}_again", 'password', AppConf.machine.root_pass
+    sudo install %w(mysql-server libmysqlclient-dev)
     run restart 'mysqld'
   end
 end
 
-only :roles => :app do
-  sudo install 'libmysqlclient-dev'
-  task :dbperms, 'Grant database access to applications' do
+only :roles => :dbmaster do
+  task :dbperms, 'Grant applications access to the database' do
     AppConf.webapps.values.each do |app|
-      run_mysql_statement "GRANT ALL ON *.* TO '#{app.name}'@'%' IDENTIFIED BY '#{app.db_password}';",
-        :on => AppConf.db.address, :password => AppConf.db.root_pass
+      mysql_execute "GRANT ALL ON *.* TO '#{app.name}'@'%' " +
+        "IDENTIFIED BY '#{app.password}';",
+        :password => AppConf.machine.root_pass
     end
   end
-end
 
-only :roles => :dbmaster do
-  task :replication, 'Setup database replication' do
+  task :replication, 'Grant replication access to this machine' do
     sudo upload "mysql/dbmaster.cnf", "/etc/mysql/conf.d/dbmaster.cnf"
-    run_mysql_statement "GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%' IDENTIFIED BY '#{AppConf.db.replication_pass}';",
-      :on => AppConf.target.address, :password => AppConf.db.root_pass
+    mysql_execute "GRANT REPLICATION SLAVE ON *.* " +
+      "TO '#{AppConf.machine.replication_user}'@'%' " +
+      "IDENTIFIED BY '#{AppConf.machine.replication_pass}';",
+      :password => AppConf.machine.root_pass
   end
 end
 
 only :roles => :dbslave do
-  task :replication, 'Setup database replication' do
+  task :replication, 'Setup database replication from master' do
     sudo upload "mysql/dbslave.cnf", "/etc/mysql/conf.d/dbslave.cnf"
-    run_mysql_statement "CHANGE MASTER TO MASTER_HOST='#{AppConf.dbmaster.address}', MASTER_USER='repl' MASTER_PASSWORD='#{AppConf.db.replication_pass}';",
-      :on => AppConf.target.address, :password => AppConf.db.root_pass
+    mysql_execute "CHANGE MASTER TO " +
+      "MASTER_HOST='#{AppConf.db_server.address}', " +      
+      "MASTER_USER='#{AppConf.db_server.replication_user}' " +
+      "MASTER_PASSWORD='#{AppConf.db_server.replication_pass}';",
+    :password => AppConf.machine.root_pass
   end
 end
 

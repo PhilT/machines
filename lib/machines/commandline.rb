@@ -2,10 +2,10 @@ module Machines
   module Commandline
     def execute(options)
       help = Help.new
-      AppConf.action = options.shift
-      if help.actions.include?(AppConf.action)
-        AppConf.action = 'generate' if AppConf.action == 'new'
-        send AppConf.action, options
+      action = options.shift
+      if help.actions.include?(action)
+        action = 'generate' if action == 'new'
+        send action, options
       else
         say help.to_s
       end

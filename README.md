@@ -246,8 +246,6 @@ Some of the settings set and used by *machines* are:
 
 * `AppConf.commands` - All the commands that are to be run
 * `AppConf.tasks` - Names of the tasks - Used to check dependencies and display tasks the help
-* `AppConf.file` - The file logger
-* `appConf.console` - The console logger
 * `AppConf.user` - The selected user settings
 
 Take a look at `template/config/*.yml` for more.
@@ -256,7 +254,7 @@ Take a look at `template/config/*.yml` for more.
 Setting up the test Machines virtual machine
 ---------------------------------------
 
-* Start your virtualization software (I use VirtualBox).
+* Start your virtualization software (I use VirtualBox)
   * Create a new VM with the name of machinesvm (used in the rake tasks and tests)
   * Select Ubuntu or Ubuntu x64 as the OS (depending on your chosen image)
   * Go to Network and add a Bridged Adapter and a Host-only Adapter
@@ -283,19 +281,20 @@ Setting up the test Machines virtual machine
 What's happening under the hood
 ---------------------------------------
 
-ssh uses the specified user and then sudo is added to commands that require it.
-When sudo is needed for file uploads. The file is uploaded to /tmp then sudo cp'd to the destination.
-When `package` is called in the `Machinesfile` that file is loaded either from the projects packages directory,
-or from the Machines packages if not found in the project.
+* An ssh connection is established to send all commands and uploads
+* Ssh uses the specified user and then sudo is added to commands that require it
+* When sudo is needed for file uploads. The file is uploaded to /tmp then sudo cp'd to the destination
+* When `package` is called in the `Machinesfile` that file is loaded either from the projects packages directory
+  or from the Machines packages if not found in the project
 
 
 Limitations
 ---------------------------------------
-* Only one user per machine. Servers use www-data (by default) for nginx/apache, passenger and deployments.
+* Only one user per machine. Servers use www-data (by default) for nginx/apache, passenger and deployments
 * The system has been designed to allow a certain flexibility in the configuration although some things
-  may not yet be totally configurable it should be possible to add or modify the relevant package.
-* We are currently focused on Ruby 1.9.2, Rails 3 and Passenger 3.
-* Some commands may not properly escape quotes when used with sudo (e.g. append and replace). This may be addressed in a future release.
+  may not yet be totally configurable it should be possible to add or modify the relevant package
+* We are currently focused on Ruby 1.9.2, Rails 3 and Passenger 3
+* Some commands may not properly escape quotes when used with sudo (e.g. append and replace). This may be addressed in a future release
 
 Planned
 ---------------------------------------
@@ -306,14 +305,12 @@ Supporting versions of Ubuntu from 11.04 onwards is planned.
 Development, Patches, Pull Requests
 ---------------------------------------
 
-* Fork the project.
+* Fork the project
 * Test drive your feature addition or bug fix
-* Commit, do not mess with rakefile, version, or history.
-* Send me a pull request. Please use topic branches.
-
-Currently adding package tests and integration test.
-Feel free to add/enhance packages and submit pull requests.
-Package tests are a bit of a bind now. They need to be more flexible to but do catch a lot of potential issues.
+* Commit, do not mess with rakefile, version, or history
+* Send me a pull request. Please use topic branches
+* Feel free to add/enhance packages and submit pull requests
+* Package tests are a bit of a pain but do catch a lot of potential issues
 
 
 References

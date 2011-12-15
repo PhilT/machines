@@ -1,30 +1,30 @@
 require 'spec_helper'
 
 describe 'Machines' do
-  include Core
-
   subject {Machines::Base.new}
 
   before(:each) do
     File.stub(:read).and_return ''
     AppConf.log_only = false
     File.open('config.yml', 'w') { |f| f.puts "timezone: GB" }
+    FileUtils.mkdir 'log'
   end
 
   describe 'init' do
     it 'initializes some AppConf settings and loads configs' do
-      AppConf.file = nil
+      Command.file = nil
+      Command.console = nil
+      Command.debug = nil
       subject.init
-      AppConf.machines.should == {}
       AppConf.passwords.should == []
       AppConf.commands.should == []
       AppConf.webapps.should == {}
       AppConf.tasks.should == {}
-      AppConf.db.should be_a AppConf
       AppConf.timezone.should == 'GB'
-      File.should exist 'output.log'
-      AppConf.file.should be_a Machines::Logger
-      AppConf.console.should be_a Machines::Logger
+      File.should exist 'log/output.log'
+      Command.file.should be_a Machines::Logger
+      Command.console.should be_a Machines::Logger
+      Command.debug.should be_a Machines::Logger
     end
   end
 
@@ -77,14 +77,6 @@ describe 'Machines' do
     end
   end
 
-  describe 'set_defaults_from' do
-    it 'sets AppConf from name/value pairs' do
-      subject.set_defaults_from ["a_name=value", "another_name=another_value"]
-      AppConf.a_name.should == 'value'
-      AppConf.another_name.should == 'another_value'
-    end
-  end
-
   describe 'build' do
     before(:each) do
       subject.stub(:init)
@@ -92,6 +84,12 @@ describe 'Machines' do
       AppConf.address = 'target'
       AppConf.user = 'username'
       AppConf.password = 'userpass'
+    end
+
+    it 'sets machine_name' do
+      Net::SCP.stub(:start)
+      subject.build ['machine']
+      AppConf.machine_name.should == 'machine'
     end
 
     it 'starts an SCP session using password authentication' do
@@ -128,7 +126,7 @@ describe 'Machines' do
       Net::SCP.stub(:start).and_yield(mock_scp)
       Command.stub(:scp=)
       mock_command.stub(:run)
-      AppConf.file.should_receive(:flush)
+      Command.file.should_receive(:flush)
       subject.build []
     end
 
@@ -141,7 +139,7 @@ describe 'Machines' do
       mock_command_from_task.should_receive(:run)
       AppConf.tasks = { :task => {:block => Proc.new { run mock_command_from_task }} }
 
-      subject.build ['task=task']
+      subject.build ['machine', 'task']
     end
 
     it 'logs instead of SSHing and running commands' do
@@ -150,13 +148,6 @@ describe 'Machines' do
       AppConf.commands.first.should_receive(:run)
       AppConf.log_only = true
       subject.build []
-    end
-
-    it 'sets AppConf settings from options' do
-      Net::SCP.stub(:start)
-      subject.build ['some_option=a_value', 'another_option=another_value']
-      AppConf.some_option.should == 'a_value'
-      AppConf.another_option.should == 'another_value'
     end
 
     describe 'interrupts' do
