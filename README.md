@@ -71,11 +71,11 @@ This tool should make it simple to develop and deploy Ruby on Rails applications
 with sensible defaults.
 
 The top level script is the `Machinesfile`. This contains the packages to include. Packages contain the commands to
-run. Default packages are provided by *machines*. Default packages can be overridden and new ones created. Feel free to
-fork *machines* and your add packages. Send a pull request and if they are tested they'll be added to the next release.
+run. Default packages are provided by Machines. Default packages can be overridden and new ones created. Feel free to
+fork Machines and your add packages. Send a pull request and if they are tested they'll be added to the next release.
 
 Commands are added to a queue with `sudo` or `run`.
-[Here is a list of the packages](https://github.com/PhilT/machines/tree/master/lib/packages) in *machines*.
+[Here is a list of the packages](https://github.com/PhilT/machines/tree/master/lib/packages) in Machines.
 
 [TODO: List of commands]
 
@@ -131,14 +131,14 @@ Take a look at the generated project. It contains several folders and the main `
 ### Check the Machinesfile
 
     ssh-keygen -R <host ip> # remove host from known_hosts file (handy when testing)
-    machines dryrun
+    machines dryrun <machine>
     cat log/output.log
 
 ### Build the machine
 
-    $ machines build
+    $ machines build <machine>
 
-**Machines** will ask a series of questions:
+Machines will ask a series of questions:
 
     1. Desktop
     2. Staging
@@ -177,7 +177,7 @@ Commandline Options
     machines COMMAND
     COMMAND can be:
       htpasswd            - Asks for a username and password and generates basic auth in webserver/conf/htpasswd
-      new <DIR>           - Creates a folder called DIR and generates an example machines project in it
+      new <DIR>           - Creates a folder called DIR and generates an example Machines project in it
       check               - Checks Machinesfile for syntax issues
       dryrun              - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them
       build               - Asks some questions then builds your chosen machine
@@ -200,7 +200,7 @@ Commandline Options
     rake vm:win:state    # Get virtual machine state (on a Windows host)
     rake vm:win:stop     # Stop the virtual machine (on a Windows host)
 
-If you have Ubuntu running on a Windows Host you can use the vm:win:* tasks to control the machines VM used for testing.
+If you have Ubuntu running on a Windows Host you can use the vm:win:* tasks to control the Machines VM used for testing.
 The simplest program I've found to get a Windows SSH server is freeSSHd (<http://www.freesshd.com/?ctt=download>).
 
 
@@ -240,9 +240,9 @@ Default structure created by running `machines new example`:
 Global settings
 ---------------------------------------
 
-*machines* uses a gem I wrote called [app_conf](https://github.com/PhilT/app_conf). It's used to load global settings
-from YAML files as well as add further settings in Ruby. *machines* uses both internally and for package settings.
-Some of the settings set and used by *machines* are:
+Machines uses a gem I wrote called [app_conf](https://github.com/PhilT/app_conf). It's used to load global settings
+from YAML files as well as add further settings in Ruby. Machines uses it both internally and for package settings.
+Some of the settings set and used by Machines are:
 
 * `AppConf.commands` - All the commands that are to be run
 * `AppConf.tasks` - Names of the tasks - Used to check dependencies and display tasks the help
@@ -255,7 +255,7 @@ Setting up the test Machines virtual machine
 ---------------------------------------
 
 * Start your virtualization software (I use VirtualBox)
-  * Create a new VM with the name of machinesvm (used in the rake tasks and tests)
+  * Create a new VM with the name of `machinesvm` (used in the rake tasks and tests)
   * Select Ubuntu or Ubuntu x64 as the OS (depending on your chosen image)
   * Go to Network and add a Bridged Adapter and a Host-only Adapter
   * Go to Storage, select the Empty CD, click the CD icon on the far right and find the image (in /tmp)
