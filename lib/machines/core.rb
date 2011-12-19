@@ -29,6 +29,10 @@ module Machines
       end
     end
 
+    def generate_password
+      WEBrick::Utils.random_string(20)
+    end
+
     # Only executes the code if AppConf parameters match what is given in args
     def only options, &block
       yield if matched(options)

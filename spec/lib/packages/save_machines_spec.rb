@@ -10,7 +10,6 @@ describe 'packages/save_machines' do
     File.open('machines.yml', 'w'){|f| f.puts "\n"}
     eval_package
     File.read('machines.yml').should == <<-EOF
-
 ---
 machines:
   a_machine:
@@ -20,12 +19,11 @@ machines:
   end
 
   it 'preserves comments' do
-    File.open('machines.yml', 'w'){|f| f.puts "# Some\n# comments\n\na_machine:\n  hostname:\n"}
+    File.open('machines.yml', 'w'){|f| f.puts "# Some\n# comments\n---\na_machine:\n  hostname:\n"}
     eval_package
     File.read('machines.yml').should == <<-EOF
 # Some
 # comments
-
 ---
 machines:
   a_machine:

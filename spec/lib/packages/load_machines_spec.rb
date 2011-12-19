@@ -62,6 +62,20 @@ describe 'packages/load_machines' do
     end
   end
 
+  it 'sets root_pass when not set' do
+    stub!(:generate_password).and_return '1234'
+    save_settings
+    eval_package
+    AppConf.machines.a_machine.root_pass.should == '1234'
+  end
+
+  it 'does not overwrite root_pass' do
+    should_not_receive(:generate_password)
+    settings['machines']['a_machine']['root_pass'] = 'something'
+    save_settings
+    eval_package
+  end
+
   it 'sets user' do
     save_settings
     eval_package

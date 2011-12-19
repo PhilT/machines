@@ -9,6 +9,13 @@ describe 'Configuration' do
     @command2 = Command.new('command 2', 'check 2')
   end
 
+  describe 'generate_password' do
+    it 'generates a random password' do
+      WEBrick::Utils.stub(:random_string).with(20).and_return '01234567890123456789'
+      generate_password.should == '01234567890123456789'
+    end
+  end
+
   describe 'task' do
     it 'yields' do
       yielded = false
