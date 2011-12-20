@@ -8,7 +8,10 @@ task :load_machines, 'Loads the machines.yml' do
   raise ConfigError, "#{AppConf.machine_name} does not match any machine in machines.yml" unless machine
   AppConf.db_server = AppConf.machines[machine.db_server]
 
-  machine.root_pass ||= generate_password
+  if machine.root_pass.nil?
+    machine.root_pass = generate_password
+    AppConf.machines_changed = true
+  end
 
   AppConf.user_home = "/home/#{machine.user}"
   AppConf.appsroot = AppConf.appsroots[machine.user] if machine.user

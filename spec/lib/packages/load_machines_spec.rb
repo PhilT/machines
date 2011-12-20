@@ -69,6 +69,20 @@ describe 'packages/load_machines' do
     AppConf.machines.a_machine.root_pass.should == '1234'
   end
 
+  it 'sets AppConf.machines_changed when passwords are generated' do
+    stub!(:generate_password).and_return '1234'
+    save_settings
+    eval_package
+    AppConf.machines_changed.should_not be_nil
+  end
+
+  it 'AppConf.machines_changed not set when no passwords are generated' do
+    settings['machines']['a_machine']['root_pass'] = '1234'
+    save_settings
+    eval_package
+    AppConf.machines_changed.should be_nil
+  end
+
   it 'does not overwrite root_pass' do
     should_not_receive(:generate_password)
     settings['machines']['a_machine']['root_pass'] = 'something'
