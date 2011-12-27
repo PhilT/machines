@@ -1,9 +1,10 @@
-task :gmate, 'Clone gmate for gEdit from Github and set some preferences and plugins' do
+task :gmate, 'Clone and install gmate for gEdit from Github and set some preferences and plugins' do
   dir = File.join AppConf.appsroot, 'gmate'
 
-  sudo install 'python-pyinotify' # Required for gEdit Open
-  run git_clone 'git://github.com/gmate/gmate.git', :to => 'workspace/gmate'
-  run 'cd workspace/gmate && echo \n | ./install.sh'
+  sudo install ['python-pyinotify'] # Required for gEdit Open
+  sudo install ['python-webkitgtk', 'ack-grep'] # Find in project
+  run git_clone 'git://github.com/gmate/gmate.git', :to => dir
+  run "cd #{dir} && echo \\n | ./install.sh"
 
   run configure '/apps/gedit-2/plugins/active-plugins' => %w(text_tools smart_indent align rails_hotkeys trailsave gemini rubyonrailsloader gedit_openfiles quickhighlightmode completion time docinfo filebrowser snippets spell indent tabswitch)
 

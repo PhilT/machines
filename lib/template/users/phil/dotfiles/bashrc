@@ -13,28 +13,35 @@ export RAILS_ENV=
 alias ls='ls --color=auto'
 alias less='less -R'
 
-# Slideshow with feh image viewer
-# Press ENTER to load current image into Gimp. H to pause slideshow
-#   slide <file or folder>
+## Slideshow with feh image viewer
+## Press ENTER to load current image into Gimp. H to pause slideshow
+##   slide <file or folder>
 alias slide='feh --action "gimp '%f'" --fullscreen --auto-zoom --borderless --slideshow-delay 5 --sort name'
 
-# Search a Rails project excluding non-source directories
+## Search a Rails project excluding non-source directories
 function s {
   grep --color=auto --exclude-dir={coverage,db,doc,.git,log,tmp,vendor,.yardoc} -r $* .
 }
 
-# Get git branch name
+## Get git branch name
 parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ [\1]/'
 }
 
-# Colour-coded prompt
-#     machine-name current-dir ruby@gemset [branch]
-PS1="\[\e[0;35m\]\h \[\e[0;34m\]\w \[\e[0;31m\]\$(~/.rvm/bin/rvm-prompt v g)\[\e[0;33m\]\$(parse_git_branch) \[\e[0;35m\]\$\[\e[m\] "
-
-# Remove a file from git history
+## Remove a file from git history
 # git-remove-history FILE
 git-remove-history() {
   git filter-branch --index-filter 'git rm --cached --ignore-unmatch $1' HEAD && git push --force
 }
+
+# Colour-coded prompt
+#     machine-name current-dir ruby@gemset [branch] $
+PURPLE="\[\e[0;35m\]"
+BLUE="\[\e[0;34m\]"
+RED="\[\e[0;31m\]"
+YELLOW="\[\e[0;33m\]"
+NORMAL="\[\e[m\]"
+BRANCH="\$(parse_git_branch)"
+# RVM="\$(~/.rvm/bin/rvm-prompt v g)" # Uncomment to enable ruby@gemset
+PS1="$PURPLE\h $BLUE\w$RED$RVM$YELLOW$BRANCH $PURPLE\$$NORMAL "
 

@@ -330,10 +330,12 @@ References
 * Another Rails deployment guide: <http://thoughtsincomputation.com/posts/deploying-in-harmony-capistrano-rvm-bundler-and-git>
 * EC2 deployment for Rails with Rubber: <http://ginzametrics.com/deploy-rails-app-to-ec2-with-rubber.html>
 * MySQL and EBS: <http://aws.amazon.com/articles/1663>
+* Nginx, passenger manual compile: <http://extralogical.net/articles/howto-compile-nginx-passenger.html>
 * Nginx Passenger setup guide: <https://github.com/jnstq/rails-nginx-passenger-ubuntu>
-* Nginx init.d script: <http://articles.slicehost.com/2007/10/17/ubuntu-lts-adding-an-nginx-init-script>
+* Nginx configuration: <http://articles.slicehost.com/2009/3/5/ubuntu-intrepid-nginx-configuration>
 * Bundler Deployment: <http://gembundler.com/deploying.html>
 * Free SSL Certificates: <http://www.startssl.com/>
+
 
 ### RVM
 

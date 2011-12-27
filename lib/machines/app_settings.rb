@@ -28,9 +28,9 @@ module Machines
         next unless apps.nil? || apps.include?(app_name)
         environment = settings[AppConf.environment.to_s] || raise(ArgumentError, "#{app_name} has no settings for #{AppConf.environment} environment")
         settings['name'] = app_name
-        settings['full_path'] = File.join(AppConf.appsroot, settings['path'])
+        settings['path'] = File.join(AppConf.appsroot, File.basename(settings['scm'], '.git'))
         public_path = "#{AppConf.environment == :development ? '' : 'current/'}public"
-        settings['root'] = File.join(settings['full_path'], public_path)
+        settings['root'] = File.join(settings['path'], public_path)
         if environment['ssl']
           settings['ssl_key'] = environment['ssl'] + '.key'
           settings['ssl_crt'] = environment['ssl'] + '.crt'

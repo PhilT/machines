@@ -18,8 +18,7 @@ describe 'AppSettings' do
 ---
 webapps:
   app:
-    path: path
-    full_path: /home/user/path
+    scm: scm://project.git
     test:
       setting: setting
       password: secure
@@ -32,10 +31,10 @@ EOF
       load_app_settings ['app']
       AppConf.webapps.should == {
         'app' => AppBuilder.new(
+          :scm => 'scm://project.git',
           :name => 'app',
-          :path => 'path',
-          :full_path => '/home/user/path',
-          :root => '/home/user/path/current/public',
+          :path => '/home/user/project',
+          :root => '/home/user/project/current/public',
           :setting => 'setting',
           :password => 'secure'
         )
@@ -48,9 +47,9 @@ EOF
       AppConf.webapps.should == {
         'app' => AppBuilder.new(
           :name => 'app',
-          :path => 'path',
-          :full_path => '/home/user/path',
-          :root => '/home/user/path/current/public',
+          :scm => 'scm://project.git',
+          :path => '/home/user/project',
+          :root => '/home/user/project/current/public',
           :setting => 'setting',
           :password => 'secure',
           :ssl_key => 'signed.key',
@@ -70,12 +69,12 @@ EOF
 ---
 webapps:
   app:
-    path: path
+    scm: scm://project.git
     test:
       setting: setting
       password: secure
   other:
-    path: other_path
+    scm: scm://other_project
     test:
       setting: other_setting
       password: secure
@@ -85,16 +84,16 @@ webapps:
       AppConf.webapps.should == {
         'app' => AppBuilder.new(
           :name => 'app',
-          :path => 'path',
-          :full_path => '/home/user/path',
-          :root => '/home/user/path/current/public',
+          :path => '/home/user/project',
+          :scm => 'scm://project.git',
+          :root => '/home/user/project/current/public',
           :setting => 'setting',
           :password => 'secure'),
         'other' => AppBuilder.new(
           :name => 'other',
-          :path => 'other_path',
-          :root => '/home/user/other_path/current/public',
-          :full_path => '/home/user/other_path',
+          :root => '/home/user/other_project/current/public',
+          :scm => 'scm://other_project',
+          :path => '/home/user/other_project',
           :setting => 'other_setting',
           :password => 'secure')
       }

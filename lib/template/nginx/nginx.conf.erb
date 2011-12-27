@@ -31,8 +31,8 @@ http {
   # client_max_body_size 1M;      # Max content that will be served. Increase if media content is to be served
   # client_body_timeout 60;       # Time allowed to respond within in seconds. Increase if requests are expected to take a long time
 
-  passenger_root <%= File.join(AppConf.user_home, '.rvm', 'gems', AppConf.ruby.full_version, '@global', 'gems', "passenger-#{AppConf.passenger.version}") %>;
-  passenger_root <%= File.join(AppConf.user_home, '.rvm', 'wrappers', AppConf.ruby.full_version, '@global', 'ruby') %>;
+  passenger_root <%= AppConf.passenger.root %>;
+  passenger_ruby <%= AppConf.passenger.ruby %>;
 
   passenger_max_pool_size 8;                # Max number of simultaneous instances
   passenger_pool_idle_time 0;               # Do not shutdown instances unless needed

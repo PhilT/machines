@@ -50,20 +50,20 @@ describe 'Installation' do
   describe 'extract' do
     it 'instaniates commands to download, extract and remove a tar archive' do
       subject = extract 'http://url/package.tar'
-      subject.command.should == 'cd /tmp && wget http://url/package.tar && tar -zxf package.tar && rm package.tar && cd -'
-      subject.check.should == 'test -d /tmp/package && echo CHECK PASSED || echo CHECK FAILED'
+      subject.command.should == 'cd /usr/local/src && wget http://url/package.tar && tar -zxf package.tar && rm package.tar && cd -'
+      subject.check.should == 'test -d /usr/local/src/package && echo CHECK PASSED || echo CHECK FAILED'
     end
 
     it 'instaniates commands to download, extract and remove a zip archive' do
       subject = extract 'http://url/package.zip'
-      subject.command.should == 'cd /tmp && wget http://url/package.zip && unzip -qq package.zip && rm package.zip && cd -'
-      subject.check.should == 'test -d /tmp/package && echo CHECK PASSED || echo CHECK FAILED'
+      subject.command.should == 'cd /usr/local/src && wget http://url/package.zip && unzip -qq package.zip && rm package.zip && cd -'
+      subject.check.should == 'test -d /usr/local/src/package && echo CHECK PASSED || echo CHECK FAILED'
     end
 
     it 'moves extracted contents to specified folder' do
-      subject = extract 'http://url/package-1.0.tar.gz', :to => '/opt/package'
-      subject.command.should == 'cd /tmp && wget http://url/package-1.0.tar.gz && tar -zxf package-1.0.tar.gz && mv package-1.0 /opt/package && rm package-1.0.tar.gz && cd -'
-      subject.check.should == 'test -d /opt/package && echo CHECK PASSED || echo CHECK FAILED'
+      subject = extract 'http://url/package-1.0.tar.gz', :to => '/opt'
+      subject.command.should == 'cd /opt && wget http://url/package-1.0.tar.gz && tar -zxf package-1.0.tar.gz && rm package-1.0.tar.gz && cd -'
+      subject.check.should == 'test -d /opt/package-1.0 && echo CHECK PASSED || echo CHECK FAILED'
     end
   end
 

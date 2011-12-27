@@ -1,4 +1,5 @@
-Need to implement 'uses_delayed_job'
+Convert uses of curl to wget
+Enable YAML to refer to other settings in the same file
 Write database.yml for non development servers
   * development machines should clone repos
   * servers should prep for cap deploy, write database.yml and create shared/log folder
@@ -31,7 +32,7 @@ DOC: webapps.yml loaded into AppConf
 DOC: Adding selfsigned key
 Keyring asks for a password when using docky Gmail notification [DEV]
 set show hidden and show binary in gedit [DEV]
-MySQL root pass is not set properly 
+MySQL root pass is not set properly
 Recommended practice for overwritting project with new template. Use Git
 Set cron to sensible times /etc/crontab [DEV]
 New check - check_command, runs a command and greps response. Replace occurences
@@ -47,4 +48,5 @@ Need a better DSL to handle AppConf and also paths File.join is so verbose
     path :appsroot, 'subfolder'
 rvm ruby@gemset --rvmrc to generate passenger compatible .rvmrc
 setup memcached
+passenger_nginx was installed with rvmsudo. Need to test it still works with just sudo
 

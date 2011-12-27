@@ -24,6 +24,13 @@ parse_git_branch() {
 }
 
 # Colour-coded prompt
-#     machine-name current-dir ruby@gemset [branch]
-PS1="\[\e[0;35m\]\h \[\e[0;34m\]\w \[\e[0;31m\]\$(~/.rvm/bin/rvm-prompt v g)\[\e[0;33m\]\$(parse_git_branch) \[\e[0;35m\]\$\[\e[m\] "
+#     machine-name current-dir ruby@gemset [branch] $
+PURPLE="\[\e[0;35m\]"
+BLUE="\[\e[0;34m\]"
+RED="\[\e[0;31m\]"
+YELLOW="\[\e[0;33m\]"
+NORMAL="\[\e[m\]"
+BRANCH="\$(parse_git_branch)"
+# RVM="\$(~/.rvm/bin/rvm-prompt v g)" # Uncomment to enable ruby@gemset
+PS1="$PURPLE\h $BLUE\w$RED$RVM$YELLOW$BRANCH $PURPLE\$$NORMAL "
 

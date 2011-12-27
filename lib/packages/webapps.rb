@@ -1,10 +1,10 @@
 def create_folders app
   if AppConf.environment == :development
-    run git_clone app.scm, :to => app.full_path
-    run bundle app.full_path
+    run git_clone app.scm, :to => app.path
+    run bundle app.path
   else
     %w(releases shared/config shared/system).each do |dir|
-      run mkdir File.join(app.full_path, dir)
+      run mkdir File.join(app.path, dir)
     end
   end
 end
@@ -29,6 +29,7 @@ task :webapps, 'Sets up Web apps in config/webapps.yml using app_server.conf.erb
     create_folders app
     write_server_config app, false
     write_server_config app, true if app.ssl_key
+    sudo append "127.0.0.1 #{app.server_name}", :to => '/etc/hosts'
   end
 end
 

@@ -52,16 +52,16 @@ module Machines
       Command.new(command, check)
     end
 
-    # Download, extract, and remove an archive. Currently supports `zip` or `tar.gz`. Extracts into /tmp
+    # Download, extract, and remove an archive. Currently supports `zip` or `tar.gz`.
     # @param [String] package Package name to extract
     # @param [Hash] options
-    # @option options [Optional String] :to folder to clone to
+    # @option options [Optional String] :to folder to clone or extract to (defaults to /usr/local/src)
     def extract package, options = {}
       name = File.basename(package)
       cmd = package[/.zip/] ? 'unzip -qq' : 'tar -zxf'
       dir = cmd =~ /unzip/ ? File.basename(name, '.zip') : File.basename(name).gsub(/\.tar.*/, '')
-      dest = " mv #{dir} #{options[:to]} &&" if options[:to]
-      Command.new("cd /tmp && wget #{package} && #{cmd} #{name} &&#{dest} rm #{name} && cd -", check_dir("#{options[:to] || File.join('/tmp', dir)}"))
+      dest = options[:to] || '/usr/local/src'
+      Command.new("cd #{dest} && wget #{package} && #{cmd} #{name} && rm #{name} && cd -", check_dir("#{File.join(dest, dir)}"))
     end
 
     # Install a gem
@@ -108,15 +108,15 @@ module Machines
     #     install 'http://example.com/my_package.deb', :cleanup => true #=> Installs a deb using dpkg then removes the deb
     def install packages, options = {}
       if packages.is_a?(String)
-        if packages.scan(/^http:\/\//).any?
+        if packages =~ /^http:\/\//
           commands = []
-          if packages.scan(/\.deb$/i).empty?
-            commands << extract(packages)
-            name = File.basename(packages).gsub(/\.(tar|zip).*/, '')
-            commands << Command.new("cd /tmp/#{name} && dpkg -i --force-architecture *.deb && cd - && rm -rf /tmp/#{name}", nil)
-          else
+          if packages =~ /\.deb$/i
             name = File.basename(packages)
             commands << Command.new("cd /tmp && wget #{packages} && dpkg -i --force-architecture #{name} && rm #{name} && cd -", nil)
+          else
+            commands << extract(packages, :to => '/tmp')
+            name = File.basename(packages).gsub(/\.(tar|zip).*/, '')
+            commands << Command.new("cd /tmp/#{name} && dpkg -i --force-architecture *.deb && cd - && rm -rf /tmp/#{name}", nil)
           end
           return commands
         else

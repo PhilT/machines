@@ -1,5 +1,7 @@
 task :nginx, 'Download and configure Nginx' do
-  run extract AppConf.webserver.url
+  sudo extract AppConf.webserver.url
+  sudo "cd #{AppConf.webserver.src_path} && ./configure #{AppConf.webserver.modules} --add-module=#{AppConf.passenger.nginx}"
+
   sudo add_upstart 'nginx',
     :description => 'Nginx HTTP Server',
     :start => 'on filesystem',
@@ -12,7 +14,7 @@ post-stop script
   start-stop-daemon --stop --pidfile $PID --name nginx --exec $DAEMON --signal TERM
 end
 SCRIPT
-  sudo mkdir File.join(AppConf.webserver.path, 'conf')
+
   sudo create_from 'nginx/nginx.conf.erb', :to => "#{AppConf.webserver.path}/conf/nginx.conf"
 end
 

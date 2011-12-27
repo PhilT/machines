@@ -3,44 +3,22 @@ appsroots:
   phil: /home/phil/workspace
   www: /home/www
 
-# An array of IP hosts. These are added to /etc/hosts by the hosts package
-# Note: localhost and local domain hosts are added by base
-hosts:
-  - 127.0.0.1 localhost
-
-# Used to add entries in /etc/hosts for webapps on development boxes
-# Allows
-local_suffix: local
+awstats:
+  stats_path: /var/www/nginx/webstats
 
 ec2:
   access_key_id: 123
   secret_access_key: 456
 
-timezone: GB
+# An array of IP hosts. These are added to /etc/hosts by the hosts package
+# Note:
+#   localhost and local domain hosts are added by base package
+#   app URLS are added by webapps package
+hosts:
+  - 192.168.1.4 server
+  - 192.168.56.1 host
 
-# Settings used in webserver packages such as nginx and apache
-webserver:
-  name: nginx
-  version: 1.0.6
-  url: http://nginx.org/download/nginx-1.0.6.tar.gz
-  path: /opt/nginx
-  servers_dir: servers
-
-awstats:
-  stats_path: /var/www/nginx/webstats
-
-# Latest version including preferred nginx version:
-# https://github.com/FooBarWidget/passenger/blob/master/NEWS
-passenger:
-  version: 3.0.9
-
-rvm:
-  url: https://rvm.beginrescueend.com/install/rvm
-  version: 1.9.2
-
-ruby:
-  version: 1.9.3
-  full_version: 1.9.3-p0
+login_theme: dark
 
 mail:
   domain: example.com
@@ -52,5 +30,35 @@ monit:
   webserver:
     address: 192.168.1.0/255.255.255.0
 
-login_theme: dark
+# Latest version including preferred nginx version:
+# https://github.com/FooBarWidget/passenger/blob/master/NEWS
+passenger:
+  version: 3.0.9
+
+# Uncomment to use RVM
+# Ruby will be installed using RVM
+# Passenger will be installed using rvmsudo
+#rvm:
+#  url: https://rvm.beginrescueend.com/install/rvm
+#  version: 1.9.2
+
+ruby:
+  version: 1.9.2
+  full_version: 1.9.2-p290
+#  gems_path: '.rvm/gems/1.9.2-p290/@global/gems'
+#  ruby_executable: .rvm/wrappers/1.9.2-p290@global/ruby
+  gems_path: .rbenv/versions/1.9.2-p290/lib/ruby/gems/1.9.1/gems
+  ruby_executable: .rbenv/versions/1.9.2-p290/bin/ruby
+
+timezone: GB
+
+# Settings used in webserver packages such as nginx and apache
+webserver:
+  name: nginx
+  modules: --with-http_ssl_module
+  version: 1.0.11
+  url: http://nginx.org/download/nginx-1.0.11.tar.gz
+  src_path: /usr/local/src/nginx-1.0.11
+  path: /usr/local/nginx
+  servers_dir: conf/servers
 

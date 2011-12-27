@@ -87,7 +87,7 @@ module Machines
       Command.new("sed -i \"s/#{regex}/#{with}/\" #{options[:in]}", check_string(with, options[:in]))
     end
 
-    # Overwrite a file with the specified content
+    # (Over)write a file with the specified content
     # @param [String] text Text to add
     # @param [Hash] options
     # @option options [String] :to File to write to
