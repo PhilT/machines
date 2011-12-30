@@ -1,6 +1,6 @@
 task :rvm, 'Install RVM' do
-  sudo install ['git-core', 'curl']
-  installer = "bash -s #{AppConf.rvm.version} < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )"
+  sudo install ['git-core']
+  installer = "bash -s #{AppConf.rvm.version} < <(wget -q https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )"
   run installer, check_file('~/.rvm/bin/rvm')
 
   run "source .bashrc", "type rvm | head -1 | grep 'rvm is a function' #{echo_result}"

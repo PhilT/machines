@@ -12,8 +12,7 @@ describe 'packages/rvm' do
     AppConf.commands.map(&:info).should == [
       "TASK   rvm - Install RVM",
       "SUDO   apt-get -q -y install git-core",
-      "SUDO   apt-get -q -y install curl",
-      'RUN    bash -s 1.0 < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )',
+      'RUN    bash -s 1.0 < <(wget -q https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )',
 
       "RUN    source .bashrc",
       "RUN    rm -rf rvm-installer",
