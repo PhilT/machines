@@ -1,8 +1,8 @@
-Convert uses of curl to wget
-Enable YAML to refer to other settings in the same file
 Write database.yml for non development servers
-  * development machines should clone repos
-  * servers should prep for cap deploy, write database.yml and create shared/log folder
+
+
+Enable YAML to refer to other settings in the same file
+development machines should clone repos
 force https
 
 EC2 - Look at assigning and freeing elastic IP addresses

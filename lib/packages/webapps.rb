@@ -3,7 +3,7 @@ def create_folders app
     run git_clone app.scm, :to => app.path
     run bundle app.path
   else
-    %w(releases shared/config shared/system).each do |dir|
+    %w(releases shared/config shared/system shared/log).each do |dir|
       run mkdir File.join(app.path, dir)
     end
   end

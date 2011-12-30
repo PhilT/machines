@@ -23,6 +23,7 @@ describe 'packages/webapps' do
       "RUN    mkdir -p /home/users/app_path/releases",
       "RUN    mkdir -p /home/users/app_path/shared/config",
       "RUN    mkdir -p /home/users/app_path/shared/system",
+      "RUN    mkdir -p /home/users/app_path/shared/log",
       "UPLOAD buffer from nginx/app_server.conf.erb to /tmp/application.conf",
       "SUDO   cp -rf /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -rf /tmp/application.conf",

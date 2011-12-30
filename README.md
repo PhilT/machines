@@ -1,7 +1,7 @@
 Machines - Generate. Customize. Deploy.
 =======================================
 
-Setup Ubuntu development and server **Machines** locally or on Amazon EC2 for hosting and developing Ruby on Rails 3 applications.
+Setup Ubuntu development and server **Machines** locally or in the cloud for hosting and developing Ruby on Rails 3 applications.
 
 Run commands like:
 
@@ -14,15 +14,9 @@ Run commands like:
 Status
 ---------------------------------------
 
-(November 2011)
+(January 2011)
 
-Now a few more fixes and some tweaks to server builds and then a final push on the EC2 stuff should see a first release
-out by the end of the year.
-
-(September 2011)
-
-This release has focused more on development builds but a lot of server packages
-have also been and added and the next release will finish off the EC2 and server builds.
+Cloud deployments to complete plus a few more minor features for server deployments.
 
 Features
 ---------------------------------------
@@ -39,14 +33,16 @@ Features
 * A lightweight configurable Ubuntu install
 * Working documentation for Ubuntu commands
 * A Ubuntu distribution Customizable with Ruby
+* Supports several cloud services such as EC2 and Rackspace (whatever fog supports)
 
 
 Motivation
 ---------------------------------------
 
 I believe that development, staging, and production environments should match if not be as close as possible.
-I develop on Ubuntu Linux and so it felt natural to have Ubuntu as my server environment. I've spent many years
-building and configuring PCs and anything that can be done to automate the process is a good thing in my opinion.
+I develop on Ubuntu Linux and so it felt natural to have Ubuntu as my server environment. Ubuntu is fast becoming a
+standard for desktop and server. I've spent many years building and configuring PCs and anything that can be done to
+automate the process is a good thing in my opinion.
 I also like to know what I've got installed so I have little clutter and an optimally running machine. I also like
 to reinstall development machines usually when upgrading Ubuntu or adding/changing hardware and prefer a clean start.
 
@@ -56,12 +52,12 @@ scope to a single platform and framework (others could be added) and does not tr
 are possible), instead opting for reinstallation. As cloud computing instances can be brought up on a whim, I find
 this an acceptable compromise to further aid simplicity.
 
+
 Target Environment
 ---------------------------------------
 
 Capistrano can do great stuff with mutli-server environments. This project is geared more towards multi-project
 environments. You have lots of apps that are setup on one or more servers.
-
 
 
 Description
