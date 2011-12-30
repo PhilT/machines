@@ -7,16 +7,40 @@ describe 'Database' do
   include AppSettings
 
   describe 'write_database_yml' do
-    it 'should write the database.yml file' do
-      should_receive(:required_options).with({:to => 'dir', :for => 'app'}, [:to, :for])
-      AppConf.environment = 'test'
+    before do
+      AppConf.environment = 'staging'
       AppConf.db_server = AppConf.new
       AppConf.db_server.address = 'dbhost'
       AppConf.webapps = {'app' => AppBuilder.new(:password => 'password')}
+    end
 
-      yml = "---\ntest:\n  adapter: mysql\n  database: app\n  username: app\n  password: password\n  host: dbhost\n  encoding: utf8\n"
-      should_receive(:write).with(yml, :to => 'dir/database.yml', :name => 'database.yml')
-      subject = write_database_yml :for => 'app', :to => 'dir'
+    it 'supplies correct parameters' do
+      file = write_database_yml :for => 'app', :to => 'dir'
+      file.local.read.should == <<-EOF
+---
+staging:
+  adapter: mysql
+  database: app
+  username: app
+  password: password
+  host: dbhost
+  encoding: utf8
+EOF
+    end
+
+    it 'overrides database name when supplied' do
+      AppConf.webapps = {'app' => AppBuilder.new(:password => 'password', :username => 'phil', :database => 'myapp')}
+      file = write_database_yml :for => 'app', :to => 'dir'
+      file.local.read.should == <<-EOF
+---
+staging:
+  adapter: mysql
+  database: myapp
+  username: phil
+  password: password
+  host: dbhost
+  encoding: utf8
+EOF
     end
   end
 end

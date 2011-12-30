@@ -6,12 +6,13 @@ module Machines
     # @option options [String] :for Application name
     def write_database_yml options
       required_options options, [:to, :for]
-      app = options[:for]
+      name = options[:for]
+      app = AppConf.webapps[name]
       yml = {AppConf.environment.to_s => {
         'adapter' => 'mysql',
-        'database' => app,
-        'username' => app,
-        'password' => AppConf.webapps[app].password,
+        'database' => app.database || name,
+        'username' => app.username || name,
+        'password' => app.password,
         'host' => AppConf.db_server.address,
         'encoding' => 'utf8'}}.to_yaml
       write yml, :to => File.join(options[:to], 'database.yml'), :name => 'database.yml'
