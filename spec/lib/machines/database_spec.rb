@@ -11,11 +11,10 @@ describe 'Database' do
       AppConf.environment = 'staging'
       AppConf.db_server = AppConf.new
       AppConf.db_server.address = 'dbhost'
-      AppConf.webapps = {'app' => AppBuilder.new(:password => 'password')}
     end
 
     it 'supplies correct parameters' do
-      file = write_database_yml :for => 'app', :to => 'dir'
+      file = write_database_yml AppBuilder.new(:name => 'app', :password => 'password', :path => 'path')
       file.local.read.should == <<-EOF
 ---
 staging:
@@ -28,9 +27,13 @@ staging:
 EOF
     end
 
+    it 'writes file to specified path' do
+      file = write_database_yml AppBuilder.new(:name => 'app', :password => 'password', :path => 'path')
+      file.remote.should == 'path/shared/config/database.yml'
+    end
+
     it 'overrides database name when supplied' do
-      AppConf.webapps = {'app' => AppBuilder.new(:password => 'password', :username => 'phil', :database => 'myapp')}
-      file = write_database_yml :for => 'app', :to => 'dir'
+      file = write_database_yml AppBuilder.new(:name => 'app', :password => 'password', :username => 'phil', :database => 'myapp', :path => 'path')
       file.local.read.should == <<-EOF
 ---
 staging:

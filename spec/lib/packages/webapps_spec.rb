@@ -9,7 +9,7 @@ describe 'packages/webapps' do
       'url' => 'github url', 'path' => '/home/users/app_path', 'enable_ssl' => nil, 'db_password' => 'pa55', 'server_name' => 'app.dev')}
     AppConf.from_hash(:awstats => {:path => 'stats_path'})
     AppConf.from_hash(:webserver => {:name => 'nginx', :path => 'nginx_path', :servers_dir => 'servers'})
-    AppConf.from_hash(:db => {:address => 'db_master'})
+    AppConf.from_hash(:db_server => {:address => 'db_master'})
     FileUtils.mkdir_p 'nginx'
     File.open('nginx/app_server.conf.erb', 'w') {|f| f.puts 'the template' }
   end
@@ -28,6 +28,7 @@ describe 'packages/webapps' do
       "SUDO   cp -rf /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -rf /tmp/application.conf",
       "SUDO   mkdir -p /var/log/nginx",
+      'UPLOAD buffer from database.yml to /home/users/app_path/shared/config/database.yml',
       'SUDO   echo "127.0.0.1 app.dev" >> /etc/hosts'
     ]
   end

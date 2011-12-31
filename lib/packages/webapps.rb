@@ -29,6 +29,7 @@ task :webapps, 'Sets up Web apps in config/webapps.yml using app_server.conf.erb
     create_folders app
     write_server_config app, false
     write_server_config app, true if app.ssl_key
+    run write_database_yml app unless AppConf.environment == :development
     sudo append "127.0.0.1 #{app.server_name}", :to => '/etc/hosts'
   end
 end

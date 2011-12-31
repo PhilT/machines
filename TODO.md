@@ -1,5 +1,3 @@
-Write database.yml for non development servers
-Can database.yml remote path be implied (e.g. AppConf.webapps[app].path)
 Allow AppConf.webapps[app].path to be overridden from webapps.yml
 ?? Does webapps.yml structure get preserved? (e.g. when modifying keys and resaving)
 Fix guard notifications

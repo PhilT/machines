@@ -4,18 +4,15 @@ module Machines
     # @param [Hash] options
     # @option options [String] :to Directory to write the database.yml to
     # @option options [String] :for Application name
-    def write_database_yml options
-      required_options options, [:to, :for]
-      name = options[:for]
-      app = AppConf.webapps[name]
+    def write_database_yml app
       yml = {AppConf.environment.to_s => {
         'adapter' => 'mysql',
-        'database' => app.database || name,
-        'username' => app.username || name,
+        'database' => app.database || app.name,
+        'username' => app.username || app.name,
         'password' => app.password,
         'host' => AppConf.db_server.address,
         'encoding' => 'utf8'}}.to_yaml
-      write yml, :to => File.join(options[:to], 'database.yml'), :name => 'database.yml'
+      write yml, :to => File.join(app.path, 'shared/config/database.yml'), :name => 'database.yml'
     end
   end
 end
