@@ -12,7 +12,7 @@ RSpec.configure do |c|
 
   module AllModules
     include Core
-    include AppSettings, Checks, Commandline, Configuration, Database, Ec2Machine
+    include AppSettings, Checks, Commandline, Configuration, Database, CloudMachine
     include FileOperations, Installation, Machinesfile, Questions, Services
   end
   c.include(AllModules)

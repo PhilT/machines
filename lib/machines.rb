@@ -70,9 +70,9 @@ module Machines
 
       task AppConf.task.to_sym if AppConf.task
 
-      if AppConf.ec2.use
-        username = 'ubuntu'
-        scp_options = {:keys => [AppConf.ec2.private_key_file]}
+      if AppConf.machine.cloud
+        username = AppConf.machine.cloud.username
+        scp_options = {:keys => [AppConf.machine.cloud.private_key_path]}
       else
         username = AppConf.user
         scp_options = {:password => AppConf.password}

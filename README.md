@@ -200,39 +200,6 @@ If you have Ubuntu running on a Windows Host you can use the vm:win:* tasks to c
 The simplest program I've found to get a Windows SSH server is freeSSHd (<http://www.freesshd.com/?ctt=download>).
 
 
-About the Template
----------------------------------------
-
-Default structure created by running `machines new example`:
-
-* example/
-  * certificates/
-    * example.com.crt - SSL certificate
-    * example.com.key - SSL private key
-    * selfsigned.crt - Self-signed SSL certificate
-    * selfsigned.key - Self-signed SSL private key
-    * amazon.key - Your X.509 private key to access EC2. The name (without .key) should match the name on your EC2 account.
-  * config/
-    * apps.yml - App servers configuration
-    * config.yml - EC2 settings, timezone, webserver, database, package settings (versions, paths, urls etc)
-    * hosts.yml - List of domains to add for local nginx/passenger development to /etc/hosts
-  * mysql/
-    * dbmaster.cnf
-    * dbslave.cnf
-  * nginx/
-    * conf
-      * htpasswd
-    * app_server.conf.erb
-    * initd
-    * nginx.conf.erb
-  * packages/ - Packages with the same name as builtin packages take precedence
-    * dev_extras.rb (example custom package)
-  * users/
-    * phil
-      * basrc
-      * confi
-  * Machinesfile
-
 Global settings
 ---------------------------------------
 
@@ -243,6 +210,7 @@ Some of the settings set and used by Machines are:
 * `AppConf.commands` - All the commands that are to be run
 * `AppConf.tasks` - Names of the tasks - Used to check dependencies and display tasks the help
 * `AppConf.user` - The selected user settings
+* `AppConf.machine` - Configuration for the selected machine
 
 Take a look at `template/config/*.yml` for more.
 

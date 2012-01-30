@@ -34,8 +34,10 @@
 #         32 bit instances - t1.micro, m1.small, m1.medium
 #         64 bit instances - m1.large, m1.xlarge, c1.xlarge, cc1.4xlarge, cg1.4xlarge, m2.xlarge, m2.2xlarge, m2.4xlarge
 #       ami: Amazon Machine Image - Choose your preferred AMI at http://alestic.com/ (e.g. ami-11f0cc65 - EU West 32 bit Ubuntu 11.10 EBS)
-#       endpoint: Location of instance (e.g. ec2.eu-west-1.amazonaws.com)
-#       private_key_file: Certificate key from Amazon (e.g. certificates/amazon.key)
+#       region: Location of instance (e.g. ec2.eu-west-1.amazonaws.com)
+#       public_key_path: Path to public key file
+#       private_key_path: Path to private key file
+#       username: Instance username (Canonical uses 'ubuntu' in it's AMIs)
 #       security_group: Security group you setup on Amazon -  (e.g. ev-public)
 
 ---
@@ -78,12 +80,13 @@ machines:
     root_pass: secure
     replication_user: repl
     replication_pass: secure
-    ec2:
-      type: t1.micro
-      ami: ami-11f0cc65 # EU WEST 1 Ubuntu x32 11.10 EBS
-      endpoint: ec2.eu-west-1.amazonaws.com
-      private_key_file: certificates/amazon_db.key
-      security_group: ev-private
+    cloud:
+      flavor_id: t1.micro
+      image_id: ami-11f0cc65 # EU WEST 1 Ubuntu x32 11.10 EBS
+      region: eu-west-1
+      public_key_path: ssh/id_rsa.pub
+      private_key_path: ssh/id_rsa
+      username: ubuntu
 
   backupdb:
     hostname: dbslave.electricvisions.com
@@ -102,12 +105,13 @@ machines:
       - dbslave
     root_pass: secure
     db_server: maindb
-    ec2:
-      type: t1.micro
-      ami: ami-11f0cc65 # EU WEST 1 Ubuntu x32 11.10 EBS
-      endpoint: ec2.eu-west-1.amazonaws.com
-      private_key_file: certificates/amazon_db.key
-      security_group: ev-private
+    cloud:
+      flavor_id: t1.micro
+      image_id: ami-11f0cc65 # EU WEST 1 Ubuntu x32 11.10 EBS
+      region: eu-west-1
+      public_key_path: ssh/id_rsa.pub
+      private_key_path: ssh/id_rsa
+      username: ubuntu
 
   staging:
     hostname: staging.electricvisions.com
@@ -125,12 +129,13 @@ machines:
       - app
       - db
     root_pass: secure
-    ec2:
-      type: t1.micro
-      ami: ami-11f0cc65 # EU WEST 1 Ubuntu x32 11.10 EBS
-      endpoint: ec2.eu-west-1.amazonaws.com
-      private_key_file: certificates/amazon_staging.key
-      security_group: ev-public
+    cloud:
+      flavor_id: t1.micro
+      image_id: ami-11f0cc65 # EU WEST 1 Ubuntu x32 11.10 EBS
+      region: eu-west-1
+      public_key_path: ssh/id_rsa.pub
+      private_key_path: ssh/id_rsa
+      username: ubuntu
 
   production:
     hostname: electricvisions.com
@@ -147,10 +152,11 @@ machines:
     roles:
       - app
     db_server: maindb
-    ec2:
-      type: t1.micro
-      ami: ami-11f0cc65 # EU WEST 1 Ubuntu x32 11.10 EBS
-      endpoint: ec2.eu-west-1.amazonaws.com
-      private_key_file: certificates/amazon_production.key
-      security_group: ev-public
+    cloud:
+      flavor_id: t1.micro
+      image_id: ami-11f0cc65 # EU WEST 1 Ubuntu x32 11.10 EBS
+      region: eu-west-1
+      public_key_path: ssh/id_rsa.pub
+      private_key_path: ssh/id_rsa
+      username: ubuntu
 

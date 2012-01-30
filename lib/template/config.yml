@@ -6,9 +6,10 @@ appsroots:
 awstats:
   stats_path: /var/www/nginx/webstats
 
-ec2:
-  access_key_id: 123
-  secret_access_key: 456
+cloud:
+  provider: AWS
+  aws_access_key_id: 123
+  aws_secret_access_key: 456
 
 # An array of IP hosts. These are added to /etc/hosts by the hosts package
 # Note:

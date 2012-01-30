@@ -1,11 +1,32 @@
-root = /home/phil
-root = ssh://phil/home
+perms = 0
+batch = true
+auto = true
+silent = true
 
+ignore = Path */.git
+ignore = Path */.unison
+ignore = Name temp.*
+ignore = Name desktop.ini
+ignore = Name AlbumArt*.jpg
+ignore = Name Thumbs.db
+
+# Central Server
+root = ssh://phil@server//media/data
+
+# Ubuntu Client
+prefer = /home/phil
+root = /home/phil
 path = Documents
 path = Pictures
+path = Reference
 path = Videos
 
-ignore = Name temp.*
-ignore = Path */something
-ignore = Name AlbumArt*.jpg
+# Windows Client
+# sshcmd = C:\Users\phil\plink-cmd.bat
+# prefer = E:/
+# root = E:/
+# path = Downloads
+# path = Music
+# path = Reference
+# path = Studio
 

@@ -80,7 +80,7 @@ describe 'Machines' do
   describe 'build' do
     before(:each) do
       subject.stub(:init)
-      AppConf.ec2 = AppConf.new
+      AppConf.machine = AppConf.new
       AppConf.address = 'target'
       AppConf.user = 'username'
       AppConf.password = 'userpass'
@@ -98,9 +98,10 @@ describe 'Machines' do
     end
 
     it 'starts an SCP session using key based authentication' do
-      AppConf.ec2.use = true
-      AppConf.ec2.private_key_file = 'private_key_file'
-      Net::SCP.should_receive(:start).with('target', 'ubuntu', :keys => ['private_key_file'])
+      AppConf.machine.cloud = AppConf.new
+      AppConf.machine.cloud.private_key_path = 'path/to/private_key'
+      AppConf.machine.cloud.username = 'ubuntu'
+      Net::SCP.should_receive(:start).with('target', 'ubuntu', :keys => ['path/to/private_key'])
 
       subject.build []
     end

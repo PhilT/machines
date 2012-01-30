@@ -1,3 +1,20 @@
+Cloud
+Use EC2 IP address for connecting to database servers
+Create elastic IP address for web servers
+* Assign private/public keys
+* Create security groups - check they exist and modify or create as required
+  Use roles to assign security groups
+  * everything gets the ssh group (open port 22)
+  * app role gets the web group (open port 80, 443)
+
+
+EC2 - Look at assigning and freeing elastic IP addresses
+  * machines.machine.address = an elastic IP address
+  * machnies.machine.ec2.instance_id = the ec2 id
+  * Set AppConf.machines_changed when creating a new instance
+  * Set up minimal Ubuntu on EC2
+  * Must allow multiple dev machines to access cloud (so multiple SSH keys must be assigned)
+
 Allow AppConf.webapps[app].path to be overridden from webapps.yml
 ?? Does webapps.yml structure get preserved? (e.g. when modifying keys and resaving)
 Fix guard notifications
@@ -5,18 +22,6 @@ Fix guard notifications
 Enable YAML to refer to other settings in the same file
 development machines should clone repos
 force https
-
-EC2 - Look at assigning and freeing elastic IP addresses
-  IP addresses need to be temporary for DB servers because:
-  * it's more secure if they only have an Amazon private IP address
-  * Only 5 IP addresses can be used per region. Additional IPs must be requested from Amazon.
-  * Maybe use Fog to use any supported cloud service
-  * machines.machine.address = an elastic IP address
-  * machnies.machine.ec2.instance_id = the ec2 address
-  * An elastic IP address must be set up when running machines (unless it's run in the cloud!)
-  * Set AppConf.machines_changed when creating a new instance
-  * EC2 server connections use an SSH key instead of password to connect - How do we set this in machines?
-  * Set up minimal Ubuntu on EC2
 
 Should be able to run Passenger install easily for new versions
 Can more files be ERB templates? Standardise. Need examples (can't remember what they were)
