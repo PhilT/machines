@@ -1,8 +1,10 @@
 *.gem
+.bin
+.bundle
 .yardoc
-
 doc
 coverage
 log
 tmp
 
+.vmconfig
