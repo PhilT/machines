@@ -3,6 +3,7 @@ require './spec/support/vm_control'
 
 describe 'Development machine' do
   before do
+    `cd tmp && rm -rf acceptance_project`
     if File.exist?('.vmconfig')
       @vm_control = File.read('.vmconfig') =~ /^HOST=WINDOWS/ ? WinVmControl.new : VmControl.new
     else
@@ -36,10 +37,16 @@ describe 'Development machine' do
     end
     response.must_match /user/
 
+    `cd tmp && ../bin/machines new acceptance_project`
+    FileUtils.cd 'tmp/acceptance_project'
+    files = %w(certificates webapps.yml config.yml mysql nginx packages users Machinesfile)
+    files.each do |name|
+      File.exist?(name).must_be true
+    end
 
-#    `cd tmp && rm -rf acceptance_project && machines new acceptance_project && cd acceptance_project && machines philworkstation dryrun`
+    `cd tmp/acceptance_project && ../../bin/machines philworkstation dryrun`
 
-#    `cd tmp/acceptance_project && machines philworkstation build`
+#    `cd tmp/acceptance_project && bin/machines philworkstation build`
 
 
   end

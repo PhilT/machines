@@ -14,6 +14,7 @@ class VmControl
   end
 
   def kill
+    return unless state =~ /running/
     vboxmanage "controlvm #{@vm} poweroff"
   end
 
