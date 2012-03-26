@@ -1,4 +1,3 @@
-require 'spec_helper'
 require 'fog'
 
 describe 'CloudMachine' do
@@ -12,7 +11,7 @@ describe 'CloudMachine' do
 
   it 'sets correct options and connects' do
     connect_to_cloud
-    AppConf.cloud.connection.should be_a Fog::Compute::AWS::Mock
+    AppConf.cloud.connection.must_be_kind_of Fog::Compute::AWS::Mock
   end
 
   it 'creates a server' do

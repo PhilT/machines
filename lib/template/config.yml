@@ -34,7 +34,10 @@ monit:
 # Latest version including preferred nginx version:
 # https://github.com/FooBarWidget/passenger/blob/master/NEWS
 passenger:
-  version: 3.0.9
+  version: 3.0.11
+# Set in passenger.rb package
+#  root: Points to passenger path in rubygems
+#  ruby: Points to the ruby executable in rbenv, rvm, compiled or installed by your package manager
 
 # Uncomment to use RVM
 # Ruby will be installed using RVM

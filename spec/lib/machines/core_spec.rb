@@ -45,13 +45,13 @@ describe 'Configuration' do
       block_ran.should be_true
     end
 
-    context 'when dependent task' do
+    describe 'when dependent task' do
       before(:each) do
         @yielded = false
         @block = Proc.new { @yielded = true }
       end
 
-      context 'exists' do
+      describe 'exists' do
         before(:each) do
           store_task :dependent_task, nil
           task :name, nil, :if => :dependent_task, &@block
@@ -63,7 +63,7 @@ describe 'Configuration' do
         end
       end
 
-      context 'does not exist' do
+      describe 'does not exist' do
         before(:each) { task :name, nil, :if => :dependent_task, &@block }
         it { @yielded.should be_false }
         it 'task not stored' do
@@ -72,13 +72,13 @@ describe 'Configuration' do
       end
     end
 
-    context 'when multiple dependent tasks' do
+    describe 'when multiple dependent tasks' do
       before(:each) do
         @yielded = false
         @block = Proc.new { @yielded = true }
       end
 
-      context 'all exist' do
+      describe 'all exist' do
         before(:each) do
           store_task :dependent_task, nil
           store_task :another_dependent, nil
@@ -91,7 +91,7 @@ describe 'Configuration' do
         end
       end
 
-      context 'all but one exist' do
+      describe 'all but one exist' do
         before(:each) do
           store_task :another_dependent, nil
           task :name, nil, :if => [:dependent_task, :another_dependent], &@block
@@ -157,43 +157,43 @@ describe 'Configuration' do
   end
 
   describe 'matched' do
-    context 'AppConf values are arrays' do
+    describe 'AppConf values are arrays' do
       before do
         AppConf.params_array = [:matched, :another]
       end
 
-      context 'options values are arrays of symbols' do
+      describe 'options values are arrays of symbols' do
         it { matched({:params_array => [:matched]}).should be_true }
         it { matched({:params_array => [:unmatched]}).should be_false }
       end
 
-      context 'options values are arrays of strings' do
+      describe 'options values are arrays of strings' do
         it { matched({'params_array' => ['matched']}).should be_true }
         it { matched({'params_array' => ['unmatched']}).should be_false }
       end
 
-      context 'options values are symbols' do
+      describe 'options values are symbols' do
         it { matched({:params_array => :matched}).should be_true }
         it { matched({:params_array => :unmatched}).should be_false }
       end
 
-      context 'options values are strings' do
+      describe 'options values are strings' do
         it { matched({:params_array => 'matched'}).should be_true }
         it { matched({:params_array => 'unmatched'}).should be_false }
       end
     end
 
-    context 'AppConf values are symbols' do
+    describe 'AppConf values are symbols' do
       before do
         AppConf.single_param = :matched
       end
 
-      context 'options values are arrays' do
+      describe 'options values are arrays' do
         it { matched({:single_param => [:matched]}).should be_true }
         it { matched({:single_param => [:unmatched]}).should be_false }
       end
 
-      context 'options values are symbols' do
+      describe 'options values are symbols' do
         it { matched({:single_param => :matched}).should be_true }
         it { matched({:single_param => :unmatched}).should be_false }
       end
@@ -217,7 +217,7 @@ describe 'Configuration' do
       AppConf.commands.should == [@command1, @command2]
     end
 
-    context 'when commands are two strings' do
+    describe 'when commands are two strings' do
       it 'creates a Command' do
         run 'command', 'check'
         AppConf.commands.first.command.should == 'command'
@@ -233,7 +233,7 @@ describe 'Configuration' do
       sudo @command1
     end
 
-    context 'when commands are two strings' do
+    describe 'when commands are two strings' do
       it 'creates a Command' do
         sudo 'command', 'check'
         AppConf.commands.first.command.should == 'command'

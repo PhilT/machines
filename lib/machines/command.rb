@@ -58,7 +58,7 @@ module Machines
     def wrap_in_export_and_sudo command
       command = "export TERM=linux && #{command}"
       echo_password = "echo #{AppConf.password} | " if AppConf.password
-      command = "#{echo_password}sudo -S sh -c '#{command}'" if @sudo
+      command = "#{echo_password}sudo -S bash -c '#{command}'" if @sudo
       Command.debug.log command
       command
     end

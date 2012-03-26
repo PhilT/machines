@@ -32,7 +32,7 @@ describe 'packages/nginx_logrotate' do
       stub!(:create_from).and_return Command.new 'command', 'check'
     end
 
-    context 'when awstats set' do
+    describe 'when awstats set' do
       before(:each) do
         AppConf.from_hash :awstats => {:url => 'url', :path => 'path', :stats_path => 'stats_path'}
       end
@@ -55,7 +55,7 @@ describe 'packages/nginx_logrotate' do
       end
     end
 
-    context 'when awstats not set' do
+    describe 'when awstats not set' do
       it 'does not generate stats command' do
         mock_settings = mock AppBuilder
         options = {:log_path => '/var/log/nginx/appname.access.log', :stats_command => nil}

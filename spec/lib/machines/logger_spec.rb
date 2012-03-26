@@ -6,7 +6,7 @@ describe 'Helpers' do
     AppConf.commands = [1,2,3]
   end
 
-  context 'logging to screen' do
+  describe 'logging to screen' do
     it 'logs first line only' do
       Command.console.log %(something with "some text\nsome more\nand "lets quote" this one" > and some output)
       %(something with "some text..." > and some output\n).should be_displayed
@@ -19,7 +19,7 @@ describe 'Helpers' do
     end
   end
 
-  context 'logging to file' do
+  describe 'logging to file' do
     it 'logs all lines' do
       Command.file.log %(something with "some text\nsome more\nand "lets quote" this one" > and some output)
       %(something with "some text\nsome more\nand "lets quote" this one" > and some output\n).should be_logged

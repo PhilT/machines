@@ -22,7 +22,7 @@ describe 'packages/load_machines' do
     before(:each) do
       save_settings
     end
-  
+
     it 'loads the machines.yml file' do
       eval_package
       AppConf.machines.a_machine.hostname.should == 'something'
@@ -41,7 +41,7 @@ describe 'packages/load_machines' do
       lambda { eval_package }.should raise_error ConfigError
     end
 
-    context 'when EC2' do
+    describe 'when EC2' do
       before(:each) do
         settings['machines']['a_machine']['ec2'] = {}
       end

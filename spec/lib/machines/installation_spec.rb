@@ -102,7 +102,7 @@ describe 'Installation' do
       lambda { git_clone nil }.should raise_error ArgumentError
     end
 
-    context ':tag option' do
+    describe ':tag option' do
       it 'checks out a specific tag' do
         subject = git_clone 'http://git_url.git', :to => 'dir', :tag => 'v1.0'
         subject.map(&:command).should == [

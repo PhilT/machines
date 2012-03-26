@@ -11,14 +11,14 @@ describe 'packages/mysql' do
       :replication_pass => 'REPL_PASS'
     })
     AppConf.from_hash(:db_server => {
-      :address => 'SERVER_IP', 
+      :address => 'SERVER_IP',
       :root_pass => 'SERVER_PASS',
       :replication_user => 'REPL_USER',
       :replication_pass => 'REPL_PASS'
     })
   end
 
-  context 'db role' do
+  describe 'db role' do
     it 'installs MySQL' do
       AppConf.roles = :db
 
@@ -34,7 +34,7 @@ describe 'packages/mysql' do
     end
   end
 
-  context 'dbmaster role' do
+  describe 'dbmaster role' do
     it 'sets permissions for each app to access database and grants replication rights for slave' do
       AppConf.roles = :dbmaster
       AppConf.webapps = {'name' => AppBuilder.new({:name => 'name', :password => 'PASSWORD'})}
@@ -51,7 +51,7 @@ describe 'packages/mysql' do
     end
   end
 
-  context 'dbslave role' do
+  describe 'dbslave role' do
     it 'sets up slave to replicate from master' do
       AppConf.roles = :dbslave
       eval_package

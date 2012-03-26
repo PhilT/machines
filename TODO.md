@@ -1,5 +1,6 @@
 WHAT IS MY FOCUS?
 ----------------------------------------
+* Look at commandline_spec
 * Get existing test working (stop writing additional code and park it)
 * Get machines running with MiniSpec
 * Run a machines install on a VM

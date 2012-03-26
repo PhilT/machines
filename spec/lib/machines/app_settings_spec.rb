@@ -1,17 +1,15 @@
-require 'spec_helper'
-
 describe 'AppSettings' do
   describe 'load_and_generate_passwords_for_webapps' do
     it 'generates passwords and saves to webapps.yml' do
       File.open('webapps.yml', 'w') {|f| f.puts "###\n\n---\nwebapps:\n  my_app:\n    development:\n      password: \n" }
       stub!(:generate_password).and_return 'random'
       load_and_generate_passwords_for_webapps
-      File.read('webapps.yml').should == "###\n\n---\nwebapps:\n  my_app:\n    development:\n      password: random\n"
+      File.read('webapps.yml').must_equal "###\n\n---\nwebapps:\n  my_app:\n    development:\n      password: random\n"
     end
   end
 
   describe 'load_app_settings' do
-    before(:each) do
+    before do
       AppConf.environment = :test
       AppConf.appsroot = '/home/user'
       @settings = <<-EOF
@@ -29,7 +27,7 @@ EOF
 
     it 'loads the app settings for selected apps' do
       load_app_settings ['app']
-      AppConf.webapps.should == {
+      AppConf.webapps.must_equal {
         'app' => AppBuilder.new(
           :scm => 'scm://project.git',
           :name => 'app',
@@ -44,7 +42,7 @@ EOF
     it 'handles ssl settings' do
       File.open('webapps.yml', 'w') {|f| f.puts @settings }
       load_app_settings ['app']
-      AppConf.webapps.should == {
+      AppConf.webapps.must_equal {
         'app' => AppBuilder.new(
           :name => 'app',
           :scm => 'scm://project.git',
@@ -81,7 +79,7 @@ webapps:
       EOF
       File.open('webapps.yml', 'w') {|f| f.puts settings }
       load_app_settings nil
-      AppConf.webapps.should == {
+      AppConf.webapps.must_equal {
         'app' => AppBuilder.new(
           :name => 'app',
           :path => '/home/user/project',

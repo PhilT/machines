@@ -1,7 +1,5 @@
 $LOAD_PATH << 'lib'
 
-puts 'Called spec_helper'
-
 require 'bundler/setup'
 require 'minitest/spec'
 require 'mocha'

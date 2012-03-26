@@ -1,13 +1,12 @@
-require 'spec_helper'
+describe Machines::Help do
+  subject { Machines::Help.new }
 
-describe 'Help' do
-  subject { Help.new }
   describe 'actions' do
-    it { subject.actions.should == ['htpasswd', 'new', 'dryrun', 'tasks', 'build', 'packages', 'override'] }
+    it { subject.actions.must_equal ['htpasswd', 'new', 'dryrun', 'tasks', 'build', 'packages', 'override'] }
   end
 
   describe 'to_s' do
-    it { subject.to_s.should == <<-HELP
+    it { subject.syntax.must_equal <<-HELP
 machines ACTION
 ACTION can be:
   htpasswd                 Generates basic auth in webserver/conf/htpasswd

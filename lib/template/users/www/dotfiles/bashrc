@@ -33,4 +33,3 @@ NORMAL="\[\e[m\]"
 BRANCH="\$(parse_git_branch)"
 # RVM="\$(~/.rvm/bin/rvm-prompt v g)" # Uncomment to enable ruby@gemset
 PS1="$PURPLE\h $BLUE\w$RED$RVM$YELLOW$BRANCH $PURPLE\$$NORMAL "
-

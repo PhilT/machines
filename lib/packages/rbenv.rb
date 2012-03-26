@@ -3,11 +3,19 @@ task :rbenv, "Install ruby-build, rbenv, ruby #{AppConf.ruby.version} and Bundle
   run git_clone 'git://github.com/sstephenson/ruby-build.git'
   sudo 'cd ~/ruby-build && ./install.sh'
 
+
+  # Safely execute bundler generated shims for your projects
+  # (https://twitter.com/#!/tpope/statuses/165631968996900865)
+  #
+  #     cd your_project
+  #     mkdir .git/safe
+  #     bundle --binstubs=.bin (or just bundle if you use the example bashrc)
+  #
   run git_clone 'git://github.com/sstephenson/rbenv.git', :to => '~/.rbenv'
-  run append 'export PATH="$HOME/.rbenv/bin:$PATH"', :to => '~/.bashrc'
-  run append '[ -f ~/.bundler-exec.sh ] && source ~/.bundler-exec.sh', :to => '~/.bashrc'
-  run append 'eval "$(rbenv init -)"', :to => '~/.bashrc'
-  run 'source ~/.bashrc'
+  run append 'export PATH=".git/safe/../../.bin:$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"', :to => '~/.profile'
+
+  # DOES THIS WORK? (E.G. SOURCING PROFILE to get the exported path)
+  run 'source ~/.profile'
 
   run "rbenv install #{AppConf.ruby.full_version}"
   run 'rbenv rehash'

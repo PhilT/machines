@@ -1,12 +1,10 @@
-require 'spec_helper'
-
 describe MockStdin do
   it 'handles multiple console inputs' do
     $input.answers = ["test", "this"]
-    ask('something? ').should == 'test'
-    ask('something else? ').should == 'this'
+    ask('something? ').must_equal 'test'
+    ask('something else? ').must_equal 'this'
     say('finally say something.')
-    $output.should == <<-THIS
+    $output.must_equal <<-THIS
 something?
 something else?
 finally say something.
@@ -15,9 +13,9 @@ THIS
 
   it 'handles character input with no echo' do
     $input.answers = ['first', 'second']
-    ask('hidden 1? ') { |question| question.echo = false }.should == 'first'
-    ask('hidden 2? ') { |question| question.echo = false }.should == 'second'
-    $output.should == "hidden 1?\nhidden 2?\n"
+    ask('hidden 1? ') { |question| question.echo = false }.must_equal 'first'
+    ask('hidden 2? ') { |question| question.echo = false }.must_equal 'second'
+    $output.must_equal "hidden 1?\nhidden 2?\n"
   end
 end
 

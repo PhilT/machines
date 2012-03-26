@@ -16,7 +16,7 @@ module Machines
       @actions.keys.map{|key| key.gsub(/ .*/, '')}
     end
 
-    def to_s
+    def syntax
       <<HELP
 machines ACTION
 ACTION can be:

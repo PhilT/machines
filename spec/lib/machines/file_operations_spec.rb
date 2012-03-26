@@ -42,7 +42,7 @@ describe 'FileOperations' do
     subject { chmod(644, 'path') }
     it { subject.command.should == 'chmod 644 path' }
 
-    context 'when mode is a string' do
+    describe 'when mode is a string' do
       subject { chmod('644', 'path') }
       it { subject.command.should == 'chmod 644 path' }
     end
