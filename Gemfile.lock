@@ -1,15 +1,15 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (3.1.1)
+    activesupport (3.2.1)
+      i18n (~> 0.6)
       multi_json (~> 1.0)
     app_conf (0.3.0)
-    bluecloth (2.1.0)
+    bluecloth (2.2.0)
     builder (3.0.0)
-    diff-lcs (1.1.2)
-    excon (0.9.4)
+    excon (0.9.5)
     fakefs (0.4.0)
-    ffi (1.0.9)
+    ffi (1.0.11)
     fog (1.1.2)
       builder
       excon (~> 0.9.0)
@@ -21,43 +21,44 @@ GEM
       nokogiri (~> 1.5.0)
       ruby-hmac
     formatador (0.2.1)
-    guard (0.9.3)
+    guard (1.0.0)
       ffi (>= 0.5.0)
       thor (~> 0.14.6)
     guard-bundler (0.1.3)
       bundler (>= 1.0.0)
       guard (>= 0.2.2)
-    guard-rspec (0.4.3)
-      guard (>= 0.4.0)
-    highline (1.6.2)
+    guard-minitest (0.5.0.rc1)
+      guard (~> 1.0)
+    highline (1.6.11)
     i18n (0.6.0)
-    iobuffer (1.0.0)
-    libnotify (0.5.7)
+    iobuffer (1.1.2)
+    libnotify (0.7.2)
+      ffi (~> 1.0.0)
+    metaclass (0.0.1)
     mime-types (1.17.2)
-    multi_json (1.0.3)
+    minitest (2.11.2)
+    minitest-libnotify (0.2.2)
+      libnotify
+      minitest
+    minitest-matchers (1.2.0)
+      minitest (>= 2.5.0)
+    mocha (0.10.4)
+      metaclass (~> 0.0.1)
+    multi_json (1.0.4)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
-    net-ssh (2.2.1)
+    net-ssh (2.3.0)
     nokogiri (1.5.0)
     rake (0.9.2.2)
-    rb-inotify (0.8.6)
-      ffi (>= 0.5.0)
     rev (0.3.2)
       iobuffer (>= 0.1.3)
-    rspec (2.5.0)
-      rspec-core (~> 2.5.0)
-      rspec-expectations (~> 2.5.0)
-      rspec-mocks (~> 2.5.0)
-    rspec-core (2.5.1)
-    rspec-expectations (2.5.0)
-      diff-lcs (~> 1.1.2)
-    rspec-mocks (2.5.0)
     ruby-hmac (0.4.0)
-    simplecov (0.4.1)
-      simplecov-html (~> 0.4.3)
-    simplecov-html (0.4.3)
+    simplecov (0.5.4)
+      multi_json (~> 1.0.3)
+      simplecov-html (~> 0.5.3)
+    simplecov-html (0.5.3)
     thor (0.14.6)
-    yard (0.7.2)
+    yard (0.7.5)
 
 PLATFORMS
   ruby
@@ -70,15 +71,16 @@ DEPENDENCIES
   fog
   guard
   guard-bundler
-  guard-rspec
+  guard-minitest
   highline
   i18n
-  libnotify
+  minitest
+  minitest-libnotify
+  minitest-matchers
+  mocha
   net-scp
   net-ssh
   rake
-  rb-inotify
   rev
-  rspec
   simplecov
   yard

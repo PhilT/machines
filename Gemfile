@@ -11,14 +11,15 @@ group :development, :test do
   gem 'bluecloth'
   gem 'guard'
   gem 'guard-bundler'
-  gem 'guard-rspec'
+  gem 'guard-minitest'
   gem 'fakefs'
   gem 'fog', :require => false
-  gem 'libnotify' if RUBY_PLATFORM =~ /linux/i
-  gem 'rb-inotify' if RUBY_PLATFORM =~ /linux/i
+  gem 'minitest'
+  gem 'minitest-libnotify' if RUBY_PLATFORM =~ /linux/i
+  gem 'minitest-matchers'
+  gem 'mocha', :require => false
   gem 'rake'
   gem 'rev'
-  gem 'rspec'
   gem 'simplecov'
   gem 'yard'
 end

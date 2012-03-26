@@ -1,6 +1,15 @@
+WHAT IS MY FOCUS?
+----------------------------------------
+* Get existing test working (stop writing additional code and park it)
+* Get machines running with MiniSpec
+* Run a machines install on a VM
+
+
 Cloud
+----------------------------------------
 Use EC2 IP address for connecting to database servers
 Create elastic IP address for web servers
+
 * Assign private/public keys
 * Create security groups - check they exist and modify or create as required
   Use roles to assign security groups
@@ -9,11 +18,15 @@ Create elastic IP address for web servers
 
 
 EC2 - Look at assigning and freeing elastic IP addresses
+
   * machines.machine.address = an elastic IP address
   * machnies.machine.ec2.instance_id = the ec2 id
   * Set AppConf.machines_changed when creating a new instance
   * Set up minimal Ubuntu on EC2
   * Must allow multiple dev machines to access cloud (so multiple SSH keys must be assigned)
+
+Misc Tasks
+----------------------------------------
 
 Allow AppConf.webapps[app].path to be overridden from webapps.yml
 ?? Does webapps.yml structure get preserved? (e.g. when modifying keys and resaving)

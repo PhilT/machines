@@ -11,10 +11,16 @@ Run commands like:
     run download AppConf.nginx.url
     run create_from 'nginx/nginx.conf.erb', :to => File.join(AppConf.nginx.path, 'conf', 'nginx.conf')
 
+Rerun the passenger_nginx install:
+
+    machines build phil_workstation passenger_nginx
+
 Status
 ---------------------------------------
 
-(January 2011)
+(March 2012)
+
+Switching to MiniSpec/Mocha due to incompatibilities with RSpec and FakeFS.
 
 Cloud deployments to complete plus a few more minor features for server deployments.
 
@@ -39,39 +45,25 @@ Features
 Motivation
 ---------------------------------------
 
-I believe that development, staging, and production environments should match if not be as close as possible.
-I develop on Ubuntu Linux and so it felt natural to have Ubuntu as my server environment. Ubuntu is fast becoming a
-standard for desktop and server. I've spent many years building and configuring PCs and anything that can be done to
-automate the process is a good thing in my opinion.
-I also like to know what I've got installed so I have little clutter and an optimally running machine. I also like
-to reinstall development machines usually when upgrading Ubuntu or adding/changing hardware and prefer a clean start.
+I believe that development, staging, and production environments should match if not be as close as possible. I develop on Ubuntu Linux and so it felt natural to have Ubuntu as my server environment. Ubuntu is fast becoming a standard for desktop and server. I've spent many years building and configuring PCs and anything that can be done to automate the process is a good thing in my opinion. I also like to know what I've got installed so I have little clutter and an optimally running machine. I also like to reinstall development machines usually when upgrading Ubuntu or adding/changing hardware and prefer a clean start.
 
-There are a few configuration management tools on the market such as Puppet and Chef but they try to cater for every
-possible server environment. They also do a very good job of configuration change management. Machines narrows the
-scope to a single platform and framework (others could be added) and does not try to manage change (small changes
-are possible), instead opting for reinstallation. As cloud computing instances can be brought up on a whim, I find
-this an acceptable compromise to further aid simplicity.
+There are a few configuration management tools on the market such as Puppet and Chef but they try to cater for every possible server environment. They also do a very good job of configuration change management. Machines narrows the scope to a single platform and framework (others could be added) and does not try to manage change (small changes are possible), instead opting for reinstallation. As cloud computing instances can be brought up on a whim, I find this an acceptable compromise to further aid simplicity.
 
 
 Target Environment
 ---------------------------------------
 
-Capistrano can do great stuff with mutli-server environments. This project is geared more towards multi-project
-environments. You have lots of apps that are setup on one or more servers.
+Capistrano can do great stuff with mutli-server environments. This project is geared more towards multi-project environments. You have lots of apps that are setup on one or more servers.
 
 
 Description
 ---------------------------------------
 
-This tool should make it simple to develop and deploy Ruby on Rails applications on Ubuntu by providing a build script
-with sensible defaults.
+This tool should make it simple to develop and deploy Ruby on Rails applications on Ubuntu by providing a build script with sensible defaults.
 
-The top level script is the `Machinesfile`. This contains the packages to include. Packages contain the commands to
-run. Default packages are provided by Machines. Default packages can be overridden and new ones created. Feel free to
-fork Machines and your add packages. Send a pull request and if they are tested they'll be added to the next release.
+The top level script is the `Machinesfile`. This contains the packages to include. Packages contain the commands to run. Default packages are provided by Machines. Default packages can be overridden and new ones created. Feel free to fork Machines and your add packages. Send a pull request and if they are tested they'll be added to the next release.
 
-Commands are added to a queue with `sudo` or `run`.
-[Here is a list of the packages](https://github.com/PhilT/machines/tree/master/lib/packages) in Machines.
+Commands are added to a queue with `sudo` or `run`. [Here is a list of the packages](https://github.com/PhilT/machines/tree/master/lib/packages) in Machines.
 
 [TODO: List of commands]
 
