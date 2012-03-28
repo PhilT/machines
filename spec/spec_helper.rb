@@ -11,7 +11,6 @@ require 'machines'
 application_dir = AppConf.application_dir
 
 MiniTest::Unit::TestCase.add_setup_hook do
-  puts 'Called add_setup_hook'
   AppConf.clear
   AppConf.passwords = []
   AppConf.commands = []
@@ -26,9 +25,10 @@ MiniTest::Unit::TestCase.add_setup_hook do
   Machines::Command.console = Machines::Logger.new $console, :truncate => true
 
   $input = MockStdin.new
-#  $output = MockStdout.new
-#  $terminal = HighLine.new($input, $output)
+  $output = MockStdout.new
+  $terminal = HighLine.new($input, $output)
   FakeFS.activate!
+  FileUtils.mkdir_p 'tmp'
 end
 
 MiniTest::Unit::TestCase.add_teardown_hook { FakeFS.deactivate! }
@@ -52,7 +52,7 @@ def load_package name
   FakeFS.deactivate!
   @package_path = File.join(AppConf.application_dir, File.join('packages', "#{name}.rb"))
   @package = File.read(@package_path)
-#  FakeFS.activate!
+  FakeFS.activate!
 end
 
 def eval_package

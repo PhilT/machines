@@ -18,10 +18,6 @@ class MockStdout
     print *strings
   end
 
-  def == other
-    @buffer == other
-  end
-
   def tty?
     false
   end

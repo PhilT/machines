@@ -1,6 +1,6 @@
 module Machines
   module Core
-    # If a block is given, store the task, describe it and log it
+    # If a block is given, store the task, log it and run it
     # If no block is given, sets commands to only those of the specified task so they can be run standalone
     # @param [Symbol] name Name of the task
     # @param [String] description Describe the task

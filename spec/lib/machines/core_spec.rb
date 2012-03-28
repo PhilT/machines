@@ -1,18 +1,26 @@
 require 'spec_helper'
 
+# This is done so that Machines::Core.run doesn't collide with MiniTest::Unit::TestCase.run
+Machines::Core.module_eval do
+  alias :run_command :run
+  remove_method :run
+end
+
 describe 'Configuration' do
   include Machines::Core
+  include Machines::Checks
   include Machines::FileOperations
 
   before(:each) do
-    @command1 = Command.new('command 1', 'check 1')
-    @command2 = Command.new('command 2', 'check 2')
+    @command1 = Machines::Command.new('command 1', 'check 1')
+    @command2 = Machines::Command.new('command 2', 'check 2')
+    alias :run :run_command # alias Machines::Core.run back so it can be called by sudo and the tests etc
   end
 
   describe 'generate_password' do
     it 'generates a random password' do
-      WEBrick::Utils.stub(:random_string).with(20).and_return '01234567890123456789'
-      generate_password.should == '01234567890123456789'
+      WEBrick::Utils.stubs(:random_string).with(20).returns '01234567890123456789'
+      generate_password.must_equal '01234567890123456789'
     end
   end
 
@@ -22,19 +30,19 @@ describe 'Configuration' do
       task :name do
         yielded = true
       end
-      yielded.should be_true
+      yielded.must_equal true
     end
 
     it 'logs the task' do
       task :name, 'description' do
       end
-      AppConf.commands.first.info.should == "TASK   name - description"
+      AppConf.commands.first.info.must_equal "TASK   name - description"
     end
 
     it 'stores task' do
       block = Proc.new {}
       task :name, 'description', &block
-      AppConf.tasks.should == {:name => {:description => 'description', :block => block}}
+      AppConf.tasks.must_equal :name => {:description => 'description', :block => block}
     end
 
     it 'sets commands to only run those from the specified task' do
@@ -42,7 +50,7 @@ describe 'Configuration' do
       block = Proc.new { block_ran = true }
       AppConf.tasks[:name] = {:block => block}
       task :name, nil
-      block_ran.should be_true
+      block_ran.must_equal true
     end
 
     describe 'when dependent task' do
@@ -57,17 +65,17 @@ describe 'Configuration' do
           task :name, nil, :if => :dependent_task, &@block
         end
 
-        it { @yielded.should be_true }
+        it { @yielded.must_equal true }
         it 'task stored' do
-          AppConf.tasks.should include :name
+          AppConf.tasks.must_include :name
         end
       end
 
       describe 'does not exist' do
         before(:each) { task :name, nil, :if => :dependent_task, &@block }
-        it { @yielded.should be_false }
+        it { @yielded.must_equal false }
         it 'task not stored' do
-          AppConf.tasks.should_not include :name
+          AppConf.tasks.wont_include :name
         end
       end
     end
@@ -85,9 +93,9 @@ describe 'Configuration' do
           task :name, nil, :if => [:dependent_task, :another_dependent], &@block
         end
 
-        it { @yielded.should be_true }
+        it { @yielded.must_equal true }
         it 'task stored' do
-          AppConf.tasks.should include :name
+          AppConf.tasks.must_include :name
         end
       end
 
@@ -97,9 +105,9 @@ describe 'Configuration' do
           task :name, nil, :if => [:dependent_task, :another_dependent], &@block
         end
 
-        it { @yielded.should be_false }
+        it { @yielded.must_equal false }
         it 'task not stored' do
-          AppConf.tasks.should_not include :name
+          AppConf.tasks.wont_include :name
         end
       end
     end
@@ -110,7 +118,7 @@ describe 'Configuration' do
       task :name, 'description', &Proc.new {}
       task :another, 'another description', &Proc.new {}
       list_tasks
-      $output.should == '  name                description
+      $output.buffer.must_equal '  name                description
   another             another description
 '
     end
@@ -118,41 +126,41 @@ describe 'Configuration' do
 
   describe 'only' do
     it 'yields when matched' do
-      should_receive(:matched).with('options').and_return true
+      expects(:matched).with('options').returns true
       yielded = false
       only 'options' do
         yielded = true
       end
-      yielded.should be_true
+      yielded.must_equal true
     end
 
     it 'does not yield when not matched' do
-      should_receive(:matched).with('options').and_return false
+      expects(:matched).with('options').returns false
       yielded = false
       only 'options' do
         yielded = true
       end
-      yielded.should be_false
+      yielded.must_equal false
     end
   end
 
   describe 'except' do
     it 'does not yield when matched' do
-      should_receive(:matched).with('options').and_return true
+      expects(:matched).with('options').returns true
       yielded = false
       except 'options' do
         yielded = true
       end
-      yielded.should be_false
+      yielded.must_equal false
     end
 
     it 'yields when not matched' do
-      should_receive(:matched).with('options').and_return false
+      expects(:matched).with('options').returns false
       yielded = false
       except 'options' do
         yielded = true
       end
-      yielded.should be_true
+      yielded.must_equal true
     end
   end
 
@@ -163,23 +171,23 @@ describe 'Configuration' do
       end
 
       describe 'options values are arrays of symbols' do
-        it { matched({:params_array => [:matched]}).should be_true }
-        it { matched({:params_array => [:unmatched]}).should be_false }
+        it { matched({:params_array => [:matched]}).must_equal true }
+        it { matched({:params_array => [:unmatched]}).wont_equal true }
       end
 
       describe 'options values are arrays of strings' do
-        it { matched({'params_array' => ['matched']}).should be_true }
-        it { matched({'params_array' => ['unmatched']}).should be_false }
+        it { matched({'params_array' => ['matched']}).must_equal true }
+        it { matched({'params_array' => ['unmatched']}).wont_equal true }
       end
 
       describe 'options values are symbols' do
-        it { matched({:params_array => :matched}).should be_true }
-        it { matched({:params_array => :unmatched}).should be_false }
+        it { matched({:params_array => :matched}).must_equal true }
+        it { matched({:params_array => :unmatched}).wont_equal true }
       end
 
       describe 'options values are strings' do
-        it { matched({:params_array => 'matched'}).should be_true }
-        it { matched({:params_array => 'unmatched'}).should be_false }
+        it { matched({:params_array => 'matched'}).must_equal true }
+        it { matched({:params_array => 'unmatched'}).wont_equal true }
       end
     end
 
@@ -189,13 +197,13 @@ describe 'Configuration' do
       end
 
       describe 'options values are arrays' do
-        it { matched({:single_param => [:matched]}).should be_true }
-        it { matched({:single_param => [:unmatched]}).should be_false }
+        it { matched({:single_param => [:matched]}).must_equal true }
+        it { matched({:single_param => [:unmatched]}).wont_equal true }
       end
 
       describe 'options values are symbols' do
-        it { matched({:single_param => :matched}).should be_true }
-        it { matched({:single_param => :unmatched}).should be_false }
+        it { matched({:single_param => :matched}).must_equal true }
+        it { matched({:single_param => :unmatched}).wont_equal true }
       end
     end
   end
@@ -203,25 +211,25 @@ describe 'Configuration' do
   describe 'run' do
     it 'adds a command to the commands array' do
       run @command1
-      AppConf.commands.should == [@command1]
+      AppConf.commands.must_equal [@command1]
     end
 
     it 'appends several commands' do
       run @command1
       run @command2
-      AppConf.commands.should == [@command1, @command2]
+      AppConf.commands.must_equal [@command1, @command2]
     end
 
     it 'appends several commands in a single call' do
       run @command1, @command2
-      AppConf.commands.should == [@command1, @command2]
+      AppConf.commands.must_equal [@command1, @command2]
     end
 
     describe 'when commands are two strings' do
       it 'creates a Command' do
         run 'command', 'check'
-        AppConf.commands.first.command.should == 'command'
-        AppConf.commands.first.check.should == 'check'
+        AppConf.commands.first.command.must_equal 'command'
+        AppConf.commands.first.check.must_equal 'check'
       end
     end
   end
@@ -229,32 +237,32 @@ describe 'Configuration' do
   describe 'sudo' do
     it 'wraps a command in a sudo with password call' do
       AppConf.password = 'password'
-      @command1.should_receive(:use_sudo)
+      @command1.expects(:use_sudo)
       sudo @command1
     end
 
     describe 'when commands are two strings' do
       it 'creates a Command' do
         sudo 'command', 'check'
-        AppConf.commands.first.command.should == 'command'
-        AppConf.commands.first.check.should == 'check'
+        AppConf.commands.first.command.must_equal 'command'
+        AppConf.commands.first.check.must_equal 'check'
       end
     end
   end
 
   describe 'upload' do
     subject { upload 'source', 'dest' }
-    it { subject.local.should == 'source' }
-    it { subject.remote.should == 'dest' }
+    it { subject.local.must_equal 'source' }
+    it { subject.remote.must_equal 'dest' }
   end
 
   describe 'sudo upload' do
     it 'modifies Upload to send it to a temp file and sudos to copy it to destination' do
-      File.stub(:directory?).and_return false
+      File.stubs(:directory?).returns false
       sudo upload 'source', 'dest'
 
-      AppConf.commands.map(&:command).should == [nil, "cp -rf /tmp/dest dest", "rm -rf /tmp/dest"]
-      AppConf.commands.map(&:check).should == [
+      AppConf.commands.map(&:command).must_equal [nil, "cp -rf /tmp/dest dest", "rm -rf /tmp/dest"]
+      AppConf.commands.map(&:check).must_equal [
         "test -s /tmp/dest && echo CHECK PASSED || echo CHECK FAILED",
         "test -s dest && echo CHECK PASSED || echo CHECK FAILED",
         "test ! -s /tmp/dest && echo CHECK PASSED || echo CHECK FAILED"
@@ -262,19 +270,19 @@ describe 'Configuration' do
     end
 
     it 'adds /. to the end of folder paths' do
-      File.stub(:directory?).with('source').and_return true
+      File.stubs(:directory?).with('source').returns true
       sudo upload 'source', 'dest'
-      AppConf.commands.map(&:command).should == [nil, "cp -rf /tmp/dest/. dest", "rm -rf /tmp/dest"]
+      AppConf.commands.map(&:command).must_equal [nil, "cp -rf /tmp/dest/. dest", "rm -rf /tmp/dest"]
     end
   end
 
   describe 'required_options' do
-    it do
-      lambda{required_options({:required => :option}, [:required])}.should_not raise_error(ArgumentError)
+    it 'does not raise when option exists' do
+      required_options({:required => :option}, [:required])
     end
 
-    it do
-      lambda{required_options({}, [:required])}.should raise_error(ArgumentError)
+    it 'raises when option does not exist' do
+      lambda{required_options({}, [:required])}.must_raise(ArgumentError)
     end
   end
 end
