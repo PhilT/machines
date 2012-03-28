@@ -1,20 +1,13 @@
 require 'spec_helper'
 
-# This is done so that Machines::Core.run doesn't collide with MiniTest::Unit::TestCase.run
-Machines::Core.module_eval do
-  alias :run_command :run
-  remove_method :run
-end
-
-describe 'Configuration' do
+describe 'Core' do
   include Machines::Core
-  include Machines::Checks
   include Machines::FileOperations
 
   before(:each) do
+    alias :run :run_command # alias Machines::Core.run back so it can be called by sudo and the tests etc
     @command1 = Machines::Command.new('command 1', 'check 1')
     @command2 = Machines::Command.new('command 2', 'check 2')
-    alias :run :run_command # alias Machines::Core.run back so it can be called by sudo and the tests etc
   end
 
   describe 'generate_password' do

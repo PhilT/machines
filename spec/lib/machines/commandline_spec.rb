@@ -1,15 +1,10 @@
 require './spec/spec_helper'
 
-describe Machines::Commandline do
+describe 'Commandline' do
   include Machines::Commandline
+  include Machines::Core
 
-# This causes MiniSpec to fail to load the setup hook.
-#  include Machines::Core
-
-  it 'does something' do
-  end
-end
-=begin
+  describe 'build' do
     it 'starts an SCP session using password authentication' do
       Net::SCP.expects(:start).with('target', 'username', :password => 'userpass')
       build []
@@ -66,8 +61,6 @@ end
       AppConf.log_only = true
       build []
     end
-  end
-end
 
     describe 'interrupts' do
       before do
@@ -104,8 +97,18 @@ end
         build []
       end
     end
+  end
+
+  describe 'dryrun' do
 
   end
+
+  describe 'execute' do
+
+  end
+end
+=begin
+
 
   describe 'execute' do
     let(:mock_help) { mock 'Help' }
@@ -130,7 +133,6 @@ end
     end
   end
 
-=begin
   describe 'dryrun' do
     it 'asks build to only log commands' do
       options = []

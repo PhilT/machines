@@ -10,7 +10,15 @@ Dir['spec/support/*.rb'].each {|file| require File.join('./spec', 'support', Fil
 require 'machines'
 application_dir = AppConf.application_dir
 
+# This is done so that Machines::Core.run doesn't collide with MiniTest::Unit::TestCase.run when included
+Machines::Core.module_eval do
+  alias :run_command :run
+  remove_method :run
+end
+
 MiniTest::Unit::TestCase.add_setup_hook do
+  include Machines::Checks
+
   AppConf.clear
   AppConf.passwords = []
   AppConf.commands = []
