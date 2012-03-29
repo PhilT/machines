@@ -1,10 +1,33 @@
-require './spec/spec_helper'
+require 'spec_helper'
 
 describe 'Commandline' do
   include Machines::Commandline
   include Machines::Core
+  include Machines::Questions
+
+  before(:each) do
+    alias :run :run_command # alias Machines::Core.run back so it can be called by sudo and the tests etc
+    AppConf.log_only = false
+    File.open('config.yml', 'w') { |f| f.puts "timezone: GB" }
+    FileUtils.mkdir_p 'log'
+  end
 
   describe 'build' do
+    before(:each) do
+      stubs(:init)
+      File.stubs(:read).returns ''
+      AppConf.machine = AppConf.new
+      AppConf.address = 'target'
+      AppConf.user = 'username'
+      AppConf.password = 'userpass'
+    end
+
+    it 'sets machine_name' do
+      Net::SCP.stubs(:start)
+      build ['machine']
+      AppConf.machine_name.must_equal 'machine'
+    end
+
     it 'starts an SCP session using password authentication' do
       Net::SCP.expects(:start).with('target', 'username', :password => 'userpass')
       build []
@@ -20,9 +43,9 @@ describe 'Commandline' do
     end
 
     it 'runs each command' do
-      mock_command = mock 'Command'
+      mock_command = mock 'Machines::Command'
       AppConf.commands = [mock_command]
-      mock_scp = mock 'Net::SCP', :session => nil
+      mock_scp = stub 'Net::SCP', :session => nil
 
       Net::SCP.expects(:start).with('target', 'username', :password => 'userpass').yields(mock_scp)
       Machines::Command.expects(:scp=).with(mock_scp)
@@ -33,7 +56,7 @@ describe 'Commandline' do
 
     it 'flushes log file after running command' do
       AppConf.log_only = false
-      mock_command = mock 'Command'
+      mock_command = mock 'Machines::Command'
       AppConf.commands = [mock_command]
       mock_scp = stub 'Net::SCP', :session => nil
 
@@ -47,7 +70,8 @@ describe 'Commandline' do
     it 'runs single task when supplied' do
       mock_scp = mock 'Net::SCP', :session => nil
       Net::SCP.stubs(:start).yields(mock_scp)
-      AppConf.commands = [mock('Command')]
+      AppConf.commands = [mock('Machines::Command')]
+      AppConf.commands.first.expects(:run).never
       mock_command_from_task = Machines::Command.new 'command', 'check'
       mock_command_from_task.expects(:run)
       AppConf.tasks = { :task => {:block => Proc.new { run mock_command_from_task }} }
@@ -56,20 +80,22 @@ describe 'Commandline' do
     end
 
     it 'logs instead of SSHing and running commands' do
-      AppConf.commands = [mock('Command')]
+      Net::SCP.expects(:start).never
+      AppConf.commands = [mock('Machines::Command')]
       AppConf.commands.first.expects(:run)
       AppConf.log_only = true
       build []
     end
 
     describe 'interrupts' do
-      before do
-        mock_command = mock 'Command'
+      before(:each) do
+        mock_command = mock 'Machines::Command'
         AppConf.commands = [mock_command]
-        mock_scp = mock 'Net::SCP', :session => nil
+        mock_scp = stub 'Net::SCP', :session => nil
 
         Net::SCP.stubs(:start).with('target', 'username', :password => 'userpass').yields(mock_scp)
         mock_command.stubs(:run)
+        $exit_requested = false
       end
 
       it 'handles CTRL+C and calls handler' do
@@ -78,10 +104,11 @@ describe 'Commandline' do
         build []
       end
 
+
       it 'sets exit flag and displays message' do
         prepare_to_exit
         $exit_requested.must_equal true
-        "\nEXITING after current command completes...\n".must_be_displayed as_warning
+        $console.next.must_equal colored("\nEXITING after current command completes...\n", :warning)
       end
 
       it 'second request to exit exits immediately' do
@@ -100,40 +127,6 @@ describe 'Commandline' do
   end
 
   describe 'dryrun' do
-
-  end
-
-  describe 'execute' do
-
-  end
-end
-=begin
-
-
-  describe 'execute' do
-    let(:mock_help) { mock 'Help' }
-
-    before do
-      mock_help.stubs(:actions).returns(['action', 'new'])
-    end
-
-    it 'calls specified action when included in help' do
-      expects :action
-      execute ['action'], mock_help
-    end
-
-    it 'calls generate with options' do
-      expects(:generate).with(['opt1'])
-      execute ['new', 'opt1'], mock_help
-    end
-
-    it 'calls help when no matching command' do
-      mock_help.stubs(:syntax).returns('help syntax')
-      lambda { execute(['anything'], mock_help) }.must_output "help syntax\n"
-    end
-  end
-
-  describe 'dryrun' do
     it 'asks build to only log commands' do
       options = []
       expects(:build).with options
@@ -142,9 +135,34 @@ end
     end
   end
 
+  describe 'execute' do
+    it 'calls specified action' do
+      %w(htpasswd dryrun build).each do |action|
+        expects action
+        execute [action], Machines::Help.new
+      end
+    end
+
+    it 'calls generate with folder' do
+      expects(:generate).with(['dir'])
+      execute ['new', 'dir'], Machines::Help.new
+    end
+
+    it 'calls generate without folder' do
+      expects(:generate).with([])
+      execute ['new'], Machines::Help.new
+    end
+
+    it 'calls help when no matching command' do
+      execute ['anything'], Machines::Help.new
+      $output.buffer.must_equal Machines::Help.new.syntax
+    end
+  end
+
   describe 'generate' do
-    it 'copies the template' do
-      FileUtils.expects(:cp_r).with("#{AppConf.application_dir}/template/.", '.')
+    it 'copies the template within ./' do
+      expects(:ask).with("Overwrite './' (y/n)? ").returns 'y'
+      FileUtils.expects(:cp_r).with("#{AppConf.application_dir}/template/.", './')
       FileUtils.expects(:mkdir_p).with('./packages')
       generate []
     end
@@ -157,19 +175,21 @@ end
     end
 
     describe 'when folder exists' do
-      before do
+      before(:each) do
         FileUtils.mkdir_p('dir')
       end
 
       it 'is overwritten after user confirmation' do
-        expects(:ask).with('Folder already exists. Overwrite (y/n)? ').returns 'y'
+        expects(:ask).with("Overwrite 'dir' (y/n)? ").returns 'y'
         FileUtils.expects(:cp_r).with("#{AppConf.application_dir}/template/.", 'dir')
         FileUtils.expects(:mkdir_p).with(File.join('dir', 'packages'))
         generate ['dir']
       end
 
       it 'generation is aborted at user request' do
-        expects(:ask).with('Folder already exists. Overwrite (y/n)? ').returns 'n'
+        expects(:ask).with("Overwrite 'dir' (y/n)? ").returns 'n'
+        FileUtils.expects(:cp_r).never
+        FileUtils.expects(:mkdir_p).never
         generate ['dir']
       end
     end
@@ -192,13 +212,13 @@ end
       init
       AppConf.passwords.must_equal []
       AppConf.commands.must_equal []
-      AppConf.webapps.must_equal {}
-      AppConf.tasks.must_equal {}
+      AppConf.webapps.must_equal({})
+      AppConf.tasks.must_equal({})
       AppConf.timezone.must_equal 'GB'
-      File.exist?('log/output.log').must_equal true
-      Machines::Command.file.must_be_kind_of Machines::Logger
-      Machines::Command.console.must_be_kind_of Machines::Logger
-      Machines::Command.debug.must_be_kind_of Machines::Logger
+      File.exists?('log/output.log').must_equal true
+      Machines::Command.file.must_be_instance_of Machines::Logger
+      Machines::Command.console.must_be_instance_of Machines::Logger
+      Machines::Command.debug.must_be_instance_of Machines::Logger
     end
   end
 
@@ -225,26 +245,28 @@ end
   end
 
   describe 'override' do
-    before do
+    before(:each) do
       FileUtils.mkdir_p File.join(AppConf.application_dir, 'packages')
       FileUtils.mkdir_p 'packages'
       FileUtils.touch File.join(AppConf.application_dir, 'packages', 'base.rb')
     end
 
     it 'copies package to project folder' do
+      puts 'copies package to project folder'
       override 'base'
-      File.exist?('packages/base.rb').must_equal true
+      File.exists?('packages/base.rb').must_equal true
+      puts '[copies package to project folder]'
     end
 
     describe 'when copying over existing package' do
-      before do
+      before(:each) do
         FileUtils.touch 'packages/base.rb'
       end
 
       it 'terminates when user answer no' do
         $input.answers = %w(n)
         override 'base'
-        $output.must_equal 'Project package already exists. Overwrite? (y/n)
+        $output.buffer.must_equal 'Project package already exists. Overwrite? (y/n)
 Aborted.
 '
       end
@@ -252,7 +274,7 @@ Aborted.
       it 'overwrites project package with default package' do
         $input.answers = %w(y)
         override 'base'
-        $output.must_equal 'Project package already exists. Overwrite? (y/n)
+        $output.buffer.must_equal 'Project package already exists. Overwrite? (y/n)
 Package copied to packages/base.rb
 '
       end
@@ -266,7 +288,7 @@ Package copied to packages/base.rb
       FileUtils.touch File.join(AppConf.application_dir, 'packages', 'base.rb')
       FileUtils.touch File.join('packages', 'apps.rb')
       packages
-      $output.must_equal 'Default packages
+      $output.buffer.must_equal 'Default packages
  * base
 Project packages
  * apps
@@ -284,7 +306,7 @@ Project packages
         :task3 => {:description => 'description 3'}
       }
       tasks
-      $output.must_equal 'Tasks
+      $output.buffer.must_equal 'Tasks
   task1                description 1
   task2                description 2
   task3                description 3
@@ -292,5 +314,4 @@ Project packages
     end
   end
 end
-=end
 

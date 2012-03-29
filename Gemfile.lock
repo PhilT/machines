@@ -39,8 +39,6 @@ GEM
     minitest-libnotify (0.2.2)
       libnotify
       minitest
-    minitest-matchers (1.2.0)
-      minitest (>= 2.5.0)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
     multi_json (1.1.0)
@@ -75,7 +73,6 @@ DEPENDENCIES
   i18n
   minitest
   minitest-libnotify
-  minitest-matchers
   mocha
   net-scp
   net-ssh

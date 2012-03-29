@@ -51,9 +51,9 @@ module Machines
     end
 
     def generate options
-      dir = options.first || '.'
+      dir = options.first || './'
       if File.exists? dir
-        confirm = ask 'Folder already exists. Overwrite (y/n)? '
+        confirm = ask "Overwrite '#{dir}' (y/n)? "
         return unless confirm.downcase == 'y'
       end
       FileUtils.cp_r(File.join(AppConf.application_dir, 'template', '/.'), dir)
@@ -113,7 +113,8 @@ module Machines
       destination = File.join('packages', "#{package}.rb")
       answer = File.exists?(destination) ? ask('Project package already exists. Overwrite? (y/n)') : 'y'
       if answer == 'y'
-        FileUtils.cp(File.join(AppConf.application_dir, 'packages', "#{package}.rb"), destination)
+        source = File.join(AppConf.application_dir, 'packages', "#{package}.rb")
+        FileUtils.cp(source, destination)
         say "Package copied to #{destination}"
       else
         say 'Aborted.'

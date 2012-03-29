@@ -39,7 +39,10 @@ MiniTest::Unit::TestCase.add_setup_hook do
   FileUtils.mkdir_p 'tmp'
 end
 
-MiniTest::Unit::TestCase.add_teardown_hook { FakeFS.deactivate! }
+MiniTest::Unit::TestCase.add_teardown_hook do
+  FakeFS.deactivate!
+  FakeFS::FileSystem.clear
+end
 
 module MiniTest
   module Assertions
@@ -71,6 +74,12 @@ def save_yaml contents, path
   File.open(path, 'w') do |f|
     YAML.dump(contents, f)
   end
+end
+
+def colored string, color
+  ending = string.scan(/(\n|\r)$/).flatten.first
+  string.sub!(/(\n|\r)$/, '')
+  $terminal.color(string, color.to_sym) + ending.to_s
 end
 
 require 'minitest/autorun'

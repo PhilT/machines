@@ -14,7 +14,7 @@ export RAILS_ENV=
 
 alias ls='ls --color=auto'
 alias less='less -R'
-alias bundle='bundle --binstubs=.bin'
+alias bb='bundle --binstubs=.bin'
 
 ## Slideshow with feh image viewer
 ## Press ENTER to load current image into Gimp. H to pause slideshow

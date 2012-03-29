@@ -16,7 +16,6 @@ group :development, :test do
   gem 'fog', :require => false
   gem 'minitest'
   gem 'minitest-libnotify' if RUBY_PLATFORM =~ /linux/i
-  gem 'minitest-matchers'
   gem 'mocha', :require => false
   gem 'rake'
   gem 'rev'
