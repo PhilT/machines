@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Machines::Command do
   subject { Machines::Command.new('command', 'check') }
-
   describe 'initialize' do
     it 'sets line, command, check' do
       subject.command.must_equal 'command'
@@ -30,7 +29,7 @@ describe Machines::Command do
       it 'returns NOT CHECKED when nothing to execute' do
         subject = Machines::Command.new('command', nil)
         AppConf.commands = [subject]
-        @mock_ssh.should_not_receive(:exec!).with(nil)
+        @mock_ssh.expects(:exec!).with(nil).never
         subject.run
 
         $console.next.must_equal "100% RUN    command\r"
@@ -51,39 +50,39 @@ describe Machines::Command do
         AppConf.log_only = true
         subject.run
 
-        "100% RUN    command\n".should be_displayed
+        $console.next.must_equal "100% RUN    command\n"
       end
 
       it 'defaults screen logging to return' do
         AppConf.log_only = nil
         subject.run
 
-        "100% RUN    command\r".should be_displayed
+        $console.next.must_equal "100% RUN    command\r"
       end
 
       it 'successful command to screen and file' do
         subject.run
 
-        "100% RUN    command\r".should be_displayed
-        "100% RUN    command\n".should be_displayed as_success
+        $console.next.must_equal "100% RUN    command\r"
+        $console.next.must_equal colored("100% RUN    command\n", :success)
 
-        "RUN    command\n".should be_logged as_highlight
-        "result\n".should be_logged
-        "CHECK PASSED\n".should be_logged as_success
+        $file.next.must_equal colored("RUN    command\n", :highlight)
+        $file.next.must_equal "result\n"
+        $file.next.must_equal colored("CHECK PASSED\n", :success)
       end
 
       it 'successful sudo command to screen and file' do
         AppConf.password = 'userpass'
-        @mock_ssh.stubs(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && check'").returns 'CHECK PASSED'
+        @mock_ssh.stubs(:exec!).with("echo userpass | sudo -S bash -c 'export TERM=linux && check'").returns 'CHECK PASSED'
         subject.use_sudo
         subject.run
 
-        "100% SUDO   command\r".should be_displayed
-        "100% SUDO   command\n".should be_displayed as_success
+        $console.next.must_equal "100% SUDO   command\r"
+        $console.next.must_equal colored("100% SUDO   command\n", :success)
 
-        "SUDO   command\n".should be_logged as_highlight
-        "result\n".should be_logged
-        "CHECK PASSED\n".should be_logged as_success
+        $file.next.must_equal colored("SUDO   command\n", :highlight)
+        $file.next.must_equal "result\n"
+        $file.next.must_equal colored("CHECK PASSED\n", :success)
       end
 
       it 'unsuccesful command to screen and file' do
@@ -91,52 +90,62 @@ describe Machines::Command do
 
         subject.run
 
-        "100% RUN    command\r".should be_displayed
-        "100% RUN    command\n".should be_displayed as_failure
+        $console.next.must_equal "100% RUN    command\r"
+        $console.next.must_equal colored("100% RUN    command\n", :failure)
 
-        "RUN    command\n".should be_logged as_highlight
-        "result\n".should be_logged
-        "CHECK FAILED\n".should be_logged as_failure
+        $file.next.must_equal colored("RUN    command\n", :highlight)
+        $file.next.must_equal "result\n"
+        $file.next.must_equal colored("CHECK FAILED\n", :failure)
       end
 
       it 'ensure failures are always logged even when exceptions raised' do
-        @mock_ssh.expects(:exec!).with('export TERM=linux && check').raises Exception.new
+        @mock_ssh.expects(:exec!).with('export TERM=linux && check').raises Exception
 
         lambda {subject.run}.must_raise Exception
 
-        "100% RUN    command\r".should be_displayed
-        "100% RUN    command\n".should be_displayed as_failure
+        $console.next.must_equal "100% RUN    command\r"
+        $console.next.must_equal colored("100% RUN    command\n", :failure)
 
-        "RUN    command\n".should be_logged as_highlight
-        "result\n".should be_logged
-        "Exception\n".should be_logged as_failure
+        $file.next.must_equal colored("RUN    command\n", :highlight)
+        $file.next.must_equal "result\n"
+        $file.next.must_equal colored("Exception\n", :failure)
       end
 
       it 'ensure logging failures do not stop app exiting gracefully' do
-        @mock_ssh.expects(:exec!).with('export TERM=linux && check').raises Exception.new
-        Machines::Command.file.stub(:log)
+        @mock_ssh.expects(:exec!).with('export TERM=linux && check').raises Exception
+        Machines::Command.file.stubs(:log)
         Machines::Command.file.expects(:log).with('Exception', :color => :failure).raises ArgumentError
-        lambda {subject.run}.should_not raise_error ArgumentError
+        begin
+          subject.run
+        rescue Exception
+        rescue ArgumentError
+          flunk 'Expecting Exception to be raised but not ArgumentError'
+        end
       end
 
       it 'ensure console failures do not stop app exiting gracefully' do
-        @mock_ssh.expects(:exec!).with('export TERM=linux && check').raises Exception.new
-        Machines::Command.console.stub(:log)
+        @mock_ssh.expects(:exec!).with('export TERM=linux && check').raises Exception
+        Machines::Command.console.stubs(:log)
         Machines::Command.console.expects(:log).with('100% RUN    command', :color => :failure).raises ArgumentError
-        lambda {subject.run}.should_not raise_error ArgumentError
+        begin
+          subject.run
+        rescue Exception
+        rescue ArgumentError
+          flunk 'Expecting Exception to be raised but not ArgumentError'
+        end
       end
     end
 
     it 'wraps command execution in sudo with a password' do
       AppConf.password = 'userpass'
-      @mock_ssh.expects(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && command'").returns "result"
+      @mock_ssh.expects(:exec!).with("echo userpass | sudo -S bash -c 'export TERM=linux && command'").returns "result"
 
       subject.use_sudo
       subject.run
     end
 
     it 'wraps command execution in sudo with no password' do
-      @mock_ssh.expects(:exec!).with("sudo -S sh -c 'export TERM=linux && command'").returns "result"
+      @mock_ssh.expects(:exec!).with("sudo -S bash -c 'export TERM=linux && command'").returns "result"
 
       subject.use_sudo
       subject.run
@@ -144,14 +153,14 @@ describe Machines::Command do
 
     it 'wraps check execution in sudo with a password' do
       AppConf.password = 'userpass'
-      @mock_ssh.expects(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && check'").returns 'CHECK PASSED'
+      @mock_ssh.expects(:exec!).with("echo userpass | sudo -S bash -c 'export TERM=linux && check'").returns 'CHECK PASSED'
 
       subject.use_sudo
       subject.run
     end
 
     it 'wraps check execution in sudo with no password' do
-      @mock_ssh.expects(:exec!).with("sudo -S sh -c 'export TERM=linux && check'").returns 'CHECK PASSED'
+      @mock_ssh.expects(:exec!).with("sudo -S bash -c 'export TERM=linux && check'").returns 'CHECK PASSED'
 
       subject.use_sudo
       subject.run

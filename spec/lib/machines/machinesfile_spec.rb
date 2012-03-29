@@ -1,9 +1,11 @@
 require 'spec_helper'
 
 describe 'Machinesfile' do
+  include Machines::Machinesfile
+
   describe 'package' do
     it 'raises specific error when failing to load Machinesfile' do
-      File.should_not_receive(:read)
+      File.expects(:read).never
       lambda{ package 'Machinesfile' }.must_raise LoadError, /Cannot find Machinesfile/
     end
 
@@ -24,7 +26,7 @@ describe 'Machinesfile' do
     end
 
     it 'raises when no custom and no built-in package' do
-      File.should_not_receive(:read)
+      File.expects(:read).never
       lambda { package :builtin_package}.must_raise LoadError, /Cannot find .* package builtin_package/
     end
   end

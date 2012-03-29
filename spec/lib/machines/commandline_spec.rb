@@ -252,10 +252,8 @@ describe 'Commandline' do
     end
 
     it 'copies package to project folder' do
-      puts 'copies package to project folder'
       override 'base'
       File.exists?('packages/base.rb').must_equal true
-      puts '[copies package to project folder]'
     end
 
     describe 'when copying over existing package' do

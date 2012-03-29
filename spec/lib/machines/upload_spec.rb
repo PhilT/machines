@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe Command do
+describe Machines::Upload do
   subject { Machines::Upload.new('local', 'remote', 'check') }
 
   describe 'initialize' do
     it 'sets line, local, remote and check' do
-      subject.command.should be_nil
+      subject.command.must_equal nil
       subject.local.must_equal 'local'
       subject.remote.must_equal 'remote'
       subject.check.must_equal 'check'
@@ -17,35 +17,35 @@ describe Command do
       AppConf.commands = [subject]
       AppConf.log_only = false
       @mock_ssh = mock 'Net::SSH'
-      @mock_scp = mock Net::SCP, :session => @mock_ssh
+      @mock_scp = stub 'Net::SCP', :session => @mock_ssh
       Machines::Command.scp = @mock_scp
-      @mock_ssh.stub(:exec!).with('export TERM=linux && check').returns "CHECK PASSED"
+      @mock_ssh.stubs(:exec!).with('export TERM=linux && check').returns "CHECK PASSED"
     end
 
     it 'uploads local to remote with logging' do
       @mock_scp.expects(:upload!).with('local', 'remote', {:recursive => false})
       subject.run
 
-      "UPLOAD local to remote\n".should be_logged as_highlight
-      "CHECK PASSED\n".should be_logged as_success
-      "100% UPLOAD local to remote\r".should be_displayed
-      "100% UPLOAD local to remote\n".should be_displayed as_success
+      $file.next.must_equal colored("UPLOAD local to remote\n", :highlight)
+      $file.next.must_equal colored("CHECK PASSED\n", :success)
+      $console.next.must_equal "100% UPLOAD local to remote\r"
+      $console.next.must_equal colored("100% UPLOAD local to remote\n", :success)
     end
 
     it 'logs with newline when logging only' do
-      @mock_scp.stub(:upload!)
+      @mock_scp.stubs(:upload!)
       AppConf.log_only = true
       subject.run
 
-      "100% UPLOAD local to remote\n".should be_displayed
+      $console.next.must_equal "100% UPLOAD local to remote\n"
     end
 
     it 'logs with return when log_only not specified' do
-      @mock_scp.stub(:upload!)
+      @mock_scp.stubs(:upload!)
       AppConf.log_only = nil
       subject.run
 
-      "100% UPLOAD local to remote\r".should be_displayed
+      $console.next.must_equal "100% UPLOAD local to remote\r"
     end
 
     it 'uploads a folder source' do
@@ -57,7 +57,7 @@ describe Command do
 
     it 'uploads an in memory buffer' do
       buffer = NamedBuffer.new('name', 'a buffer')
-      subject = Upload.new(buffer, 'remote', 'check')
+      subject = Machines::Upload.new(buffer, 'remote', 'check')
       AppConf.commands = [subject]
       @mock_scp.expects(:upload!).with(buffer, 'remote', {:recursive => false})
       subject.run
@@ -70,13 +70,13 @@ describe Command do
     end
 
     describe 'when local is a buffer' do
-      subject { Upload.new(NamedBuffer.new('name', 'a buffer'), 'remote', 'check') }
+      subject { Machines::Upload.new(NamedBuffer.new('name', 'a buffer'), 'remote', 'check') }
       it 'contains name of the buffer' do
         subject.info.must_equal 'UPLOAD buffer from name to remote'
       end
 
       it 'handles nil names' do
-        subject = Upload.new(NamedBuffer.new(nil, 'a buffer'), 'remote', 'check')
+        subject = Machines::Upload.new(NamedBuffer.new(nil, 'a buffer'), 'remote', 'check')
         subject.info.must_equal "UPLOAD unnamed buffer to remote"
       end
     end

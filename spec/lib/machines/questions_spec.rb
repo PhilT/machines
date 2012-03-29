@@ -1,13 +1,15 @@
 require 'spec_helper'
 
 describe 'Questions' do
+  include Machines::Questions
+
   describe 'enter_password' do
     before(:each) do
       stubs(:ask).returns 'password'
     end
 
     it 'does not echo output' do
-      mock_question = mock HighLine::Question
+      mock_question = mock 'HighLine::Question'
       mock_question.expects(:echo=).with(false).twice
       stubs(:ask).yields(mock_question).returns 'password'
       enter_password 'type'
@@ -42,7 +44,7 @@ describe 'Questions' do
 
     it 'only asks once when confirm set to false' do
       expects(:ask).with('Enter type password: ').once.returns 'password'
-      should_not_receive(:ask).with('Confirm the password: ')
+      expects(:ask).with('Confirm the password: ').never
       enter_password('type', false)
     end
 
@@ -58,7 +60,7 @@ describe 'Questions' do
     it 'do not add to passwords list if not available' do
       AppConf.passwords = nil
       enter_password('type')
-      AppConf.passwords.should be_nil
+      AppConf.passwords.must_equal nil
     end
   end
 end

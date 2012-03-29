@@ -1,6 +1,13 @@
 require 'spec_helper'
 
 describe 'Configuration' do
+  include Machines::Configuration
+  include Machines::Core
+
+  before do
+    alias :run :run_command # alias Machines::Core.run back so it can be called by sudo and the tests etc
+  end
+
   describe 'add_user' do
     it do
       command = add_user 'login'
@@ -10,7 +17,7 @@ describe 'Configuration' do
 
     it do
       command = add_user 'a_user', :password => 'password', :admin => true
-      command.command.should match /useradd -s \/bin\/bash -d \/home\/a_user -m -p .* -G admin a_user/
+      command.command.must_match /useradd -s \/bin\/bash -d \/home\/a_user -m -p .* -G admin a_user/
       command.check.must_equal "test -d /home/a_user #{echo_result}"
     end
   end
@@ -44,7 +51,7 @@ describe 'Configuration' do
       command.first.check.must_equal 'gconftool-2 --get "key" | grep "value" ' + echo_result
     end
 
-    it { lambda{ configure(:invalid_type => Object.new) }.must_raise }
+    it { lambda{ configure(:invalid_type => Object.new) }.must_raise RuntimeError }
   end
 
   describe 'del_user' do

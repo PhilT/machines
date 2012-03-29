@@ -1,13 +1,16 @@
 require 'spec_helper'
 
 describe 'Database' do
-  include Core
-  include Configuration
-  include Database
-  include AppSettings
+  include Machines::Core
+  include Machines::Configuration
+  include Machines::Database
+  include Machines::AppSettings
+  include Machines::FileOperations
 
   describe 'write_database_yml' do
     before do
+      alias :run :run_command # alias Machines::Core.run back so it can be called by sudo and the tests etc
+
       AppConf.environment = 'staging'
       AppConf.db_server = AppConf.new
       AppConf.db_server.address = 'dbhost'

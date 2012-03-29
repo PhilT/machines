@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-describe LogCommand do
-  subject {LogCommand.new :name, 'description'}
+describe Machines::LogCommand do
+  subject {Machines::LogCommand.new :name, 'description'}
 
   it 'logs the name and description' do
     AppConf.commands = [subject]
     subject.run
-    "\n".should be_displayed
-    "     TASK   name - description\n".should be_displayed as_info
+    $console.next.must_equal "\n"
+    $console.next.must_equal colored("     TASK   name - description\n", :info)
 
-    "\n".should be_logged
-    "TASK   name - description\n".should be_logged as_info
+    $file.next.must_equal "\n"
+    $file.next.must_equal colored("TASK   name - description\n", :info)
   end
 end
 
