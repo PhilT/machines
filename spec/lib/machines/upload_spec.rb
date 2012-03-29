@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe Command do
-  subject { Upload.new('local', 'remote', 'check') }
+  subject { Machines::Upload.new('local', 'remote', 'check') }
 
   describe 'initialize' do
     it 'sets line, local, remote and check' do
       subject.command.should be_nil
-      subject.local.should == 'local'
-      subject.remote.should == 'remote'
-      subject.check.should == 'check'
+      subject.local.must_equal 'local'
+      subject.remote.must_equal 'remote'
+      subject.check.must_equal 'check'
     end
   end
 
@@ -16,14 +16,14 @@ describe Command do
     before(:each) do
       AppConf.commands = [subject]
       AppConf.log_only = false
-      @mock_ssh = mock Net::SSH
+      @mock_ssh = mock 'Net::SSH'
       @mock_scp = mock Net::SCP, :session => @mock_ssh
-      Command.scp = @mock_scp
-      @mock_ssh.stub(:exec!).with('export TERM=linux && check').and_return "CHECK PASSED"
+      Machines::Command.scp = @mock_scp
+      @mock_ssh.stub(:exec!).with('export TERM=linux && check').returns "CHECK PASSED"
     end
 
     it 'uploads local to remote with logging' do
-      @mock_scp.should_receive(:upload!).with('local', 'remote', {:recursive => false})
+      @mock_scp.expects(:upload!).with('local', 'remote', {:recursive => false})
       subject.run
 
       "UPLOAD local to remote\n".should be_logged as_highlight
@@ -50,7 +50,7 @@ describe Command do
 
     it 'uploads a folder source' do
       FileUtils.mkdir_p('local')
-      @mock_scp.should_receive(:upload!).with('local', 'remote', {:recursive => true})
+      @mock_scp.expects(:upload!).with('local', 'remote', {:recursive => true})
 
       subject.run
     end
@@ -59,25 +59,25 @@ describe Command do
       buffer = NamedBuffer.new('name', 'a buffer')
       subject = Upload.new(buffer, 'remote', 'check')
       AppConf.commands = [subject]
-      @mock_scp.should_receive(:upload!).with(buffer, 'remote', {:recursive => false})
+      @mock_scp.expects(:upload!).with(buffer, 'remote', {:recursive => false})
       subject.run
     end
   end
 
   describe 'info' do
     it 'contains source and destination paths and UPLOAD' do
-      subject.info.should == 'UPLOAD local to remote'
+      subject.info.must_equal 'UPLOAD local to remote'
     end
 
     describe 'when local is a buffer' do
       subject { Upload.new(NamedBuffer.new('name', 'a buffer'), 'remote', 'check') }
       it 'contains name of the buffer' do
-        subject.info.should == 'UPLOAD buffer from name to remote'
+        subject.info.must_equal 'UPLOAD buffer from name to remote'
       end
 
       it 'handles nil names' do
         subject = Upload.new(NamedBuffer.new(nil, 'a buffer'), 'remote', 'check')
-        subject.info.should == "UPLOAD unnamed buffer to remote"
+        subject.info.must_equal "UPLOAD unnamed buffer to remote"
       end
     end
   end

@@ -15,7 +15,7 @@ describe 'Database' do
 
     it 'supplies correct parameters' do
       file = write_database_yml AppBuilder.new(:name => 'app', :password => 'password', :path => 'path')
-      file.local.read.should == <<-EOF
+      file.local.read.must_equal <<-EOF
 ---
 staging:
   adapter: mysql
@@ -29,12 +29,12 @@ EOF
 
     it 'writes file to specified path' do
       file = write_database_yml AppBuilder.new(:name => 'app', :password => 'password', :path => 'path')
-      file.remote.should == 'path/shared/config/database.yml'
+      file.remote.must_equal 'path/shared/config/database.yml'
     end
 
     it 'overrides database name when supplied' do
       file = write_database_yml AppBuilder.new(:name => 'app', :password => 'password', :username => 'phil', :database => 'myapp', :path => 'path')
-      file.local.read.should == <<-EOF
+      file.local.read.must_equal <<-EOF
 ---
 staging:
   adapter: mysql

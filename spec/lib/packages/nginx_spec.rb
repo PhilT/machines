@@ -13,7 +13,7 @@ describe 'packages/nginx' do
   it 'adds the following commands' do
     AppConf.environment = :staging
     eval_package
-    AppConf.commands.map(&:info).should == [
+    AppConf.commands.map(&:info).must_equal [
       "TASK   nginx - Download and configure Nginx",
       "SUDO   cd /usr/local/src && wget nginx_url/package && tar -zxf package && rm package && cd -",
       'SUDO   cd /usr/local/src/nginx-1.2.3 && ./configure --with-http_ssl_module --add-module=/passenger/path/ext/nginx',

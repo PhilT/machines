@@ -13,7 +13,7 @@ describe 'Helpers' do
     end
 
     it 'truncates lines longer than screen width' do
-      $terminal.stub(:output_cols).and_return 10
+      $terminal.stub(:output_cols).returns 10
       Command.console.log "A line that's longer than the screen width", :newline => false
       "A line...\r".should be_displayed
     end
@@ -61,7 +61,7 @@ describe 'Helpers' do
     it 'flushes the file' do
       mock_file = mock File
       subject = Machines::Logger.new(mock_file)
-      mock_file.should_receive(:flush)
+      mock_file.expects(:flush)
       subject.flush
     end
   end

@@ -1,7 +1,8 @@
+require 'spec_helper'
 require 'fog'
 
 describe 'CloudMachine' do
-  include CloudMachine
+  include Machines::CloudMachine
 
   before do
     Fog.mock!

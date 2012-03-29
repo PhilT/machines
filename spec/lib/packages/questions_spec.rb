@@ -7,7 +7,7 @@ describe 'packages/questions' do
   end
 
   it 'asks for a password' do
-    should_receive(:enter_password).with('users', false)
+    expects(:enter_password).with('users', false)
     eval_package
   end
 
@@ -21,8 +21,8 @@ describe 'packages/questions' do
     AppConf.log_only = true
     should_not_receive(:enter_password)
     eval_package
-    AppConf.passwords.should == ['pa55word']
-    AppConf.password.should == 'pa55word'
+    AppConf.passwords.must_equal ['pa55word']
+    AppConf.password.must_equal 'pa55word'
   end
 
 end

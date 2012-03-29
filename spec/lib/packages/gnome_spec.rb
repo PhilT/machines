@@ -7,7 +7,7 @@ describe 'packages/gnome' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).should == [
+    AppConf.commands.map(&:info).must_equal [
       "TASK   gnome - Set Gnome display preferences",
       'RUN    gconftool-2 --set "/apps/metacity/general/titlebar_font" --type string "Arial Bold 10"',
       'RUN    gconftool-2 --set "/apps/metacity/general/num_workspaces" --type int 1',

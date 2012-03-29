@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe 'Checks' do
   describe 'echo_result' do
     it do

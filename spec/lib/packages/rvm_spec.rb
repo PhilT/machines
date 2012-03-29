@@ -9,7 +9,7 @@ describe 'packages/rvm' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).should == [
+    AppConf.commands.map(&:info).must_equal [
       "TASK   rvm - Install RVM",
       "SUDO   apt-get -q -y install git-core",
       'RUN    bash -s 1.0 < <(wget -q https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )',

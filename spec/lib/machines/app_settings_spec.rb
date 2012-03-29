@@ -1,8 +1,12 @@
+require 'spec_helper'
+
 describe 'AppSettings' do
+  include Machines::AppSettings
+
   describe 'load_and_generate_passwords_for_webapps' do
     it 'generates passwords and saves to webapps.yml' do
       File.open('webapps.yml', 'w') {|f| f.puts "###\n\n---\nwebapps:\n  my_app:\n    development:\n      password: \n" }
-      stub!(:generate_password).and_return 'random'
+      stubs(:generate_password).returns 'random'
       load_and_generate_passwords_for_webapps
       File.read('webapps.yml').must_equal "###\n\n---\nwebapps:\n  my_app:\n    development:\n      password: random\n"
     end
@@ -27,7 +31,7 @@ EOF
 
     it 'loads the app settings for selected apps' do
       load_app_settings ['app']
-      AppConf.webapps.must_equal {
+      AppConf.webapps.must_equal({
         'app' => AppBuilder.new(
           :scm => 'scm://project.git',
           :name => 'app',
@@ -36,13 +40,13 @@ EOF
           :setting => 'setting',
           :password => 'secure'
         )
-      }
+      })
     end
 
     it 'handles ssl settings' do
       File.open('webapps.yml', 'w') {|f| f.puts @settings }
       load_app_settings ['app']
-      AppConf.webapps.must_equal {
+      AppConf.webapps.must_equal({
         'app' => AppBuilder.new(
           :name => 'app',
           :scm => 'scm://project.git',
@@ -54,12 +58,12 @@ EOF
           :ssl_crt => 'signed.crt',
           :ssl => 'signed'
         )
-      }
+      })
     end
 
     it 'raises when settings not included for specified environment' do
       File.open('webapps.yml', 'w') {|f| f.puts "---\nwebapps:\n  app:\n    path: path\n" }
-      lambda{ load_app_settings(['app']) }.should raise_error(ArgumentError, 'app has no settings for test environment')
+      lambda{ load_app_settings(['app']) }.must_raise(ArgumentError, 'app has no settings for test environment')
     end
 
     it 'loads settings for all apps when none specified' do
@@ -79,7 +83,7 @@ webapps:
       EOF
       File.open('webapps.yml', 'w') {|f| f.puts settings }
       load_app_settings nil
-      AppConf.webapps.must_equal {
+      AppConf.webapps.must_equal({
         'app' => AppBuilder.new(
           :name => 'app',
           :path => '/home/user/project',
@@ -94,7 +98,7 @@ webapps:
           :path => '/home/user/other_project',
           :setting => 'other_setting',
           :password => 'secure')
-      }
+      })
     end
   end
 end

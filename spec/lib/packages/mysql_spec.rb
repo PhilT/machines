@@ -23,7 +23,7 @@ describe 'packages/mysql' do
       AppConf.roles = :db
 
       eval_package
-      AppConf.commands.map(&:info).should == [
+      AppConf.commands.map(&:info).must_equal [
         "TASK   mysql - Install MySQL",
         "SUDO   echo mysql-server-5.1 mysql-server/root_password password DB_PASS | debconf-set-selections",
         "SUDO   echo mysql-server-5.1 mysql-server/root_password_again password DB_PASS | debconf-set-selections",
@@ -39,7 +39,7 @@ describe 'packages/mysql' do
       AppConf.roles = :dbmaster
       AppConf.webapps = {'name' => AppBuilder.new({:name => 'name', :password => 'PASSWORD'})}
       eval_package
-      AppConf.commands.map(&:info).should == [
+      AppConf.commands.map(&:info).must_equal [
         "TASK   dbperms - Grant applications access to the database",
         %{RUN    echo "GRANT ALL ON *.* TO 'name'@'%' IDENTIFIED BY 'PASSWORD';" | mysql -u root -pDB_PASS},
         "TASK   replication - Grant replication access to this machine",
@@ -55,7 +55,7 @@ describe 'packages/mysql' do
     it 'sets up slave to replicate from master' do
       AppConf.roles = :dbslave
       eval_package
-      AppConf.commands.map(&:info).should == [
+      AppConf.commands.map(&:info).must_equal [
         "TASK   replication - Setup database replication from master",
         "UPLOAD mysql/dbslave.cnf to /tmp/dbslave.cnf",
         "SUDO   cp -rf /tmp/dbslave.cnf /etc/mysql/conf.d/dbslave.cnf",

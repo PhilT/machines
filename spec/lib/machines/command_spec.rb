@@ -1,42 +1,44 @@
-describe Command do
-  subject { Command.new('command', 'check') }
+require 'spec_helper'
+
+describe Machines::Command do
+  subject { Machines::Command.new('command', 'check') }
 
   describe 'initialize' do
     it 'sets line, command, check' do
-      subject.command.should == 'command'
-      subject.check.should == 'check'
+      subject.command.must_equal 'command'
+      subject.check.must_equal 'check'
     end
   end
 
   describe 'run' do
     before(:each) do
       AppConf.commands = [subject]
-      @mock_ssh = mock Net::SSH
-      @mock_ssh.stub(:exec!).and_return 'result'
-      @mock_ssh.stub(:exec!).with('export TERM=linux && command').and_return "result"
-      @mock_ssh.stub(:exec!).with('export TERM=linux && check').and_return "CHECK PASSED"
-      Command.scp = mock Net::SCP, :session => @mock_ssh
+      @mock_ssh = mock 'Net::SSH'
+      @mock_ssh.stubs(:exec!).returns 'result'
+      @mock_ssh.stubs(:exec!).with('export TERM=linux && command').returns "result"
+      @mock_ssh.stubs(:exec!).with('export TERM=linux && check').returns "CHECK PASSED"
+      Machines::Command.scp = stub 'Net::SCP', :session => @mock_ssh
     end
 
     it 'does not execute command when logging only' do
-      @mock_ssh.should_not_receive :exec!
+      @mock_ssh.expects(:exec!).never
       AppConf.log_only = true
       subject.run
     end
 
     describe 'check_result' do
       it 'returns NOT CHECKED when nothing to execute' do
-        subject = Command.new('command', nil)
+        subject = Machines::Command.new('command', nil)
         AppConf.commands = [subject]
         @mock_ssh.should_not_receive(:exec!).with(nil)
         subject.run
 
-        "100% RUN    command\r".should be_displayed
-        "100% RUN    command\n".should be_displayed as_warning
+        $console.next.must_equal "100% RUN    command\r"
+        $console.next.must_equal colored("100% RUN    command\n", :warning)
 
-        "RUN    command\n".should be_logged as_highlight
-        "result\n".should be_logged
-        "NOT CHECKED\n".should be_logged as_warning
+        $file.next.must_equal colored("RUN    command\n", :highlight)
+        $file.next.must_equal "result\n"
+        $file.next.must_equal colored("NOT CHECKED\n", :warning)
       end
     end
 
@@ -72,7 +74,7 @@ describe Command do
 
       it 'successful sudo command to screen and file' do
         AppConf.password = 'userpass'
-        @mock_ssh.stub(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && check'").and_return 'CHECK PASSED'
+        @mock_ssh.stubs(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && check'").returns 'CHECK PASSED'
         subject.use_sudo
         subject.run
 
@@ -85,7 +87,7 @@ describe Command do
       end
 
       it 'unsuccesful command to screen and file' do
-        @mock_ssh.stub(:exec!).with('export TERM=linux && check').and_return "CHECK FAILED"
+        @mock_ssh.stubs(:exec!).with('export TERM=linux && check').returns "CHECK FAILED"
 
         subject.run
 
@@ -98,9 +100,9 @@ describe Command do
       end
 
       it 'ensure failures are always logged even when exceptions raised' do
-        @mock_ssh.should_receive(:exec!).with('export TERM=linux && check').and_raise Exception.new
+        @mock_ssh.expects(:exec!).with('export TERM=linux && check').raises Exception.new
 
-        lambda {subject.run}.should raise_error Exception
+        lambda {subject.run}.must_raise Exception
 
         "100% RUN    command\r".should be_displayed
         "100% RUN    command\n".should be_displayed as_failure
@@ -111,30 +113,30 @@ describe Command do
       end
 
       it 'ensure logging failures do not stop app exiting gracefully' do
-        @mock_ssh.should_receive(:exec!).with('export TERM=linux && check').and_raise Exception.new
-        Command.file.stub(:log)
-        Command.file.should_receive(:log).with('Exception', :color => :failure).and_raise ArgumentError
+        @mock_ssh.expects(:exec!).with('export TERM=linux && check').raises Exception.new
+        Machines::Command.file.stub(:log)
+        Machines::Command.file.expects(:log).with('Exception', :color => :failure).raises ArgumentError
         lambda {subject.run}.should_not raise_error ArgumentError
       end
 
       it 'ensure console failures do not stop app exiting gracefully' do
-        @mock_ssh.should_receive(:exec!).with('export TERM=linux && check').and_raise Exception.new
-        Command.console.stub(:log)
-        Command.console.should_receive(:log).with('100% RUN    command', :color => :failure).and_raise ArgumentError
+        @mock_ssh.expects(:exec!).with('export TERM=linux && check').raises Exception.new
+        Machines::Command.console.stub(:log)
+        Machines::Command.console.expects(:log).with('100% RUN    command', :color => :failure).raises ArgumentError
         lambda {subject.run}.should_not raise_error ArgumentError
       end
     end
 
     it 'wraps command execution in sudo with a password' do
       AppConf.password = 'userpass'
-      @mock_ssh.should_receive(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && command'").and_return "result"
+      @mock_ssh.expects(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && command'").returns "result"
 
       subject.use_sudo
       subject.run
     end
 
     it 'wraps command execution in sudo with no password' do
-      @mock_ssh.should_receive(:exec!).with("sudo -S sh -c 'export TERM=linux && command'").and_return "result"
+      @mock_ssh.expects(:exec!).with("sudo -S sh -c 'export TERM=linux && command'").returns "result"
 
       subject.use_sudo
       subject.run
@@ -142,14 +144,14 @@ describe Command do
 
     it 'wraps check execution in sudo with a password' do
       AppConf.password = 'userpass'
-      @mock_ssh.should_receive(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && check'").and_return 'CHECK PASSED'
+      @mock_ssh.expects(:exec!).with("echo userpass | sudo -S sh -c 'export TERM=linux && check'").returns 'CHECK PASSED'
 
       subject.use_sudo
       subject.run
     end
 
     it 'wraps check execution in sudo with no password' do
-      @mock_ssh.should_receive(:exec!).with("sudo -S sh -c 'export TERM=linux && check'").and_return 'CHECK PASSED'
+      @mock_ssh.expects(:exec!).with("sudo -S sh -c 'export TERM=linux && check'").returns 'CHECK PASSED'
 
       subject.use_sudo
       subject.run
@@ -158,14 +160,14 @@ describe Command do
 
   describe 'progress' do
     it 'returns correct percentage' do
-      AppConf.commands = 200.times.map { Command.new('command', 'check') }
-      AppConf.commands[10].send('progress').should == '  6% '
+      AppConf.commands = 200.times.map { Machines::Command.new('command', 'check') }
+      AppConf.commands[10].send('progress').must_equal '  6% '
     end
   end
 
   describe 'info' do
     it 'returns the command' do
-      subject.info.should == 'RUN    command'
+      subject.info.must_equal 'RUN    command'
     end
   end
 end

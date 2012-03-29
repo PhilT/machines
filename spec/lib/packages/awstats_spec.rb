@@ -10,7 +10,7 @@ describe 'packages/awstats' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).should == [
+    AppConf.commands.map(&:info).must_equal [
       "TASK   awstats - Install AWStats",
       "SUDO   apt-get -q -y install awstats",
       "UPLOAD buffer from awstats/awstats.conf.erb to /tmp/awstats.conf",

@@ -17,7 +17,7 @@ describe 'packages/webapps' do
   it 'adds the following commands' do
     AppConf.environment = :production
     eval_package
-    AppConf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.should == [
+    AppConf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.must_equal [
       "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",
       "SUDO   mkdir -p nginx_path/servers",
       "RUN    mkdir -p /home/users/app_path/releases",
@@ -36,7 +36,7 @@ describe 'packages/webapps' do
   it "doesn't make app structure when target is a development machine" do
     AppConf.environment = :development
     eval_package
-    AppConf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.should == [
+    AppConf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.must_equal [
       "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",
       "SUDO   mkdir -p nginx_path/servers",
       "RUN    git clone -q github.com/project /home/users/app_path",

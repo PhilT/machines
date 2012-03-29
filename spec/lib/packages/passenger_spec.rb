@@ -10,7 +10,7 @@ describe 'packages/passenger' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).should == [
+    AppConf.commands.map(&:info).must_equal [
       "TASK   passenger - Install passenger",
       'SUDO   apt-get -q -y install libcurl4-openssl-dev',
       'RUN    gem install passenger -v "3.0.7"',
@@ -19,8 +19,8 @@ describe 'packages/passenger' do
 
   it 'sets passenger root and ruby' do
     eval_package
-    AppConf.passenger.root.should == '/home/user/ruby/gems/passenger-3.0.7'
-    AppConf.passenger.ruby.should == '/home/user/bin/ruby'
+    AppConf.passenger.root.must_equal '/home/user/ruby/gems/passenger-3.0.7'
+    AppConf.passenger.ruby.must_equal '/home/user/bin/ruby'
   end
 end
 

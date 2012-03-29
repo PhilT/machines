@@ -8,7 +8,7 @@ describe 'packages/dependencies' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).should == [
+    AppConf.commands.map(&:info).must_equal [
       "TASK   dependencies - Dependencies required for various commands to run",
       "SUDO   apt-get -q -y update > /tmp/apt-update.log",
       "SUDO   apt-get -q -y install debconf-utils",

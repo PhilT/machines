@@ -10,7 +10,7 @@ describe 'packages/passenger_nginx' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).should == [
+    AppConf.commands.map(&:info).must_equal [
       "TASK   passenger_nginx - Build the passenger module for Nginx",
       'SUDO   cd /home/user/gems/passenger-1.2.3/ext/nginx && rake nginx RELEASE=yes && cd -'
     ]

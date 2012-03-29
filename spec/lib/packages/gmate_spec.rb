@@ -8,7 +8,7 @@ describe 'packages/gmate' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).should == [
+    AppConf.commands.map(&:info).must_equal [
       "TASK   gmate - Clone and install gmate for gEdit from Github and set some preferences and plugins",
       "SUDO   apt-get -q -y install python-pyinotify",
       "SUDO   apt-get -q -y install python-webkitgtk",

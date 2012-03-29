@@ -7,7 +7,7 @@ describe 'packages/docky' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).should == [
+    AppConf.commands.map(&:info).must_equal [
       "TASK   docky - Install and configure Docky a dock and app launcher",
       "SUDO   apt-get -q -y install docky",
       "SUDO   apt-get -q -y install gnome-system-monitor",

@@ -31,14 +31,14 @@ describe 'packages/base' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).should == @hosts + @packages
+    AppConf.commands.map(&:info).must_equal @hosts + @packages
   end
 
   it 'does not add hosts when nil' do
     AppConf.hosts = nil
     @hosts.pop
     eval_package
-    AppConf.commands.map(&:info).should == @hosts + @packages
+    AppConf.commands.map(&:info).must_equal @hosts + @packages
   end
 end
 

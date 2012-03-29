@@ -13,7 +13,7 @@ describe 'packages/dotfiles' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).should == [
+    AppConf.commands.map(&:info).must_equal [
       "TASK   dotfiles - Upload files in users/username/dotfiles, prepend a dot and substitute some bashrc vars",
       "UPLOAD #{File.expand_path('users/username/dotfiles/bashrc')} to .bashrc",
       "RUN    sed -i \"s/export RAILS_ENV=/export RAILS_ENV=railsenv/\" .bashrc",

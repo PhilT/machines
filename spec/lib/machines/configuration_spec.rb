@@ -4,21 +4,21 @@ describe 'Configuration' do
   describe 'add_user' do
     it do
       command = add_user 'login'
-      command.command.should == 'useradd -s /bin/bash -d /home/login -m login'
-      command.check.should == "test -d /home/login #{echo_result}"
+      command.command.must_equal 'useradd -s /bin/bash -d /home/login -m login'
+      command.check.must_equal "test -d /home/login #{echo_result}"
     end
 
     it do
       command = add_user 'a_user', :password => 'password', :admin => true
       command.command.should match /useradd -s \/bin\/bash -d \/home\/a_user -m -p .* -G admin a_user/
-      command.check.should == "test -d /home/a_user #{echo_result}"
+      command.check.must_equal "test -d /home/a_user #{echo_result}"
     end
   end
 
   describe 'add' do
     it 'add an existing user to a group' do
       command = add :user => 'phil', :to => 'group'
-      command.command.should == 'usermod -a -G group phil'
+      command.command.must_equal 'usermod -a -G group phil'
     end
   end
 
@@ -29,7 +29,7 @@ describe 'Configuration' do
 
     it 'supports different types' do
       commands = configure @options
-      commands.map(&:command).should == [
+      commands.map(&:command).must_equal [
         'gconftool-2 --set "string" --type string "str"',
         'gconftool-2 --set "number" --type int 123',
         'gconftool-2 --set "t" --type bool true',
@@ -41,17 +41,17 @@ describe 'Configuration' do
 
     it 'checks value has been set' do
       command = configure 'key' => 'value'
-      command.first.check.should == 'gconftool-2 --get "key" | grep "value" ' + echo_result
+      command.first.check.must_equal 'gconftool-2 --get "key" | grep "value" ' + echo_result
     end
 
-    it { lambda{ configure(:invalid_type => Object.new) }.should raise_error }
+    it { lambda{ configure(:invalid_type => Object.new) }.must_raise }
   end
 
   describe 'del_user' do
     it 'calls deluser with remove-all-files option' do
       subject = del_user 'login'
-      subject.command.should == 'deluser login --remove-home -q'
-      subject.check.should == "test ! -s /home/login #{echo_result}"
+      subject.command.must_equal 'deluser login --remove-home -q'
+      subject.check.must_equal "test ! -s /home/login #{echo_result}"
     end
   end
 end

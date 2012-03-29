@@ -10,7 +10,7 @@ describe 'packages/save_machines' do
   it 'loads the machines.yml file' do
     File.open('machines.yml', 'w'){|f| f.puts "\n"}
     eval_package
-    File.read('machines.yml').should == <<-EOF
+    File.read('machines.yml').must_equal <<-EOF
 ---
 machines:
   a_machine:
@@ -22,7 +22,7 @@ machines:
   it 'preserves comments' do
     File.open('machines.yml', 'w'){|f| f.puts "# Some\n# comments\n---\na_machine:\n  hostname:\n"}
     eval_package
-    File.read('machines.yml').should == <<-EOF
+    File.read('machines.yml').must_equal <<-EOF
 # Some
 # comments
 ---
@@ -38,7 +38,7 @@ machines:
   end
 
   it 'only saves when something changed' do
-    AppConf.should_receive :save
+    AppConf.expects :save
     eval_package
   end
 

@@ -9,7 +9,7 @@ describe 'packages/slim' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).should == [
+    AppConf.commands.map(&:info).must_equal [
       "TASK   slim - Install SLiM desktop manager",
       "SUDO   apt-get -q -y install slim",
       "UPLOAD slim/themes to /tmp/themes",

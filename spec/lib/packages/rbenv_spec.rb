@@ -10,7 +10,7 @@ describe 'packages/rbenv' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).should == [
+    AppConf.commands.map(&:info).must_equal [
       'TASK   rbenv - Install ruby-build, rbenv, ruby 1.9.2 and Bundler',
       "SUDO   apt-get -q -y install git-core",
       'RUN    git clone -q git://github.com/sstephenson/ruby-build.git',

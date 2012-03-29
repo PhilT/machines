@@ -11,7 +11,7 @@ describe 'packages/nginx_logrotate' do
 
   it 'generates command' do
     eval_package
-    AppConf.commands.map(&:info).should == [
+    AppConf.commands.map(&:info).must_equal [
       'TASK   logrotate_nginx - Logrotate nginx access and error logs and optionally generate stats',
       "UPLOAD buffer from logrotate/nginx.erb to /tmp/appname_nginx_access_log",
       "SUDO   cp -rf /tmp/appname_nginx_access_log /etc/logrotate.d/appname_nginx_access_log",
@@ -29,7 +29,7 @@ describe 'packages/nginx_logrotate' do
   describe 'nginx logs template' do
     before(:each) do
       AppConf.awstats = nil
-      stub!(:create_from).and_return Command.new 'command', 'check'
+      stubs(:create_from).returns Command.new 'command', 'check'
     end
 
     describe 'when awstats set' do
@@ -46,11 +46,11 @@ describe 'packages/nginx_logrotate' do
   endscript
   COMMAND
         options = {:log_path => '/var/log/nginx/appname.access.log', :stats_command => command}
-        AppBuilder.should_receive(:new).with(options).and_return mock_settings
+        AppBuilder.expects(:new).with(options).returns mock_settings
         options = {:log_path => '/var/log/nginx/appname.error.log', :stats_command => nil}
-        AppBuilder.should_receive(:new).with(options).and_return mock_settings
+        AppBuilder.expects(:new).with(options).returns mock_settings
         options = {:settings => mock_settings, :to => '/etc/logrotate.d/appname_nginx_access_log'}
-        should_receive(:create_from).with('logrotate/nginx.erb', options).and_return Command.new 'command', 'check'
+        expects(:create_from).with('logrotate/nginx.erb', options).returns Command.new 'command', 'check'
         eval_package
       end
     end
@@ -59,9 +59,9 @@ describe 'packages/nginx_logrotate' do
       it 'does not generate stats command' do
         mock_settings = mock AppBuilder
         options = {:log_path => '/var/log/nginx/appname.access.log', :stats_command => nil}
-        AppBuilder.should_receive(:new).with(options).and_return mock_settings
+        AppBuilder.expects(:new).with(options).returns mock_settings
         options = {:settings => mock_settings, :to => '/etc/logrotate.d/appname_nginx_access_log'}
-        should_receive(:create_from).with('logrotate/nginx.erb', options).and_return Command.new 'command', 'check'
+        expects(:create_from).with('logrotate/nginx.erb', options).returns Command.new 'command', 'check'
         eval_package
       end
     end
@@ -69,11 +69,11 @@ describe 'packages/nginx_logrotate' do
   describe 'apps logs template' do
     it 'generates correct template' do
       mock_settings = mock AppBuilder
-      stub!(:create_from).and_return Command.new 'command', 'check'
+      stubs(:create_from).returns Command.new 'command', 'check'
       AppBuilder.stub(:new)
-      AppBuilder.should_receive(:new).with(:log_path => 'apppath/shared/log/*.log').and_return mock_settings
+      AppBuilder.expects(:new).with(:log_path => 'apppath/shared/log/*.log').returns mock_settings
       options = {:settings => mock_settings, :to => '/etc/logrotate.d/appname_app_log'}
-      should_receive(:create_from).with('logrotate/app.erb', options).and_return Command.new 'command', 'check'
+      expects(:create_from).with('logrotate/app.erb', options).returns Command.new 'command', 'check'
       eval_package
     end
   end
