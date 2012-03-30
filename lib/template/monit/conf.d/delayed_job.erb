@@ -1,6 +1,6 @@
-<% AppConf.webapps.each do |appname, app| %>
+<% $conf.webapps.each do |appname, app| %>
   <% if app.monitor_delayed_job %>
-    <% script = "/usr/bin/env RAILS_ENV=#{AppConf.environment} #{app.path}/current/script" %>
+    <% script = "/usr/bin/env RAILS_ENV=#{$conf.environment} #{app.path}/current/script" %>
     check process delayed_job with pidfile <%= app.path %>/shared/pids/delayed_job.pid
           start program = "<%= script %>/delayed_job start"
           stop program = "<%= script %>/delayed_job stop"

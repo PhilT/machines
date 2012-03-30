@@ -37,18 +37,15 @@ describe 'Development machine' do
     end
     response.must_match /user/
 
-    `cd tmp && ../bin/machines new acceptance_project`
-    FileUtils.cd 'tmp/acceptance_project'
+    `cd tmp && ruby -I../lib ../bin/machines new acceptance_project`
     files = %w(certificates webapps.yml config.yml mysql nginx packages users Machinesfile)
     files.each do |name|
-      File.exist?(name).must_be true
+      File.exist?(File.join('tmp', 'acceptance_project', name)).must_equal true
     end
 
-    `cd tmp/acceptance_project && ../../bin/machines philworkstation dryrun`
+    puts `cd tmp/acceptance_project && ruby -I../../lib ../../bin/machines dryrun philworkstation`
 
-#    `cd tmp/acceptance_project && bin/machines philworkstation build`
-
-
+#    `ruby -Ilib ../../bin/machines philworkstation build`
   end
 end
 

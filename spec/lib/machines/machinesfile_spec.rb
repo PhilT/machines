@@ -18,7 +18,7 @@ describe 'Machinesfile' do
     end
 
     it 'loads built-in package when no custom package' do
-      builtin_package = "#{AppConf.application_dir}/packages/builtin_package.rb"
+      builtin_package = "#{$conf.application_dir}/packages/builtin_package.rb"
       FileUtils.mkdir_p File.dirname(builtin_package)
       FileUtils.touch builtin_package
       File.expects(:read).with(builtin_package).returns ''

@@ -11,7 +11,7 @@ describe 'packages/monit' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).must_equal [
+    $conf.commands.map(&:info).must_equal [
       "TASK   monit - Install and configure monit",
       "SUDO   apt-get -q -y install monit",
       "UPLOAD buffer from monit/monitrc.erb to /tmp/monitrc",

@@ -1,4 +1,4 @@
 task :save_machines, 'Saves the machines.yml' do
-  AppConf.save(:machines, 'machines.yml') if AppConf.machines_changed
+  $conf.save(:machines, 'machines.yml') if $conf.machines_changed
 end
 

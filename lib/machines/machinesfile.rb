@@ -7,7 +7,7 @@ module Machines
         error = "Cannot find custom or built-in package #{name}."
       end
       package = load_and_eval File.join('packages', "#{name}.rb")
-      package ||= load_and_eval File.join(AppConf.application_dir, 'packages', "#{name}.rb")
+      package ||= load_and_eval File.join($conf.application_dir, 'packages', "#{name}.rb")
       package || raise(LoadError, error, caller)
     end
 

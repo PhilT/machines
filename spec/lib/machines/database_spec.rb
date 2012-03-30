@@ -9,9 +9,9 @@ describe 'Database' do
 
   describe 'write_database_yml' do
     before do
-      AppConf.environment = 'staging'
-      AppConf.db_server = AppConf.new
-      AppConf.db_server.address = 'dbhost'
+      $conf.environment = 'staging'
+      $conf.db_server = AppConf.new
+      $conf.db_server.address = 'dbhost'
     end
 
     it 'supplies correct parameters' do

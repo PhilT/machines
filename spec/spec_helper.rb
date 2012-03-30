@@ -8,7 +8,7 @@ require 'fakefs/safe'
 
 Dir['spec/support/*.rb'].each {|file| require File.join('./spec', 'support', File.basename(file)) }
 require 'machines'
-application_dir = AppConf.application_dir
+application_dir = $conf.application_dir
 
 # This is done so that Machines::Core.run doesn't collide with MiniTest::Unit::TestCase.run when included
 module Machines::Core
@@ -24,11 +24,11 @@ end
 MiniTest::Spec.add_setup_hook do
   include Machines::Checks
 
-  AppConf.clear
-  AppConf.passwords = []
-  AppConf.commands = []
-  AppConf.tasks = {}
-  AppConf.application_dir = application_dir
+  $conf.clear
+  $conf.passwords = []
+  $conf.commands = []
+  $conf.tasks = {}
+  $conf.application_dir = application_dir
 
   $debug = FakeOut.new
   $file = FakeOut.new
@@ -74,7 +74,7 @@ MiniTest::Spec.register_spec_type(/packages\//, MiniTest::Spec::Package)
 
 def load_package name
   FakeFS.deactivate!
-  @package_path = File.join(AppConf.application_dir, File.join('packages', "#{name}.rb"))
+  @package_path = File.join($conf.application_dir, File.join('packages', "#{name}.rb"))
   @package = File.read(@package_path)
   FakeFS.activate!
 end

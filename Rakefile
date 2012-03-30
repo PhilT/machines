@@ -1,27 +1,25 @@
 require 'yard'
 require 'highline/import'
+require 'rake'
 require 'rake/testtask'
 
-task :default => [:coverage, :acceptance, :yard, :install, :done]
-
-task :done do
-  puts '', $terminal.color('Done.', :bold, :blue)
-end
+task :default => [:coverage, :acceptance, :yard, :install]
 
 YARD::Rake::YardocTask.new
 
 Rake::TestTask.new(:spec) do |t|
+  t.libs << './spec'
   t.pattern = './spec/{support_specs,lib}/**/*_spec.rb'
 end
 
 Rake::TestTask.new(:acceptance) do |t|
+  t.libs << './spec'
   t.pattern = './spec/{acceptance}/**/*_spec.rb'
 end
 
 desc 'Generate code coverage'
 task :coverage do
   ENV['COVERAGE'] = 'true'
-  puts '', $terminal.color('Running specs with code coverage', :bold, :blue)
   Rake::Task['spec'].invoke
   ENV['COVERAGE'] = nil
 end

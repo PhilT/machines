@@ -7,29 +7,29 @@ module Machines
     end
 
     def generate_passwords
-      AppConf.webapps.keys.each do |webapp|
-        AppConf.webapps[webapp].keys.each do |environment|
-          env_settings = AppConf.webapps[webapp][environment]
+      $conf.webapps.keys.each do |webapp|
+        $conf.webapps[webapp].keys.each do |environment|
+          env_settings = $conf.webapps[webapp][environment]
           next unless env_settings.is_a?(AppConf)
           env_settings.password = generate_password unless env_settings.password
         end
       end
     end
 
-    # Loads application settings from webapps.yml and makes them available in AppConf.webapps
+    # Loads application settings from webapps.yml and makes them available in $conf.webapps
     # as an AppBuilder (bindable OpenStruct) so it can be used in ERB templates to generate config files
     # @param [Array] apps Names of the apps to configure
     def load_app_settings(apps)
       load_and_generate_passwords_for_webapps
-      webapps = AppConf.webapps.to_hash
-      AppConf.clear :webapps
-      AppConf.webapps = {}
+      webapps = $conf.webapps.to_hash
+      $conf.clear :webapps
+      $conf.webapps = {}
       webapps.each do |app_name, settings|
         next unless apps.nil? || apps.include?(app_name)
-        environment = settings[AppConf.environment.to_s] || raise(ArgumentError, "#{app_name} has no settings for #{AppConf.environment} environment")
+        environment = settings[$conf.environment.to_s] || raise(ArgumentError, "#{app_name} has no settings for #{$conf.environment} environment")
         settings['name'] = app_name
-        settings['path'] = File.join(AppConf.appsroot, File.basename(settings['scm'], '.git'))
-        public_path = "#{AppConf.environment == :development ? '' : 'current/'}public"
+        settings['path'] = File.join($conf.appsroot, File.basename(settings['scm'], '.git'))
+        public_path = "#{$conf.environment == :development ? '' : 'current/'}public"
         settings['root'] = File.join(settings['path'], public_path)
         if environment['ssl']
           settings['ssl_key'] = environment['ssl'] + '.key'
@@ -37,14 +37,14 @@ module Machines
         end
 
         environment.each { |k, v| settings[k] = v }
-        AppConf.webapps[app_name] = AppBuilder.new(settings.reject{|k, v| v.is_a?(Hash) })
+        $conf.webapps[app_name] = AppBuilder.new(settings.reject{|k, v| v.is_a?(Hash) })
       end
     end
 
     def load_and_generate_passwords_for_webapps
-      AppConf.load('webapps.yml')
+      $conf.load('webapps.yml')
       generate_passwords
-      AppConf.save('webapps', 'webapps.yml')
+      $conf.save('webapps', 'webapps.yml')
     end
 
   end

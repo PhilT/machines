@@ -1,8 +1,8 @@
 task :passenger, 'Install passenger' do
   sudo install 'libcurl4-openssl-dev'
-  run gem 'passenger', :version => AppConf.passenger.version
+  run gem 'passenger', :version => $conf.passenger.version
 
-  AppConf.passenger.root = File.join(AppConf.user_home, AppConf.ruby.gems_path, "passenger-#{AppConf.passenger.version}")
-  AppConf.passenger.ruby = File.join(AppConf.user_home, AppConf.ruby.executable)
+  $conf.passenger.root = File.join($conf.user_home, $conf.ruby.gems_path, "passenger-#{$conf.passenger.version}")
+  $conf.passenger.ruby = File.join($conf.user_home, $conf.ruby.executable)
 end
 

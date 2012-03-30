@@ -7,7 +7,7 @@ describe 'packages/apps' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).must_equal [
+    $conf.commands.map(&:info).must_equal [
       "TASK   apps - Install apps for minimal development machine",
       "SUDO   apt-get -q -y install abiword",
       "SUDO   apt-get -q -y install audacious",

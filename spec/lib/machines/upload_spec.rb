@@ -14,8 +14,8 @@ describe Machines::Upload do
 
   describe 'run' do
     before(:each) do
-      AppConf.commands = [subject]
-      AppConf.log_only = false
+      $conf.commands = [subject]
+      $conf.log_only = false
       @mock_ssh = mock 'Net::SSH'
       @mock_scp = stub 'Net::SCP', :session => @mock_ssh
       Machines::Command.scp = @mock_scp
@@ -34,7 +34,7 @@ describe Machines::Upload do
 
     it 'logs with newline when logging only' do
       @mock_scp.stubs(:upload!)
-      AppConf.log_only = true
+      $conf.log_only = true
       subject.run
 
       $console.next.must_equal "100% UPLOAD local to remote\n"
@@ -42,7 +42,7 @@ describe Machines::Upload do
 
     it 'logs with return when log_only not specified' do
       @mock_scp.stubs(:upload!)
-      AppConf.log_only = nil
+      $conf.log_only = nil
       subject.run
 
       $console.next.must_equal "100% UPLOAD local to remote\r"
@@ -58,7 +58,7 @@ describe Machines::Upload do
     it 'uploads an in memory buffer' do
       buffer = NamedBuffer.new('name', 'a buffer')
       subject = Machines::Upload.new(buffer, 'remote', 'check')
-      AppConf.commands = [subject]
+      $conf.commands = [subject]
       @mock_scp.expects(:upload!).with(buffer, 'remote', {:recursive => false})
       subject.run
     end

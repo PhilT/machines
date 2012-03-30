@@ -7,7 +7,7 @@ describe 'packages/virtualbox' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).must_equal [
+    $conf.commands.map(&:info).must_equal [
       "TASK   virtualbox - Install VirtualBox",
       "SUDO   apt-get -q -y install dkms",
       "SUDO   expr substr `cat /etc/lsb-release | grep DISTRIB_CODENAME` 18 20 | xargs -I DISTRIB_CODENAME echo deb http://download.virtualbox.org/virtualbox/debian DISTRIB_CODENAME contrib >> /etc/apt/sources.list",

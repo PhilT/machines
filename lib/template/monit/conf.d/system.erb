@@ -7,7 +7,7 @@ check system localhost
       if cpu usage (system) > 30% then alert
       if cpu usage (wait) > 20% then alert
 
-<% AppConf.monit.check.paths.split(' ').each do |path| %>
+<% $conf.monit.check.paths.split(' ').each do |path| %>
 check filesystem rootfs with path <%= path %>
       if space < 5% then alert
 <% end %>

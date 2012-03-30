@@ -26,13 +26,13 @@ describe 'Questions' do
 
     it 'adds to password list' do
       enter_password('type')
-      AppConf.passwords.must_equal ['password']
+      $conf.passwords.must_equal ['password']
     end
 
     it 'does not add password less than 5 characters to password list' do
       stubs(:ask).returns 'pass'
       enter_password('type')
-      AppConf.passwords.must_equal []
+      $conf.passwords.must_equal []
     end
 
     it 'repeats until password and confirmation match' do
@@ -50,7 +50,7 @@ describe 'Questions' do
 
     it 'password still added to list when not confirming' do
       enter_password('type', false)
-      AppConf.passwords.must_equal ['password']
+      $conf.passwords.must_equal ['password']
     end
 
     it 'password still returned when not confirming' do
@@ -58,9 +58,9 @@ describe 'Questions' do
     end
 
     it 'do not add to passwords list if not available' do
-      AppConf.passwords = nil
+      $conf.passwords = nil
       enter_password('type')
-      AppConf.passwords.must_equal nil
+      $conf.passwords.must_equal nil
     end
   end
 end

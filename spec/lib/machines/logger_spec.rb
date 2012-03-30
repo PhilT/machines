@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Machines::Logger do
   before(:each) do
-    AppConf.user = 'www'
-    AppConf.commands = [1,2,3]
+    $conf.user = 'www'
+    $conf.commands = [1,2,3]
   end
 
   describe 'logging to screen' do
@@ -48,7 +48,7 @@ describe Machines::Logger do
     end
 
     it 'does not show passwords' do
-      AppConf.passwords = ['a_password', 'another password']
+      $conf.passwords = ['a_password', 'another password']
       Machines::Command.file.log 'something with a_password and another password in'
       $file.next.must_equal "something with ***** and ***** in\n"
     end

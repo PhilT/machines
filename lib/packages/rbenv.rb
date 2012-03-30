@@ -1,4 +1,4 @@
-task :rbenv, "Install ruby-build, rbenv, ruby #{AppConf.ruby.version} and Bundler" do
+task :rbenv, "Install ruby-build, rbenv, ruby #{$conf.ruby.version} and Bundler" do
   sudo install ['git-core']
   run git_clone 'git://github.com/sstephenson/ruby-build.git'
   sudo 'cd ~/ruby-build && ./install.sh'
@@ -17,9 +17,9 @@ task :rbenv, "Install ruby-build, rbenv, ruby #{AppConf.ruby.version} and Bundle
   # DOES THIS WORK? (E.G. SOURCING PROFILE to get the exported path)
   run 'source ~/.profile'
 
-  run "rbenv install #{AppConf.ruby.full_version}"
+  run "rbenv install #{$conf.ruby.full_version}"
   run 'rbenv rehash'
-  run "rbenv global #{AppConf.ruby.full_version}", "ruby -v | grep #{AppConf.ruby.version} #{echo_result}"
+  run "rbenv global #{$conf.ruby.full_version}", "ruby -v | grep #{$conf.ruby.version} #{echo_result}"
 
   run write "gem: --no-rdoc --no-ri", :to => '.gemrc', :name => '.gemrc'
   run gem 'bundler'

@@ -1,4 +1,4 @@
-username = AppConf.user
+username = $conf.user
 
 task :dotfiles, "Upload files in users/#{username}/dotfiles, prepend a dot and substitute some bashrc vars" do
   Dir["users/#{username}/dotfiles/*"].each do |source|
@@ -6,8 +6,8 @@ task :dotfiles, "Upload files in users/#{username}/dotfiles, prepend a dot and s
   end
 
   if File.exists?("users/#{username}/dotfiles/bashrc")
-    run replace 'export RAILS_ENV=', :with => "export RAILS_ENV=#{AppConf.environment}", :in => '.bashrc'
-    run replace 'export CDPATH=', :with => "export CDPATH=#{AppConf.appsroot}", :in => '.bashrc'
+    run replace 'export RAILS_ENV=', :with => "export RAILS_ENV=#{$conf.environment}", :in => '.bashrc'
+    run replace 'export CDPATH=', :with => "export CDPATH=#{$conf.appsroot}", :in => '.bashrc'
   end
 end
 

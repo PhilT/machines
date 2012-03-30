@@ -3,14 +3,14 @@ require 'spec_helper'
 describe 'packages/rbenv' do
   before(:each) do
     load_package('rbenv')
-    AppConf.ruby = AppConf.new
-    AppConf.ruby.version = '1.9.2'
-    AppConf.ruby.full_version = '1.9.2-p290'
+    $conf.ruby = AppConf.new
+    $conf.ruby.version = '1.9.2'
+    $conf.ruby.full_version = '1.9.2-p290'
   end
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).must_equal [
+    $conf.commands.map(&:info).must_equal [
       'TASK   rbenv - Install ruby-build, rbenv, ruby 1.9.2 and Bundler',
       "SUDO   apt-get -q -y install git-core",
       'RUN    git clone -q git://github.com/sstephenson/ruby-build.git',

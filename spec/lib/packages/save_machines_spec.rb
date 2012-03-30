@@ -3,8 +3,8 @@ require 'spec_helper'
 describe 'packages/save_machines' do
   before(:each) do
     load_package('save_machines')
-    AppConf.machines_changed = true
-    AppConf.from_hash({'machines' => {'a_machine' => {'hostname' => 'something', 'environment' => 'development'}}})
+    $conf.machines_changed = true
+    $conf.from_hash({'machines' => {'a_machine' => {'hostname' => 'something', 'environment' => 'development'}}})
   end
 
   it 'loads the machines.yml file' do
@@ -38,13 +38,13 @@ machines:
   end
 
   it 'only saves when something changed' do
-    AppConf.expects :save
+    $conf.expects :save
     eval_package
   end
 
   it 'does not save when nothing changed' do
-    AppConf.clear :machines_changed
-    AppConf.expects(:save).never
+    $conf.clear :machines_changed
+    $conf.expects(:save).never
     eval_package
   end
 end

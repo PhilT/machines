@@ -12,11 +12,12 @@ require 'tempfile'
 require 'webrick/utils'
 require 'yaml'
 
-AppConf.application_dir = File.dirname(__FILE__)
+$conf = AppConf.new
+$conf.application_dir = File.dirname(__FILE__)
 
 module Machines
   class Base
-    Dir[File.join(AppConf.application_dir, 'machines/**/*.rb')].sort.each do |lib|
+    Dir[File.join($conf.application_dir, 'machines/**/*.rb')].sort.each do |lib|
       require lib
       path = ActiveSupport::Inflector.camelize(File.basename(lib, '.rb'))
       module_or_class = eval(path, nil, "eval: #{path}")

@@ -11,7 +11,7 @@ describe Machines::Command do
 
   describe 'run' do
     before(:each) do
-      AppConf.commands = [subject]
+      $conf.commands = [subject]
       @mock_ssh = mock 'Net::SSH'
       @mock_ssh.stubs(:exec!).returns 'result'
       @mock_ssh.stubs(:exec!).with('export TERM=linux && command').returns "result"
@@ -21,14 +21,14 @@ describe Machines::Command do
 
     it 'does not execute command when logging only' do
       @mock_ssh.expects(:exec!).never
-      AppConf.log_only = true
+      $conf.log_only = true
       subject.run
     end
 
     describe 'check_result' do
       it 'returns NOT CHECKED when nothing to execute' do
         subject = Machines::Command.new('command', nil)
-        AppConf.commands = [subject]
+        $conf.commands = [subject]
         @mock_ssh.expects(:exec!).with(nil).never
         subject.run
 
@@ -43,18 +43,18 @@ describe Machines::Command do
 
     describe 'logs' do
       before(:each) do
-        AppConf.log_only = false
+        $conf.log_only = false
       end
 
       it 'to screen using newline instead of return when logging only' do
-        AppConf.log_only = true
+        $conf.log_only = true
         subject.run
 
         $console.next.must_equal "100% RUN    command\n"
       end
 
       it 'defaults screen logging to return' do
-        AppConf.log_only = nil
+        $conf.log_only = nil
         subject.run
 
         $console.next.must_equal "100% RUN    command\r"
@@ -72,7 +72,7 @@ describe Machines::Command do
       end
 
       it 'successful sudo command to screen and file' do
-        AppConf.password = 'userpass'
+        $conf.password = 'userpass'
         @mock_ssh.stubs(:exec!).with("echo userpass | sudo -S bash -c 'export TERM=linux && check'").returns 'CHECK PASSED'
         subject.use_sudo
         subject.run
@@ -137,7 +137,7 @@ describe Machines::Command do
     end
 
     it 'wraps command execution in sudo with a password' do
-      AppConf.password = 'userpass'
+      $conf.password = 'userpass'
       @mock_ssh.expects(:exec!).with("echo userpass | sudo -S bash -c 'export TERM=linux && command'").returns "result"
 
       subject.use_sudo
@@ -152,7 +152,7 @@ describe Machines::Command do
     end
 
     it 'wraps check execution in sudo with a password' do
-      AppConf.password = 'userpass'
+      $conf.password = 'userpass'
       @mock_ssh.expects(:exec!).with("echo userpass | sudo -S bash -c 'export TERM=linux && check'").returns 'CHECK PASSED'
 
       subject.use_sudo
@@ -169,8 +169,8 @@ describe Machines::Command do
 
   describe 'progress' do
     it 'returns correct percentage' do
-      AppConf.commands = 200.times.map { Machines::Command.new('command', 'check') }
-      AppConf.commands[10].send('progress').must_equal '  6% '
+      $conf.commands = 200.times.map { Machines::Command.new('command', 'check') }
+      $conf.commands[10].send('progress').must_equal '  6% '
     end
   end
 

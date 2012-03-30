@@ -33,13 +33,13 @@ module Machines
 
   protected
     def progress
-      "%3d%% " % ((AppConf.commands.index(self) + 1) / AppConf.commands.count.to_f * 100).round
+      "%3d%% " % (($conf.commands.index(self) + 1) / $conf.commands.count.to_f * 100).round
     end
 
     def process &block
-      Command.console.log progress + info, :newline => (AppConf.log_only || false)
+      Command.console.log progress + info, :newline => ($conf.log_only || false)
       Command.file.log info, :color => :highlight
-      unless AppConf.log_only
+      unless $conf.log_only
         begin
           yield
           result = @@ssh.exec!(wrap_in_export_and_sudo(@check))
@@ -57,7 +57,7 @@ module Machines
 
     def wrap_in_export_and_sudo command
       command = "export TERM=linux && #{command}"
-      echo_password = "echo #{AppConf.password} | " if AppConf.password
+      echo_password = "echo #{$conf.password} | " if $conf.password
       command = "#{echo_password}sudo -S bash -c '#{command}'" if @sudo
       Command.debug.log command
       command

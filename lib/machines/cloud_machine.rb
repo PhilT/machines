@@ -10,18 +10,18 @@ module Machines
       end
 
       Fog.credential = 'machines_key'
-      options = symbolize_keys(AppConf.cloud.to_hash)
-      options.merge!(:region => AppConf.machine.cloud.region)
-      AppConf.cloud.connection = Fog::Compute.new(options)
+      options = symbolize_keys($conf.cloud.to_hash)
+      options.merge!(:region => $conf.machine.cloud.region)
+      $conf.cloud.connection = Fog::Compute.new(options)
     end
 
     def create_server
-      server = AppConf.cloud.connection.servers.create(
-        :private_key_path => AppConf.machine.cloud.private_key_path,
-        :public_key_path => AppConf.machine.cloud.public_key_path,
-        :username => AppConf.machine.cloud.username,
-        :flavor_id => AppConf.machine.cloud.flavor_id,
-        :image_id => AppConf.machine.cloud.image_id)
+      server = $conf.cloud.connection.servers.create(
+        :private_key_path => $conf.machine.cloud.private_key_path,
+        :public_key_path => $conf.machine.cloud.public_key_path,
+        :username => $conf.machine.cloud.username,
+        :flavor_id => $conf.machine.cloud.flavor_id,
+        :image_id => $conf.machine.cloud.image_id)
       server.wait_for { ready? }
     end
 

@@ -1,4 +1,4 @@
-user <%= AppConf.user %>;
+user <%= $conf.user %>;
 worker_processes  4;    # Match this with the number of CPUs or increase for large static files
 pid /var/run/nginx.pid; # Used by monit
 
@@ -31,13 +31,13 @@ http {
   # client_max_body_size 1M;      # Max content that will be served. Increase if media content is to be served
   # client_body_timeout 60;       # Time allowed to respond within in seconds. Increase if requests are expected to take a long time
 
-  passenger_root <%= AppConf.passenger.root %>;
-  passenger_ruby <%= AppConf.passenger.ruby %>;
+  passenger_root <%= $conf.passenger.root %>;
+  passenger_ruby <%= $conf.passenger.ruby %>;
 
   passenger_max_pool_size 8;                # Max number of simultaneous instances
   passenger_pool_idle_time 0;               # Do not shutdown instances unless needed
   passenger_pre_start http://localhost;     # Prestart RiskPlatform
 
-  include <%= File.join(AppConf.webserver.path, AppConf.webserver.servers_dir, '*.conf') %>;
+  include <%= File.join($conf.webserver.path, $conf.webserver.servers_dir, '*.conf') %>;
 }
 

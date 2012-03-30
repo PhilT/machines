@@ -2,12 +2,12 @@ set daemon 120
 set logfile syslog facility log_daemon
 
 set mailserver localhost
-set alert <%= AppConf.monit.mailto %>
+set alert <%= $conf.monit.mailto %>
 
 set httpd port 2812 and
     use address localhost
     allow localhost
-    allow <%= AppConf.monit.webserver.address %>
+    allow <%= $conf.monit.webserver.address %>
     allow admin:p@ssw0rd
 
 include /etc/monit/conf.d/*

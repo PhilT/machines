@@ -6,7 +6,7 @@ describe Machines::Commandline do
   include Machines::Questions
 
   before(:each) do
-    AppConf.log_only = false
+    $conf.log_only = false
     File.open('config.yml', 'w') { |f| f.puts "timezone: GB" }
     FileUtils.mkdir_p 'log'
   end
@@ -15,16 +15,16 @@ describe Machines::Commandline do
     before(:each) do
       stubs(:init)
       File.stubs(:read).returns ''
-      AppConf.machine = AppConf.new
-      AppConf.address = 'target'
-      AppConf.user = 'username'
-      AppConf.password = 'userpass'
+      $conf.machine = AppConf.new
+      $conf.address = 'target'
+      $conf.user = 'username'
+      $conf.password = 'userpass'
     end
 
     it 'sets machine_name' do
       Net::SCP.stubs(:start)
       build ['machine']
-      AppConf.machine_name.must_equal 'machine'
+      $conf.machine_name.must_equal 'machine'
     end
 
     it 'starts an SCP session using password authentication' do
@@ -33,9 +33,9 @@ describe Machines::Commandline do
     end
 
     it 'starts an SCP session using key based authentication' do
-      AppConf.machine.cloud = AppConf.new
-      AppConf.machine.cloud.private_key_path = 'path/to/private_key'
-      AppConf.machine.cloud.username = 'ubuntu'
+      $conf.machine.cloud = AppConf.new
+      $conf.machine.cloud.private_key_path = 'path/to/private_key'
+      $conf.machine.cloud.username = 'ubuntu'
       Net::SCP.expects(:start).with('target', 'ubuntu', :keys => ['path/to/private_key'])
 
       build []
@@ -43,7 +43,7 @@ describe Machines::Commandline do
 
     it 'runs each command' do
       mock_command = mock 'Machines::Command'
-      AppConf.commands = [mock_command]
+      $conf.commands = [mock_command]
       mock_scp = stub 'Net::SCP', :session => nil
 
       Net::SCP.expects(:start).with('target', 'username', :password => 'userpass').yields(mock_scp)
@@ -54,9 +54,9 @@ describe Machines::Commandline do
     end
 
     it 'flushes log file after running command' do
-      AppConf.log_only = false
+      $conf.log_only = false
       mock_command = mock 'Machines::Command'
-      AppConf.commands = [mock_command]
+      $conf.commands = [mock_command]
       mock_scp = stub 'Net::SCP', :session => nil
 
       Net::SCP.stubs(:start).yields(mock_scp)
@@ -69,27 +69,27 @@ describe Machines::Commandline do
     it 'runs single task when supplied' do
       mock_scp = mock 'Net::SCP', :session => nil
       Net::SCP.stubs(:start).yields(mock_scp)
-      AppConf.commands = [mock('Machines::Command')]
-      AppConf.commands.first.expects(:run).never
+      $conf.commands = [mock('Machines::Command')]
+      $conf.commands.first.expects(:run).never
       mock_command_from_task = Machines::Command.new 'command', 'check'
       mock_command_from_task.expects(:run)
-      AppConf.tasks = { :task => {:block => Proc.new { run mock_command_from_task }} }
+      $conf.tasks = { :task => {:block => Proc.new { run mock_command_from_task }} }
 
       build ['machine', 'task']
     end
 
     it 'logs instead of SSHing and running commands' do
       Net::SCP.expects(:start).never
-      AppConf.commands = [mock('Machines::Command')]
-      AppConf.commands.first.expects(:run)
-      AppConf.log_only = true
+      $conf.commands = [mock('Machines::Command')]
+      $conf.commands.first.expects(:run)
+      $conf.log_only = true
       build []
     end
 
     describe 'interrupts' do
       before(:each) do
         mock_command = mock 'Machines::Command'
-        AppConf.commands = [mock_command]
+        $conf.commands = [mock_command]
         mock_scp = stub 'Net::SCP', :session => nil
 
         Net::SCP.stubs(:start).with('target', 'username', :password => 'userpass').yields(mock_scp)
@@ -130,7 +130,7 @@ describe Machines::Commandline do
       options = []
       expects(:build).with options
       dryrun options
-      AppConf.log_only.must_equal true
+      $conf.log_only.must_equal true
     end
   end
 
@@ -138,22 +138,22 @@ describe Machines::Commandline do
     it 'calls specified action' do
       %w(htpasswd dryrun build).each do |action|
         expects action
-        execute [action], Machines::Help.new
+        execute [action]
       end
     end
 
     it 'calls generate with folder' do
       expects(:generate).with(['dir'])
-      execute ['new', 'dir'], Machines::Help.new
+      execute ['new', 'dir']
     end
 
     it 'calls generate without folder' do
       expects(:generate).with([])
-      execute ['new'], Machines::Help.new
+      execute ['new']
     end
 
     it 'calls help when no matching command' do
-      execute ['anything'], Machines::Help.new
+      execute ['anything']
       $output.buffer.must_equal Machines::Help.new.syntax
     end
   end
@@ -161,13 +161,13 @@ describe Machines::Commandline do
   describe 'generate' do
     it 'copies the template within ./' do
       expects(:ask).with("Overwrite './' (y/n)? ").returns 'y'
-      FileUtils.expects(:cp_r).with("#{AppConf.application_dir}/template/.", './')
+      FileUtils.expects(:cp_r).with("#{$conf.application_dir}/template/.", './')
       FileUtils.expects(:mkdir_p).with('./packages')
       generate []
     end
 
     it 'copies the template within dir' do
-      FileUtils.expects(:cp_r).with("#{AppConf.application_dir}/template/.", 'dir')
+      FileUtils.expects(:cp_r).with("#{$conf.application_dir}/template/.", 'dir')
       FileUtils.expects(:mkdir_p).with(File.join('dir', 'packages'))
       expects(:say).with('Project created at dir/')
       generate ['dir']
@@ -180,7 +180,7 @@ describe Machines::Commandline do
 
       it 'is overwritten after user confirmation' do
         expects(:ask).with("Overwrite 'dir' (y/n)? ").returns 'y'
-        FileUtils.expects(:cp_r).with("#{AppConf.application_dir}/template/.", 'dir')
+        FileUtils.expects(:cp_r).with("#{$conf.application_dir}/template/.", 'dir')
         FileUtils.expects(:mkdir_p).with(File.join('dir', 'packages'))
         generate ['dir']
       end
@@ -196,7 +196,7 @@ describe Machines::Commandline do
 
   describe 'htpasswd' do
     it 'htpasswd is generated and saved' do
-      AppConf.webserver = 'server'
+      $conf.webserver = 'server'
       $input.answers = %w(user pass pass)
       htpasswd nil
       File.read('server/conf/htpasswd').must_match /user:.{13}/
@@ -204,16 +204,16 @@ describe Machines::Commandline do
   end
 
   describe 'init' do
-    it 'initializes some AppConf settings and loads configs' do
+    it 'initializes some $conf settings and loads configs' do
       Machines::Command.file = nil
       Machines::Command.console = nil
       Machines::Command.debug = nil
       init
-      AppConf.passwords.must_equal []
-      AppConf.commands.must_equal []
-      AppConf.webapps.must_equal({})
-      AppConf.tasks.must_equal({})
-      AppConf.timezone.must_equal 'GB'
+      $conf.passwords.must_equal []
+      $conf.commands.must_equal []
+      $conf.webapps.must_equal({})
+      $conf.tasks.must_equal({})
+      $conf.timezone.must_equal 'GB'
       File.exists?('log/output.log').must_equal true
       Machines::Command.file.must_be_instance_of Machines::Logger
       Machines::Command.console.must_be_instance_of Machines::Logger
@@ -245,9 +245,9 @@ describe Machines::Commandline do
 
   describe 'override' do
     before(:each) do
-      FileUtils.mkdir_p File.join(AppConf.application_dir, 'packages')
+      FileUtils.mkdir_p File.join($conf.application_dir, 'packages')
       FileUtils.mkdir_p 'packages'
-      FileUtils.touch File.join(AppConf.application_dir, 'packages', 'base.rb')
+      FileUtils.touch File.join($conf.application_dir, 'packages', 'base.rb')
     end
 
     it 'copies package to project folder' do
@@ -280,9 +280,9 @@ Package copied to packages/base.rb
 
   describe 'packages' do
     it 'displays a list of default and project packages' do
-      FileUtils.mkdir_p File.join(AppConf.application_dir, 'packages')
+      FileUtils.mkdir_p File.join($conf.application_dir, 'packages')
       FileUtils.mkdir_p 'packages'
-      FileUtils.touch File.join(AppConf.application_dir, 'packages', 'base.rb')
+      FileUtils.touch File.join($conf.application_dir, 'packages', 'base.rb')
       FileUtils.touch File.join('packages', 'apps.rb')
       packages
       $output.buffer.must_equal 'Default packages
@@ -297,7 +297,7 @@ Project packages
     it 'displays a list of tasks' do
       expects(:init)
       expects(:load_machinesfile)
-      AppConf.tasks = {
+      $conf.tasks = {
         :task1 => {:description => 'description 1'},
         :task2 =>  {:description => 'description 2'},
         :task3 => {:description => 'description 3'}

@@ -1,7 +1,7 @@
 def stats_command(app)
-  return unless AppConf.awstats
+  return unless $conf.awstats
 
-  dir = File.join(AppConf.awstats.stats_path, app.name) # TODO: Check path is created when generating stats for first time
+  dir = File.join($conf.awstats.stats_path, app.name) # TODO: Check path is created when generating stats for first time
 
   <<-SCRIPT
   sharedscripts
@@ -12,7 +12,7 @@ def stats_command(app)
 end
 
 task :logrotate_nginx, 'Logrotate nginx access and error logs and optionally generate stats' do
-  AppConf.webapps.each do |app_name, app|
+  $conf.webapps.each do |app_name, app|
     %w(access error).each do |type|
       command = type == 'access' ? stats_command(app) : nil
       settings = AppSettings::AppBuilder.new(:log_path => "/var/log/nginx/#{app.name}.#{type}.log", :stats_command => command)
@@ -22,7 +22,7 @@ task :logrotate_nginx, 'Logrotate nginx access and error logs and optionally gen
 end
 
 task :logrotate_apps, 'Logrotate Rails app logs' do
-  AppConf.webapps.each do |app_name, app|
+  $conf.webapps.each do |app_name, app|
     settings = AppSettings::AppBuilder.new(:log_path => File.join(app.path, 'shared', 'log', '*.log'))
     sudo create_from 'logrotate/app.erb', :settings => settings, :to => File.join('/etc', 'logrotate.d', "#{app.name}_app_log")
   end

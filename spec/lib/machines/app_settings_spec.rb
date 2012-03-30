@@ -14,8 +14,8 @@ describe 'AppSettings' do
 
   describe 'load_app_settings' do
     before do
-      AppConf.environment = :test
-      AppConf.appsroot = '/home/user'
+      $conf.environment = :test
+      $conf.appsroot = '/home/user'
       @settings = <<-EOF
 ---
 webapps:
@@ -31,7 +31,7 @@ EOF
 
     it 'loads the app settings for selected apps' do
       load_app_settings ['app']
-      AppConf.webapps.must_equal({
+      $conf.webapps.must_equal({
         'app' => AppBuilder.new(
           :scm => 'scm://project.git',
           :name => 'app',
@@ -46,7 +46,7 @@ EOF
     it 'handles ssl settings' do
       File.open('webapps.yml', 'w') {|f| f.puts @settings }
       load_app_settings ['app']
-      AppConf.webapps.must_equal({
+      $conf.webapps.must_equal({
         'app' => AppBuilder.new(
           :name => 'app',
           :scm => 'scm://project.git',
@@ -83,7 +83,7 @@ webapps:
       EOF
       File.open('webapps.yml', 'w') {|f| f.puts settings }
       load_app_settings nil
-      AppConf.webapps.must_equal({
+      $conf.webapps.must_equal({
         'app' => AppBuilder.new(
           :name => 'app',
           :path => '/home/user/project',

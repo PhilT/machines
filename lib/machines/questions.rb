@@ -7,7 +7,7 @@ module Machines
         password_confirmation = ask('Confirm the password: ') { |question| question.echo = false }
         say "Passwords do not match, please re-enter" unless password == password_confirmation
       end while password != password_confirmation
-      AppConf.passwords << password if AppConf.passwords && password.size > 4
+      $conf.passwords << password if $conf.passwords && password.size > 4
       password
     end
   end

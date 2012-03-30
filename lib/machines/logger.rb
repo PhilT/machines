@@ -57,7 +57,7 @@ module Machines
     end
 
     def blank_out_passwords message
-      AppConf.passwords && AppConf.passwords.any? ? message.gsub(/(#{(AppConf.passwords).join('|')})/, "*****") : message
+      $conf.passwords && $conf.passwords.any? ? message.gsub(/(#{($conf.passwords).join('|')})/, "*****") : message
     end
 
   end

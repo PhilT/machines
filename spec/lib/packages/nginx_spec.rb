@@ -3,17 +3,17 @@ require 'spec_helper'
 describe 'packages/nginx' do
   before(:each) do
     load_package('nginx')
-    AppConf.from_hash(:webserver => {:name => 'nginx', :version => '1.0.2', :path => 'nginx_path',
+    $conf.from_hash(:webserver => {:name => 'nginx', :version => '1.0.2', :path => 'nginx_path',
       :url => 'nginx_url/package', :src_path => '/usr/local/src/nginx-1.2.3', :modules => '--with-http_ssl_module'})
-    AppConf.from_hash(:passenger => {:nginx => '/passenger/path/ext/nginx'})
+    $conf.from_hash(:passenger => {:nginx => '/passenger/path/ext/nginx'})
     FileUtils.mkdir_p 'nginx'
     File.open('nginx/nginx.conf.erb', 'w') {|f| f.puts 'the template' }
   end
 
   it 'adds the following commands' do
-    AppConf.environment = :staging
+    $conf.environment = :staging
     eval_package
-    AppConf.commands.map(&:info).must_equal [
+    $conf.commands.map(&:info).must_equal [
       "TASK   nginx - Download and configure Nginx",
       "SUDO   cd /usr/local/src && wget nginx_url/package && tar -zxf package && rm package && cd -",
       'SUDO   cd /usr/local/src/nginx-1.2.3 && ./configure --with-http_ssl_module --add-module=/passenger/path/ext/nginx',

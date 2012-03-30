@@ -1,5 +1,5 @@
 task :gmate, 'Clone and install gmate for gEdit from Github and set some preferences and plugins' do
-  dir = File.join AppConf.appsroot, 'gmate'
+  dir = File.join $conf.appsroot, 'gmate'
 
   sudo install ['python-pyinotify'] # Required for gEdit Open
   sudo install ['python-webkitgtk', 'ack-grep'] # Find in project

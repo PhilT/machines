@@ -8,7 +8,7 @@ describe 'packages/optional' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).must_equal [
+    $conf.commands.map(&:info).must_equal [
       "TASK   workspace - Copies everything from local workspace folder to new machine",
       'UPLOAD ~/workspace to workspace',
       'RUN    mkdir -p Documents Downloads Music Pictures Videos'

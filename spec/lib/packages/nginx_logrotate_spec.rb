@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'packages/nginx_logrotate' do
   before(:each) do
     load_package('nginx_logrotate')
-    AppConf.webapps = {'name' => AppBuilder.new({:name => 'appname', :path => 'apppath'})}
+    $conf.webapps = {'name' => AppBuilder.new({:name => 'appname', :path => 'apppath'})}
     FileUtils.mkdir_p 'logrotate'
     File.open('logrotate/nginx.erb', 'w') {|f| f.puts 'nginx template' }
     File.open('logrotate/app.erb', 'w') {|f| f.puts 'app template' }
@@ -11,7 +11,7 @@ describe 'packages/nginx_logrotate' do
 
   it 'generates command' do
     eval_package
-    AppConf.commands.map(&:info).must_equal [
+    $conf.commands.map(&:info).must_equal [
       'TASK   logrotate_nginx - Logrotate nginx access and error logs and optionally generate stats',
       "UPLOAD buffer from logrotate/nginx.erb to /tmp/appname_nginx_access_log",
       "SUDO   cp -rf /tmp/appname_nginx_access_log /etc/logrotate.d/appname_nginx_access_log",
@@ -28,13 +28,13 @@ describe 'packages/nginx_logrotate' do
 
   describe 'nginx logs template' do
     before(:each) do
-      AppConf.awstats = nil
+      $conf.awstats = nil
       stubs(:create_from).returns Command.new 'command', 'check'
     end
 
     describe 'when awstats set' do
       before(:each) do
-        AppConf.from_hash :awstats => {:url => 'url', :path => 'path', :stats_path => 'stats_path'}
+        $conf.from_hash :awstats => {:url => 'url', :path => 'path', :stats_path => 'stats_path'}
       end
 
       it 'generates stats command' do

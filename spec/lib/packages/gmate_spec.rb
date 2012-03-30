@@ -3,12 +3,12 @@ require 'spec_helper'
 describe 'packages/gmate' do
   before(:each) do
     load_package('gmate')
-    AppConf.appsroot = 'apps_root'
+    $conf.appsroot = 'apps_root'
   end
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).must_equal [
+    $conf.commands.map(&:info).must_equal [
       "TASK   gmate - Clone and install gmate for gEdit from Github and set some preferences and plugins",
       "SUDO   apt-get -q -y install python-pyinotify",
       "SUDO   apt-get -q -y install python-webkitgtk",

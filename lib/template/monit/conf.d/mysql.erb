@@ -2,7 +2,7 @@ check process mysql with pidfile /opt/mysql/data/myserver.mydomain.pid
       group database
       start program = "/etc/init.d/mysql start"
       stop program = "/etc/init.d/mysql stop"
-      if failed host <%= AppConf.db.address %> port 3306 protocol mysql then restart
+      if failed host <%= $conf.db.address %> port 3306 protocol mysql then restart
       if 5 restarts within 5 cycles then timeout
       depends on mysql_bin
       depends on mysql_rc

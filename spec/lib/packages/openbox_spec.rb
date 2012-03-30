@@ -7,7 +7,7 @@ describe 'packages/openbox' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).must_equal [
+    $conf.commands.map(&:info).must_equal [
       "TASK   openbox - Install Openbox window manager and associated fonts, themes, etc",
       "SUDO   echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula boolean true | debconf-set-selections",
       "SUDO   apt-get -q -y install dmz-cursor-theme",

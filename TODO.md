@@ -22,14 +22,14 @@ EC2 - Look at assigning and freeing elastic IP addresses
 
   * machines.machine.address = an elastic IP address
   * machnies.machine.ec2.instance_id = the ec2 id
-  * Set AppConf.machines_changed when creating a new instance
+  * Set $conf.machines_changed when creating a new instance
   * Set up minimal Ubuntu on EC2
   * Must allow multiple dev machines to access cloud (so multiple SSH keys must be assigned)
 
 Misc Tasks
 ----------------------------------------
 
-Allow AppConf.webapps[app].path to be overridden from webapps.yml
+Allow $conf.webapps[app].path to be overridden from webapps.yml
 ?? Does webapps.yml structure get preserved? (e.g. when modifying keys and resaving)
 Fix guard notifications
 
@@ -48,7 +48,7 @@ real ssl certs
 Need to ignore hostname server error (causes check to fail)
 add a package to evmachines to add the extra hosts
 Need to test ERB templates
-DOC: webapps.yml loaded into AppConf
+DOC: webapps.yml loaded into $conf
 DOC: Adding selfsigned key
 Keyring asks for a password when using docky Gmail notification [DEV]
 set show hidden and show binary in gedit [DEV]
@@ -60,10 +60,10 @@ Need a way to see optional tasks that are not run as part of full build
 Make template more generic
 Add CPU monitor to docky [DEV]
 
-Would `set :variable_name, value` be better than `AppConf.variable = value`?
-Need a better DSL to handle AppConf and also paths File.join is so verbose
+Would `set :variable_name, value` be better than `$conf.variable = value`?
+Need a better DSL to handle $conf and also paths File.join is so verbose
   For exmaple, instead of:
-    File.join(AppConf.appsroot, 'subfolder')
+    File.join($conf.appsroot, 'subfolder')
   How about:
     path :appsroot, 'subfolder'
 rvm ruby@gemset --rvmrc to generate passenger compatible .rvmrc

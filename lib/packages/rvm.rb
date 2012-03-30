@@ -1,6 +1,6 @@
 task :rvm, 'Install RVM' do
   sudo install ['git-core']
-  installer = "bash -s #{AppConf.rvm.version} < <(wget -q https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )"
+  installer = "bash -s #{$conf.rvm.version} < <(wget -q https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )"
   run installer, check_file('~/.rvm/bin/rvm')
 
   run "source .bashrc", "type rvm | head -1 | grep 'rvm is a function' #{echo_result}"
@@ -11,9 +11,9 @@ task :rvm_prompt_off, 'turn off trust prompting for new .rvmrc files' do
   run append 'export rvm_trust_rvmrcs_flag=1', :to => '.rvmrc'
 end
 
-task :ruby, "Install Ruby, make #{AppConf.ruby.version}@global the default and install Bundler" do
-  run "rvm install #{AppConf.ruby.version}", "rvm #{AppConf.ruby.version} #{echo_result}"
-  run "rvm #{AppConf.ruby.version}@global --default", "ruby -v | grep #{AppConf.ruby.version} #{echo_result}"
+task :ruby, "Install Ruby, make #{$conf.ruby.version}@global the default and install Bundler" do
+  run "rvm install #{$conf.ruby.version}", "rvm #{$conf.ruby.version} #{echo_result}"
+  run "rvm #{$conf.ruby.version}@global --default", "ruby -v | grep #{$conf.ruby.version} #{echo_result}"
   run write "gem: --no-rdoc --no-ri", :to => '.gemrc', :name => '.gemrc'
   run gem 'bundler'
 end

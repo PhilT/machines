@@ -6,10 +6,10 @@ Setup Ubuntu development and server **Machines** locally or in the cloud for hos
 Run commands like:
 
     sudo install %w(build-essential zlib1g-dev libpcre3-dev)
-    sudo write "127.0.1.1\t#{AppConf.hostname}", :to => '/etc/hosts'
+    sudo write "127.0.1.1\t#{$conf.hostname}", :to => '/etc/hosts'
     sudo append "192.168.1.2\tserver", :to => '/etc/hosts'
-    run download AppConf.nginx.url
-    run create_from 'nginx/nginx.conf.erb', :to => File.join(AppConf.nginx.path, 'conf', 'nginx.conf')
+    run download $conf.nginx.url
+    run create_from 'nginx/nginx.conf.erb', :to => File.join($conf.nginx.path, 'conf', 'nginx.conf')
 
 Rerun the passenger_nginx install:
 
@@ -199,10 +199,10 @@ Machines uses a gem I wrote called [app_conf](https://github.com/PhilT/app_conf)
 from YAML files as well as add further settings in Ruby. Machines uses it both internally and for package settings.
 Some of the settings set and used by Machines are:
 
-* `AppConf.commands` - All the commands that are to be run
-* `AppConf.tasks` - Names of the tasks - Used to check dependencies and display tasks the help
-* `AppConf.user` - The selected user settings
-* `AppConf.machine` - Configuration for the selected machine
+* `$conf.commands` - All the commands that are to be run
+* `$conf.tasks` - Names of the tasks - Used to check dependencies and display tasks the help
+* `$conf.user` - The selected user settings
+* `$conf.machine` - Configuration for the selected machine
 
 Take a look at `template/config/*.yml` for more.
 

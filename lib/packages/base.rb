@@ -1,12 +1,12 @@
 task :hosts, 'Set /etc/hosts' do
   # Sets hostname according to the following: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=316099
-  fqdn = AppConf.machine.hostname
-  hostname = AppConf.machine.hostname.split('.').first
+  fqdn = $conf.machine.hostname
+  hostname = $conf.machine.hostname.split('.').first
   sudo write "127.0.0.1 #{fqdn} localhost.localdomain localhost\n127.0.1.1 #{hostname}\n", :to => '/etc/hosts'
-  sudo write AppConf.machine.hostname, :to => '/etc/hostname'
+  sudo write $conf.machine.hostname, :to => '/etc/hostname'
   sudo start 'hostname'
 
-  AppConf.hosts.each {|ip_host| sudo append "#{ip_host}", :to => '/etc/hosts' } if AppConf.hosts.is_a?(Array)
+  $conf.hosts.each {|ip_host| sudo append "#{ip_host}", :to => '/etc/hosts' } if $conf.hosts.is_a?(Array)
 end
 
 

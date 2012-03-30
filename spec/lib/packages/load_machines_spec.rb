@@ -11,8 +11,8 @@ describe 'packages/load_machines' do
 
   before(:each) do
     load_package('load_machines')
-    AppConf.machine_name = 'a_machine'
-    AppConf.from_hash('appsroots' => {'phil' => '/home/phil'})
+    $conf.machine_name = 'a_machine'
+    $conf.from_hash('appsroots' => {'phil' => '/home/phil'})
     stubs(:load_app_settings)
     stubs(:connect)
     stubs(:run_instance)
@@ -25,12 +25,12 @@ describe 'packages/load_machines' do
 
     it 'loads the machines.yml file' do
       eval_package
-      AppConf.machines.a_machine.hostname.must_equal 'something'
+      $conf.machines.a_machine.hostname.must_equal 'something'
     end
 
-    it 'sets AppConf.machine using AppConf.machine_name' do
+    it 'sets $conf.machine using $conf.machine_name' do
       eval_package
-      AppConf.machine.hostname.must_equal 'something'
+      $conf.machine.hostname.must_equal 'something'
     end
   end
 
@@ -66,21 +66,21 @@ describe 'packages/load_machines' do
     stubs(:generate_password).returns '1234'
     save_settings
     eval_package
-    AppConf.machines.a_machine.root_pass.must_equal '1234'
+    $conf.machines.a_machine.root_pass.must_equal '1234'
   end
 
-  it 'sets AppConf.machines_changed when passwords are generated' do
+  it 'sets $conf.machines_changed when passwords are generated' do
     stubs(:generate_password).returns '1234'
     save_settings
     eval_package
-    AppConf.machines_changed.wont_equal nil
+    $conf.machines_changed.wont_equal nil
   end
 
-  it 'AppConf.machines_changed not set when no passwords are generated' do
+  it '$conf.machines_changed not set when no passwords are generated' do
     settings['machines']['a_machine']['root_pass'] = '1234'
     save_settings
     eval_package
-    AppConf.machines_changed.must_equal nil
+    $conf.machines_changed.must_equal nil
   end
 
   it 'does not overwrite root_pass' do
@@ -93,7 +93,7 @@ describe 'packages/load_machines' do
   it 'sets user' do
     save_settings
     eval_package
-    AppConf.machine.user.must_equal 'phil'
+    $conf.machine.user.must_equal 'phil'
   end
 
   it 'loads app settings' do

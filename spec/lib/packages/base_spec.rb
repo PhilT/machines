@@ -3,9 +3,9 @@ require 'spec_helper'
 describe 'packages/base' do
   before(:each) do
     load_package('base')
-    AppConf.machine = AppConf.new
-    AppConf.machine.hostname = 'hostname'
-    AppConf.hosts = ['1.2.3.4 some.domain']
+    $conf.machine = AppConf.new
+    $conf.machine.hostname = 'hostname'
+    $conf.hosts = ['1.2.3.4 some.domain']
     @hosts = [
       "TASK   hosts - Set /etc/hosts",
       "UPLOAD unnamed buffer to /tmp/hosts",
@@ -31,14 +31,14 @@ describe 'packages/base' do
 
   it 'adds the following commands' do
     eval_package
-    AppConf.commands.map(&:info).must_equal @hosts + @packages
+    $conf.commands.map(&:info).must_equal @hosts + @packages
   end
 
   it 'does not add hosts when nil' do
-    AppConf.hosts = nil
+    $conf.hosts = nil
     @hosts.pop
     eval_package
-    AppConf.commands.map(&:info).must_equal @hosts + @packages
+    $conf.commands.map(&:info).must_equal @hosts + @packages
   end
 end
 

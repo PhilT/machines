@@ -28,19 +28,19 @@ describe Machines::Core do
     it 'logs the task' do
       task :name, 'description' do
       end
-      AppConf.commands.first.info.must_equal "TASK   name - description"
+      $conf.commands.first.info.must_equal "TASK   name - description"
     end
 
     it 'stores task' do
       block = Proc.new {}
       task :name, 'description', &block
-      AppConf.tasks.must_equal :name => {:description => 'description', :block => block}
+      $conf.tasks.must_equal :name => {:description => 'description', :block => block}
     end
 
     it 'sets commands to only run those from the specified task' do
       block_ran = false
       block = Proc.new { block_ran = true }
-      AppConf.tasks[:name] = {:block => block}
+      $conf.tasks[:name] = {:block => block}
       task :name, nil
       block_ran.must_equal true
     end
@@ -59,7 +59,7 @@ describe Machines::Core do
 
         it { @yielded.must_equal true }
         it 'task stored' do
-          AppConf.tasks.must_include :name
+          $conf.tasks.must_include :name
         end
       end
 
@@ -67,7 +67,7 @@ describe Machines::Core do
         before(:each) { task :name, nil, :if => :dependent_task, &@block }
         it { @yielded.must_equal false }
         it 'task not stored' do
-          AppConf.tasks.wont_include :name
+          $conf.tasks.wont_include :name
         end
       end
     end
@@ -87,7 +87,7 @@ describe Machines::Core do
 
         it { @yielded.must_equal true }
         it 'task stored' do
-          AppConf.tasks.must_include :name
+          $conf.tasks.must_include :name
         end
       end
 
@@ -99,7 +99,7 @@ describe Machines::Core do
 
         it { @yielded.must_equal false }
         it 'task not stored' do
-          AppConf.tasks.wont_include :name
+          $conf.tasks.wont_include :name
         end
       end
     end
@@ -157,9 +157,9 @@ describe Machines::Core do
   end
 
   describe 'matched' do
-    describe 'AppConf values are arrays' do
+    describe '$conf values are arrays' do
       before do
-        AppConf.params_array = [:matched, :another]
+        $conf.params_array = [:matched, :another]
       end
 
       describe 'options values are arrays of symbols' do
@@ -183,9 +183,9 @@ describe Machines::Core do
       end
     end
 
-    describe 'AppConf values are symbols' do
+    describe '$conf values are symbols' do
       before do
-        AppConf.single_param = :matched
+        $conf.single_param = :matched
       end
 
       describe 'options values are arrays' do
@@ -203,32 +203,32 @@ describe Machines::Core do
   describe 'run' do
     it 'adds a command to the commands array' do
       run @command1
-      AppConf.commands.must_equal [@command1]
+      $conf.commands.must_equal [@command1]
     end
 
     it 'appends several commands' do
       run @command1
       run @command2
-      AppConf.commands.must_equal [@command1, @command2]
+      $conf.commands.must_equal [@command1, @command2]
     end
 
     it 'appends several commands in a single call' do
       run @command1, @command2
-      AppConf.commands.must_equal [@command1, @command2]
+      $conf.commands.must_equal [@command1, @command2]
     end
 
     describe 'when commands are two strings' do
       it 'creates a Command' do
         run 'command', 'check'
-        AppConf.commands.first.command.must_equal 'command'
-        AppConf.commands.first.check.must_equal 'check'
+        $conf.commands.first.command.must_equal 'command'
+        $conf.commands.first.check.must_equal 'check'
       end
     end
   end
 
   describe 'sudo' do
     it 'wraps a command in a sudo with password call' do
-      AppConf.password = 'password'
+      $conf.password = 'password'
       @command1.expects(:use_sudo)
       sudo @command1
     end
@@ -236,8 +236,8 @@ describe Machines::Core do
     describe 'when commands are two strings' do
       it 'creates a Command' do
         sudo 'command', 'check'
-        AppConf.commands.first.command.must_equal 'command'
-        AppConf.commands.first.check.must_equal 'check'
+        $conf.commands.first.command.must_equal 'command'
+        $conf.commands.first.check.must_equal 'check'
       end
     end
   end
@@ -253,8 +253,8 @@ describe Machines::Core do
       File.stubs(:directory?).returns false
       sudo upload 'source', 'dest'
 
-      AppConf.commands.map(&:command).must_equal [nil, "cp -rf /tmp/dest dest", "rm -rf /tmp/dest"]
-      AppConf.commands.map(&:check).must_equal [
+      $conf.commands.map(&:command).must_equal [nil, "cp -rf /tmp/dest dest", "rm -rf /tmp/dest"]
+      $conf.commands.map(&:check).must_equal [
         "test -s /tmp/dest && echo CHECK PASSED || echo CHECK FAILED",
         "test -s dest && echo CHECK PASSED || echo CHECK FAILED",
         "test ! -s /tmp/dest && echo CHECK PASSED || echo CHECK FAILED"
@@ -264,7 +264,7 @@ describe Machines::Core do
     it 'adds /. to the end of folder paths' do
       File.stubs(:directory?).with('source').returns true
       sudo upload 'source', 'dest'
-      AppConf.commands.map(&:command).must_equal [nil, "cp -rf /tmp/dest/. dest", "rm -rf /tmp/dest"]
+      $conf.commands.map(&:command).must_equal [nil, "cp -rf /tmp/dest/. dest", "rm -rf /tmp/dest"]
     end
   end
 

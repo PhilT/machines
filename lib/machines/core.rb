@@ -9,22 +9,22 @@ module Machines
     def task name, description = nil, options = {}, &block
       if block
         dependencies = [options[:if]].flatten
-        return if options[:if] && (dependencies - AppConf.tasks.keys).any?
+        return if options[:if] && (dependencies - $conf.tasks.keys).any?
         store_task name, description, &block
-        AppConf.commands << LogCommand.new(name, description)
+        $conf.commands << LogCommand.new(name, description)
         yield
       else
-        AppConf.commands = []
-        AppConf.tasks[name][:block].call
+        $conf.commands = []
+        $conf.tasks[name][:block].call
       end
     end
 
     def store_task name, description, &block
-      AppConf.tasks[name] = {:description => description, :block => block}
+      $conf.tasks[name] = {:description => description, :block => block}
     end
 
     def list_tasks
-      AppConf.tasks.each do |name, task|
+      $conf.tasks.each do |name, task|
         say "  #{"%-20s" % name}#{task[:description]}"
       end
     end
@@ -33,12 +33,12 @@ module Machines
       WEBrick::Utils.random_string(20)
     end
 
-    # Only executes the code if AppConf parameters match what is given in args
+    # Only executes the code if $conf parameters match what is given in args
     def only options, &block
       yield if matched(options)
     end
 
-    # Does not execute the code if AppConf parameters match what is given in args
+    # Does not execute the code if $conf parameters match what is given in args
     def except options, &block
       yield unless matched(options)
     end
@@ -46,8 +46,8 @@ module Machines
     def matched options
       options.each do |key, value|
         value = value.is_a?(Array) ? value.map{|o| o.to_s } : value.to_s
-        if AppConf[key].is_a?(Array)
-          values = AppConf[key].map{|o| o.to_s }
+        if $conf[key].is_a?(Array)
+          values = $conf[key].map{|o| o.to_s }
           if value.is_a?(Array)
             return unless values.reject{ |symbol| !value.include?(symbol.to_s) }.any?
           else
@@ -55,9 +55,9 @@ module Machines
           end
         else
           if value.is_a?(Array)
-            return unless value.include?(AppConf[key].to_s)
+            return unless value.include?($conf[key].to_s)
           else
-            return unless value == AppConf[key].to_s
+            return unless value == $conf[key].to_s
           end
         end
       end
@@ -69,7 +69,7 @@ module Machines
     # If first command is a string it creates a Command object using the first two strings as command and check
     def run *commands
       commands = command_from_string(commands)
-      AppConf.commands += commands.flatten
+      $conf.commands += commands.flatten
     end
 
     # Queue up command(s) using SUDO to run remotely

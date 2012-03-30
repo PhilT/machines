@@ -2,28 +2,29 @@ require 'net/ssh'
 
 class VmControl
   def initialize
-    @vm = 'machinesvm'
+    @name = 'machinesvm'
   end
 
   def start
-    vboxmanage "startvm #{@vm} --type headless"
+    vboxmanage "startvm #{@name} --type headless"
   end
 
   def stop
-    vboxmanage "controlvm #{@vm} savestate"
+    vboxmanage "controlvm #{@name} savestate"
   end
 
   def kill
     return unless state =~ /running/
-    vboxmanage "controlvm #{@vm} poweroff"
+    vboxmanage "controlvm #{@name} poweroff"
   end
 
   def restore
-    vboxmanage "snapshot #{@vm} restorecurrent"
+    vboxmanage "snapshot #{@name} restorecurrent"
   end
 
   def state
-    output = vboxmanage "showvminfo #{@vm} | grep State"
+    string = "showvminfo #{@name}"
+    output = vboxmanage string
     output.scan(/State:\s+(.*)/).first.first
   end
 
