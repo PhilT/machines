@@ -1,12 +1,11 @@
 require 'spec_helper'
 
-describe 'Commandline' do
-  include Machines::Commandline
+describe Machines::Commandline do
   include Machines::Core
+  include Machines::Commandline
   include Machines::Questions
 
   before(:each) do
-    alias :run :run_command # alias Machines::Core.run back so it can be called by sudo and the tests etc
     AppConf.log_only = false
     File.open('config.yml', 'w') { |f| f.puts "timezone: GB" }
     FileUtils.mkdir_p 'log'

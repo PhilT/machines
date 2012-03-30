@@ -16,10 +16,8 @@ describe 'packages/rbenv' do
       'RUN    git clone -q git://github.com/sstephenson/ruby-build.git',
       'SUDO   cd ~/ruby-build && ./install.sh',
       'RUN    git clone -q git://github.com/sstephenson/rbenv.git ~/.rbenv',
-      'RUN    echo "export PATH=\\"\\$HOME/.rbenv/bin:\\$PATH\\"" >> ~/.bashrc',
-      'RUN    echo "[ -f ~/.bundler-exec.sh ] && source ~/.bundler-exec.sh" >> ~/.bashrc',
-      'RUN    echo "eval \\"\\$(rbenv init -)\\"" >> ~/.bashrc',
-      'RUN    source ~/.bashrc',
+      'RUN    echo "export PATH=\\".git/safe/../../.bin:\\$HOME/.rbenv/bin:\\$HOME/.rbenv/shims:\\$PATH\\"" >> ~/.profile',
+      'RUN    source ~/.profile',
 
       'RUN    rbenv install 1.9.2-p290',
       'RUN    rbenv rehash',

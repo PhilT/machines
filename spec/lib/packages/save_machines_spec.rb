@@ -34,7 +34,7 @@ machines:
   end
 
   it 'does not raise when no machines.yml' do
-    lambda { eval_package }.should_not raise_error Errno::ENOENT
+    eval_package
   end
 
   it 'only saves when something changed' do
@@ -44,7 +44,7 @@ machines:
 
   it 'does not save when nothing changed' do
     AppConf.clear :machines_changed
-    AppConf.should_not_receive :save
+    AppConf.expects(:save).never
     eval_package
   end
 end

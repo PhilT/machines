@@ -1,11 +1,10 @@
 require 'spec_helper'
 
-describe 'Core' do
+describe Machines::Core do
   include Machines::Core
   include Machines::FileOperations
 
-  before(:each) do
-    alias :run :run_command # alias Machines::Core.run back so it can be called by sudo and the tests etc
+  before do
     @command1 = Machines::Command.new('command 1', 'check 1')
     @command2 = Machines::Command.new('command 2', 'check 2')
   end

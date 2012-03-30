@@ -1,12 +1,8 @@
 require 'spec_helper'
 
 describe 'Configuration' do
-  include Machines::Configuration
   include Machines::Core
-
-  before do
-    alias :run :run_command # alias Machines::Core.run back so it can be called by sudo and the tests etc
-  end
+  include Machines::Configuration
 
   describe 'add_user' do
     it do

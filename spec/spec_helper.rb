@@ -11,12 +11,17 @@ require 'machines'
 application_dir = AppConf.application_dir
 
 # This is done so that Machines::Core.run doesn't collide with MiniTest::Unit::TestCase.run when included
-Machines::Core.module_eval do
+module Machines::Core
   alias :run_command :run
   remove_method :run
 end
+MiniTest::Spec.add_setup_hook do |klass|
+  klass.instance_eval do
+    alias :run :run_command if respond_to?(:run_command)
+  end
+end
 
-MiniTest::Unit::TestCase.add_setup_hook do
+MiniTest::Spec.add_setup_hook do
   include Machines::Checks
 
   AppConf.clear
@@ -39,7 +44,7 @@ MiniTest::Unit::TestCase.add_setup_hook do
   FileUtils.mkdir_p 'tmp'
 end
 
-MiniTest::Unit::TestCase.add_teardown_hook do
+MiniTest::Spec.add_teardown_hook do
   FakeFS.deactivate!
   FakeFS::FileSystem.clear
 end
@@ -57,6 +62,14 @@ module MiniTest
     end
   end
 end
+
+class MiniTest::Spec::Package < MiniTest::Spec
+  include Machines
+  include AppSettings, CloudMachine, Commandline, Configuration, Core, Database
+  include FileOperations, Installation, Machinesfile, Questions, Services
+end
+
+MiniTest::Spec.register_spec_type(/packages\//, MiniTest::Spec::Package)
 
 
 def load_package name

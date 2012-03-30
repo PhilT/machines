@@ -13,13 +13,13 @@ describe 'packages/questions' do
 
   it 'does not ask for a password when machine is EC2' do
     AppConf.machine.ec2 = {}
-    should_not_receive(:enter_password)
+    expects(:enter_password).never
     eval_package
   end
 
   it 'sets password when logging' do
     AppConf.log_only = true
-    should_not_receive(:enter_password)
+    expects(:enter_password).never
     eval_package
     AppConf.passwords.must_equal ['pa55word']
     AppConf.password.must_equal 'pa55word'

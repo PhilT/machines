@@ -9,8 +9,6 @@ describe 'Database' do
 
   describe 'write_database_yml' do
     before do
-      alias :run :run_command # alias Machines::Core.run back so it can be called by sudo and the tests etc
-
       AppConf.environment = 'staging'
       AppConf.db_server = AppConf.new
       AppConf.db_server.address = 'dbhost'

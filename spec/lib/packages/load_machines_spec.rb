@@ -48,7 +48,7 @@ describe 'packages/load_machines' do
 
       it 'does not throw or connect when address set' do
         save_settings
-        should_not_receive(:connect)
+        expects(:connect).never
         eval_package
       end
 
@@ -73,18 +73,18 @@ describe 'packages/load_machines' do
     stubs(:generate_password).returns '1234'
     save_settings
     eval_package
-    AppConf.machines_changed.should_not be_nil
+    AppConf.machines_changed.wont_equal nil
   end
 
   it 'AppConf.machines_changed not set when no passwords are generated' do
     settings['machines']['a_machine']['root_pass'] = '1234'
     save_settings
     eval_package
-    AppConf.machines_changed.should be_nil
+    AppConf.machines_changed.must_equal nil
   end
 
   it 'does not overwrite root_pass' do
-    should_not_receive(:generate_password)
+    expects(:generate_password).never
     settings['machines']['a_machine']['root_pass'] = 'something'
     save_settings
     eval_package

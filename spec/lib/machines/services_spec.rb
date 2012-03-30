@@ -5,10 +5,6 @@ describe 'Services' do
   include Machines::FileOperations
   include Machines::Services
 
-  before do
-    alias :run :run_command # alias Machines::Core.run back so it can be called by sudo and the tests etc
-  end
-
   describe 'add_upstart' do
     it 'writes a configuration' do
       expects(:write).with(%(description "description"\nrespawn\nexec command\n), :to => '/etc/init/name.conf', :name => 'name upstart')

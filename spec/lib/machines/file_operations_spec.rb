@@ -4,10 +4,6 @@ describe 'FileOperations' do
   include Machines::FileOperations
   include Machines::Core
 
-  before do
-    alias :run :run_command # alias Machines::Core.run back so it can be called by sudo and the tests etc
-  end
-
   describe 'append' do
     it 'escapes backslashes (\\)' do
       subject = append '\\', :to => 'file'

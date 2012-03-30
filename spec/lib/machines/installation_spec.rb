@@ -5,10 +5,6 @@ describe 'Installation' do
   include Machines::Installation
   include Machines::Configuration
 
-  before do
-    alias :run :run_command # alias Machines::Core.run back so it can be called by sudo and the tests etc
-  end
-
   describe 'add_ppa' do
     it 'adds a ppa' do
       subject = add_ppa 'user/name', 'key'
