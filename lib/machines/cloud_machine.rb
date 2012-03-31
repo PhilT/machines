@@ -4,8 +4,8 @@ module Machines
       begin
         require 'fog'
       rescue LoadError
-        say 'fog gem required to use cloud features.', :red
-        say 'Please "gem install fog".', :red
+        say 'fog gem required to use cloud features.'
+        say 'Please "gem install fog".'
         raise
       end
 

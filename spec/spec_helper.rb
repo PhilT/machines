@@ -30,6 +30,10 @@ MiniTest::Spec.add_setup_hook do
   $conf.tasks = {}
   $conf.application_dir = application_dir
 
+  $input = StringIO.new
+  $output = StringIO.new
+  $terminal = HighLine.new($input, $output)
+
   $debug = FakeOut.new
   $file = FakeOut.new
   $console = FakeOut.new
@@ -37,9 +41,6 @@ MiniTest::Spec.add_setup_hook do
   Machines::Command.file = Machines::Logger.new $file
   Machines::Command.console = Machines::Logger.new $console, :truncate => true
 
-  $input = MockStdin.new
-  $output = MockStdout.new
-  $terminal = HighLine.new($input, $output)
   FakeFS.activate!
   FileUtils.mkdir_p 'tmp'
 end
@@ -52,13 +53,8 @@ end
 module MiniTest
   module Assertions
     def capture_io
-      input = MockStdin.new
-      output = StringIO.new
-      $terminal = HighLine.new(input, output)
-
       yield
-
-      return output.string
+      return $output.string
     end
   end
 end

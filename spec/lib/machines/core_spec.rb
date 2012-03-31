@@ -109,8 +109,7 @@ describe Machines::Core do
     it 'displays a list of tasks' do
       task :name, 'description', &Proc.new {}
       task :another, 'another description', &Proc.new {}
-      list_tasks
-      $output.buffer.must_equal '  name                description
+      lambda { list_tasks }.must_output '  name                description
   another             another description
 '
     end

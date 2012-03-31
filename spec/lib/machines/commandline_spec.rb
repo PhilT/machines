@@ -153,8 +153,7 @@ describe Machines::Commandline do
     end
 
     it 'calls help when no matching command' do
-      execute ['anything']
-      $output.buffer.must_equal Machines::Help.new.syntax
+      lambda { execute ['anything'] }.must_output Machines::Help.new.syntax
     end
   end
 
@@ -197,7 +196,7 @@ describe Machines::Commandline do
   describe 'htpasswd' do
     it 'htpasswd is generated and saved' do
       $conf.webserver = 'server'
-      $input.answers = %w(user pass pass)
+      $input.string = "user\npass\npass\n"
       htpasswd nil
       File.read('server/conf/htpasswd').must_match /user:.{13}/
     end
@@ -261,17 +260,15 @@ describe Machines::Commandline do
       end
 
       it 'terminates when user answer no' do
-        $input.answers = %w(n)
-        override 'base'
-        $output.buffer.must_equal 'Project package already exists. Overwrite? (y/n)
+        $input.string = "n\n"
+        lambda { override 'base' }.must_output 'Project package already exists. Overwrite? (y/n)
 Aborted.
 '
       end
 
       it 'overwrites project package with default package' do
-        $input.answers = %w(y)
-        override 'base'
-        $output.buffer.must_equal 'Project package already exists. Overwrite? (y/n)
+        $input.string = "y\n"
+        lambda { override 'base' }.must_output 'Project package already exists. Overwrite? (y/n)
 Package copied to packages/base.rb
 '
       end
@@ -284,8 +281,7 @@ Package copied to packages/base.rb
       FileUtils.mkdir_p 'packages'
       FileUtils.touch File.join($conf.application_dir, 'packages', 'base.rb')
       FileUtils.touch File.join('packages', 'apps.rb')
-      packages
-      $output.buffer.must_equal 'Default packages
+      lambda { packages }.must_output 'Default packages
  * base
 Project packages
  * apps
@@ -302,8 +298,7 @@ Project packages
         :task2 =>  {:description => 'description 2'},
         :task3 => {:description => 'description 3'}
       }
-      tasks
-      $output.buffer.must_equal 'Tasks
+      lambda { tasks }.must_output 'Tasks
   task1                description 1
   task2                description 2
   task3                description 3
