@@ -1,3 +1,8 @@
+# Standard minitest diff calls the OS's diff command. FakeFS breaks diff because
+# diff is looking for the files on disk but the files are written by Tempfile
+# while FakeFS is still active. The following modules provide a pure ruby diff
+# and override MiniTest::Assertions::diff to utilitize it.
+
 module Diff
   attr_accessor :diffs, :sequences
 
