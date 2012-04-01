@@ -99,16 +99,11 @@ Take a look at the generated project. It contains several folders and the main `
 
 ### Prepare the target machine
 
-* Download the latest image or ISO:
-  * [Ubuntu 11.10 Minimal i386 ISO](http://archive.ubuntu.com/ubuntu/dists/oneiric/main/installer-i386/current/images/netboot/mini.iso)
-  * [Ubuntu 11.10 Minimal x64 ISO](http://archive.ubuntu.com/ubuntu/dists/oneiric/main/installer-amd64/current/images/netboot/mini.iso)
-  * [Ubuntu 11.10 Minimal i386 IMG](http://archive.ubuntu.com/ubuntu/dists/oneiric/main/installer-i386/current/images/netboot/boot.img.gz)
-  * [Ubuntu 11.10 Minimal x64 IMG](http://archive.ubuntu.com/ubuntu/dists/oneiric/main/installer-amd64/current/images/netboot/boot.img.gz)
-* or Download the last LTS image or ISO:
-  * [Ubuntu 10.04 Minimal i386 ISO](http://archive.ubuntu.com/ubuntu/dists/lucid/main/installer-i386/current/images/netboot/mini.iso)
-  * [Ubuntu 10.04 Minimal x64 ISO](http://archive.ubuntu.com/ubuntu/dists/lucid/main/installer-amd64/current/images/netboot/mini.iso)
-  * [Ubuntu 10.04 Minimal i386 IMG](http://archive.ubuntu.com/ubuntu/dists/lucid/main/installer-i386/current/images/netboot/boot.img.gz)
-  * [Ubuntu 10.04 Minimal x64 IMG](http://archive.ubuntu.com/ubuntu/dists/lucid/main/installer-amd64/current/images/netboot/boot.img.gz)
+* Download the latest minimal Ubuntu 12.04 image or ISO (Precise Pangolin)
+  * [64bit image](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-amd64/current/images/netboot/boot.img.gz)
+  * [64bit ISO](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-amd64/current/images/netboot/mini.iso)
+  * [32bit image](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-i386/current/images/netboot/boot.img.gz)
+  * [32bit ISO](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-amd64/current/images/netboot/mini.iso)
 * Images can be written to USB with:
 * `gunzip boot.img.gz && sudo dd if=boot.img of=/dev/sdX` where `sdX` is your USB device (use `dmesg` to get this)
 * Insert the USB stick and boot from it to install Ubuntu

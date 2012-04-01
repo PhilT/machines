@@ -210,7 +210,6 @@ describe Machines::Commandline do
       init
       $conf.passwords.must_equal []
       $conf.commands.must_equal []
-      $conf.webapps.must_equal({})
       $conf.tasks.must_equal({})
       $conf.timezone.must_equal 'GB'
       File.exists?('log/output.log').must_equal true

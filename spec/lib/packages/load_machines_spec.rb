@@ -34,6 +34,17 @@ describe 'packages/load_machines' do
     end
   end
 
+  describe 'setting db_server' do
+    it 'sets the db_server using the selected machines db_server' do
+      settings['machines']['a_machine']['db_server'] = 'other_machine'
+      settings['machines']['other_machine'] = {'hostname' => 'name', 'user' => 'fred', 'address' => '1.1.1.1'}
+      save_settings
+      eval_package
+      $conf.db_server.user.must_equal 'fred'
+      $conf.db_server.address.must_equal '1.1.1.1'
+    end
+  end
+
   describe 'setting address' do
     it 'raises an exception when no address' do
       settings['machines']['a_machine']['address'] = nil

@@ -7,4 +7,5 @@ coverage
 log
 tmp
 
-.vmconfig
+.vmcontrol
+

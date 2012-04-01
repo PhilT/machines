@@ -16,7 +16,7 @@ task :logrotate_nginx, 'Logrotate nginx access and error logs and optionally gen
     %w(access error).each do |type|
       command = type == 'access' ? stats_command(app) : nil
       settings = AppSettings::AppBuilder.new(:log_path => "/var/log/nginx/#{app.name}.#{type}.log", :stats_command => command)
-      sudo create_from 'logrotate/nginx.erb', :settings => settings, :to => "/etc/logrotate.d/#{app.name}_nginx_#{type}_log"
+      sudo create_from 'logrotate/nginx.erb', :settings => settings, :to => "/etc/logrotate.d/#{app.name}_nginx_#{type}"
     end
   end
 end
@@ -24,7 +24,7 @@ end
 task :logrotate_apps, 'Logrotate Rails app logs' do
   $conf.webapps.each do |app_name, app|
     settings = AppSettings::AppBuilder.new(:log_path => File.join(app.path, 'shared', 'log', '*.log'))
-    sudo create_from 'logrotate/app.erb', :settings => settings, :to => File.join('/etc', 'logrotate.d', "#{app.name}_app_log")
+    sudo create_from 'logrotate/app.erb', :settings => settings, :to => File.join('/etc', 'logrotate.d', "#{app.name}_app")
   end
 end
 

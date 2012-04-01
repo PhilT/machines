@@ -1,25 +1,38 @@
 require 'minitest/autorun'
 require './spec/support/vm_control'
+require 'app_conf'
 
 describe 'Development machine' do
+  def run_in_shell command
+    output = `#{command}`
+    flunk output unless $?.success?
+  end
+
   before do
-    `cd tmp && rm -rf acceptance_project`
-    if File.exist?('.vmconfig')
-      @vm_control = File.read('.vmconfig') =~ /^HOST=WINDOWS/ ? WinVmControl.new : VmControl.new
-    else
-      flunk '.vmconfig does not exist. Touch it to test using VMs on a Linux host or add HOST=WINDOWS to test on a VM running on Windows.'
-    end
+    @vm = VmControl.new
+    run_in_shell 'cd tmp && rm -rf acceptance_project'
   end
 
   after do
-    @vm_control.kill
+    @vm.kill
   end
 
   it 'does a dryrun then build' do
-    if !@vm_control.restore
-      flunk 'Connection timed out. Did you start your SSH server on the host?'
+    run_in_shell 'cd tmp && ruby -I../lib ../bin/machines new acceptance_project'
+    files = %w(certificates webapps.yml config.yml mysql nginx packages users Machinesfile)
+    files.each do |name|
+      File.exist?(File.join('tmp', 'acceptance_project', name)).must_equal true
     end
-    flunk unless @vm_control.start
+
+    appConf = AppConf.new
+    appConf.load('tmp/acceptance_project/machines.yml')
+    appConf.machines.philworkstation.address = 'machinesvm'
+    appConf.save(:machines, 'tmp/acceptance_project/machines.yml')
+
+    run_in_shell 'cd tmp/acceptance_project && ruby -I../../lib ../../bin/machines dryrun philworkstation'
+
+    @vm.restore
+    @vm.start
     response = ''
     connection_error = nil
     10.times do
@@ -36,14 +49,6 @@ describe 'Development machine' do
       end
     end
     response.must_match /user/
-
-    `cd tmp && ruby -I../lib ../bin/machines new acceptance_project`
-    files = %w(certificates webapps.yml config.yml mysql nginx packages users Machinesfile)
-    files.each do |name|
-      File.exist?(File.join('tmp', 'acceptance_project', name)).must_equal true
-    end
-
-    puts `cd tmp/acceptance_project && ruby -I../../lib ../../bin/machines dryrun philworkstation`
 
 #    `ruby -Ilib ../../bin/machines philworkstation build`
   end

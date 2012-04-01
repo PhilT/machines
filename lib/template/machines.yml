@@ -60,6 +60,7 @@ machines:
     roles:
       - app
       - db
+    db_server: philworkstation
     root_pass: secure
 
   maindb:
@@ -128,6 +129,7 @@ machines:
     roles:
       - app
       - db
+    db_server: staging
     root_pass: secure
     cloud:
       flavor_id: t1.micro

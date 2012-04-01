@@ -67,12 +67,18 @@ end
 
 MiniTest::Spec.register_spec_type(/packages\//, MiniTest::Spec::Package)
 
+def RealFS &block
+  FakeFS.deactivate!
+  yield block
+ensure
+  FakeFS.activate!
+end
 
 def load_package name
-  FakeFS.deactivate!
-  @package_path = File.join($conf.application_dir, File.join('packages', "#{name}.rb"))
-  @package = File.read(@package_path)
-  FakeFS.activate!
+  RealFS do
+    @package_path = File.join($conf.application_dir, File.join('packages', "#{name}.rb"))
+    @package = File.read(@package_path)
+  end
 end
 
 def eval_package

@@ -36,7 +36,7 @@ only :roles => :dbslave do
   task :replication, 'Setup database replication from master' do
     sudo upload "mysql/dbslave.cnf", "/etc/mysql/conf.d/dbslave.cnf"
     mysql_execute "CHANGE MASTER TO " +
-      "MASTER_HOST='#{$conf.db_server.address}', " +      
+      "MASTER_HOST='#{$conf.db_server.address}', " +
       "MASTER_USER='#{$conf.db_server.replication_user}' " +
       "MASTER_PASSWORD='#{$conf.db_server.replication_pass}';",
     :password => $conf.machine.root_pass

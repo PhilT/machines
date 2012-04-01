@@ -78,7 +78,6 @@ module Machines
       $exit_requested = false
       $conf.passwords = []
       $conf.commands = []
-      $conf.webapps = {}
       $conf.tasks = {}
       $conf.load('config.yml')
 

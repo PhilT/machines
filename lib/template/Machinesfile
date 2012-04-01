@@ -4,20 +4,19 @@ package :questions
 package :dependencies
 package :timezone
 package :base
-package :virtualbox_guest if AppConf.machine = 'philworkstation'
+package :virtualbox_guest if $conf.machine == 'philworkstation'
 
 only :roles => :app do
-  package :monit unless AppConf.environment == :development
+  package :monit unless $conf.environment == :development
   package :webapps
   package :dotfiles
   package :git
-  package :rvm
-  package :ruby
+  package :rbenv
   package :nginx
   package :passenger
   package :passenger_nginx
   package :nginx_logrotate
-  package :postfix unless AppConf.environment == :development
+  package :postfix unless $conf.environment == :development
 end
 
 only :roles => :db do
