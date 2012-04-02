@@ -50,7 +50,8 @@ describe 'Development machine' do
     end
     response.must_match /user/
 
-#    `ruby -Ilib ../../bin/machines philworkstation build`
+    # Need to specify passwords
+    #run_in_shell 'cd tmp/acceptance_project && ruby -I../../lib ../../bin/machines build philworkstation'
   end
 end
 

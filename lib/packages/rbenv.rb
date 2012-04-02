@@ -23,7 +23,5 @@ task :rbenv, "Install ruby-build, rbenv, ruby #{$conf.ruby.version} and Bundler"
 
   run write "gem: --no-rdoc --no-ri", :to => '.gemrc', :name => '.gemrc'
   run gem 'bundler'
-  run 'wget -q https://github.com/gma/bundler-exec/raw/master/bundler-exec.sh > ~/.bundler-exec.sh'#, file_check('~/.bundler-exec.sh')
-  run 'source ~/.bashrc', "type ruby | grep run-with-bundler #{echo_result}"
 end
 

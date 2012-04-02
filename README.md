@@ -1,7 +1,7 @@
-Machines - Generate. Customize. Deploy.
-=======================================
+Machines - Ubuntu configuration simplified
+==========================================
 
-Setup Ubuntu development and server **Machines** locally or in the cloud for hosting and developing Ruby on Rails 3 applications.
+Setup Ubuntu development and server **Machines** locally or in the cloud for hosting and developing in Ruby, Rails and related environments.
 
 Run commands like:
 

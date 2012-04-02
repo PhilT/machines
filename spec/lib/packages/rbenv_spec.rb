@@ -25,8 +25,6 @@ describe 'packages/rbenv' do
 
       'UPLOAD buffer from .gemrc to .gemrc',
       'RUN    gem install bundler',
-      'RUN    wget -q https://github.com/gma/bundler-exec/raw/master/bundler-exec.sh > ~/.bundler-exec.sh',
-      'RUN    source ~/.bashrc'
     ]
   end
 end

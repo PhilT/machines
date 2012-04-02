@@ -1,6 +1,6 @@
 task :nginx, 'Download and configure Nginx' do
   sudo extract $conf.webserver.url
-  sudo "cd #{$conf.webserver.src_path} && ./configure #{$conf.webserver.modules} --add-module=#{$conf.passenger.nginx}"
+  sudo "cd #{$conf.webserver.src_path} && ./configure #{$conf.webserver.modules} --add-module=#{$conf.passenger.root}"
 
   sudo add_upstart 'nginx',
     :description => 'Nginx HTTP Server',

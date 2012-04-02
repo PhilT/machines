@@ -5,7 +5,7 @@ describe 'packages/nginx' do
     load_package('nginx')
     $conf.from_hash(:webserver => {:name => 'nginx', :version => '1.0.2', :path => 'nginx_path',
       :url => 'nginx_url/package', :src_path => '/usr/local/src/nginx-1.2.3', :modules => '--with-http_ssl_module'})
-    $conf.from_hash(:passenger => {:nginx => '/passenger/path/ext/nginx'})
+    $conf.from_hash(:passenger => {:root => '/passenger/path/ext/nginx'})
     FileUtils.mkdir_p 'nginx'
     File.open('nginx/nginx.conf.erb', 'w') {|f| f.puts 'the template' }
   end
