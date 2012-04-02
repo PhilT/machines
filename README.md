@@ -27,46 +27,26 @@ Cloud deployments to complete plus a few more minor features for server deployme
 Features
 ---------------------------------------
 
-* Preconfigured Ruby & Rails light development environment (Openbox, docky, gEdit with gmate and VirtualBox)
-* Working default template supports Nginx, RVM, Passenger, Ruby, Rails apps, MySQL (+ replication), Git, Monit, Logrotate
+* An opinionated Ubuntu configuration script with sensible defaults
 * Easily override the defaults with configuration options and custom ruby
-* Several deb sources added making it easier to keep up-to-date with the latest versions
-* Tested on Ubuntu i386/amd64 11.04 minimal
-* Minimal Ubuntu ISO/IMG used for increased security and stability and low memory footprint
-* Commands abstracted to provide a consistent configuration syntax
-* Full automated test suite to ensure correct commands are generated (Using RSpec)
-* Extra checks done to ensure commands generate the correct result and avoids false positives
-* A lightweight configurable Ubuntu install
-* Working documentation for Ubuntu commands
 * A Ubuntu distribution Customizable with Ruby
-* Supports several cloud services such as EC2 and Rackspace (whatever fog supports)
-
+* Supports several cloud services
+* Working default template supports Nginx, RVM, Passenger, Ruby, Rails apps, MySQL (+ replication), Git, Monit, Logrotate
+* Preconfigured Ruby & Rails light development environment (Openbox, docky, gEdit with gmate)
+* Bring up new instances fully configured in ten minutes
 
 Motivation
 ---------------------------------------
 
-I believe that development, staging, and production environments should match if not be as close as possible. I develop on Ubuntu Linux and so it felt natural to have Ubuntu as my server environment. Ubuntu is fast becoming a standard for desktop and server. I've spent many years building and configuring PCs and anything that can be done to automate the process is a good thing in my opinion. I also like to know what I've got installed so I have little clutter and an optimally running machine. I also like to reinstall development machines usually when upgrading Ubuntu or adding/changing hardware and prefer a clean start.
-
-There are a few configuration management tools on the market such as Puppet and Chef but they try to cater for every possible server environment. They also do a very good job of configuration change management. Machines narrows the scope to a single platform and framework (others could be added) and does not try to manage change (small changes are possible), instead opting for reinstallation. As cloud computing instances can be brought up on a whim, I find this an acceptable compromise to further aid simplicity.
+Configuration management is a complex topic. I wanted to reduce some of the variables (single target platform, single development environment) to provide a simpler solution.
 
 
-Target Environment
+Overview
 ---------------------------------------
-
-Capistrano can do great stuff with mutli-server environments. This project is geared more towards multi-project environments. You have lots of apps that are setup on one or more servers.
-
-
-Description
----------------------------------------
-
-This tool should make it simple to develop and deploy Ruby on Rails applications on Ubuntu by providing a build script with sensible defaults.
 
 The top level script is the `Machinesfile`. This contains the packages to include. Packages contain the commands to run. Default packages are provided by Machines. Default packages can be overridden and new ones created. Feel free to fork Machines and your add packages. Send a pull request and if they are tested they'll be added to the next release.
 
-Commands are added to a queue with `sudo` or `run`. [Here is a list of the packages](https://github.com/PhilT/machines/tree/master/lib/packages) in Machines.
-
-[TODO: List of commands]
-
+Commands are added to a queue with `sudo` or `run`. [/lib/packages](https://github.com/PhilT/machines/tree/master/lib/packages) contains the packages you can add in the `Machinesfile` in Machines.
 
 Installation and Configuration
 ---------------------------------------
@@ -83,19 +63,25 @@ e.g. Running `machines new example` creates the `example` folder and copies in a
 
 ### Configure your deployment
 
-Take a look at the generated project. It contains several folders and the main `Machinesfile`:
+Take a look at the generated project. It contains several folders with templates and
+configuration settings for various programs, your `Machinesfile` and the various `.yml` files.
 
-* certificates - Amazon EC2 and your website certificates
-* config - machine and application settings and EC2 credentials
-* users - user preferences and configuration files
-* a number of application specific folders containing configuration files
+`machines.yml` is your machine architecture. Here you'll add all the computers in your environment.
 
-1. Edit the build script (`Machinesfile`)
-1. Add your websites certificates and amazon private key (if required)
-1. Edit settings in `config/`
-1. Run `machines override <package>` to copy a default package to your project for alteration (Use `machines packages` to see a list)
-1. Setup your `users/` folders
-1. Add `~/.ssh/id_rsa.pub` public key from all users machines that need access, to the `users/www/authorized_keys` file
+`webapps.yml` lists the web applications you develop and maintain.
+
+`config.yml` contains settings for various packages. Version numbers, Cloud configuration, paths, etc.
+
+`users/` contains user specific preferences, dotfiles, etc
+
+* Create your architecture in `machines.yml`
+* Add you webapps in `webapps.yml`
+* Edit the build script (`Machinesfile`)
+* Add your websites certificates and amazon private key (if required)
+* Edit settings in `config.yml`
+* Run `machines override <package>` to copy a default package to your project for alteration (Use `machines packages` to see a list)
+* Setup your `users/` folders
+* Add `~/.ssh/id_rsa.pub` public key from all users machines that need access, to the `users/www/authorized_keys` file
 
 ### Prepare the target machine
 
