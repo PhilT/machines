@@ -46,7 +46,7 @@ Overview
 
 The top level script is the `Machinesfile`. This contains the packages to include. Packages contain the commands to run. Default packages are provided by Machines. Default packages can be overridden and new ones created. Feel free to fork Machines and your add packages. Send a pull request and if they are tested they'll be added to the next release.
 
-Commands are added to a queue with `sudo` or `run`. [/lib/packages](https://github.com/PhilT/machines/tree/master/lib/packages) contains the packages you can add in the `Machinesfile` in Machines.
+Commands are added to a queue with `sudo` or `run`. [lib/packages](https://github.com/PhilT/machines/tree/master/lib/packages) contains the packages you can add in the `Machinesfile` in Machines.
 
 Installation and Configuration
 ---------------------------------------
@@ -89,7 +89,7 @@ configuration settings for various programs, your `Machinesfile` and the various
   * [64bit image](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-amd64/current/images/netboot/boot.img.gz)
   * [64bit ISO](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-amd64/current/images/netboot/mini.iso)
   * [32bit image](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-i386/current/images/netboot/boot.img.gz)
-  * [32bit ISO](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-amd64/current/images/netboot/mini.iso)
+  * [32bit ISO](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-i386/current/images/netboot/mini.iso)
 * Images can be written to USB with:
 * `gunzip boot.img.gz && sudo dd if=boot.img of=/dev/sdX` where `sdX` is your USB device (use `dmesg` to get this)
 * Insert the USB stick and boot from it to install Ubuntu
