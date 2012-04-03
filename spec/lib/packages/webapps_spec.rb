@@ -15,7 +15,7 @@ describe 'packages/webapps' do
   end
 
   it 'adds the following commands' do
-    $conf.environment = :production
+    $conf.environment = 'production'
     eval_package
     $conf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.must_equal [
       "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",
@@ -34,7 +34,7 @@ describe 'packages/webapps' do
   end
 
   it "doesn't make app structure when target is a development machine" do
-    $conf.environment = :development
+    $conf.environment = 'development'
     eval_package
     $conf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.must_equal [
       "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",

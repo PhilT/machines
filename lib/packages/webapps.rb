@@ -1,5 +1,5 @@
 def create_folders app
-  if $conf.environment == :development
+  if $conf.environment == 'development'
     run git_clone app.scm, :to => app.path
     run bundle app.path
   else

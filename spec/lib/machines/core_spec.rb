@@ -133,6 +133,15 @@ describe Machines::Core do
       end
       yielded.must_equal false
     end
+
+    it 'yields when symbol matches string' do
+      $conf.environment = 'development'
+      yielded = false
+      only :environment => :development do
+        yielded = true
+      end
+      yielded.must_equal true
+    end
   end
 
   describe 'except' do
@@ -156,6 +165,16 @@ describe Machines::Core do
   end
 
   describe 'matched' do
+    describe '$conf values are strings' do
+      before do
+        $conf.string_param = 'matched'
+      end
+
+      it { matched(:string_param => :matched).must_equal true }
+      it { matched(:string_param => 'matched').must_equal true }
+      it { matched(:string_param => :unmatched).wont_equal true }
+    end
+
     describe '$conf values are arrays' do
       before do
         $conf.params_array = [:matched, :another]
