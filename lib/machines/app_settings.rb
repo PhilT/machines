@@ -30,7 +30,7 @@ module Machines
           raise(ArgumentError, "#{app_name} has no settings for #{$conf.environment} environment")
         settings['name'] = app_name
         settings['path'] = File.join($conf.appsroot, File.basename(settings['scm'], '.git'))
-        public_path = "#{$conf.environment == :development ? '' : 'current/'}public"
+        public_path = "#{$conf.environment == 'development' ? '' : 'current/'}public"
         settings['root'] = File.join(settings['path'], public_path)
         if environment['ssl']
           settings['ssl_key'] = environment['ssl'] + '.key'

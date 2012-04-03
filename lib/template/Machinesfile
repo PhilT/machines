@@ -4,10 +4,9 @@ package :questions
 package :dependencies
 package :timezone
 package :base
-package :virtualbox_guest if $conf.machine == 'philworkstation'
 
 only :roles => :app do
-  package :monit unless $conf.environment == :development
+  except(:environment => :development){ package :monit }
   package :webapps
   package :dotfiles
   package :git
@@ -16,7 +15,7 @@ only :roles => :app do
   package :passenger
   package :passenger_nginx
   package :nginx_logrotate
-  package :postfix unless $conf.environment == :development
+  except(:environment => :development){ package :postfix }
 end
 
 only :roles => :db do
