@@ -136,7 +136,7 @@ describe Machines::Commandline do
 
   describe 'execute' do
     it 'calls specified action' do
-      %w(htpasswd dryrun build).each do |action|
+      Machines::Help.new.actions.reject{|a| a == 'new'}.each do |action|
         expects action
         execute [action]
       end
@@ -280,7 +280,7 @@ Package copied to packages/base.rb
       FileUtils.mkdir_p 'packages'
       FileUtils.touch File.join($conf.application_dir, 'packages', 'base.rb')
       FileUtils.touch File.join('packages', 'apps.rb')
-      lambda { packages }.must_output 'Default packages
+      lambda { packages nil }.must_output 'Default packages
  * base
 Project packages
  * apps

@@ -1,6 +1,8 @@
 require 'minitest/autorun'
+class VmControl < MiniTest::Spec; end
 require './spec/support/vm_control'
 require 'app_conf'
+
 
 describe 'Development machine' do
   def run_in_shell command

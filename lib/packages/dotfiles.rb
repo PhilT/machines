@@ -5,10 +5,8 @@ task :dotfiles, "Upload files in users/#{username}/dotfiles, prepend a dot and s
     run upload source, ".#{File.basename(source)}" if File.exists?(source)
   end
 
-  if File.exists?("users/#{username}/dotfiles/bashrc")
-    run replace 'export RAILS_ENV=', :with => "export RAILS_ENV=#{$conf.environment}", :in => '.bashrc'
-    run replace 'export CDPATH=', :with => "export CDPATH=#{$conf.appsroot}", :in => '.bashrc'
-  end
+  run append "export RAILS_ENV=#{$conf.environment}", :to => '.profile'
+  run append "export CDPATH=#{$conf.appsroot}", :to => '.profile'
 end
 
 authorized_key_file = "users/#{username}/authorized_keys"

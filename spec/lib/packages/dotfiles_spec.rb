@@ -16,8 +16,8 @@ describe 'packages/dotfiles' do
     $conf.commands.map(&:info).must_equal [
       "TASK   dotfiles - Upload files in users/username/dotfiles, prepend a dot and substitute some bashrc vars",
       "UPLOAD #{File.expand_path('users/username/dotfiles/bashrc')} to .bashrc",
-      "RUN    sed -i \"s/export RAILS_ENV=/export RAILS_ENV=railsenv/\" .bashrc",
-      "RUN    sed -i \"s/export CDPATH=/export CDPATH=appsroot/\" .bashrc",
+      "RUN    echo \"export RAILS_ENV=railsenv\" >> .profile",
+      "RUN    echo \"export CDPATH=appsroot\" >> .profile",
       "TASK   keyfiles - Upload authorized_keys file",
       "RUN    mkdir -p .ssh",
       "RUN    chmod 700 .ssh",

@@ -40,3 +40,8 @@ end
 
 sudo append 'inode/directory=pcmanfm.desktop', :to => '.local/share/applications/mimeapps.list'
 
+# Slideshow with feh image viewer
+# Press ENTER to load current image into Gimp. H to pause slideshow
+#   slide <file or folder>
+run append "alias slide='feh --action \"gimp '%f'\" --fullscreen --auto-zoom --borderless --slideshow-delay 5 --sort name'", :to => '.bash_aliases'
+

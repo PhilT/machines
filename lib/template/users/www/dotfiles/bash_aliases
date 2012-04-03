@@ -1,0 +1,36 @@
+# Output raw control characters in less (colors log files that use escape codes)
+alias less='less -R'
+
+# Create binstubs for bundler
+alias bb='bundle --binstubs=.bin'
+
+# Halve the size of all images in the current folder
+alias halfsize='ls *.* | xargs -n1 --replace convert -verbose {} -resize 50% {}'
+
+# Search a Rails project excluding non-source directories
+function s {
+  grep --color=auto --exclude-dir={coverage,db,doc,.git,log,tmp,vendor,.yardoc} -r $* .
+}
+
+# Reset network interface
+function ifr {
+  sudo ifdown eth0
+  sudo ifup eth0
+}
+
+# Get git branch name
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ [\1]/'
+}
+
+# Colour-coded prompt
+#     machine-name current-dir rubyversion@gemset [branch] $
+PURPLE="\[\e[0;35m\]"
+BLUE="\[\e[0;34m\]"
+RED="\[\e[0;31m\]"
+YELLOW="\[\e[0;33m\]"
+NORMAL="\[\e[m\]"
+BRANCH="\$(parse_git_branch)"
+# RVM="\$(~/.rvm/bin/rvm-prompt v g)" # Uncomment to enable rubyversion@gemset
+PS1="$PURPLE\h $BLUE\w$RED$RVM$YELLOW$BRANCH $PURPLE\$$NORMAL "
+

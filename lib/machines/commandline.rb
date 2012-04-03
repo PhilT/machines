@@ -96,7 +96,7 @@ module Machines
       end
     end
 
-    def packages
+    def packages notused
       say 'Default packages'
       Dir[File.join($conf.application_dir, 'packages', '**/*.rb')].each do |package|
         say " * #{File.basename(package, '.rb')}"
