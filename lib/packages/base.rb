@@ -4,14 +4,14 @@ task :hosts, 'Set /etc/hosts' do
   hostname = $conf.machine.hostname.split('.').first
   sudo write "127.0.0.1 #{fqdn} localhost.localdomain localhost\n127.0.1.1 #{hostname}\n", :to => '/etc/hosts'
   sudo write $conf.machine.hostname, :to => '/etc/hostname'
-  sudo start 'hostname'
+  sudo start 'hostname', :check => false
 
   $conf.hosts.each {|ip_host| sudo append "#{ip_host}", :to => '/etc/hosts' } if $conf.hosts.is_a?(Array)
 end
 
 
 task :base, 'Install base packages' do
-  sudo install %w(build-essential zlib1g-dev libpcre3-dev)
-  sudo install %w(libreadline5-dev libxml2-dev libxslt1-dev libssl-dev)
+  sudo install %w(build-essential zlib1g-dev libpcre3-dev libruby1.9.1)
+  sudo install %w(libxml2-dev libxslt1-dev libssl-dev)
 end
 

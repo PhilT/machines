@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe Machines::Logger do
   before(:each) do
-    $conf.user = 'www'
+    $conf.machine = AppConf.new
+    $conf.machine.user = 'www'
     $conf.commands = [1,2,3]
   end
 

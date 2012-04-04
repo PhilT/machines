@@ -1,4 +1,4 @@
-username = $conf.user
+username = $conf.machine.user
 
 task :dotfiles, "Upload files in users/#{username}/dotfiles, prepend a dot and substitute some bashrc vars" do
   Dir["users/#{username}/dotfiles/*"].each do |source|

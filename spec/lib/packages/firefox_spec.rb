@@ -8,9 +8,7 @@ describe 'packages/firefox' do
   it 'adds the following commands' do
     eval_package
     $conf.commands.map(&:info).must_equal [
-      "TASK   firefox - add the Firefox repo and install",
-      "SUDO   add-apt-repository ppa:mozillateam/firefox-stable",
-      "SUDO   apt-get -q -y update > /tmp/apt-update.log",
+      "TASK   firefox - install firefox",
       "SUDO   apt-get -q -y install firefox"
     ]
   end

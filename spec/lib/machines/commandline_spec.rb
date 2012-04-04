@@ -16,8 +16,8 @@ describe Machines::Commandline do
       stubs(:init)
       File.stubs(:read).returns ''
       $conf.machine = AppConf.new
-      $conf.address = 'target'
-      $conf.user = 'username'
+      $conf.machine.address = 'target'
+      $conf.machine.user = 'username'
       $conf.password = 'userpass'
     end
 

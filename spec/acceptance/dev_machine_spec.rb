@@ -46,7 +46,6 @@ describe 'Development machine' do
         break
       rescue => e
         connection_error = e
-        puts e
         sleep 3
       end
     end

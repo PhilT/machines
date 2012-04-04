@@ -7,14 +7,14 @@ package :base
 
 only :roles => :app do
   except(:environment => :development){ package :monit }
-  package :webapps
   package :dotfiles
   package :git
   package :rbenv
-  package :nginx
   package :passenger
   package :passenger_nginx
+  package :nginx
   package :nginx_logrotate
+  package :webapps
   except(:environment => :development){ package :postfix }
 end
 

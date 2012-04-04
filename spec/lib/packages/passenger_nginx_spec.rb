@@ -6,6 +6,7 @@ describe 'packages/passenger_nginx' do
     $conf.from_hash(:webserver => {:path => 'nginx_dest', :version => '1.0.2'})
     $conf.password = 'pass'
     $conf.from_hash(:passenger => {:root => '/home/user/gems/passenger-1.2.3'})
+    $conf.from_hash(:ruby => {:gems_path => 'lib/ruby/gems/1.9.1/gems'})
   end
 
   it 'adds the following commands' do

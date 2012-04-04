@@ -22,7 +22,7 @@ describe 'packages/base' do
       "SUDO   apt-get -q -y install build-essential",
       "SUDO   apt-get -q -y install zlib1g-dev",
       "SUDO   apt-get -q -y install libpcre3-dev",
-      "SUDO   apt-get -q -y install libreadline5-dev",
+      "SUDO   apt-get -q -y install libruby1.9.1",
       "SUDO   apt-get -q -y install libxml2-dev",
       "SUDO   apt-get -q -y install libxslt1-dev",
       "SUDO   apt-get -q -y install libssl-dev",
@@ -31,14 +31,14 @@ describe 'packages/base' do
 
   it 'adds the following commands' do
     eval_package
-    $conf.commands.map(&:info).must_equal @hosts + @packages
+    $conf.commands.map(&:info).join("\n").must_equal (@hosts + @packages).join("\n")
   end
 
   it 'does not add hosts when nil' do
     $conf.hosts = nil
     @hosts.pop
     eval_package
-    $conf.commands.map(&:info).must_equal @hosts + @packages
+    $conf.commands.map(&:info).join("\n").must_equal (@hosts + @packages).join("\n")
   end
 end
 

@@ -3,7 +3,8 @@ require 'spec_helper'
 describe 'packages/dotfiles' do
   before(:each) do
     load_package('dotfiles')
-    $conf.user = 'username'
+    $conf.machine = AppConf.new
+    $conf.machine.user = 'username'
     $conf.appsroot = 'appsroot'
     $conf.environment = 'railsenv'
     FileUtils.mkdir_p 'users/username/dotfiles'

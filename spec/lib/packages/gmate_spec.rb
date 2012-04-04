@@ -11,7 +11,6 @@ describe 'packages/gmate' do
     $conf.commands.map(&:info).must_equal [
       "TASK   gmate - Clone and install gmate for gEdit from Github and set some preferences and plugins",
       "SUDO   apt-get -q -y install python-pyinotify",
-      "SUDO   apt-get -q -y install python-webkitgtk",
       "SUDO   apt-get -q -y install ack-grep",
       "RUN    git clone -q git://github.com/gmate/gmate.git apps_root/gmate",
       "RUN    cd apps_root/gmate && echo \\n | ./install.sh",

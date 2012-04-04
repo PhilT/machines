@@ -2,7 +2,7 @@ task :gmate, 'Clone and install gmate for gEdit from Github and set some prefere
   dir = File.join $conf.appsroot, 'gmate'
 
   sudo install ['python-pyinotify'] # Required for gEdit Open
-  sudo install ['python-webkitgtk', 'ack-grep'] # Find in project
+  sudo install ['ack-grep'] # Find in project
   run git_clone 'git://github.com/gmate/gmate.git', :to => dir
   run "cd #{dir} && echo \\n | ./install.sh"
 

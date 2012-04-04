@@ -1,5 +1,4 @@
-task :firefox, 'add the Firefox repo and install' do
-  sudo add_ppa 'mozillateam/firefox-stable', 'mozilla'
+task :firefox, 'install firefox' do
   sudo install %w(firefox)
 end
 

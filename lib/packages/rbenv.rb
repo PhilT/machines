@@ -1,5 +1,5 @@
 task :rbenv, "Install ruby-build, rbenv, ruby #{$conf.ruby.version} and Bundler" do
-  sudo install ['git-core']
+  sudo install ['git-core', 'curl']
   run git_clone 'git://github.com/sstephenson/ruby-build.git'
   sudo 'cd ~/ruby-build && ./install.sh'
 
@@ -12,16 +12,14 @@ task :rbenv, "Install ruby-build, rbenv, ruby #{$conf.ruby.version} and Bundler"
   #     bundle --binstubs=.bin (or just bundle if you use the example bashrc)
   #
   run git_clone 'git://github.com/sstephenson/rbenv.git', :to => '~/.rbenv'
-  run append 'export PATH=".git/safe/../../.bin:$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"', :to => '~/.profile'
+  #NOTE: This path will not be available to the session as Net::SSH uses a non-login shell
+  run append 'PATH=".git/safe/../../.bin:$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"', :to => '~/.profile'
 
-  # DOES THIS WORK? (E.G. SOURCING PROFILE to get the exported path)
-  run 'source ~/.profile'
-
-  run "rbenv install #{$conf.ruby.full_version}"
-  run 'rbenv rehash'
-  run "rbenv global #{$conf.ruby.full_version}", "ruby -v | grep #{$conf.ruby.version} #{echo_result}"
+  run "~/.rbenv/bin/rbenv install #{$conf.ruby.full_version}"
+  run '~/.rbenv/bin/rbenv rehash'
+  run "~/.rbenv/bin/rbenv global #{$conf.ruby.full_version}", "~/.rbenv/bin/rbenv exec ruby -v | grep #{$conf.ruby.version} #{echo_result}"
 
   run write "gem: --no-rdoc --no-ri", :to => '.gemrc', :name => '.gemrc'
-  run gem 'bundler'
+  run '~/.rbenv/bin/rbenv exec gem install bundler', "~/.rbenv/bin/rbenv exec gem list | grep bundler #{echo_result}"
 end
 

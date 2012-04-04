@@ -13,7 +13,7 @@ module Machines
         username = $conf.machine.cloud.username
         scp_options = {:keys => [$conf.machine.cloud.private_key_path]}
       else
-        username = $conf.user
+        username = $conf.machine.user
         scp_options = {:password => $conf.password}
       end
 
@@ -23,7 +23,7 @@ module Machines
         end
       else
         Kernel.trap("INT") { prepare_to_exit }
-        Net::SCP.start $conf.address, username, scp_options do |scp|
+        Net::SCP.start $conf.machine.address, username, scp_options do |scp|
           Command.scp = scp
           $conf.commands.each do |command|
             command.run

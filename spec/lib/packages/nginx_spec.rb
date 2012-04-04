@@ -5,21 +5,19 @@ describe 'packages/nginx' do
     load_package('nginx')
     $conf.from_hash(:webserver => {:name => 'nginx', :version => '1.0.2', :path => 'nginx_path',
       :url => 'nginx_url/package', :src_path => '/usr/local/src/nginx-1.2.3', :modules => '--with-http_ssl_module'})
-    $conf.from_hash(:passenger => {:root => '/passenger/path/ext/nginx'})
+    $conf.from_hash(:passenger => {:nginx => '/passenger/path/ext/nginx'})
     FileUtils.mkdir_p 'nginx'
     File.open('nginx/nginx.conf.erb', 'w') {|f| f.puts 'the template' }
+    File.open('nginx/upstart.conf.erb', 'w') {|f| f.puts 'the template' }
   end
 
-  it 'adds the following commands' do
-    $conf.environment = :staging
+  it 'adds the following commands for staging environment' do
+    $conf.environment = 'staging'
     eval_package
-    $conf.commands.map(&:info).must_equal [
+    $conf.commands.map(&:info).join("\n").must_equal [
       "TASK   nginx - Download and configure Nginx",
       "SUDO   cd /usr/local/src && wget nginx_url/package && tar -zxf package && rm package && cd -",
-      'SUDO   cd /usr/local/src/nginx-1.2.3 && ./configure --with-http_ssl_module --add-module=/passenger/path/ext/nginx',
-      "UPLOAD buffer from nginx upstart to /tmp/nginx.conf",
-      "SUDO   cp -rf /tmp/nginx.conf /etc/init/nginx.conf",
-      "RUN    rm -rf /tmp/nginx.conf",
+      'SUDO   cd /usr/local/src/nginx-1.2.3 && ./configure --with-http_ssl_module --add-module=/passenger/path/ext/nginx && make && make install',
       "UPLOAD buffer from nginx/nginx.conf.erb to /tmp/nginx.conf",
       "SUDO   cp -rf /tmp/nginx.conf nginx_path/conf/nginx.conf",
       "RUN    rm -rf /tmp/nginx.conf",
@@ -28,7 +26,23 @@ describe 'packages/nginx' do
       "SUDO   cp -rf /tmp/htpasswd nginx_path/conf/htpasswd",
       "RUN    rm -rf /tmp/htpasswd",
       "SUDO   chmod 400 nginx_path/conf/htpasswd"
-    ]
+    ].join("\n")
+  end
+
+  it 'adds the following commands for development environment' do
+    $conf.environment = 'development'
+    eval_package
+    $conf.commands.map(&:info).join("\n").must_equal [
+      "TASK   nginx - Download and configure Nginx",
+      "SUDO   cd /usr/local/src && wget nginx_url/package && tar -zxf package && rm package && cd -",
+      'SUDO   cd /usr/local/src/nginx-1.2.3 && ./configure --with-http_ssl_module --add-module=/passenger/path/ext/nginx && make && make install',
+      "UPLOAD buffer from nginx/nginx.conf.erb to /tmp/nginx.conf",
+      "SUDO   cp -rf /tmp/nginx.conf nginx_path/conf/nginx.conf",
+      "RUN    rm -rf /tmp/nginx.conf",
+      "UPLOAD buffer from nginx/upstart.conf.erb to /tmp/nginx.conf",
+      "SUDO   cp -rf /tmp/nginx.conf /etc/init/nginx.conf",
+      "RUN    rm -rf /tmp/nginx.conf"
+    ].join("\n")
   end
 end
 

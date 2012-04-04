@@ -5,26 +5,22 @@ describe 'Services' do
   include Machines::FileOperations
   include Machines::Services
 
-  describe 'add_upstart' do
-    it 'writes a configuration' do
-      expects(:write).with(%(description "description"\nrespawn\nexec command\n), :to => '/etc/init/name.conf', :name => 'name upstart')
-      add_upstart 'name', :description => 'description', :respawn => true, :exec => 'command'
-    end
-
-    it 'adds a custom script to the configuration' do
-      expects(:write).with(%(description "description"\ncustom script\n), :to => '/etc/init/name.conf', :name => 'name upstart')
-      add_upstart 'name', :description => 'description', :custom => 'custom script'
-    end
-  end
-
   describe 'restart' do
     subject { restart 'daemon' }
     it { subject.command.must_equal 'service daemon restart' }
   end
 
   describe 'start' do
-    subject { start 'daemon' }
-    it { subject.command.must_equal 'service daemon start' }
+    it 'start daemon and check it runs' do
+      subject = start 'daemon'
+      subject.command.must_equal 'service daemon start'
+      subject.check.must_equal 'ps aux | grep daemon | grep -v grep && echo CHECK PASSED || echo CHECK FAILED'
+    end
+
+    it 'start daemon with no checking' do
+      subject = start 'daemon', :check => false
+      subject.check.must_equal nil
+    end
   end
 end
 
