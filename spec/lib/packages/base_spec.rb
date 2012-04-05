@@ -5,9 +5,9 @@ describe 'packages/base' do
     load_package('base')
     $conf.machine = AppConf.new
     $conf.machine.hostname = 'hostname'
-    $conf.hosts = ['1.2.3.4 some.domain']
+    $conf.from_hash(:hosts => {'some.domain' => '1.2.3.4'})
     @hosts = [
-      "TASK   hosts - Set /etc/hosts",
+      "TASK   hosts - Setup /etc/hosts",
       "UPLOAD unnamed buffer to /tmp/hosts",
       "SUDO   cp -rf /tmp/hosts /etc/hosts",
       "RUN    rm -rf /tmp/hosts",
@@ -16,6 +16,7 @@ describe 'packages/base' do
       "RUN    rm -rf /tmp/hostname",
       "SUDO   service hostname start",
       "SUDO   echo \"1.2.3.4 some.domain\" >> /etc/hosts",
+      "RUN    ssh-keyscan -H some.domain >> $HOME/.ssh/known_hosts"
     ]
     @packages = [
       "TASK   base - Install base packages",
@@ -35,8 +36,8 @@ describe 'packages/base' do
   end
 
   it 'does not add hosts when nil' do
-    $conf.hosts = nil
-    @hosts.pop
+    $conf.clear :hosts
+    @hosts.pop 2
     eval_package
     $conf.commands.map(&:info).join("\n").must_equal (@hosts + @packages).join("\n")
   end

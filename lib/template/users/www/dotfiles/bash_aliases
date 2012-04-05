@@ -1,6 +1,8 @@
 # Output raw control characters in less (colors log files that use escape codes)
 alias less='less -R'
 
+alias g='gedit'
+
 # Create binstubs for bundler
 alias bb='bundle --binstubs=.bin'
 

@@ -11,13 +11,13 @@ cloud:
   aws_access_key_id: 123
   aws_secret_access_key: 456
 
-# An array of IP hosts. These are added to /etc/hosts by the hosts package
+# IP hosts. These are added to /etc/hosts by the hosts task in the base package
 # Note:
 #   localhost and local domain hosts are added by base package
 #   app URLS are added by webapps package
 hosts:
-  - 192.168.1.4 server
-  - 192.168.56.1 host
+  server: 192.168.1.4
+  host: 192.168.56.1
 
 login_theme: dark
 

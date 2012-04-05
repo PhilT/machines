@@ -1,4 +1,4 @@
-task :hosts, 'Set /etc/hosts' do
+task :hosts, 'Setup /etc/hosts' do
   # Sets hostname according to the following: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=316099
   fqdn = $conf.machine.hostname
   hostname = $conf.machine.hostname.split('.').first
@@ -6,7 +6,10 @@ task :hosts, 'Set /etc/hosts' do
   sudo write $conf.machine.hostname, :to => '/etc/hostname'
   sudo start 'hostname', :check => false
 
-  $conf.hosts.each {|ip_host| sudo append "#{ip_host}", :to => '/etc/hosts' } if $conf.hosts.is_a?(Array)
+  $conf.hosts.to_hash.each do |host, address|
+    sudo append "#{address} #{host}", :to => '/etc/hosts'
+    run "ssh-keyscan -H #{host} >> $HOME/.ssh/known_hosts"
+  end if $conf.hosts
 end
 
 
