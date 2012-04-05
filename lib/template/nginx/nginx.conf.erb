@@ -1,4 +1,4 @@
-user <%= $conf.user %>;
+user <%= $conf.machine.user %>;
 worker_processes  4;    # Match this with the number of CPUs or increase for large static files
 pid /var/run/nginx.pid; # Used by monit
 
