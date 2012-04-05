@@ -110,6 +110,7 @@ module Machines
     end
 
     def override package
+      package = package.first
       destination = File.join('packages', "#{package}.rb")
       answer = File.exists?(destination) ? ask('Project package already exists. Overwrite? (y/n)') : 'y'
       if answer == 'y'

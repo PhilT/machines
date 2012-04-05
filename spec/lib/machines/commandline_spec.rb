@@ -249,7 +249,7 @@ describe Machines::Commandline do
     end
 
     it 'copies package to project folder' do
-      override 'base'
+      override ['base']
       File.exists?('packages/base.rb').must_equal true
     end
 
@@ -260,14 +260,14 @@ describe Machines::Commandline do
 
       it 'terminates when user answer no' do
         $input.string = "n\n"
-        lambda { override 'base' }.must_output 'Project package already exists. Overwrite? (y/n)
+        lambda { override ['base'] }.must_output 'Project package already exists. Overwrite? (y/n)
 Aborted.
 '
       end
 
       it 'overwrites project package with default package' do
         $input.string = "y\n"
-        lambda { override 'base' }.must_output 'Project package already exists. Overwrite? (y/n)
+        lambda { override ['base'] }.must_output 'Project package already exists. Overwrite? (y/n)
 Package copied to packages/base.rb
 '
       end
