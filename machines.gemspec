@@ -2,6 +2,7 @@ require 'base64'
 
 require 'base64'
 $LOAD_PATH << 'lib'
+require 'machines/version.rb'
 
 @dependencies = []
 @development_dependencies = []
@@ -28,7 +29,7 @@ eval File.read('Gemfile')
 
 Gem::Specification.new do |s|
   s.name        = 'machines'
-  s.version     = '0.4.2'
+  s.version     = Machines::VERSION
   s.authors     = 'Phil Thompson'
   s.email       = Base64.decode64("cGhpbEBlbGVjdHJpY3Zpc2lvbnMuY29t\n")
   s.homepage    = 'http://github.com/PhilT/machines'

@@ -15,14 +15,5 @@ require 'yaml'
 $conf = AppConf.new
 $conf.application_dir = File.dirname(__FILE__)
 
-module Machines
-  class Base
-    Dir[File.join($conf.application_dir, 'machines/**/*.rb')].sort.each do |lib|
-      require lib
-      path = ActiveSupport::Inflector.camelize(File.basename(lib, '.rb'))
-      module_or_class = eval(path, nil, "eval: #{path}")
-      include module_or_class unless module_or_class.is_a?(Class)
-    end
-  end
-end
+require 'machines/base'
 

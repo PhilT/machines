@@ -18,6 +18,7 @@ module Machines
 
     def syntax
       <<HELP
+machines v#{Machines::VERSION} - Ubuntu configuration tool.
 machines ACTION
 ACTION can be:
 #{@actions.map{|action, help| "  %-25s#{help}" % action}.join("\n")}
