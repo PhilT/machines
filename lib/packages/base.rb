@@ -8,7 +8,6 @@ task :hosts, 'Setup /etc/hosts' do
 
   $conf.hosts.to_hash.each do |host, address|
     sudo append "#{address} #{host}", :to => '/etc/hosts'
-    run "ssh-keyscan -H #{host} >> $HOME/.ssh/known_hosts"
   end if $conf.hosts
 end
 

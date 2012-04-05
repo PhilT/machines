@@ -16,7 +16,6 @@ describe 'packages/base' do
       "RUN    rm -rf /tmp/hostname",
       "SUDO   service hostname start",
       "SUDO   echo \"1.2.3.4 some.domain\" >> /etc/hosts",
-      "RUN    ssh-keyscan -H some.domain >> $HOME/.ssh/known_hosts"
     ]
     @packages = [
       "TASK   base - Install base packages",
@@ -37,7 +36,7 @@ describe 'packages/base' do
 
   it 'does not add hosts when nil' do
     $conf.clear :hosts
-    @hosts.pop 2
+    @hosts.pop
     eval_package
     $conf.commands.map(&:info).join("\n").must_equal (@hosts + @packages).join("\n")
   end
