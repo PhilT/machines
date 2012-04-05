@@ -12,13 +12,6 @@ describe 'Installation' do
     end
   end
 
-  describe 'bundle' do
-    it 'runs bundle command on specified project' do
-      subject = bundle '/home/user/project'
-      subject.command.must_equal 'cd /home/user/project && bundle'
-    end
-  end
-
   describe 'deb' do
     it 'adds to /etc/apt/sources and add a key' do
       subject = deb 'source', :key => 'gpg', :name => 'name'

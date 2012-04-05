@@ -17,10 +17,8 @@ task :dotfiles, "Upload files in users/#{username}/dotfiles, prepend a dot and s
 
   authorized_key_file = "users/#{username}/authorized_keys"
   if File.exists?(authorized_key_file)
-    task :keyfiles, 'Upload authorized_keys file' do
-      run upload authorized_key_file, '$HOME/.ssh/authorized_keys'
-      run chmod 600, '$HOME/.ssh/authorized_keys'
-    end
+    run upload authorized_key_file, '$HOME/.ssh/authorized_keys'
+    run chmod 600, '$HOME/.ssh/authorized_keys'
   end
 end
 

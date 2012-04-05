@@ -34,13 +34,14 @@ describe 'packages/webapps' do
   end
 
   it "doesn't make app structure when target is a development machine" do
+    $conf.from_hash(:ruby => {:gems_path => '.rbenv'})
     $conf.environment = 'development'
     eval_package
     $conf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.must_equal [
       "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",
       "SUDO   mkdir -p nginx_path/servers",
       "RUN    git clone -q github.com/project /home/users/app_path",
-      "RUN    cd /home/users/app_path && bundle",
+      "RUN    cd /home/users/app_path && $HOME/.rbenv/bin/rbenv exec bundle",
       "UPLOAD buffer from nginx/app_server.conf.erb to /tmp/application.conf",
       "SUDO   cp -rf /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -rf /tmp/application.conf",

@@ -14,12 +14,6 @@ module Machines
       ]
     end
 
-    # Runs bundle command in specified folder
-    # @param [String] path Full path to the project
-    def bundle path
-      Command.new("cd #{path} && bundle", "bundle check #{echo_result}")
-    end
-
     # Adds a DEB source
     # @param [String] source URL of the package. If DISTRIB_CODENAME is included then it
     #                 is replaced by the Ubuntu version name

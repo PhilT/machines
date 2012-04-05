@@ -24,7 +24,6 @@ describe 'packages/dotfiles' do
       "RUN    ssh-keyscan -H somehost >> $HOME/.ssh/known_hosts",
       "RUN    echo \"export RAILS_ENV=railsenv\" >> .profile",
       "RUN    echo \"export CDPATH=appsroot\" >> .profile",
-      "TASK   keyfiles - Upload authorized_keys file",
       "UPLOAD users/username/authorized_keys to $HOME/.ssh/authorized_keys",
       "RUN    chmod 600 $HOME/.ssh/authorized_keys"
     ].join("\n")
