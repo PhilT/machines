@@ -3,7 +3,7 @@ require 'highline/import'
 require 'rake'
 require 'rake/testtask'
 
-task :default => [:coverage, :acceptance, :yard, :install]
+task :default => [:coverage, :yard, :install]
 
 YARD::Rake::YardocTask.new
 
@@ -31,8 +31,10 @@ task :install do
 
   result = `gem build #{gemspec_path} 2>&1`
   if result =~ /Successfully built/
-    system "gem uninstall -x #{spec.name} 2>&1"
-    system "gem install #{spec.file_name} --no-rdoc --no-ri 2>&1"
+    Bundler.with_clean_env do
+      system "gem uninstall -x -a #{spec.name} 2>&1"
+      system "gem install #{spec.file_name} --no-rdoc --no-ri 2>&1"
+    end
   else
     raise result
   end
