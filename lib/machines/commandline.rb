@@ -9,12 +9,13 @@ module Machines
 
       task $conf.task.to_sym if $conf.task
 
+      ssh_options = {:paranoid => false}
       if $conf.machine.cloud
         username = $conf.machine.cloud.username
-        scp_options = {:keys => [$conf.machine.cloud.private_key_path]}
+        ssh_options[:keys] = [$conf.machine.cloud.private_key_path]
       else
         username = $conf.machine.user
-        scp_options = {:password => $conf.password}
+        ssh_options[:password] = $conf.password
       end
 
       if $conf.log_only
@@ -23,13 +24,16 @@ module Machines
         end
       else
         Kernel.trap("INT") { prepare_to_exit }
-        Net::SCP.start $conf.machine.address, username, scp_options do |scp|
-          Command.scp = scp
+        begin
+          Command.ssh = Net::SSH.start $conf.machine.address, username, ssh_options
+          Command.scp = Net::SCP.new(Command.ssh)
           $conf.commands.each do |command|
             command.run
             Command.file.flush
             exit if $exit_requested
           end
+        ensure
+          Command.ssh.close
         end
       end
     end

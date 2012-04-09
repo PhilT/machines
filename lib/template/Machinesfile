@@ -23,13 +23,18 @@ only :roles => :db do
 end
 
 only :user => 'phil' do
-  package :openbox
-  package :apps
+  package :usb
+  package :sudo_mods
+  package :subtle
   package :chrome
   package :firefox
-  package :gmate
-  package :docky
+  package :gedit
   package :unison
+  package :abiword
+  package :gnumeric
+  package :file_roller
+  package :productivity
+  package :custom
 end
 
 sudo upgrade

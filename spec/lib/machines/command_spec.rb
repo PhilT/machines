@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Machines::Command do
   subject { Machines::Command.new('command', 'check') }
+
   describe 'initialize' do
     it 'sets line, command, check' do
       subject.command.must_equal 'command'
@@ -16,7 +17,7 @@ describe Machines::Command do
       @mock_ssh.stubs(:exec!).returns 'result'
       @mock_ssh.stubs(:exec!).with('export TERM=linux && command').returns "result"
       @mock_ssh.stubs(:exec!).with('export TERM=linux && check').returns "CHECK PASSED"
-      Machines::Command.scp = stub 'Net::SCP', :session => @mock_ssh
+      Machines::Command.ssh = @mock_ssh
     end
 
     it 'does not execute command when logging only' do

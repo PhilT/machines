@@ -10,7 +10,18 @@ module Machines
 
     def self.scp= scp
       @@scp = scp
-      @@ssh = scp.session
+    end
+
+    def self.ssh= ssh
+      @@ssh = ssh
+    end
+
+    def self.ssh
+      @@ssh
+    end
+
+    def self.scp
+      @@scp
     end
 
     def initialize(command, check)

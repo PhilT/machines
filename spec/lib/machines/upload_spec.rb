@@ -17,7 +17,8 @@ describe Machines::Upload do
       $conf.commands = [subject]
       $conf.log_only = false
       @mock_ssh = mock 'Net::SSH'
-      @mock_scp = stub 'Net::SCP', :session => @mock_ssh
+      @mock_scp = stub 'Net::SCP'
+      Machines::Command.ssh = @mock_ssh
       Machines::Command.scp = @mock_scp
       @mock_ssh.stubs(:exec!).with('export TERM=linux && check').returns "CHECK PASSED"
     end

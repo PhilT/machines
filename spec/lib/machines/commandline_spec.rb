@@ -14,21 +14,23 @@ describe Machines::Commandline do
   describe 'build' do
     before(:each) do
       stubs(:init)
-      File.stubs(:read).returns ''
+      FileUtils.touch('Machinesfile')
       $conf.machine = AppConf.new
       $conf.machine.address = 'target'
       $conf.machine.user = 'username'
       $conf.password = 'userpass'
+      Net::SCP.stubs(:new)
+      @ssh_stub = stub('Net::SSH', :close => nil, :exec! => nil)
+      Net::SSH.stubs(:start).returns @ssh_stub
     end
 
     it 'sets machine_name' do
-      Net::SCP.stubs(:start)
       build ['machine']
       $conf.machine_name.must_equal 'machine'
     end
 
     it 'starts an SCP session using password authentication' do
-      Net::SCP.expects(:start).with('target', 'username', :password => 'userpass')
+      Net::SSH.expects(:start).with('target', 'username', :paranoid => false, :password => 'userpass').returns @ssh_stub
       build []
     end
 
@@ -36,7 +38,7 @@ describe Machines::Commandline do
       $conf.machine.cloud = AppConf.new
       $conf.machine.cloud.private_key_path = 'path/to/private_key'
       $conf.machine.cloud.username = 'ubuntu'
-      Net::SCP.expects(:start).with('target', 'ubuntu', :keys => ['path/to/private_key'])
+      Net::SSH.expects(:start).with('target', 'ubuntu', :paranoid => false, :keys => ['path/to/private_key']).returns @ssh_stub
 
       build []
     end
@@ -44,10 +46,7 @@ describe Machines::Commandline do
     it 'runs each command' do
       mock_command = mock 'Machines::Command'
       $conf.commands = [mock_command]
-      mock_scp = stub 'Net::SCP', :session => nil
 
-      Net::SCP.expects(:start).with('target', 'username', :password => 'userpass').yields(mock_scp)
-      Machines::Command.expects(:scp=).with(mock_scp)
       mock_command.expects(:run)
 
       build []
@@ -55,27 +54,21 @@ describe Machines::Commandline do
 
     it 'flushes log file after running command' do
       $conf.log_only = false
-      mock_command = mock 'Machines::Command'
-      $conf.commands = [mock_command]
-      mock_scp = stub 'Net::SCP', :session => nil
+      command_stub = stub('Machines::Command', :run => nil)
+      $conf.commands = [command_stub]
 
-      Net::SCP.stubs(:start).yields(mock_scp)
-      Machines::Command.stubs(:scp=)
-      mock_command.stubs(:run)
       Machines::Command.file.expects(:flush)
       build []
     end
 
-    it 'runs single task when supplied' do
-      mock_scp = mock 'Net::SCP', :session => nil
-      Net::SCP.stubs(:start).yields(mock_scp)
-      $conf.commands = [mock('Machines::Command')]
-      $conf.commands.first.expects(:run).never
-      mock_command_from_task = Machines::Command.new 'command', 'check'
-      mock_command_from_task.expects(:run)
-      $conf.tasks = { :task => {:block => Proc.new { run mock_command_from_task }} }
+    it 'replaces commands with the single task when supplied' do
+      command_will_run = Machines::Command.new '', ''
+      command_wont_run = Machines::Command.new '', ''
+      $conf.tasks = { :task => {:block => Proc.new { run command_will_run }} }
 
       build ['machine', 'task']
+
+      $conf.commands.must_equal [command_will_run]
     end
 
     it 'logs instead of SSHing and running commands' do
@@ -90,9 +83,7 @@ describe Machines::Commandline do
       before(:each) do
         mock_command = mock 'Machines::Command'
         $conf.commands = [mock_command]
-        mock_scp = stub 'Net::SCP', :session => nil
 
-        Net::SCP.stubs(:start).with('target', 'username', :password => 'userpass').yields(mock_scp)
         mock_command.stubs(:run)
         $exit_requested = false
       end

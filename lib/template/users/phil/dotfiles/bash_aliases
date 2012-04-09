@@ -9,6 +9,13 @@ alias bb='bundle --binstubs=.bin'
 # Halve the size of all images in the current folder
 alias halfsize='ls *.* | xargs -n1 --replace convert -verbose {} -resize 50% {}'
 
+# Slideshow with feh image viewer
+# Press ENTER to load current image into Gimp. H to pause slideshow
+#   slide <file or folder>
+function slide {
+  feh --action "gimp '%f'" --fullscreen --auto-zoom --borderless --slideshow-delay 5 --sort name
+}
+
 # Search a Rails project excluding non-source directories
 function s {
   grep --color=auto --exclude-dir={coverage,db,doc,.git,log,tmp,vendor,.yardoc} -r $* .

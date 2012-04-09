@@ -2,6 +2,8 @@
 alias less='less -R'
 
 alias g='gedit'
+alias off='sudo shutdown now -P'
+alias boot='sudo reboot'
 
 # Create binstubs for bundler
 alias bb='bundle --binstubs=.bin'

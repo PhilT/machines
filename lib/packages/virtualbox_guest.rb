@@ -1,4 +1,5 @@
-task :virtualbox_guest, 'Removes piix4_smbus error that appears on Ubuntu VMs when booting' do
+task :virtualbox_guest, 'Installs VirtualBox Guest Additions and fixes piix4_smbus error' do
+  sudo install ['virtualbox-guest-additions']
   sudo append 'blacklist i2c_piix4', :to => '/etc/modprobe.d/blacklist.conf'
 end
 
