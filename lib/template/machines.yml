@@ -42,6 +42,21 @@
 
 ---
 machines:
+  testvm:
+    hostname: main.electricvisions.com
+    address: machinesvm
+    user: phil
+    password: password
+    environment: development
+    apps:
+      - condensd
+      - fountainwiki
+      - velocitytracking
+    roles:
+      - app
+      - db
+    db_server: testvm
+
   philworkstation:
     hostname: main.electricvisions.com
     address:

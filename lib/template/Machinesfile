@@ -26,7 +26,7 @@ only :user => 'phil' do
   package :usb
   package :sudo_mods
   package :subtle
-  package :chrome
+  sudo install ['chromium-browser']
   package :firefox
   package :gedit
   package :unison

@@ -11,20 +11,8 @@
 
 ---
 webapps:
-  electricvisions:
-    scm: phil@server:/media/data/git/electricvisions
-    development:
-      server_name: electricvisions.dev
-      password: electricvisions
-    staging:
-      server_name: staging.electricvisions.com
-      password:
-    production:
-      server_name: electricvisions.com
-      password:
-
   condensd: # Fork of fountainwiki with stylesheet changes
-    scm: git@github.com:/PhilT/condensd.git
+    scm: git://github.com/PhilT/condensd.git
     development:
       server_name: condensd.dev
       password: condensd
@@ -38,7 +26,7 @@ webapps:
       monitor_delayed_job: true
 
   fountainwiki:
-    scm: git@github.com:/PhilT/fountain.git
+    scm: git://github.com/PhilT/fountain.git
     database: fountain
     username: fountain
     development:
@@ -54,32 +42,8 @@ webapps:
       password:
       monitor_delayed_job: true
 
-  merrol:
-    scm: phil@server:/media/data/git/merrol_website
-    development:
-      server_name: merrol.dev
-      password: merrol
-    staging:
-      server_name: staging.merrol.com
-      password:
-    production:
-      server_name: merrol.com
-      password:
-
-  somafila:
-    scm: phil@server:/media/data/git/somafila
-    development:
-      server_name: somafila.dev
-      password: somafila
-    staging:
-      server_name: staging.somafila.com
-      password:
-    production:
-      server_name: somafila.com
-      password:
-
   velocitytracking:
-    scm: git@github.com:/PhilT/velocity.git
+    scm: git://github.com/PhilT/velocity.git
     database: velocity
     username: velocity
     development:
@@ -91,22 +55,4 @@ webapps:
     production:
       server_name: velocitytracking.com
       password:
-
-  eutopia:
-    scm: git@github.com:/PhilT/eutopia.git
-    development:
-      server_name: eutopia.dev
-      password: eutopia
-
-  sanity:
-    scm: git@github.com:/PhilT/sanity.git
-    development:
-      server_name: sanity.dev
-      password: sanity
-
-  tvs:
-    scm: git@github.com:/PhilT/tvs.git
-    development:
-      server_name: tvs.dev
-      password: tvs
 

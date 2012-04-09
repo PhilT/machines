@@ -1,5 +1,5 @@
-Machines - Ubuntu configuration simplified
-==========================================
+Machines - A working Ubuntu system in 10 minutes
+===========================================================
 
 Setup Ubuntu development and server **Machines** locally or in the cloud for hosting and developing in Ruby, Rails and related environments.
 
@@ -16,40 +16,39 @@ Rerun the passenger_nginx install:
     machines build phil_workstation passenger_nginx
 
 Status
----------------------------------------
+-----------------------------------------------------------
 
-(March 2012)
+(April 2012)
 
-Switching to MiniSpec/Mocha due to incompatibilities with RSpec and FakeFS.
+Working development machine builds.
 
 Cloud deployments to complete plus a few more minor features for server deployments.
 
 Features
----------------------------------------
+-----------------------------------------------------------
 
 * An opinionated Ubuntu configuration script with sensible defaults
 * Easily override the defaults with configuration options and custom ruby
-* A Ubuntu distribution Customizable with Ruby
 * Supports several cloud services
-* Working default template supports Nginx, RVM, Passenger, Ruby, Rails apps, MySQL (+ replication), Git, Monit, Logrotate
-* Preconfigured Ruby & Rails light development environment (Openbox, docky, gEdit with gmate)
+* Working default template supports Nginx, Passenger, Ruby, Rails apps, MySQL, Git, Monit, Logrotate
+* Preconfigured Ruby & Rails light development environment (Openbox or Subtle)
 * Bring up new instances fully configured in ten minutes
 
 Motivation
----------------------------------------
+-----------------------------------------------------------
 
 Configuration management is a complex topic. I wanted to reduce some of the variables (single target platform, single development environment) to provide a simpler solution.
 
 
 Overview
----------------------------------------
+-----------------------------------------------------------
 
 The top level script is the `Machinesfile`. This contains the packages to include. Packages contain the commands to run. Default packages are provided by Machines. Default packages can be overridden and new ones created. Feel free to fork Machines and your add packages. Send a pull request and if they are tested they'll be added to the next release.
 
-Commands are added to a queue with `sudo` or `run`. [lib/packages](https://github.com/PhilT/machines/tree/master/lib/packages) contains the packages you can add in the `Machinesfile` in Machines.
+Commands are added to a queue with `sudo` or `run`. [lib/packages](https://github.com/PhilT/machines/tree/master/lib/packages) contains the packages you can add in the `Machinesfile` in Machines. Once the build starts the commands are run and shown with the current progress.
 
 Installation and Configuration
----------------------------------------
+-----------------------------------------------------------
 
 ### Install the gem
 
@@ -57,9 +56,9 @@ Installation and Configuration
 
 ### Generate an example build script
 
-    machines new <folder>
+    machines new example
 
-e.g. Running `machines new example` creates the `example` folder and copies in an example template.
+Creates the `example` folder and copies in an example template.
 
 ### Configure your deployment
 
@@ -90,7 +89,7 @@ configuration settings for various programs, your `Machinesfile` and the various
   * [64bit ISO](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-amd64/current/images/netboot/mini.iso)
   * [32bit image](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-i386/current/images/netboot/boot.img.gz)
   * [32bit ISO](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-i386/current/images/netboot/mini.iso)
-* Images can be written to USB with:
+* Images can be written to USB with (Be sure to eject the drive correctly):
 * `gunzip boot.img.gz && sudo dd if=boot.img of=/dev/sdX` where `sdX` is your USB device (use `dmesg` to get this)
 * Insert the USB stick and boot from it to install Ubuntu
 * Install SSH Server & note the IP address
@@ -141,7 +140,7 @@ While running open another terminal to view detailed output:
 
 
 Commandline Options
----------------------------------------
+-----------------------------------------------------------
 
     machines COMMAND
     COMMAND can be:
@@ -174,7 +173,7 @@ The simplest program I've found to get a Windows SSH server is freeSSHd (<http:/
 
 
 Global settings
----------------------------------------
+-----------------------------------------------------------
 
 Machines uses a gem I wrote called [app_conf](https://github.com/PhilT/app_conf). It's used to load global settings
 from YAML files as well as add further settings in Ruby. Machines uses it both internally and for package settings.
@@ -189,7 +188,7 @@ Take a look at `template/config/*.yml` for more.
 
 
 Setting up the test Machines virtual machine
----------------------------------------
+-----------------------------------------------------------
 
 * Start your virtualization software (I use VirtualBox)
   * Create a new VM with the name of `machinesvm` (used in the rake tasks and tests)
@@ -216,7 +215,7 @@ Setting up the test Machines virtual machine
 
 
 What's happening under the hood
----------------------------------------
+-----------------------------------------------------------
 
 * An ssh connection is established to send all commands and uploads
 * Ssh uses the specified user and then sudo is added to commands that require it
@@ -226,7 +225,7 @@ What's happening under the hood
 
 
 Limitations
----------------------------------------
+-----------------------------------------------------------
 * Only one user per machine. Servers use www-data (by default) for nginx/apache, passenger and deployments
 * The system has been designed to allow a certain flexibility in the configuration although some things
   may not yet be totally configurable it should be possible to add or modify the relevant package
@@ -234,13 +233,13 @@ Limitations
 * Some commands may not properly escape quotes when used with sudo (e.g. append and replace). This may be addressed in a future release
 
 Planned
----------------------------------------
+-----------------------------------------------------------
 
 Supporting versions of Ubuntu from 11.04 onwards is planned.
 
 
 Development, Patches, Pull Requests
----------------------------------------
+-----------------------------------------------------------
 
 * Fork the project
 * Test drive your feature addition or bug fix
@@ -251,7 +250,7 @@ Development, Patches, Pull Requests
 
 
 References
----------------------------------------
+-----------------------------------------------------------
 
 ### APIs
 
@@ -286,13 +285,13 @@ References
 * <https://help.ubuntu.com/community/Installation/LowMemorySystems>
 
 Acknowledgements
----------------------------------------
+-----------------------------------------------------------
 
 Thanks to all the people that published the hundreds of articles, blog posts and APIs I've read.
 
 
 Copyright
----------------------------------------
+-----------------------------------------------------------
 
 Copyright (c) 2010, 2011 Phil Thompson. See LICENSE for details.
 

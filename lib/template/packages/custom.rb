@@ -7,7 +7,7 @@ only :user => 'phil' do
 
   sudo install [
     'flashplugin-installer',    # Play Flash in a Web browser
-    'libsqlite3-dev'            # Needed if SQLite Gem is used
+    'libsqlite3-dev',           # Needed if SQLite Gem is used
     'ubuntu-restricted-extras', # play/record MP3, DVD, Flash, Quicktime, WMA, WMV, etc
   ]
 

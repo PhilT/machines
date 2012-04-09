@@ -31,7 +31,7 @@ class VmControl
   def vboxmanage command
     send File.read('.vmcontrol').gsub("\n", ''), command
   rescue Errno::ENOENT
-    flunk '.vmcontrol does not exist. Add `local` to test using VMs on a Linux host or add `remote` to test on a VM running on Windows.'
+    raise '.vmcontrol does not exist. Add `local` to test using VMs on a Linux host or add `remote` to test on a VM running on Windows.'
   end
 
 private
@@ -46,7 +46,7 @@ private
         output = ssh.exec!("C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage #{command}")
       end
     rescue Timeout::Error => e
-      flunk 'Connection timed out. Did you start your SSH server on the host?'
+      raise 'Connection timed out. Did you start your SSH server on the host?'
     end
     output
   end
