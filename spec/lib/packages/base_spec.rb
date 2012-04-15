@@ -22,7 +22,7 @@ describe 'packages/base' do
       "SUDO   apt-get -q -y install build-essential",
       "SUDO   apt-get -q -y install zlib1g-dev",
       "SUDO   apt-get -q -y install libpcre3-dev",
-      "SUDO   apt-get -q -y install libruby1.9.1",
+      "SUDO   apt-get -q -y install ruby1.9.1-dev",
       "SUDO   apt-get -q -y install libxml2-dev",
       "SUDO   apt-get -q -y install libxslt1-dev",
       "SUDO   apt-get -q -y install libssl-dev",

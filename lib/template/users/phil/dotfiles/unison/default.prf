@@ -5,6 +5,7 @@ silent = true
 
 ignore = Path */.git
 ignore = Path */.unison
+ignore = Name *.log
 ignore = Name temp.*
 ignore = Name desktop.ini
 ignore = Name AlbumArt*.jpg

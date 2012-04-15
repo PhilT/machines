@@ -1,8 +1,8 @@
 [apply]
 	whitespace = nowarn
 [user]
-	name = Phil Thompson
-	email = phil@example.com
+	name = YOUR FULL NAME
+	email = YOUR_EMAIL@EXAMPLE.COM
 [color]
   ui = true
 [alias]
@@ -20,6 +20,6 @@
 [core]
 	whitespace = -trailing-space
 [github]
-	token = 1234567890abcdef
-	user = PhilT
+	token = YOUR_GITHUB_TOKEN
+	user = YOUR_GITHUB_USERNAME
 

@@ -37,6 +37,8 @@ only :user => 'phil' do
   package :custom
 end
 
+only(:machine_name => 'phil_desktop') { package virtualbox_guest }
+
 sudo upgrade
 
 package :save_machines

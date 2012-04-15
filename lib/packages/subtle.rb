@@ -3,7 +3,7 @@ task :subtle, 'Install Subtle tiling window manager and associated fonts, themes
   sudo install [
     'dmz-cursor-theme',           # Mouse cursor theme
     'elementary-icon-theme',      # An icon theme
-    'feh',                        # Set the background image: feh --bg-scale
+    'feh',                        # Set background image/view pics/slideshow/etc
     'gnome-screenshot',           # Press Print Screen to take a screen shot of the desktop
     'gnome-themes-standard',      # Needed to theme GTK 3 apps
     'lxappearance',               # Set gtk themes, cursors and icons - Set to clearlooks
@@ -14,9 +14,13 @@ task :subtle, 'Install Subtle tiling window manager and associated fonts, themes
     'ttf-ubuntu-font-family',     # The new ubuntu font
     'ttf-mscorefonts-installer',  # Microsoft fonts
     'xautolock',                  # Locks screen after idle
-    'xorg',                       # Basic X Windows Graphical Interface needed by Openbox
+    'xorg',                       # Basic X Windows Graphical Interface
   ]
-end
 
-sudo append 'inode/directory=pcmanfm.desktop', :to => '.local/share/applications/mimeapps.list'
+  sudo append 'inode/directory=pcmanfm.desktop', :to => '.local/share/applications/mimeapps.list'
+
+  # Copy default subtle.rb file for easy modification
+  run mkdir '.local/share/subtle'
+  run copy '/etc/xdg/subtle/subtle.rb', '.local/share/subtle'
+end
 
