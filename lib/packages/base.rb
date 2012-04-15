@@ -13,7 +13,7 @@ end
 
 
 task :base, 'Install base packages' do
-  sudo install %w(build-essential zlib1g-dev libpcre3-dev libruby1.9.1)
+  sudo install %w(build-essential zlib1g-dev libpcre3-dev ruby1.9.1-dev)
   sudo install %w(libxml2-dev libxslt1-dev libssl-dev)
 end
 
