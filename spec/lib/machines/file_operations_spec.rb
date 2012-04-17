@@ -78,8 +78,17 @@ describe 'FileOperations' do
   end
 
   describe 'mkdir' do
-    subject { mkdir('path') }
-    it { subject.command.must_equal 'mkdir -p path' }
+    it 'creates a mkdir command for a single path' do
+      mkdir('path').first.command.must_equal 'mkdir -p path'
+    end
+
+    it 'creates a mkdir command for a multiple paths' do
+      mkdir('path1', 'path2').map(&:command).must_equal ['mkdir -p path1', 'mkdir -p path2']
+    end
+
+    it 'creates a mkdir command for an array of paths' do
+      mkdir(['path1', 'path2']).map(&:command).must_equal ['mkdir -p path1', 'mkdir -p path2']
+    end
    end
 
   describe 'rename' do

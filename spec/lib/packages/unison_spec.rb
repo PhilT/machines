@@ -10,7 +10,7 @@ describe 'packages/unison' do
     $conf.commands.map(&:info).must_equal [
       "TASK   unison - Install unison two way file sync and set it to run hourly. Config in users/user/.unison/default.prf",
       "SUDO   apt-get -q -y install unison",
-      "RUN    '30 18 * * * /usr/bin/unison' | crontab"
+      "RUN    echo '30 18 * * * /usr/bin/unison' | crontab"
     ]
   end
 end

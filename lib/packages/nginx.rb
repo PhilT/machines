@@ -1,9 +1,19 @@
 task :nginx, 'Download and configure Nginx' do
   sudo extract $conf.webserver.url
-  sudo "cd #{$conf.webserver.src_path} && ./configure #{$conf.webserver.modules} --add-module=#{$conf.passenger.nginx} && make && make install"
+  modules = "#{$conf.webserver.modules} --add-module=#{$conf.passenger.nginx}"
+  commands = [
+    "cd #{$conf.webserver.src_path}",
+    "./configure #{modules}",
+    "make",
+    "make install"
+  ].join(' && ')
+
+  sudo commands, check_file("#{$conf.webserver.path}/sbin/nginx")
 
   sudo create_from 'nginx/nginx.conf.erb', :to => "#{$conf.webserver.path}/conf/nginx.conf"
-  only(:environment => :development) { sudo create_from 'nginx/upstart.conf.erb', :to => "/etc/init/nginx.conf" }
+  only(:environment => :development) do
+    sudo create_from 'nginx/upstart.conf.erb', :to => "/etc/init/nginx.conf"
+  end
 end
 
 only :environment => :staging do

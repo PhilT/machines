@@ -7,7 +7,7 @@ task :productivity, 'Install some productivity apps and set associations'do
     'gitk',                     # GUI for git
     'inkscape',                 # vector graphics editor
     'meld',                     # Diff tool used by git
-    'mysql-query-browser',      # GUI for MySQL
+    'mysql-navigator',          # GUI for MySQL
   ]
 
   run append 'application/pdf=evince.desktop', :to => '.local/share/applications/mimeapps.list'

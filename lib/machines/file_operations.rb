@@ -52,9 +52,12 @@ module Machines
       Command.new("ln -sf #{target} #{link_name}", check_link(link_name))
     end
 
-    # Create a path on the remote host
-    def mkdir dir
-      Command.new("mkdir -p #{dir}", check_dir(dir))
+    # Create a path or paths on the remote host (Uses -p to be safe and create full path)
+    # @param [String, Array] A single path, multiple paths or array of paths to create
+    def mkdir *dirs
+      dirs.flatten.map do |dir|
+        Command.new("mkdir -p #{dir}", check_dir(dir))
+      end
     end
 
     # Rename a remote file or folder
