@@ -42,7 +42,7 @@ only :user => 'phil' do
   package :custom
 end
 
-sudo upgrade
+package :finalise
 
 package :save_machines
 

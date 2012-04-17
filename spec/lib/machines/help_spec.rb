@@ -9,7 +9,7 @@ describe Machines::Help do
 
   describe 'to_s' do
     it { subject.syntax.must_equal <<-HELP
-machines v0.5.0 - Ubuntu configuration tool.
+machines v0.5.1 - Ubuntu/Ruby configuration tool.
 machines ACTION
 ACTION can be:
   htpasswd                 Generates basic auth in webserver/conf/htpasswd
