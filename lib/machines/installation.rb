@@ -79,10 +79,12 @@ module Machines
     # @param [Hash] options
     # @option options [Optional String] :to Folder to clone to
     # @option options [Optional String] :tag Checkout this tag after cloning (requires :to)
+    # @option options [Optional String] :branch Switch this branch when cloning
     def git_clone url, options = {}
       raise ArgumentError.new('git_clone Must include a url and folder') if url.nil? || url.empty?
       raise ArgumentError.new('specifying :tag also requires :to') if options[:tag] && options[:to].nil?
-      command = "git clone -q #{url}"
+      branch = "--branch #{options[:branch]} " if options[:branch]
+      command = "git clone --quiet #{branch}#{url}"
       command << " #{options[:to]}" if options[:to]
       command = Command.new(command, check_dir(options[:to]))
       command = [command, Command.new("cd #{options[:to]} && git checkout #{options[:tag]}", "git name-rev --name-only HEAD | grep #{options[:tag]}")] if options[:tag]

@@ -29,7 +29,7 @@ module Machines
         environment = settings[$conf.environment.to_s] ||
           raise(ArgumentError, "#{app_name} has no settings for #{$conf.environment} environment")
         settings['name'] = app_name
-        settings['path'] = File.join($conf.appsroot, File.basename(settings['scm'], '.git'))
+        settings['path'] = File.join($conf.appsroot, app_name)
         public_path = "#{$conf.environment == 'development' ? '' : 'current/'}public"
         settings['root'] = File.join(settings['path'], public_path)
         if environment['ssl']

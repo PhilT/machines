@@ -12,6 +12,7 @@ cloud:
   aws_secret_access_key: 456
 
 # IP hosts. These are added to /etc/hosts by the hosts task in the base package
+# They are also added to known hosts but the host must be accessible at this point
 # Note:
 #   localhost and local domain hosts are added by base package
 #   app URLS are added by webapps package

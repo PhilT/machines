@@ -3,16 +3,20 @@
 # You can replace these comments with your own. Comment lines will be retained upto
 # the ---.
 #
-# THIS CONTAINS A NUMBER OF PASSWORDS. SETTING PROPER PERMISSIONS IS HIGHLY RECOMMENDED.
+# TODO: Move passwords to separate GPG encrypted file
 #
 # password: Password for application database - Leave blank to generate one
 # database: Database name to write to database.yml - Leave blank to use application name
 # username: Username to write to database.yml - Leave blank to use application name
+# The name of the webapp will be used as the name of the destination folder of the clone
+# Any environments can be used here. A machine has a given environment.
+# Any of the keys can be used within or outside the environment
 
 ---
 webapps:
-  condensd: # Fork of fountainwiki with stylesheet changes
-    scm: git://github.com/PhilT/condensd.git
+  condensd:
+    scm: git://github.com/PhilT/fountain.git
+    branch: condensd
     development:
       server_name: condensd.dev
       password: condensd
@@ -25,7 +29,7 @@ webapps:
       password:
       monitor_delayed_job: true
 
-  fountainwiki:
+  fountain:
     scm: git://github.com/PhilT/fountain.git
     database: fountain
     username: fountain

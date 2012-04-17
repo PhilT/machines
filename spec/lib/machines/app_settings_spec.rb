@@ -35,8 +35,8 @@ EOF
         'app' => AppBuilder.new(
           :scm => 'scm://project.git',
           :name => 'app',
-          :path => '/home/user/project',
-          :root => '/home/user/project/current/public',
+          :path => '/home/user/app',
+          :root => '/home/user/app/current/public',
           :setting => 'setting',
           :password => 'secure'
         )
@@ -50,8 +50,8 @@ EOF
         'app' => AppBuilder.new(
           :name => 'app',
           :scm => 'scm://project.git',
-          :path => '/home/user/project',
-          :root => '/home/user/project/current/public',
+          :path => '/home/user/app',
+          :root => '/home/user/app/current/public',
           :setting => 'setting',
           :password => 'secure',
           :ssl_key => 'signed.key',
@@ -86,16 +86,16 @@ webapps:
       $conf.webapps.must_equal({
         'app' => AppBuilder.new(
           :name => 'app',
-          :path => '/home/user/project',
+          :path => '/home/user/app',
           :scm => 'scm://project.git',
-          :root => '/home/user/project/current/public',
+          :root => '/home/user/app/current/public',
           :setting => 'setting',
           :password => 'secure'),
         'other' => AppBuilder.new(
           :name => 'other',
-          :root => '/home/user/other_project/current/public',
+          :root => '/home/user/other/current/public',
           :scm => 'scm://other_project',
-          :path => '/home/user/other_project',
+          :path => '/home/user/other',
           :setting => 'other_setting',
           :password => 'secure')
       })

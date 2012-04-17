@@ -1,9 +1,8 @@
 def create_folders app
   if $conf.environment == 'development'
-    run git_clone app.scm, :to => app.path
+    run git_clone app.scm, :to => app.path, :branch => app.branch
     bundle_command =  $conf.ruby.gems_path =~ /^.rbenv/ ? "$HOME/.rbenv/bin/rbenv exec bundle" : "bundle"
     run "cd #{app.path} && #{bundle_command}", "cd #{app.path} && #{bundle_command} check #{echo_result}"
-
   else
     %w(releases shared/config shared/system shared/log).each do |dir|
       run mkdir File.join(app.path, dir)

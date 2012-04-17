@@ -82,12 +82,12 @@ describe 'Installation' do
   describe 'git_clone' do
     it 'instaniates a command to clone a git repository' do
       subject = git_clone 'http://git_url.git'
-      subject.command.must_equal 'git clone -q http://git_url.git'
+      subject.command.must_equal 'git clone --quiet http://git_url.git'
     end
 
     it 'instaniates a command to clone a git repository to a specified folder' do
       subject = git_clone 'http://git_url.git', :to => 'dir'
-      subject.command.must_equal 'git clone -q http://git_url.git dir'
+      subject.command.must_equal 'git clone --quiet http://git_url.git dir'
     end
 
     it 'raises when no url supplied' do
@@ -95,11 +95,18 @@ describe 'Installation' do
       lambda { git_clone nil }.must_raise ArgumentError
     end
 
+    describe ':branch option' do
+      it 'clones to a specific branch' do
+        subject = git_clone 'http://git_url.git', :branch => 'other'
+        subject.command.must_equal 'git clone --quiet --branch other http://git_url.git'
+      end
+    end
+
     describe ':tag option' do
       it 'checks out a specific tag' do
         subject = git_clone 'http://git_url.git', :to => 'dir', :tag => 'v1.0'
         subject.map(&:command).must_equal [
-          'git clone -q http://git_url.git dir',
+          'git clone --quiet http://git_url.git dir',
           'cd dir && git checkout v1.0'
         ]
       end

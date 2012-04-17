@@ -9,7 +9,7 @@ describe 'packages/sqlserver' do
     eval_package
     $conf.commands.map(&:info).must_equal [
       "TASK   sqlserver - Download and build sqlserver driver",
-      "RUN    git clone -q git://github.com/rails-sqlserver/tiny_tds.git",
+      "RUN    git clone --quiet git://github.com/rails-sqlserver/tiny_tds.git",
       "RUN    cd tiny_tds && rake compile && rake native gem"
     ]
   end
