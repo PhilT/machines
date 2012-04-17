@@ -5,6 +5,8 @@ package :dependencies
 package :timezone
 package :base
 
+only(:machine_name => 'phil_desktop') { package :virtualbox_guest }
+
 only :roles => :app do
   except(:environment => :development){ package :monit }
   package :dotfiles
@@ -14,12 +16,15 @@ only :roles => :app do
   package :passenger_nginx
   package :nginx
   package :nginx_logrotate
-  package :webapps
-  except(:environment => :development){ package :postfix }
 end
 
 only :roles => :db do
   package :mysql
+end
+
+only :roles => :app do
+  package :webapps
+  except(:environment => :development){ package :postfix }
 end
 
 only :user => 'phil' do
@@ -36,8 +41,6 @@ only :user => 'phil' do
   package :productivity
   package :custom
 end
-
-only(:machine_name => 'phil_desktop') { package virtualbox_guest }
 
 sudo upgrade
 

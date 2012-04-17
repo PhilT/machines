@@ -141,7 +141,7 @@ module Machines
     # Update, upgrade, autoremove, autoclean apt packages
     def upgrade
       %w(update upgrade autoremove autoclean).map do |command|
-        Command.new("#{APTGET_QUIET} #{command}", nil)
+        Command.new("#{APTGET_QUIET} #{command}", check_command('echo $?', '0'))
       end
     end
   end

@@ -10,7 +10,8 @@ module Machines
     # @param [Hash] options
     # @option options [Boolean] :check Set to false to disable the check (e.g. start hostname, :check => false)
     def start daemon, options = {}
-      Command.new("service #{daemon} start", options[:check] == false ? nil : check_daemon(daemon))
+      check = options[:check] || check_daemon(daemon)
+      Command.new("service #{daemon} start", check)
     end
 
     # Restart a daemon

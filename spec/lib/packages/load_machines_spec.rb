@@ -105,6 +105,7 @@ describe 'packages/load_machines' do
     save_settings
     eval_package
     $conf.machine.user.must_equal 'phil'
+    $conf.user.must_equal 'phil'
   end
 
   it 'loads app settings' do

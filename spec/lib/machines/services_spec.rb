@@ -17,9 +17,9 @@ describe 'Services' do
       subject.check.must_equal 'ps aux | grep daemon | grep -v grep && echo CHECK PASSED || echo CHECK FAILED'
     end
 
-    it 'start daemon with no checking' do
-      subject = start 'daemon', :check => false
-      subject.check.must_equal nil
+    it 'start daemon with custom check' do
+      subject = start 'daemon', :check => 'check'
+      subject.check.must_equal 'check'
     end
   end
 end

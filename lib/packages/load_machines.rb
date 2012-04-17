@@ -16,6 +16,7 @@ task :load_machines, 'Loads the machines.yml' do
   $conf.user_home = "/home/#{machine.user}"
   $conf.appsroot = $conf.appsroots[machine.user] if machine.user
   $conf.users = $conf.appsroots.keys
+  $conf.user = machine.user
   $conf.environment = machine.environment
   $conf.roles = machine.roles
 

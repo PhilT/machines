@@ -25,9 +25,10 @@ describe 'packages/mysql' do
       eval_package
       $conf.commands.map(&:info).must_equal [
         "TASK   mysql - Install MySQL",
-        "SUDO   echo mysql-server-5.1 mysql-server/root_password password DB_PASS | debconf-set-selections",
-        "SUDO   echo mysql-server-5.1 mysql-server/root_password_again password DB_PASS | debconf-set-selections",
+        "SUDO   echo mysql-server-5.5 mysql-server/root_password password DB_PASS | debconf-set-selections",
+        "SUDO   echo mysql-server-5.5 mysql-server/root_password_again password DB_PASS | debconf-set-selections",
         "SUDO   apt-get -q -y install mysql-server",
+        "SUDO   apt-get -q -y install mysql-client",
         "SUDO   apt-get -q -y install libmysqlclient-dev",
         "RUN    service mysqld restart"
       ]

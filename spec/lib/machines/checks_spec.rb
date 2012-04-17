@@ -90,5 +90,11 @@ describe 'Checks' do
       check_init_d('name').must_equal "test -L /etc/rc0.d/K20name #{echo_result}"
     end
   end
+
+  describe 'check_command' do
+    it do
+      check_command('command', 'match').must_equal "command | grep match #{echo_result}"
+    end
+  end
 end
 

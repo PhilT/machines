@@ -19,12 +19,12 @@ describe 'packages/rbenv' do
       'RUN    git clone -q git://github.com/sstephenson/rbenv.git ~/.rbenv',
       'RUN    echo "PATH=\\".git/safe/../../.bin:\\$HOME/.rbenv/bin:\\$HOME/.rbenv/shims:\\$PATH\\"" >> ~/.profile',
 
-      'RUN    ~/.rbenv/bin/rbenv install 1.9.2-p290',
-      'RUN    ~/.rbenv/bin/rbenv rehash',
-      'RUN    ~/.rbenv/bin/rbenv global 1.9.2-p290',
+      'RUN    $HOME/.rbenv/bin/rbenv install 1.9.2-p290',
+      'RUN    $HOME/.rbenv/bin/rbenv rehash',
+      'RUN    $HOME/.rbenv/bin/rbenv global 1.9.2-p290',
 
       'UPLOAD buffer from .gemrc to .gemrc',
-      'RUN    ~/.rbenv/bin/rbenv exec gem install bundler',
+      'RUN    $HOME/.rbenv/bin/rbenv exec gem install bundler',
     ]
   end
 end

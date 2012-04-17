@@ -5,11 +5,11 @@ end
 
 only :roles => :db do
   task :mysql, 'Install MySQL' do
-    name = 'mysql-server-5.1'
+    name = 'mysql-server-5.5'
     key = 'mysql-server/root_password'
     sudo debconf name, key, 'password', $conf.machine.root_pass
     sudo debconf name, "#{key}_again", 'password', $conf.machine.root_pass
-    sudo install %w(mysql-server libmysqlclient-dev)
+    sudo install %w(mysql-server mysql-client libmysqlclient-dev)
     run restart 'mysqld'
   end
 end

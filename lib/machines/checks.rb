@@ -50,6 +50,10 @@ module Machines
     def check_init_d name
       "test -L /etc/rc0.d/K20#{name} #{echo_result}"
     end
+
+    def check_command command, match
+      "#{command} | grep #{match} #{echo_result}"
+    end
   end
 end
 
