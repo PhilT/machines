@@ -22,5 +22,6 @@ task :rbenv, "Install ruby-build, rbenv, ruby #{$conf.ruby.version} and Bundler"
 
   run write "gem: --no-rdoc --no-ri", :to => '.gemrc', :name => '.gemrc'
   run "#{rbenv} exec gem install bundler", check_command("#{rbenv} exec gem list", 'bundler')
+  run "#{rbenv} rehash", check_command('which bundle', '$HOME/.rbenv/shims/bundle')
 end
 

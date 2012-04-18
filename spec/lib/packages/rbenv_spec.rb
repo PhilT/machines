@@ -10,7 +10,7 @@ describe 'packages/rbenv' do
 
   it 'adds the following commands' do
     eval_package
-    $conf.commands.map(&:info).must_equal [
+    $conf.commands.map(&:info).join("\n").must_equal [
       'TASK   rbenv - Install ruby-build, rbenv, ruby 1.9.2 and Bundler',
       "SUDO   apt-get -q -y install git-core",
       "SUDO   apt-get -q -y install curl",
@@ -25,7 +25,8 @@ describe 'packages/rbenv' do
 
       'UPLOAD buffer from .gemrc to .gemrc',
       'RUN    $HOME/.rbenv/bin/rbenv exec gem install bundler',
-    ]
+      'RUN    $HOME/.rbenv/bin/rbenv rehash'
+    ].join("\n")
   end
 end
 

@@ -3,6 +3,8 @@ def create_folders app
     run git_clone app.scm, :to => app.path, :branch => app.branch
     bundle_command =  $conf.ruby.gems_path =~ /^.rbenv/ ? "$HOME/.rbenv/bin/rbenv exec bundle" : "bundle"
     run "cd #{app.path} && #{bundle_command}", "cd #{app.path} && #{bundle_command} check #{echo_result}"
+    run "cd #{app.path} && #{bundle_command} --binstubs=.bin"
+    run "$HOME/.rbenv/bin/rbenv rehash", check_command('echo $?', '0') if $conf.ruby.gems_path =~ /^.rbenv/
   else
     %w(releases shared/config shared/system shared/log).each do |dir|
       run mkdir File.join(app.path, dir)

@@ -27,7 +27,7 @@ describe 'packages/webapps' do
   it 'adds the following commands' do
     $conf.environment = 'production'
     eval_package
-    $conf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.must_equal [
+    $conf.commands.map(&:info).join("\n").must_equal [
       "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",
       "SUDO   mkdir -p nginx_path/servers",
       "RUN    mkdir -p /home/users/application/releases",
@@ -40,24 +40,27 @@ describe 'packages/webapps' do
       "SUDO   mkdir -p /var/log/nginx",
       'UPLOAD buffer from database.yml to /home/users/application/shared/config/database.yml',
       'SUDO   echo "127.0.0.1 app.dev" >> /etc/hosts'
-    ]
+    ].join("\n")
   end
 
   it "doesn't make app structure when target is a development machine" do
     $conf.from_hash(:ruby => {:gems_path => '.rbenv'})
     $conf.environment = 'development'
     eval_package
-    $conf.commands.map(&:info).map{|info| info.gsub(" \n", "\n")}.must_equal [
+    commandline = $conf.commands.map(&:info).join("\n")
+    commandline.must_equal [
       "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",
       "SUDO   mkdir -p nginx_path/servers",
       "RUN    git clone --quiet --branch master github.com/project /home/users/application",
       "RUN    cd /home/users/application && $HOME/.rbenv/bin/rbenv exec bundle",
+      "RUN    cd /home/users/application && $HOME/.rbenv/bin/rbenv exec bundle --binstubs=.bin",
+      "RUN    $HOME/.rbenv/bin/rbenv rehash",
       "UPLOAD buffer from nginx/app_server.conf.erb to /tmp/application.conf",
       "SUDO   cp -rf /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -rf /tmp/application.conf",
       "SUDO   mkdir -p /var/log/nginx",
       'SUDO   echo "127.0.0.1 app.dev" >> /etc/hosts'
-    ]
+    ].join("\n")
   end
 end
 
