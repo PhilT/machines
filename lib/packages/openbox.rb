@@ -31,3 +31,5 @@ end
 
 sudo append 'inode/directory=pcmanfm.desktop', :to => '.local/share/applications/mimeapps.list'
 
+run append 'ck-launch-session openbox-session', :to => '~/.xinitrc'
+
