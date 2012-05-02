@@ -1,4 +1,4 @@
-Machines - A working Ubuntu system in 10 minutes
+Machines - A custom Ubuntu system in less than 15 minutes
 ===========================================================
 
 Setup Ubuntu development and server **Machines** locally or in the cloud for hosting and developing in Ruby, Rails and related environments.
@@ -18,11 +18,11 @@ Rerun the passenger_nginx install:
 Status
 -----------------------------------------------------------
 
-(April 2012)
+(May 2012)
 
-Working development machine builds.
+Working development and server builds.
 
-Cloud deployments to complete plus a few more minor features for server deployments.
+Cloud deployments to complete.
 
 Features
 -----------------------------------------------------------
@@ -30,9 +30,9 @@ Features
 * An opinionated Ubuntu configuration script with sensible defaults
 * Easily override the defaults with configuration options and custom ruby
 * Supports several cloud services
-* Working default template supports Nginx, Passenger, Ruby, Rails apps, MySQL, Git, Monit, Logrotate
+* Default template supports Nginx, Passenger, Ruby, Rails, MySQL, Git, Monit, Logrotate
 * Preconfigured Ruby & Rails light development environment (Openbox or Subtle)
-* Bring up new instances fully configured in ten minutes
+* Bring up new instances fully configured in less than 15 minutes
 
 Motivation
 -----------------------------------------------------------
@@ -106,30 +106,11 @@ configuration settings for various programs, your `Machinesfile` and the various
 
     $ machines build <machine>
 
-Machines will ask a series of questions:
-
-    1. Desktop
-    2. Staging
-    3. Production
-    4. Database
-    Select machine to build: 1
-    Would you like to start an EC2 instance (y/n)? n
-    Enter the IP address of the target machine (EC2, VM, LAN):
-    1. phil
-    2. www
-    Choose user:
-    Password:
-    Hostname to set machine to (Shown on bash prompt if default .bashrc used):
-
-If not a DB Server:
-    Enter the IP address or DNS name of the database this app server will connect to:
-    Enter the root password of the database (Used to create permissions for each of the apps):
 
 Console output:
 
 * Running commands are displayed in gray
 * Tasks show in blue
-* Completed commands change to:
 * Successfully completed commands are displayed in green
 * Failures show in red
 * Yellow indicates there was no check for the command
@@ -144,39 +125,20 @@ Commandline Options
 
     machines COMMAND
     COMMAND can be:
-      htpasswd            - Asks for a username and password and generates basic auth in webserver/conf/htpasswd
-      new <DIR>           - Creates a folder called DIR and generates an example Machines project in it
-      check               - Checks Machinesfile for syntax issues
-      dryrun              - Runs through Machinesfile logging all commands to log/output.log but does not acutally run them
-      build               - Asks some questions then builds your chosen machine
-      build <TASK>        - Builds a single named task
-      packages            - lists the available packages
-      override <PACKAGE>  - copies the default package into project/packages so it can be edited/overidden
-
-
-### Rake tasks for managing the VM (these tasks will be turned into commands on Machines to make testing easier)
-
-    rake vm:kill         # Shutdown the virtual machine
-    rake vm:restore      # Restore last snapshot of virtual machine
-    rake vm:start        # Start the virtual machine in headless mode
-    rake vm:state        # Get virtual machine state
-    rake vm:stop         # Stop the virtual machine
-
-    rake vm:win:kill     # Shutdown the virtual machine (on a Windows host)
-    rake vm:win:restore  # Restore last snapshot of virtual machine (on a Windows host)
-    rake vm:win:start    # Start the virtual machine in headless mode (on a Windows host)
-    rake vm:win:state    # Get virtual machine state (on a Windows host)
-    rake vm:win:stop     # Stop the virtual machine (on a Windows host)
-
-If you have Ubuntu running on a Windows Host you can use the vm:win:* tasks to control the Machines VM used for testing.
-The simplest program I've found to get a Windows SSH server is freeSSHd (<http://www.freesshd.com/?ctt=download>).
+      htpasswd                 Generates basic auth in webserver/conf/htpasswd
+      new <DIR>                Generates an example machines project in DIR
+      dryrun                   Logs commands but does not run them
+      tasks                    Lists the available tasks
+      build <machine> [task]   Builds your chosen machine. Optionally, build just one task
+      packages                 Lists the available packages
+      override <PACKAGE>       Copies the default package into project/packages so it can be edited/overidden
 
 
 Global settings
 -----------------------------------------------------------
 
-Machines uses a gem I wrote called [app_conf](https://github.com/PhilT/app_conf). It's used to load global settings
-from YAML files as well as add further settings in Ruby. Machines uses it both internally and for package settings.
+Machines uses a gem I wrote called [app_conf](https://github.com/PhilT/app_conf). It allows settings
+to be loaded from YAML and also set using Ruby. Machines uses it both internally and for package settings.
 Some of the settings set and used by Machines are:
 
 * `$conf.commands` - All the commands that are to be run
@@ -184,25 +146,20 @@ Some of the settings set and used by Machines are:
 * `$conf.user` - The selected user settings
 * `$conf.machine` - Configuration for the selected machine
 
-Take a look at `template/config/*.yml` for more.
+Take a look at `template/*.yml` for more.
 
 
 Setting up the test Machines virtual machine
 -----------------------------------------------------------
 
 * Start your virtualization software (I use VirtualBox)
-  * Create a new VM with the name of `machinesvm` (used in the rake tasks and tests)
-  * Select Ubuntu or Ubuntu x64 as the OS (depending on your chosen image)
+  * Create a new VM. I name mine `machinesvm` (as it's used by the tests)
+  * Select Ubuntu or Ubuntu x64 as the OS (I mostly use x64 these days)
   * Go to Network and add a Bridged Adapter and a Host-only Adapter
   * Go to Storage, select the Empty CD, click the CD icon on the far right and find the image (in /tmp)
-  * I also turn off the Audio device
-* Start the VM, select Command line Install and follow the prompts
+* Start the VM, select Install and follow the prompts
 * Accept default hostname (this will be set later)
 * Enter 'user' for username and 'password' for the password
-* If desired apply the piix4_smbus error fix(A warning that appears on Ubuntu VMs when booting: May be fixed in 11.04)
-
-      sudo sh -c 'echo blacklist i2c_piix4 >> /etc/modprobe.d/blacklist.conf'
-
 * And add openssh
 
       sudo apt-get -y install openssh-server && ifconfig
@@ -211,7 +168,7 @@ Setting up the test Machines virtual machine
 
       sudo sh -c 'echo VM_IP_ADDRESS machinesvm >> /etc/hosts'
 
-* Finally, take a snapshot of the VM and name it 'Clean'. This is used to restore the VM to a known state after each test run
+* Finally, take a snapshot of the VM and name it 'FreshInstall'. Handy when testing.
 
 
 What's happening under the hood
@@ -226,16 +183,12 @@ What's happening under the hood
 
 Limitations
 -----------------------------------------------------------
-* Only one user per machine. Servers use www-data (by default) for nginx/apache, passenger and deployments
+* Only one user per machine. Although other users could be setup with additional build runs.
+* Servers use www (by default) for nginx/apache, passenger and deployments
 * The system has been designed to allow a certain flexibility in the configuration although some things
   may not yet be totally configurable it should be possible to add or modify the relevant package
 * We are currently focused on Ruby 1.9.2, Rails 3 and Passenger 3
 * Some commands may not properly escape quotes when used with sudo (e.g. append and replace). This may be addressed in a future release
-
-Planned
------------------------------------------------------------
-
-Supporting versions of Ubuntu from 11.04 onwards is planned.
 
 
 Development, Patches, Pull Requests
@@ -243,7 +196,7 @@ Development, Patches, Pull Requests
 
 * Fork the project
 * Test drive your feature addition or bug fix
-* Commit, do not mess with rakefile, version, or history
+* Commit, do not mess with Rakefile, version, or history
 * Send me a pull request. Please use topic branches
 * Feel free to add/enhance packages and submit pull requests
 * Package tests are a bit of a pain but do catch a lot of potential issues
@@ -270,7 +223,6 @@ References
 * Nginx Passenger setup guide: <https://github.com/jnstq/rails-nginx-passenger-ubuntu>
 * Nginx configuration: <http://articles.slicehost.com/2009/3/5/ubuntu-intrepid-nginx-configuration>
 * Bundler Deployment: <http://gembundler.com/deploying.html>
-* Free SSL Certificates: <http://www.startssl.com/>
 
 
 ### RVM
@@ -293,5 +245,5 @@ Thanks to all the people that published the hundreds of articles, blog posts and
 Copyright
 -----------------------------------------------------------
 
-Copyright (c) 2010, 2011 Phil Thompson. See LICENSE for details.
+Copyright (c) 2010, 2011, 2012 Phil Thompson. See LICENSE for details.
 

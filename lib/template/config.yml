@@ -6,6 +6,10 @@ appsroots:
 awstats:
   stats_path: /var/www/nginx/webstats
 
+# Set to false if your BIOS clock is set to localtime (e.g. you dual boot Windows)
+# This will override whatever option was chosen when Ubuntu was installed
+clock_utc: true
+
 cloud:
   provider: AWS
   aws_access_key_id: 123
