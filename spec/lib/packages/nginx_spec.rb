@@ -21,11 +21,10 @@ describe 'packages/nginx' do
       "UPLOAD buffer from nginx/nginx.conf.erb to /tmp/nginx.conf",
       "SUDO   cp -rf /tmp/nginx.conf nginx_path/conf/nginx.conf",
       "RUN    rm -rf /tmp/nginx.conf",
-      "TASK   htpasswd - Upload htpasswd file",
-      "UPLOAD nginx/conf/htpasswd to /tmp/htpasswd",
-      "SUDO   cp -rf /tmp/htpasswd nginx_path/conf/htpasswd",
-      "RUN    rm -rf /tmp/htpasswd",
-      "SUDO   chmod 400 nginx_path/conf/htpasswd"
+      "UPLOAD buffer from nginx/upstart.conf.erb to /tmp/nginx.conf",
+      "SUDO   cp -rf /tmp/nginx.conf /etc/init/nginx.conf",
+      "RUN    rm -rf /tmp/nginx.conf",
+      "SUDO   initctl reload-configuration"
     ].join("\n")
   end
 
@@ -41,7 +40,8 @@ describe 'packages/nginx' do
       "RUN    rm -rf /tmp/nginx.conf",
       "UPLOAD buffer from nginx/upstart.conf.erb to /tmp/nginx.conf",
       "SUDO   cp -rf /tmp/nginx.conf /etc/init/nginx.conf",
-      "RUN    rm -rf /tmp/nginx.conf"
+      "RUN    rm -rf /tmp/nginx.conf",
+      "SUDO   initctl reload-configuration"
     ].join("\n")
   end
 end

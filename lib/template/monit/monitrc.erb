@@ -8,7 +8,7 @@ set httpd port 2812 and
     use address localhost
     allow localhost
     allow <%= $conf.monit.webserver.address %>
-    allow admin:p@ssw0rd
+    allow <%= $conf.monit.webserver.username %>:<%= $conf.monit.webserver.password %>
 
 include /etc/monit/conf.d/*
 

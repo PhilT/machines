@@ -11,17 +11,9 @@ task :nginx, 'Download and configure Nginx' do
   sudo commands, check_file("#{$conf.webserver.path}/sbin/nginx")
 
   sudo create_from 'nginx/nginx.conf.erb', :to => "#{$conf.webserver.path}/conf/nginx.conf"
-  only(:environment => :development) do
-    sudo create_from 'nginx/upstart.conf.erb', :to => "/etc/init/nginx.conf"
-  end
-end
 
-only :environment => :staging do
-  task :htpasswd, 'Upload htpasswd file' do
-    htpasswd_file = File.join($conf.webserver.path, 'conf', 'htpasswd')
-    sudo upload 'nginx/conf/htpasswd', htpasswd_file
-    sudo chmod 400, htpasswd_file
-  end
+  sudo create_from 'nginx/upstart.conf.erb', :to => "/etc/init/nginx.conf"
+  sudo 'initctl reload-configuration'
 end
 
 task :monit_nginx, 'Add monit configuration for Nginx', :if => [:monit, :nginx] do
