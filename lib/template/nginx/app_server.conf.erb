@@ -1,7 +1,7 @@
 # Redirect from www
 server {
   server_name www.<%= server_name %>;
-  rewrite ^ https://$server_name$uri permanent;
+  rewrite ^ http://<%= server_name %>$request_uri? permanent;
 }
 
 server {
@@ -41,10 +41,5 @@ server {
   location @503 {
     rewrite  ^(.*)$  /system/maintenance.html break;
   }
-
-  <% if basic_auth %>
-    auth_basic "Restricted";
-    auth_basic_user_file conf/htpasswd;
-  <% end %>
 }
 

@@ -16,7 +16,7 @@ describe 'packages/monit' do
       "TASK   monit - Install and configure monit",
       "SUDO   apt-get -q -y install monit",
       "SUDO   /etc/init.d/monit stop && update-rc.d -f monit remove",
-      "UPLOAD buffer from monit/upstart.conf.erb to /tmp/monit.conf",
+      "UPLOAD monit/upstart.conf to /tmp/monit.conf",
       "SUDO   cp -rf /tmp/monit.conf /etc/init/monit.conf",
       "RUN    rm -rf /tmp/monit.conf",
       "SUDO   initctl reload-configuration",
