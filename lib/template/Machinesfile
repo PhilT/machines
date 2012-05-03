@@ -3,12 +3,13 @@ package :questions
 
 package :dependencies
 package :timezone
+package :hosts
 package :base
 
 only(:machine_name => 'phil_desktop') { package :virtualbox_guest }
 
 only :roles => :app do
-  except(:environment => :development){ package :monit }
+  package :monit unless $conf.environment == :development
   package :dotfiles
   package :git
   package :rbenv
@@ -24,7 +25,7 @@ end
 
 only :roles => :app do
   package :webapps
-  except(:environment => :development){ package :postfix }
+  package :postfix unless $conf.environment == :development
 end
 
 only :user => 'phil' do

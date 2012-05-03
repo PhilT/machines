@@ -1,19 +1,14 @@
-task :hosts, 'Setup /etc/hosts' do
-  # Sets hostname according to the following: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=316099
-  fqdn = $conf.machine.hostname
-  hostname = $conf.machine.hostname.split('.').first
-  sudo write "127.0.0.1 #{fqdn} localhost.localdomain localhost\n127.0.1.1 #{hostname}\n", :to => '/etc/hosts'
-  sudo write $conf.machine.hostname, :to => '/etc/hostname'
-  sudo start 'hostname', :check => check_command('hostname', $conf.machine.hostname)
-
-  $conf.hosts.to_hash.each do |host, address|
-    sudo append "#{address} #{host}", :to => '/etc/hosts'
-  end if $conf.hosts
-end
-
-
-task :base, 'Install base packages' do
-  sudo install %w(build-essential zlib1g-dev libpcre3-dev ruby1.9.1-dev libreadline-dev)
-  sudo install %w(libxml2-dev libxslt1-dev libssl-dev)
+task :base, 'Install base packages for compiling Ruby and libraries' do
+  sudo install [
+    'build-essential',     # Needed to build most libraries for Ruby
+    'zlib1g-dev',          # Compression library
+    'libpcre3-dev',        # Regular expressions library
+    'ruby1.9.1-dev',       # Needed by Ruby
+    'libreadline-dev',     # Needed by IRB
+    'libxml2-dev',         # Needed by Nokogiri
+    'libxslt1-dev',        # Needed by Nokogiri
+    'libssl-dev',          # Needed by OpenSSL
+    'libncurses-dev',      # Needed by Curses in Stdlib
+  ]
 end
 
