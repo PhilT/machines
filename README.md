@@ -43,7 +43,7 @@ Configuration management is a complex topic. I wanted to reduce some of the vari
 Overview
 -----------------------------------------------------------
 
-The top level script is the `Machinesfile`. This contains the packages to include. Packages contain the commands to run. Default packages are provided by Machines. Default packages can be overridden and new ones created. Feel free to fork Machines and your add packages. Send a pull request and if they are tested they'll be added to the next release.
+The top level script is the `Machinesfile`. This contains the packages to include. Packages contain the commands to run. Default packages are provided by Machines. Default packages can be overridden and new ones created.
 
 Commands are added to a queue with `sudo` or `run`. [lib/packages](https://github.com/PhilT/machines/tree/master/lib/packages) contains the packages you can add in the `Machinesfile` in Machines. Once the build starts the commands are run and shown with the current progress.
 
