@@ -27,16 +27,18 @@ http {
   gzip_types        text/plain text/css application/x-javascript text/xml
                     application/xml application/xml+rss text/javascript;
 
-  client_body_buffer_size 128k;   # Size of the memory buffer that will be written to before using a temporary file
-  # client_max_body_size 1M;      # Max content that will be served. Increase if media content is to be served
-  # client_body_timeout 60;       # Time allowed to respond within in seconds. Increase if requests are expected to take a long time
+  client_body_buffer_size 128k; # Buffer size that will be written to before using a temporary file
+  client_max_body_size 5M;      # Max content to be served. Increase if media content is to be served
+  # client_body_timeout 60;     # Time allowed to respond in seconds. Increase for long requests
 
   passenger_root <%= $conf.passenger.root %>;
   passenger_ruby <%= $conf.passenger.ruby %>;
 
-  passenger_max_pool_size 8;                # Max number of simultaneous instances
-  passenger_pool_idle_time 0;               # Do not shutdown instances unless needed
-  passenger_pre_start http://localhost;     # Prestart RiskPlatform
+  passenger_max_pool_size 8;                      # Max number of simultaneous instances
+  passenger_pool_idle_time 0;                     # Do not shutdown instances unless needed
+  <% $conf.webapps.each do |app| %>
+    passenger_pre_start http://<%= app.server_name %>;  # Hit the server so it's ready
+  <% end %>
 
   include <%= File.join($conf.webserver.path, $conf.webserver.servers_dir, '*.conf') %>;
 }

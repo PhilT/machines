@@ -1,9 +1,11 @@
 <% $conf.webapps.each do |appname, app| %>
   <% if app.monitor_delayed_job %>
-    <% script = "/usr/bin/env RAILS_ENV=#{$conf.environment} #{app.path}/current/script" %>
+    <% path = "PATH=#{$conf.user_home}/.rbenv/bin:#{$conf.user_home}/.rbenv/shims:$PATH" %>
+    <% env = "RAILS_ENV=#{$conf.environment}" %>
+    <% script = "cd #{app.path}/current && #{path} #{env} bundle exec script/delayed_job" %>
     check process delayed_job with pidfile <%= app.path %>/shared/pids/delayed_job.pid
-          start program = "<%= script %>/delayed_job start"
-          stop program = "<%= script %>/delayed_job stop"
+          start program = "/bin/bash -c '<%= script %> start'" as uid <%= $conf.user %> and gid <%= $conf.user %>
+          stop program = "/bin/bash -c '<%= script %> stop'"
   <% end %>
 <% end %>
 

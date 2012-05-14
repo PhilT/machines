@@ -24,10 +24,12 @@ webapps:
       server_name: staging.condensd.com
       password:
       monitor_delayed_job: true
+      monit_web: true
     production:
       server_name: condensd.com
       password:
       monitor_delayed_job: true
+      monit_web: true
 
   fountain:
     scm: git://github.com/PhilT/fountain.git
