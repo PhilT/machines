@@ -26,18 +26,19 @@ module Machines
       $conf.webapps = {}
       webapps.each do |app_name, settings|
         next unless apps.nil? || apps.include?(app_name)
-        environment = settings[$conf.environment.to_s] ||
-          raise(ArgumentError, "#{app_name} has no settings for #{$conf.environment} environment")
+        environment = settings[$conf.environment.to_s] || raise(ArgumentError, "#{app_name} has no settings for #{$conf.environment}")
         settings['name'] = app_name
         settings['path'] = File.join($conf.appsroot, app_name)
         public_path = "#{$conf.environment == 'development' ? '' : 'current/'}public"
         settings['root'] = File.join(settings['path'], public_path)
-        if environment['ssl']
-          settings['ssl_key'] = environment['ssl'] + '.key'
-          settings['ssl_crt'] = environment['ssl'] + '.crt'
-        end
 
         environment.each { |k, v| settings[k] = v }
+        if settings['cert']
+          settings['ssl'] = true unless settings['ssl']
+          settings['ssl_key'] = settings['cert'] + '.key'
+          settings['ssl_crt'] = settings['cert'] + '.crt'
+        end
+
         $conf.webapps[app_name] = AppBuilder.new(settings.reject{|k, v| v.is_a?(Hash) })
       end
     end

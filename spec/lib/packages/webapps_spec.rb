@@ -12,7 +12,6 @@ describe 'packages/webapps' do
         'name' => 'application',
         'url' => 'github url',
         'path' => '/home/users/application',
-        'enable_ssl' => nil,
         'db_password' => 'pa55',
         'server_name' => 'app.dev'
       )
@@ -28,7 +27,7 @@ describe 'packages/webapps' do
     $conf.environment = 'production'
     eval_package
     $conf.commands.map(&:info).join("\n").must_equal [
-      "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",
+      "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb. Copies SSL certs.",
       "SUDO   mkdir -p nginx_path/servers",
       "RUN    mkdir -p /home/users/application/releases",
       "RUN    mkdir -p /home/users/application/shared/config",
@@ -49,7 +48,7 @@ describe 'packages/webapps' do
     eval_package
     commandline = $conf.commands.map(&:info).join("\n")
     commandline.must_equal [
-      "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",
+      "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb. Copies SSL certs.",
       "SUDO   mkdir -p nginx_path/servers",
       "RUN    git clone --quiet --branch master github.com/project /home/users/application",
       "RUN    cd /home/users/application && $HOME/.rbenv/bin/rbenv exec bundle",

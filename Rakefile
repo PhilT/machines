@@ -1,3 +1,4 @@
+require 'bundler'
 require 'yard'
 require 'highline/import'
 require 'rake'

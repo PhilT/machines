@@ -24,9 +24,9 @@ webapps:
     test:
       setting: setting
       password: secure
-      ssl: signed
+      cert: signed
 EOF
-      File.open('webapps.yml', 'w') {|f| f.puts @settings.gsub("      ssl: signed\n", '') }
+      File.open('webapps.yml', 'w') {|f| f.puts @settings.gsub("      cert: signed\n", '') }
     end
 
     it 'loads the app settings for selected apps' do
@@ -56,7 +56,8 @@ EOF
           :password => 'secure',
           :ssl_key => 'signed.key',
           :ssl_crt => 'signed.crt',
-          :ssl => 'signed'
+          :cert => 'signed',
+          :ssl => true
         )
       })
     end

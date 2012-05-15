@@ -58,7 +58,9 @@ webapps:
     staging:
       server_name: staging.velocitytracking.com
       password:
+      cert: selfsigned
     production:
       server_name: velocitytracking.com
       password:
+      cert: velocitytracking.com
 
