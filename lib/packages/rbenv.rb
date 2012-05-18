@@ -13,15 +13,16 @@ task :rbenv, "Install ruby-build, rbenv, ruby #{$conf.ruby.version} and Bundler"
   #
   run git_clone 'git://github.com/sstephenson/rbenv.git', :to => '~/.rbenv'
   #NOTE: This path will not be available to the session as Net::SSH uses a non-login shell
-  run append 'PATH=".git/safe/../../.bin:$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"', :to => '~/.profile'
+  path = 'PATH=.git/safe/../../.bin:$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH'
+  run append path, :to => '~/.profile'
   rbenv = '$HOME/.rbenv/bin/rbenv'
 
   run "#{rbenv} install #{$conf.ruby.full_version}", check_command("#{rbenv} versions", $conf.ruby.version)
-  run "#{rbenv} rehash", check_command('which gem', '.rbenv/shims/gem')
+  run "#{rbenv} rehash", check_command("#{path} which gem", '.rbenv/shims/gem')
   run "#{rbenv} global #{$conf.ruby.full_version}", check_command("#{rbenv} exec ruby -v", $conf.ruby.version)
 
   run write "gem: --no-rdoc --no-ri", :to => '.gemrc', :name => '.gemrc'
   run "#{rbenv} exec gem install bundler", check_command("#{rbenv} exec gem list", 'bundler')
-  run "#{rbenv} rehash", check_command('which bundle', '.rbenv/shims/bundle')
+  run "#{rbenv} rehash", check_command("#{path} which bundle", '.rbenv/shims/bundle')
 end
 

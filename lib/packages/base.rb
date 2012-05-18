@@ -8,7 +8,7 @@ task :base, 'Install base packages for compiling Ruby and libraries' do
     'libxml2-dev',         # Needed by Nokogiri
     'libxslt1-dev',        # Needed by Nokogiri
     'libssl-dev',          # Needed by OpenSSL in Nginx
-    'libncurses-dev',      # Needed by Curses in Stdlib
+    'libncurses5-dev',      # Needed by Curses in Stdlib
   ]
 end
 

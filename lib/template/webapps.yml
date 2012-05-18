@@ -17,6 +17,8 @@ webapps:
   condensd:
     scm: git://github.com/PhilT/fountain.git
     branch: condensd
+    ssl: false
+    write_yml: true
     development:
       server_name: condensd.dev
       password: condensd
@@ -35,6 +37,8 @@ webapps:
     scm: git://github.com/PhilT/fountain.git
     database: fountain
     username: fountain
+    ssl: false
+    write_yml: true
     development:
       server_name: fountainwiki.dev
       password: fountain
@@ -52,6 +56,8 @@ webapps:
     scm: git://github.com/PhilT/velocity.git
     database: velocity
     username: velocity
+    ssl: false
+    write_yml: true
     development:
       server_name: velocitytracking.dev
       password: velocity

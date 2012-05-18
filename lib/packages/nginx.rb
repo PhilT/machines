@@ -8,12 +8,12 @@ task :nginx, 'Download and configure Nginx' do
     "make install"
   ].join(' && ')
 
+
   sudo commands, check_file("#{$conf.webserver.path}/sbin/nginx")
 
-  sudo create_from 'nginx/nginx.conf.erb', :to => "#{$conf.webserver.path}/conf/nginx.conf"
+  sudo create_from 'nginx/nginx.conf.erb', :to => "#{$conf.webserver.path}/#{$conf.webserver.conf_path}/nginx.conf"
 
   sudo create_from 'nginx/upstart.conf.erb', :to => "/etc/init/nginx.conf"
-  sudo 'initctl reload-configuration'
 end
 
 task :monit_nginx, 'Add monit configuration for Nginx', :if => [:monit, :nginx] do

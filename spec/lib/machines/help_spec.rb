@@ -4,7 +4,7 @@ describe Machines::Help do
   subject { Machines::Help.new }
 
   describe 'actions' do
-    it { subject.actions.must_equal ['htpasswd', 'new', 'dryrun', 'tasks', 'build', 'packages', 'override'] }
+    it { subject.actions.must_equal ['htpasswd', 'new', 'dryrun', 'tasks', 'build', 'list', 'packages', 'override'] }
   end
 
   describe 'syntax' do

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'packages/nginx' do
   before(:each) do
     load_package('nginx')
-    $conf.from_hash(:webserver => {:name => 'nginx', :version => '1.0.2', :path => 'nginx_path',
+    $conf.from_hash(:webserver => {:name => 'nginx', :version => '1.0.2', :path => 'nginx_path', :conf_path => 'conf',
       :url => 'nginx_url/package', :src_path => '/usr/local/src/nginx-1.2.3', :modules => '--with-http_ssl_module'})
     $conf.from_hash(:passenger => {:nginx => '/passenger/path/ext/nginx'})
     FileUtils.mkdir_p 'nginx'
@@ -23,8 +23,7 @@ describe 'packages/nginx' do
       "RUN    rm -rf /tmp/nginx.conf",
       "UPLOAD buffer from nginx/upstart.conf.erb to /tmp/nginx.conf",
       "SUDO   cp -rf /tmp/nginx.conf /etc/init/nginx.conf",
-      "RUN    rm -rf /tmp/nginx.conf",
-      "SUDO   initctl reload-configuration"
+      "RUN    rm -rf /tmp/nginx.conf"
     ].join("\n")
   end
 
@@ -40,8 +39,7 @@ describe 'packages/nginx' do
       "RUN    rm -rf /tmp/nginx.conf",
       "UPLOAD buffer from nginx/upstart.conf.erb to /tmp/nginx.conf",
       "SUDO   cp -rf /tmp/nginx.conf /etc/init/nginx.conf",
-      "RUN    rm -rf /tmp/nginx.conf",
-      "SUDO   initctl reload-configuration"
+      "RUN    rm -rf /tmp/nginx.conf"
     ].join("\n")
   end
 end

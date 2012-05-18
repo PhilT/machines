@@ -14,7 +14,7 @@ describe 'packages/base' do
       "SUDO   apt-get -q -y install libxml2-dev",
       "SUDO   apt-get -q -y install libxslt1-dev",
       "SUDO   apt-get -q -y install libssl-dev",
-      "SUDO   apt-get -q -y install libncurses-dev"
+      "SUDO   apt-get -q -y install libncurses5-dev"
     ].join("\n")
   end
 end

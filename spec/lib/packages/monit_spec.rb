@@ -19,7 +19,6 @@ describe 'packages/monit' do
       "UPLOAD monit/upstart.conf to /tmp/monit.conf",
       "SUDO   cp -rf /tmp/monit.conf /etc/init/monit.conf",
       "RUN    rm -rf /tmp/monit.conf",
-      "SUDO   initctl reload-configuration",
       "UPLOAD buffer from monit/monitrc.erb to /tmp/monitrc",
       "SUDO   cp -rf /tmp/monitrc /etc/monit/monitrc",
       "RUN    rm -rf /tmp/monitrc",
@@ -28,8 +27,7 @@ describe 'packages/monit' do
       "RUN    rm -rf /tmp/system",
       "UPLOAD monit/conf.d/ssh to /tmp/ssh",
       "SUDO   cp -rf /tmp/ssh /etc/monit/conf.d/ssh",
-      "RUN    rm -rf /tmp/ssh",
-      "SUDO   echo dummy"
+      "RUN    rm -rf /tmp/ssh"
     ].join("\n")
   end
 end

@@ -6,7 +6,6 @@ task :webapps, 'Sets up Web apps in config/webapps.yml using app_server.conf.erb
       bundle_command =  $conf.ruby.gems_path =~ /^.rbenv/ ? "$HOME/.rbenv/bin/rbenv exec bundle" : "bundle"
       run "cd #{app.path} && #{bundle_command}", "cd #{app.path} && #{bundle_command} check #{echo_result}"
       run "cd #{app.path} && #{bundle_command} --binstubs=.bin", check_dir("#{app.path}/.bin")
-      run "$HOME/.rbenv/bin/rbenv rehash", check_command('echo $?', '0') if $conf.ruby.gems_path =~ /^.rbenv/
     else
       %w(releases shared/config shared/system shared/log).each do |dir|
         run mkdir File.join(app.path, dir)
@@ -14,15 +13,17 @@ task :webapps, 'Sets up Web apps in config/webapps.yml using app_server.conf.erb
     end
 
     if app.ssl && File.exists?("certificates/#{app.ssl_crt}") && File.exists?("certificates/#{app.ssl_key}")
-      sudo upload "certificates/#{app.ssl_crt}", "/usr/local/nginx/conf/#{app.ssl_crt}"
-      sudo upload "certificates/#{app.ssl_key}", "/usr/local/nginx/conf/#{app.ssl_key}"
+      webserver_conf_path = File.join $conf.webserver.path, $conf.webserver.conf_path
+      sudo upload "certificates/#{app.ssl_crt}", "#{webserver_conf_path}/#{app.ssl_crt}"
+      sudo upload "certificates/#{app.ssl_key}", "#{webserver_conf_path}/#{app.ssl_key}"
+      sudo chmod '600', "#{webserver_conf_path}/#{app.ssl_key}"
     end
     conf_name = "#{app.name}.conf"
     conf_path = File.join($conf.webserver.path, $conf.webserver.servers_dir, conf_name)
     sudo create_from "#{$conf.webserver.name}/app_server.conf.erb", :settings => app, :to => conf_path
     sudo mkdir "/var/log/#{$conf.webserver.name}"
 
-    except(:environment => :development) { run write_database_yml app }
+    run write_database_yml app if app.write_yml && $conf.environment != 'development'
     sudo append "127.0.0.1 #{app.server_name}", :to => '/etc/hosts'
   end
 end

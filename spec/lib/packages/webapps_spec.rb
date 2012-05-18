@@ -37,9 +37,15 @@ describe 'packages/webapps' do
       "SUDO   cp -rf /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -rf /tmp/application.conf",
       "SUDO   mkdir -p /var/log/nginx",
-      'UPLOAD buffer from database.yml to /home/users/application/shared/config/database.yml',
       'SUDO   echo "127.0.0.1 app.dev" >> /etc/hosts'
     ].join("\n")
+  end
+
+  it 'creates a database.yml when requested' do
+    $conf.environment = 'production'
+    $conf.webapps['application'].write_yml = true
+    eval_package
+    $conf.commands.map(&:info).join("\n").must_match 'UPLOAD buffer from database.yml to /home/users/application/shared/config/database.yml'
   end
 
   it "doesn't make app structure when target is a development machine" do
@@ -53,7 +59,6 @@ describe 'packages/webapps' do
       "RUN    git clone --quiet --branch master github.com/project /home/users/application",
       "RUN    cd /home/users/application && $HOME/.rbenv/bin/rbenv exec bundle",
       "RUN    cd /home/users/application && $HOME/.rbenv/bin/rbenv exec bundle --binstubs=.bin",
-      "RUN    $HOME/.rbenv/bin/rbenv rehash",
       "UPLOAD buffer from nginx/app_server.conf.erb to /tmp/application.conf",
       "SUDO   cp -rf /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -rf /tmp/application.conf",
