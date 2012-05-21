@@ -6,17 +6,20 @@ stop on runlevel [!2345]
 env DAEMON=<%= $conf.webserver.path %>/sbin/nginx
 env PID=/var/run/nginx.pid
 
+# Needed to allow Nginx to start however, the wrong PID will be tracked
 expect fork
-respawn
-respawn limit 10 5
-#oom never
 
+# Test the nginx configuration and exit if it is incorrect
 pre-start script
         $DAEMON -t
-        if [ $? -ne 0 ]
-                then exit $?
-        fi
 end script
 
+# Ensure nginx is shutdown gracefully
+# Upstart will be tracking the wrong PID so the following is needed to stop nginx
+post-stop script
+    start-stop-daemon --stop --pidfile $PID --name nginx --exec $DAEMON --signal QUIT
+end script
+
+# Start Nginx
 exec $DAEMON
 
