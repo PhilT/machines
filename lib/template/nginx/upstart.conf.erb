@@ -9,7 +9,7 @@ env PID=/var/run/nginx.pid
 # Needed to allow Nginx to start however, the wrong PID will be tracked
 expect fork
 
-# Test the nginx configuration and exit if it is incorrect
+# Test the nginx configuration (Upstart will exit if this fails)
 pre-start script
         $DAEMON -t
 end script
