@@ -18,8 +18,43 @@ EC2 - Look at assigning and freeing elastic IP addresses
   * Set up minimal Ubuntu on EC2
   * Must allow multiple dev machines to access cloud (so multiple SSH keys must be assigned)
 
+Package and Task Tasks
+----------------------------------------
+
+COMMAND: view task/package
+Test tasks can be run individually - e.g. passenger passenger_nginx nginx
+Attempt to document or determine with code packages that cannot be run more than once on the same install as they would duplicate data
+Display additional install notes for a particular package (at the end of installation) - e.g. printer setup requires Windows share to be setup
+CODE/DOC: Describe difference between package and task or merge packages with tasks if possible
+BUG: Report error if task is nested
+?? Define packages as a group of tasks?
+
+
 Misc Tasks
 ----------------------------------------
+
+Remove percentage from progress once command has completed
+DOC: How webapps environment specific settings override default settings and how to set your own
+DOC: Main $conf settings e.g. user, machine, webapps, environment
+DOC: All config files
+DOC: Why we use ~/.profile (with links)
+On initial SSH connection to machine, test we have an Internet connection. Fail if not.
+Add support for non-webapps (git_clone && bundle && rake)
+Add the check that was run to `CHECK_FAILED/CHECK_PASSED`
+Output progress to log/<machine_name>_progress.log
+Rename output log to log/<machine_name>_output.log
+Overridable config templates (like packages) - e.g. instead of nginx/ in project use a default but allow overrides
+DOC: machines desc <package> - Should display a detailed description of the package
+machines list - Display a list of machines to build (or maybe machines build/dryrun with no machinename)
+?? base package may not be needed on DB installs
+?? Default path for Nginx install is /usr/local - Is it installed correctly for non-default paths?
+?? I have a new webapp - How can I add it to a server that has already been installed?
+DRY up per user config by creating a "common_user" config that all users pull default config from
+BUG: Uploads throw exception if local file is missing - Get upload to check file existence when adding to queue
+BUG: CTRL+C doesn't quite exit cleanly
+Check $conf.db_server is picked up and used to write database.yml on qa/staging/production
+
+
 
 Allow $conf.webapps[app].path to be overridden from webapps.yml
 ?? Does webapps.yml structure get preserved? (e.g. when modifying keys and resaving)
