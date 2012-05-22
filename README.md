@@ -149,26 +149,33 @@ Some of the settings set and used by Machines are:
 Take a look at `template/*.yml` for more.
 
 
-Setting up the test Machines virtual machine
+Setting up a test VM
 -----------------------------------------------------------
 
-* Start your virtualization software (I use VirtualBox)
-  * Create a new VM. I name mine `machinesvm` (as it's used by the tests)
-  * Select Ubuntu or Ubuntu x64 as the OS (I mostly use x64 these days)
-  * Go to Network and add a Bridged Adapter and a Host-only Adapter
-  * Go to Storage, select the Empty CD, click the CD icon on the far right and find the image (in /tmp)
-* Start the VM, select Install and follow the prompts
-* Accept default hostname (this will be set later)
-* Enter 'user' for username and 'password' for the password
-* And add openssh
+Make sure you've downloaded one of the ISOs from the list in *Prepare the target machine*.
 
-      sudo apt-get -y install openssh-server && ifconfig
-
-* On your local machine add an entry to the hosts file (change VM_IP_ADDRESS to the ip address of the VM)
-
-      sudo sh -c 'echo VM_IP_ADDRESS machinesvm >> /etc/hosts'
-
-* Finally, take a snapshot of the VM and name it 'FreshInstall'. Handy when testing.
+1. Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+1. Oracle VirtualBox -> New
+  * Name: machinesvm
+  * Operating System: Linux
+  * Version: Ubuntu (64 bit)
+1. Settings -> Network -> Adapter 2 -> Enable Network Adapter
+  * Attached to: Host-only Adapter
+1. Start -> Media Source Folder Icon -> mini.iso
+1. Installer boot menu -> Install -> Accept defaults except for:
+  * eth0 primary interface
+  * Full name for the new user: user
+  * Username for your account: user
+  * Choose a password for the new user: password
+  * Re-enter password to verify: password
+  * YES to partition disks (choose partition entire disk if asked)
+  * Add OpenSSH from application installer menu
+1. Devices -> CD/DVD Devices -> Uncheck mini.iso
+1. Reboot
+  * ubuntu Login: user
+  * Password: password
+1. Run `ifconfig` and make a note of eth1 inet addr
+1. Take a snapshot (restore before each test run)
 
 
 What's happening under the hood
