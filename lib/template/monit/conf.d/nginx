@@ -1,5 +1,5 @@
 check process nginx with pidfile /var/run/nginx.pid
-  start program = "sbin/start nginx"
-  stop program  = "sbin/stop nginx"
+  start program = "/sbin/start nginx"
+  stop program  = "/sbin/stop nginx"
   group www
 
