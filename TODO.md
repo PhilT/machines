@@ -1,11 +1,3 @@
-WHAT IS MY FOCUS?
-----------------------------------------
-* Look at commandline_spec
-* Get existing test working (stop writing additional code and park it)
-* Get machines running with MiniSpec
-* Run a machines install on a VM
-* Should I add source bashrc?
-
 Cloud
 ----------------------------------------
 Use EC2 IP address for connecting to database servers
@@ -39,26 +31,15 @@ force https
 
 Should be able to run Passenger install easily for new versions
 Can more files be ERB templates? Standardise. Need examples (can't remember what they were)
-Add monit to inittab [SERVER]
-Handle Net::SSH::HostKeyMismatch errors (need to delete existing key)
 webapps has gaps in testing (e.g. ssl)
 escape $$ in passwords
 turn off debug output by default
-real ssl certs
-Need to ignore hostname server error (causes check to fail)
-add a package to evmachines to add the extra hosts
-Need to test ERB templates
 DOC: webapps.yml loaded into $conf
-DOC: Adding selfsigned key
-Keyring asks for a password when using docky Gmail notification [DEV]
-set show hidden and show binary in gedit [DEV]
 MySQL root pass is not set properly
 Recommended practice for overwritting project with new template. Use Git
 Set cron to sensible times /etc/crontab [DEV]
 New check - check_command, runs a command and greps response. Replace occurences
 Need a way to see optional tasks that are not run as part of full build
-Make template more generic
-Add CPU monitor to docky [DEV]
 
 Would `set :variable_name, value` be better than `$conf.variable = value`?
 Need a better DSL to handle $conf and also paths File.join is so verbose
