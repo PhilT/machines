@@ -15,6 +15,7 @@
 ---
 webapps:
   condensd:
+    title: 'Condensd'
     scm: git://github.com/PhilT/fountain.git
     branch: condensd
     ssl: false
@@ -34,6 +35,7 @@ webapps:
       monit_web: true
 
   fountain:
+    title: 'Fountain'
     scm: git://github.com/PhilT/fountain.git
     database: fountain
     username: fountain
@@ -53,6 +55,7 @@ webapps:
       monitor_delayed_job: true
 
   velocitytracking:
+    title: 'Velocity'
     scm: git://github.com/PhilT/velocity.git
     database: velocity
     username: velocity
