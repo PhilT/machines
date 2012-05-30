@@ -1,5 +1,6 @@
 task :gedit, 'Install basic programmers editor and set associations' do
   sudo install [
+    'python-gi-cairo',  # gedit throws exceptions when closing files without this
     'gedit',
   ]
 
