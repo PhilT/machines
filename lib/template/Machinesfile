@@ -6,10 +6,10 @@ package :timezone
 package :hosts
 package :base
 
-only(:machine_name => 'phil_desktop') { package :virtualbox_guest }
+package :virtualbox_guest if $conf.machine.name == 'phil_desktop'
 
 only :roles => :app do
-  package :monit unless $conf.environment == :development
+  package :monit unless $conf.environment == 'development'
   package :dotfiles
   package :git
   package :rbenv
@@ -25,14 +25,14 @@ end
 
 only :roles => :app do
   package :webapps
-  package :postfix unless $conf.environment == :development
+  package :postfix unless $conf.environment == 'development'
 end
 
 only :user => 'phil' do
   package :usb
   package :sudo_mods
   package :subtle
-  sudo install ['chromium-browser']
+  task(:chromium, 'Install Chromium') { sudo install ['chromium-browser'] }
   package :firefox
   package :gedit
   package :unison

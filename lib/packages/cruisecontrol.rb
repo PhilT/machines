@@ -14,6 +14,8 @@ task :cruisecontrol, 'Install, configure and set to start on boot' do
 
   sudo copy 'cruisecontrol.rb/daemon/cruise', '/etc/init.d/cruise'
   sudo "update-rc.d cruise defaults"
-  sudo append "export CRUISE_HOME=#{$conf.user_home}/cruisecontrol.rb", :to => '/etc/profile'
+  sudo append "export CRUISE_HOME=#{$conf.user_home}/cruisecontrol.rb", to: '/etc/profile'
+
+  run append "ActionMailer::Base.smtp_settings = {address: #{$conf.mail.address}, domain: #{$conf.mail.domain}}", to: ".cruise/site_config.rb"
 end
 

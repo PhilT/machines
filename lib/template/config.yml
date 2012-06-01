@@ -28,6 +28,8 @@ login_theme: dark
 
 mail:
   domain: example.com
+  address: mail
+
 
 monit:
   mailto: admin@example.com
