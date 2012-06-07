@@ -29,7 +29,6 @@ only :roles => :app do
 end
 
 only :user => 'phil' do
-  package :usb
   package :sudo_mods
   package :subtle
   task(:chromium, 'Install Chromium') { sudo install ['chromium-browser'] }

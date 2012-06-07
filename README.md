@@ -98,9 +98,15 @@ configuration settings for various programs, your `Machinesfile` and the various
 
 ### Check the Machinesfile
 
-    ssh-keygen -R <host ip> # remove host from known_hosts file (handy when testing)
     machines dryrun <machine>
     cat log/output.log
+
+
+### Check the machine
+
+    ssh-keygen -R <host ip> # remove host from known_hosts file (handy when testing)
+    $ ssh <IP ADDRESS>      # Make sure you can connect to the machine
+
 
 ### Build the machine
 
@@ -143,8 +149,12 @@ Some of the settings set and used by Machines are:
 
 * `$conf.commands` - All the commands that are to be run
 * `$conf.tasks` - Names of the tasks - Used to check dependencies and display tasks the help
-* `$conf.user` - The selected user settings
+* `$conf.user` - The selected user name
+* `$conf.user_home` - Users home folder e.g. `/home/phil`
 * `$conf.machine` - Configuration for the selected machine
+* `$conf.machine_name` - Name of the selected machine
+* `$conf.environment` - Environment of the machine (also at `$conf.machine.environment`)
+* `$conf.webapps` - A hash of webapps keyed from the name of the webapp specified in webapps.yml
 
 Take a look at `template/*.yml` for more.
 
@@ -191,10 +201,11 @@ What's happening under the hood
 Limitations
 -----------------------------------------------------------
 * Only one user per machine. Although other users could be setup with additional build runs.
+* One environment per machine - Again additional machines could be configured to use the same physical machine (although could be problems with some environment settings)
 * Servers use www (by default) for nginx/apache, passenger and deployments
 * The system has been designed to allow a certain flexibility in the configuration although some things
   may not yet be totally configurable it should be possible to add or modify the relevant package
-* We are currently focused on Ruby 1.9.2, Rails 3 and Passenger 3
+* We are currently focused on Ruby 1.9.2 (Moving to 1.9.3 soon), Rails 3 and Passenger 3
 * Some commands may not properly escape quotes when used with sudo (e.g. append and replace). This may be addressed in a future release
 
 

@@ -14,6 +14,5 @@ task :productivity, 'Install some productivity apps and set associations'do
   run append 'image/png=gimp.desktop', :to => '.local/share/applications/mimeapps.list'
   run append 'image/jpeg=gimp.desktop', :to => '.local/share/applications/mimeapps.list'
   run append 'image/svg=inkscape.desktop', :to => '.local/share/applications/mimeapps.list'
-
 end
 

@@ -11,18 +11,22 @@ describe 'packages/cruisecontrol' do
       )
     }
     $conf.from_hash(:mail => {address: 'mailserver', domain: 'domain.net' })
+    $conf.user = 'user'
+    $conf.user_home = '/home/user'
   end
 
   it 'adds the following commands' do
     eval_package
     $conf.commands.map(&:info).join("\n").must_equal [
       "TASK   cruisecontrol - Install, configure and set to start on boot",
+      "RUN    git clone --quiet https://github.com/thoughtworks/cruisecontrol.rb.git",
       "RUN    cd cruisecontrol.rb &&  bundle",
       "RUN    cd cruisecontrol.rb &&  ruby ./cruise add Application -r github.com/project",
       "SUDO   cp -rf cruisecontrol.rb/daemon/cruise /etc/init.d/cruise",
       "SUDO   update-rc.d cruise defaults",
-      "SUDO   echo \"export CRUISE_HOME=/cruisecontrol.rb\" >> /etc/profile",
-      "RUN    echo \"ActionMailer::Base.smtp_settings = {address: mailserver, domain: domain.net}\" >> .cruise/site_config.rb"
+      "SUDO   sed -i \"s/CRUISE_USER = .*/CRUISE_USER = 'user'/\" /etc/init.d/cruise",
+      "SUDO   sed -i \"s/CRUISE_HOME = .*/CRUISE_HOME = '\\/home\\/user\\/cruisecontrol.rb'/\" /etc/init.d/cruise",
+      "RUN    echo \"ActionMailer::Base.smtp_settings = {address: 'mailserver', domain: 'domain.net'}\" >> .cruise/site_config.rb"
     ].join("\n")
   end
 end

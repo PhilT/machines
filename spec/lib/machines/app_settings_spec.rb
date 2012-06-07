@@ -62,9 +62,9 @@ EOF
       })
     end
 
-    it 'raises when settings not included for specified environment' do
+    it 'does not fail when settings not included for specified environment' do
       File.open('webapps.yml', 'w') {|f| f.puts "---\nwebapps:\n  app:\n    path: path\n" }
-      lambda{ load_app_settings(['app']) }.must_raise(ArgumentError, 'app has no settings for test environment')
+      load_app_settings(['app'])
     end
 
     it 'loads settings for all apps when none specified' do

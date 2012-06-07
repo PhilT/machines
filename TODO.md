@@ -1,3 +1,15 @@
+TODO next
+----------------------------------------
+
+$conf.machine_name should be $conf.machine.name
+Add support for non-webapps (git_clone && bundle && rake)
+Support missing environment (e.g. scm machine)
+Check environment is a string
+Append (if not exist) or alter (if exists) in file
+Move passwords to gpg file
+`machines dryrun/build` with no machine name should list the machines available
+dotfiles package needs rename/reorg. ssh folder should always be created
+
 Cloud
 ----------------------------------------
 Use EC2 IP address for connecting to database servers
@@ -22,8 +34,8 @@ Package and Task Tasks
 ----------------------------------------
 
 COMMAND: view task/package
-Test tasks can be run individually - e.g. passenger passenger_nginx nginx
-Attempt to document or determine with code packages that cannot be run more than once on the same install as they would duplicate data
+Support running multiple tasks - e.g. `machines build passenger passenger_nginx nginx`
+Any methods other than `append` that cannot be repeatedly run?
 Display additional install notes for a particular package (at the end of installation) - e.g. printer setup requires Windows share to be setup
 CODE/DOC: Describe difference between package and task or merge packages with tasks if possible
 BUG: Report error if task is nested
@@ -35,11 +47,9 @@ Misc Tasks
 
 Remove percentage from progress once command has completed
 DOC: How webapps environment specific settings override default settings and how to set your own
-DOC: Main $conf settings e.g. user, machine, webapps, environment
 DOC: All config files
 DOC: Why we use ~/.profile (with links)
 On initial SSH connection to machine, test we have an Internet connection. Fail if not.
-Add support for non-webapps (git_clone && bundle && rake)
 Add the check that was run to `CHECK_FAILED/CHECK_PASSED`
 Output progress to log/<machine_name>_progress.log
 Rename output log to log/<machine_name>_output.log
@@ -54,15 +64,12 @@ BUG: Uploads throw exception if local file is missing - Get upload to check file
 BUG: CTRL+C doesn't quite exit cleanly
 Check $conf.db_server is picked up and used to write database.yml on qa/staging/production
 
-
-
 Allow $conf.webapps[app].path to be overridden from webapps.yml
 ?? Does webapps.yml structure get preserved? (e.g. when modifying keys and resaving)
 Fix guard notifications
 
 Enable YAML to refer to other settings in the same file
 development machines should clone repos
-force https
 
 Should be able to run Passenger install easily for new versions
 Can more files be ERB templates? Standardise. Need examples (can't remember what they were)

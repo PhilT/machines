@@ -23,7 +23,7 @@
 #     address: IP or DNS name of the machine (this is populated automatically when creating EC2 machines)
 #     user: User to login as and to identify the  users/ folder to use
 #     environment: Rails.env to use
-#     apps: An array of apps to setup on this machine (if nil sets up all)
+#     apps: An array of app names to setup on this machine (nil for all, [] for none)
 #     roles: Roles of the server (Roles known by standard template are: app, db, dbmaster, dbslave)
 #     db_server: Db server that will be used or replicated from (e.g. db_server: maindb).
 #     root_pass: Root password for db servers - Leave blank to generate one

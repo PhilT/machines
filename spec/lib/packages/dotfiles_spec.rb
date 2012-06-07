@@ -28,5 +28,17 @@ describe 'packages/dotfiles' do
       "RUN    chmod 600 .ssh/authorized_keys"
     ].join("\n")
   end
+
+  it 'sets RAILS_ENV when specified in set_rails_env_for' do
+    $conf.set_rails_env_for = ['railsenv']
+    eval_package
+    $conf.commands.map(&:info).join("\n").must_match /RUN    echo \"export RAILS_ENV=railsenv\" >> .profile/
+  end
+
+  it 'RAILS_ENV not set when not specified in set_rails_env_for' do
+    $conf.set_rails_env_for = ['some_other_env']
+    eval_package
+    $conf.commands.map(&:info).join("\n").wont_match /RUN    echo \"export RAILS_ENV=railsenv\" >> .profile/
+  end
 end
 

@@ -12,8 +12,8 @@ task :dotfiles, "Upload files in users/#{username}/dotfiles, prepend a dot and s
     run "ssh-keyscan -H #{host} >> $HOME/.ssh/known_hosts"
   end if $conf.hosts
 
-  run append "export RAILS_ENV=#{$conf.environment}", :to => '.profile'
-  run append "export CDPATH=#{$conf.appsroot}", :to => '.profile'
+  run append "export RAILS_ENV=#{$conf.environment}", to: '.profile' if $conf.set_rails_env_for.nil? || $conf.set_rails_env_for.include?($conf.environment)
+  run append "export CDPATH=#{$conf.appsroot}", to: '.profile'
 
   authorized_key_file = "users/#{username}/authorized_keys"
   if File.exists?(authorized_key_file)
