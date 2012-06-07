@@ -63,7 +63,7 @@ ruby:
   gems_path: .rbenv/versions/1.9.2-p290/lib/ruby/gems/1.9.1/gems
   executable: .rbenv/versions/1.9.2-p290/bin/ruby
 
-set_rails_envs_for:
+set_rails_env_for:
   - qa
   - staging
   - production
