@@ -21,7 +21,7 @@ module Machines
     # @option options [String] :to Adds an existing user to the specified group
     def add options
       required_options options, [:user, :to]
-      Command.new("usermod -a -G #{options[:to]} #{options[:user]}", check_string('', ''))
+      Command.new("usermod -a -G #{options[:to]} #{options[:user]}", check_command("groups #{options[:user]}", options[:to]))
     end
 
     # Sets gconf key value pairs
