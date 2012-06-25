@@ -30,5 +30,12 @@ describe 'packages/hosts' do
     eval_package
     $conf.commands.map(&:info).join("\n").must_equal (@hosts).join("\n")
   end
+
+  it 'does not add host when address is nil' do
+    $conf.from_hash(:hosts => {'some.domain' => nil})
+    @hosts.pop
+    eval_package
+    $conf.commands.map(&:info).join("\n").must_equal (@hosts).join("\n")
+  end
 end
 

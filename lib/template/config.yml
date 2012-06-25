@@ -20,7 +20,10 @@ cloud:
 # Note:
 #   localhost and local domain hosts are added by base package
 #   app URLS are added by webapps package
+#   hosts without addresses are only added to known_hosts file and not to /etc/hosts
 hosts:
+  github.com:
+  gist.github.com:
   server: 192.168.1.4
   host: 192.168.56.1
 

@@ -141,6 +141,7 @@ module Machines
     end
 
     # Update, upgrade, autoremove, autoclean apt packages
+    # TODO: Check that check_command really checks the correct command with 'echo $?'
     def upgrade
       %w(update upgrade autoremove autoclean).map do |command|
         Command.new("#{APTGET_QUIET} #{command}", check_command('echo $?', '0'))

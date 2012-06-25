@@ -7,7 +7,7 @@ task :hosts, 'Setup /etc/hosts' do
   sudo start 'hostname', :check => check_command('hostname', $conf.machine.hostname)
 
   $conf.hosts.to_hash.each do |host, address|
-    sudo append "#{address} #{host}", :to => '/etc/hosts'
+    sudo append "#{address} #{host}", :to => '/etc/hosts' if host && address
   end if $conf.hosts
 end
 

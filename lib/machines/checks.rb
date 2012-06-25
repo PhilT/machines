@@ -51,8 +51,12 @@ module Machines
       "test -L /etc/rc0.d/K20#{name} #{echo_result}"
     end
 
-    def check_command command, match
-      "#{command} | grep #{match} #{echo_result}"
+    def check_command command, match = nil
+      if match
+        "#{command} | grep #{match} #{echo_result}"
+      else
+        "#{command} #{echo_result}"
+      end
     end
   end
 end

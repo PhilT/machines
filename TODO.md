@@ -80,7 +80,6 @@ DOC: webapps.yml loaded into $conf
 MySQL root pass is not set properly
 Recommended practice for overwritting project with new template. Use Git
 Set cron to sensible times /etc/crontab [DEV]
-New check - check_command, runs a command and greps response. Replace occurences
 Need a way to see optional tasks that are not run as part of full build
 
 Would `set :variable_name, value` be better than `$conf.variable = value`?

@@ -95,6 +95,11 @@ describe 'Checks' do
     it do
       check_command('command', 'match').must_equal "command | grep match #{echo_result}"
     end
+
+    it do
+      check_command('command').must_equal "command #{echo_result}"
+    end
+
   end
 end
 
