@@ -1,8 +1,9 @@
-
 only :user => 'phil' do
-  task :workspace, 'Copies everything from local workspace folder to new machine' do
-    run upload '~/workspace', 'workspace'
-    run mkdir 'Documents Downloads Music Pictures Videos'
+  task :workspace, 'Setup home folders' do
+    %w(downloads music pictures reference videos).each do |folder|
+      run mkdir folder
+      run append "file://#{$conf.user_home}/#{folder} folder", to: '.gtk-bookmarks'
+    end
   end
 
   sudo install [
