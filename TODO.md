@@ -1,10 +1,7 @@
 TODO next
 ----------------------------------------
 
-$conf.machine_name should be $conf.machine.name
-Add support for non-webapps (git_clone && bundle && rake)
 Support missing environment (e.g. scm machine)
-Check environment is a string
 Append (if not exist) or alter (if exists) in file
 Move passwords to gpg file
 `machines dryrun/build` with no machine name should list the machines available
