@@ -1,7 +1,7 @@
 Machines - A custom Ubuntu system in less than 15 minutes
 ===========================================================
 
-Setup Ubuntu development and server **Machines** locally or in the cloud for hosting and developing in Ruby, Rails and related environments.
+Setup Ubuntu development and server **Machines** locally or in the cloud for developing and hosting Ruby, Rails and related environments.
 
 Run commands like:
 
@@ -18,7 +18,7 @@ Rerun the passenger_nginx install:
 Status
 -----------------------------------------------------------
 
-(May 2012)
+(June 2012)
 
 Working development and server builds.
 

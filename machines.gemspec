@@ -1,31 +1,6 @@
 require 'base64'
-
-require 'base64'
 $LOAD_PATH << 'lib'
 require 'machines/version.rb'
-
-@dependencies = []
-@development_dependencies = []
-@groups = []
-
-def self.source url
-end
-
-def self.gem name, options = {}
-  if @groups.select{|group| [:test, :development].include? group}
-    @development_dependencies << name
-  else
-    @dependencies << name
-  end
-end
-
-def self.group *names, &block
-  @groups = names
-  yield
-  @groups = []
-end
-
-eval File.read('Gemfile')
 
 Gem::Specification.new do |s|
   s.name        = 'machines'
@@ -39,11 +14,25 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.rubyforge_project = 'machines'
 
-  @dependencies.each do |name|
+  %w(activesupport app_conf highline i18n net-ssh net-scp).each do |name|
     s.add_dependency name
   end
 
-  @development_dependencies.each do |name|
+  %w(
+    bluecloth
+    guard
+    guard-bundler
+    guard-minitest
+    fakefs
+    fog
+    minitest
+    minitest-libnotify
+    mocha
+    rake
+    rev
+    simplecov
+    yard
+  ).each do |name|
     s.add_development_dependency name
   end
 

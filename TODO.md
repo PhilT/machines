@@ -8,7 +8,6 @@ Check environment is a string
 Append (if not exist) or alter (if exists) in file
 Move passwords to gpg file
 `machines dryrun/build` with no machine name should list the machines available
-dotfiles package needs rename/reorg. ssh folder should always be created
 
 Cloud
 ----------------------------------------
