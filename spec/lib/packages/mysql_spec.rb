@@ -30,7 +30,7 @@ describe 'packages/mysql' do
         "SUDO   apt-get -q -y install mysql-server",
         "SUDO   apt-get -q -y install mysql-client",
         "SUDO   apt-get -q -y install libmysqlclient-dev",
-        "RUN    service mysqld restart"
+        "RUN    service mysql restart"
       ]
     end
   end
