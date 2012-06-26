@@ -6,6 +6,6 @@ doc
 coverage
 log
 tmp
-
+Gemfile.lock
 .vmcontrol
 
