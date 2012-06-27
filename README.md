@@ -147,13 +147,16 @@ Machines uses a gem I wrote called [app_conf](https://github.com/PhilT/app_conf)
 to be loaded from YAML and also set using Ruby. Machines uses it both internally and for package settings.
 Some of the settings set and used by Machines are:
 
+* `$conf.appsroot` - Where applications are cloned
 * `$conf.commands` - All the commands that are to be run
+* `$conf.environment` - Environment of the machine (also at `$conf.machine.environment`)
+* `$conf.machine` - Configuration for the selected machine
+* `$conf.machine_name` - Name of the selected machine
+* `$conf.roles` - List of roles for selected machine (also available as `$conf.machine.roles`)
 * `$conf.tasks` - Names of the tasks - Used to check dependencies and display tasks the help
 * `$conf.user` - The selected user name
 * `$conf.user_home` - Users home folder e.g. `/home/phil`
-* `$conf.machine` - Configuration for the selected machine
-* `$conf.machine_name` - Name of the selected machine
-* `$conf.environment` - Environment of the machine (also at `$conf.machine.environment`)
+* `$conf.users` - A list of the available users
 * `$conf.webapps` - A hash of webapps keyed from the name of the webapp specified in webapps.yml
 
 Take a look at `template/*.yml` for more.

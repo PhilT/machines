@@ -1,0 +1,7 @@
+LogFile="/var/log/<%= $conf.webserver.name %>/<%= name %>.access.log"
+LogFormat=1
+SiteDomain="<%= server_name %>"
+HostAliases="localhost 127.0.0.1 <%= server_name %>"
+DNSLookup=1
+DirData="<%= $conf.appsroot %>/<%= name %>_stats/data"
+

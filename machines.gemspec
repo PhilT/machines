@@ -26,7 +26,6 @@ Gem::Specification.new do |s|
     fakefs
     fog
     minitest
-    minitest-libnotify
     mocha
     rake
     rev

@@ -1,10 +1,8 @@
 # Base folder where webapps are installed for each user
+# $conf.appsroot points to the current users root
 appsroots:
   phil: /home/phil/workspace
   www: /home/www
-
-awstats:
-  stats_path: /var/www/nginx/webstats
 
 # Set to false if your BIOS clock is set to localtime (e.g. you dual boot Windows)
 # This will override whatever option was chosen when Ubuntu was installed

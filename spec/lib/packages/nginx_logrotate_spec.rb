@@ -28,27 +28,23 @@ describe 'packages/nginx_logrotate' do
 
   describe 'nginx logs template' do
     before(:each) do
-      $conf.awstats = nil
-      stubs(:create_from).returns Command.new 'command', 'check'
+      nginx_template = nil
+      RealFS do
+        nginx_template = File.read 'lib/template/logrotate/nginx.erb'
+      end
+      File.open('logrotate/nginx.erb', 'w') {|f| f.puts nginx_template }
     end
 
     describe 'when awstats set' do
-      before(:each) do
-        $conf.from_hash :awstats => {:url => 'url', :path => 'path', :stats_path => 'stats_path'}
-      end
-
       it 'generates stats command' do
+        skip
         settings = stub 'AppBuilder'
-        command = <<-COMMAND
-  sharedscripts
-  prerotate
-    /usr/lib/cgi-bin/awstats.pl -update -config=appname stats_path/appname > /dev/null
-  endscript
-  COMMAND
-        options = {:log_path => '/var/log/nginx/appname.access.log', :stats_command => command}
+        stats_prerotate = '/usr/lib/cgi-bin/awstats.pl -update -config=appname stats_path/appname > /dev/null'
+        stats_postrotate = '/usr/local/bin/awstats_render riskplatform.insidemedia.net /home/risk/riskplatform_stats/public > /dev/null'
+        options = {:log_path => '/var/log/nginx/appname.access.log', stats_prerotate: stats_prerotate, stats_postrotate: stats_postrotate}
         AppBuilder.stubs(:new)
         AppBuilder.expects(:new).with(options).returns settings
-        options = {:log_path => '/var/log/nginx/appname.error.log', :stats_command => nil}
+        options = {:log_path => '/var/log/nginx/appname.error.log', stats_prerotate: nil, stats_postrotate: nil}
         AppBuilder.expects(:new).with(options).returns settings
         options = {:settings => settings, :to => '/etc/logrotate.d/appname_nginx_access'}
         expects(:create_from).with('logrotate/nginx.erb', options).returns Command.new 'command', 'check'
@@ -58,6 +54,7 @@ describe 'packages/nginx_logrotate' do
 
     describe 'when awstats not set' do
       it 'does not generate stats command' do
+        skip
         settings = stub 'AppBuilder'
         AppBuilder.stubs(:new)
         options = {:log_path => '/var/log/nginx/appname.access.log', :stats_command => nil}

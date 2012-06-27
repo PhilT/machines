@@ -55,6 +55,17 @@ server {
   }
 
   <% end %>
+  <% if stats %>
+  location /stats {
+    alias <%= "#{path}_stats/public" %>;
+    index <%= "awstats.#{server_name}.html" %>;
+  }
+
+  location /icon {
+    root /usr/share/awstats;
+  }
+
+  <% end %>
   # Cache assets: see http://developer.yahoo.com/performance/rules.html#expires
   location ~ ^/(images|javascripts|stylesheets)/ {
     expires 10y;
