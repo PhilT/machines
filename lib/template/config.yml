@@ -4,6 +4,13 @@ appsroots:
   phil: /home/phil/workspace
   www: /home/www
 
+# Create .bin/safe folder in bundler controlled projects
+# (https://twitter.com/#!/tpope/statuses/165631968996900865)
+# The post recommends .git/safe but I find this confusing and suggest using .bin as this is where binstubs
+# are configured (bin/ is the default for `bundler --binstubs` but bin/ is already used by gems that have one
+# or more executables.)
+bin_safe: true
+
 # Set to false if your BIOS clock is set to localtime (e.g. you dual boot Windows)
 # This will override whatever option was chosen when Ubuntu was installed
 clock_utc: true

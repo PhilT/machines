@@ -5,6 +5,10 @@ Support missing environment (e.g. scm machine)
 Append (if not exist) or alter (if exists) in file
 Move passwords to gpg file
 `machines dryrun/build` with no machine name should list the machines available
+DRY up per user config by creating a "common" user config that all users pull default config from
+DRY up further by having default templates in the same way that packages default to built-in ones
+  (In other words remove as much as possible from evmachines)
+Complement this by providing a command to view packages and templates
 
 Cloud
 ----------------------------------------
@@ -29,7 +33,6 @@ EC2 - Look at assigning and freeing elastic IP addresses
 Package and Task Tasks
 ----------------------------------------
 
-COMMAND: view task/package
 Support running multiple tasks - e.g. `machines build passenger passenger_nginx nginx`
 Any methods other than `append` that cannot be repeatedly run?
 Display additional install notes for a particular package (at the end of installation) - e.g. printer setup requires Windows share to be setup
@@ -49,13 +52,11 @@ On initial SSH connection to machine, test we have an Internet connection. Fail 
 Add the check that was run to `CHECK_FAILED/CHECK_PASSED`
 Output progress to log/<machine_name>_progress.log
 Rename output log to log/<machine_name>_output.log
-Overridable config templates (like packages) - e.g. instead of nginx/ in project use a default but allow overrides
 DOC: machines desc <package> - Should display a detailed description of the package
 machines list - Display a list of machines to build (or maybe machines build/dryrun with no machinename)
 ?? base package may not be needed on DB installs
 ?? Default path for Nginx install is /usr/local - Is it installed correctly for non-default paths?
 ?? I have a new webapp - How can I add it to a server that has already been installed?
-DRY up per user config by creating a "common_user" config that all users pull default config from
 BUG: Uploads throw exception if local file is missing - Get upload to check file existence when adding to queue
 BUG: CTRL+C doesn't quite exit cleanly
 Check $conf.db_server is picked up and used to write database.yml on qa/staging/production

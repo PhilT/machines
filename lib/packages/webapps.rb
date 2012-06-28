@@ -7,6 +7,7 @@ task :webapps, 'Sets up Web apps in config/webapps.yml using app_server.conf.erb
       bundle_command = "cd #{app.path} && #{bundle_command}"
       run bundle_command, check_command("#{bundle_command} check")
       run "#{bundle_command} --binstubs=.bin", check_dir("#{app.path}/.bin")
+      run mkdir "#{app.path}/.bin/safe" if $conf.bin_safe
     else
       %w(releases shared/config shared/system shared/log).each do |dir|
         run mkdir File.join(app.path, dir)

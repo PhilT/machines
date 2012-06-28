@@ -17,12 +17,13 @@ task :subtle, 'Install Subtle tiling window manager and associated fonts, themes
     'xorg',                       # Basic X Windows Graphical Interface
   ]
 
-  sudo append 'inode/directory=pcmanfm.desktop', :to => '.local/share/applications/mimeapps.list'
+  sudo append 'inode/directory=pcmanfm.desktop', to: '.local/share/applications/mimeapps.list'
 
   # Copy default subtle.rb file for easy modification
   run mkdir '.local/share/subtle'
   run copy '/etc/xdg/subtle/subtle.rb', '.local/share/subtle'
 
-  run append 'ck-launch-session subtle', :to => '~/.xinitrc'
+  run append 'ck-launch-session subtle', to: '~/.xinitrc'
+  sudo append 'snd_mixer_oss', to: '/etc/modules'
 end
 
