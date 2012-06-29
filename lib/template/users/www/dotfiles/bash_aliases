@@ -24,7 +24,7 @@ function ifr {
 
 # Get git branch name
 parse_git_branch() {
-  git symbolic-ref -q HEAD | sed 's/refs\/heads\/\(.*\)/ \1/'
+  git symbolic-ref -q HEAD 2> /dev/null | sed 's/refs\/heads\/\(.*\)/ \1/'
 }
 
 # Colour-coded prompt
