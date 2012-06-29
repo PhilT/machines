@@ -32,7 +32,7 @@ describe 'FileOperations' do
 
     it 'adds to a file with specified content including escaped characters' do
       subject = append '\\$"`', :to => 'file'
-      subject.command.must_equal 'echo "\\\\\\$\\"\\`" >> file'
+      subject.command.must_equal 'grep "\\\\\\$\\"\\`" file || echo "\\\\\\$\\"\\`" >> file'
     end
 
     it 'checks text was added' do

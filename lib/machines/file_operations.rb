@@ -1,12 +1,12 @@
 module Machines
   module FileOperations
-    # Add some text to the end of a file
+    # Add a line of text to the end of a file unless it already exists
     # @param [String] text Text to add
     # @param [Hash] options
     # @option options [String] :to File to append to
     def append text, options
       text = text.gsub(/([\\$"`])/, '\\\\\1')
-      Command.new("echo \"#{text}\" >> #{options[:to]}", check_string(text, options[:to]))
+      Command.new("grep \"#{text}\" #{options[:to]} || echo \"#{text}\" >> #{options[:to]}", check_string(text, options[:to]))
     end
 
     # Change permissions of a path

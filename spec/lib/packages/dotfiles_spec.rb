@@ -22,8 +22,8 @@ describe 'packages/dotfiles' do
       "RUN    mkdir -p $HOME/.ssh",
       "RUN    chmod 700 $HOME/.ssh",
       "RUN    ssh-keyscan -H somehost >> $HOME/.ssh/known_hosts",
-      "RUN    echo \"export RAILS_ENV=railsenv\" >> .profile",
-      "RUN    echo \"export CDPATH=appsroot\" >> .profile",
+      "RUN    grep \"export RAILS_ENV=railsenv\" .profile || echo \"export RAILS_ENV=railsenv\" >> .profile",
+      "RUN    grep \"export CDPATH=appsroot\" .profile || echo \"export CDPATH=appsroot\" >> .profile",
       "UPLOAD users/username/authorized_keys to .ssh/authorized_keys",
       "RUN    chmod 600 .ssh/authorized_keys"
     ].join("\n")
@@ -32,13 +32,13 @@ describe 'packages/dotfiles' do
   it 'sets RAILS_ENV when specified in set_rails_env_for' do
     $conf.set_rails_env_for = ['railsenv']
     eval_package
-    $conf.commands.map(&:info).join("\n").must_match /RUN    echo \"export RAILS_ENV=railsenv\" >> .profile/
+    $conf.commands.map(&:info).join("\n").must_match /RUN    grep \"export RAILS_ENV=railsenv\" .profile || echo \"export RAILS_ENV=railsenv\" >> .profile/
   end
 
   it 'RAILS_ENV not set when not specified in set_rails_env_for' do
     $conf.set_rails_env_for = ['some_other_env']
     eval_package
-    $conf.commands.map(&:info).join("\n").wont_match /RUN    echo \"export RAILS_ENV=railsenv\" >> .profile/
+    $conf.commands.map(&:info).join("\n").wont_match /RUN    grep \"export RAILS_ENV=railsenv\" .profile \|\| echo \"export RAILS_ENV=railsenv\" >> .profile/
   end
 end
 

@@ -26,7 +26,7 @@ describe 'packages/cruisecontrol' do
       "SUDO   update-rc.d cruise defaults",
       "SUDO   sed -i \"s/CRUISE_USER = .*/CRUISE_USER = 'user'/\" /etc/init.d/cruise",
       "SUDO   sed -i \"s/CRUISE_HOME = .*/CRUISE_HOME = '\\/home\\/user\\/cruisecontrol.rb'/\" /etc/init.d/cruise",
-      "RUN    echo \"ActionMailer::Base.smtp_settings = {address: 'mailserver', domain: 'domain.net'}\" >> .cruise/site_config.rb"
+      "RUN    grep \"ActionMailer::Base.smtp_settings = {address: 'mailserver', domain: 'domain.net'}\" .cruise/site_config.rb || echo \"ActionMailer::Base.smtp_settings = {address: 'mailserver', domain: 'domain.net'}\" >> .cruise/site_config.rb"
     ].join("\n")
   end
 end

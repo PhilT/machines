@@ -18,7 +18,7 @@ describe 'packages/rvm' do
       "RUN    rm -rf rvm-installer",
 
       "TASK   rvm_prompt_off - turn off trust prompting for new .rvmrc files",
-      "RUN    echo \"export rvm_trust_rvmrcs_flag=1\" >> .rvmrc",
+      "RUN    grep \"export rvm_trust_rvmrcs_flag=1\" .rvmrc || echo \"export rvm_trust_rvmrcs_flag=1\" >> .rvmrc",
 
       'TASK   ruby - Install Ruby, make 1.9@global the default and install Bundler',
       'RUN    rvm install 1.9',

@@ -15,7 +15,7 @@ describe 'packages/hosts' do
       "SUDO   cp -rf /tmp/hostname /etc/hostname",
       "RUN    rm -rf /tmp/hostname",
       "SUDO   service hostname start",
-      "SUDO   echo \"1.2.3.4 some.domain\" >> /etc/hosts",
+      "SUDO   grep \"1.2.3.4 some.domain\" /etc/hosts || echo \"1.2.3.4 some.domain\" >> /etc/hosts",
     ]
   end
 

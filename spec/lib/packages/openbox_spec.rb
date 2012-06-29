@@ -33,8 +33,8 @@ describe 'packages/openbox' do
       "RUN    gconftool-2 --set \"/desktop/gnome/interface/font_name\" --type string \"Ubuntu Light 8\"",
       "RUN    gconftool-2 --set \"/desktop/gnome/interface/document_font_name\" --type string \"Ubuntu Light 8\"",
       "RUN    gconftool-2 --set \"/desktop/gnome/interface/monospace_font_name\" --type string \"Monospace 10\"",
-      "SUDO   echo \"inode/directory=pcmanfm.desktop\" >> .local/share/applications/mimeapps.list",
-      "RUN    echo \"ck-launch-session openbox-session\" >> ~/.xinitrc"
+      "SUDO   grep \"inode/directory=pcmanfm.desktop\" .local/share/applications/mimeapps.list || echo \"inode/directory=pcmanfm.desktop\" >> .local/share/applications/mimeapps.list",
+      "RUN    grep \"ck-launch-session openbox-session\" ~/.xinitrc || echo \"ck-launch-session openbox-session\" >> ~/.xinitrc"
      ].join("\n")
   end
 end

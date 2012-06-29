@@ -65,7 +65,7 @@ module Machines
     end
 
     # Queue up command(s) to run remotely
-    # @param [Array] *commands Command(s) to run.
+    # @param [Array] commands Command(s) to run.
     # If first command is a string it creates a Command object using the first two strings as command and check
     def run *commands
       commands = command_from_string(commands)
@@ -73,7 +73,7 @@ module Machines
     end
 
     # Queue up command(s) using SUDO to run remotely
-    # @param [Array] *commands Command(s) to run
+    # @param [Array] commands Command(s) to run
     def sudo *commands
       commands = command_from_string commands
       commands.flatten.each do |command|

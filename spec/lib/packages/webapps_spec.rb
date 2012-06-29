@@ -37,7 +37,7 @@ describe 'packages/webapps' do
       "SUDO   cp -rf /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -rf /tmp/application.conf",
       "SUDO   mkdir -p /var/log/nginx",
-      'SUDO   echo "127.0.0.1 app.dev" >> /etc/hosts'
+      'SUDO   grep "127.0.0.1 app.dev" /etc/hosts || echo "127.0.0.1 app.dev" >> /etc/hosts'
     ].join("\n")
   end
 
@@ -63,7 +63,7 @@ describe 'packages/webapps' do
       "SUDO   cp -rf /tmp/application.conf nginx_path/servers/application.conf",
       "RUN    rm -rf /tmp/application.conf",
       "SUDO   mkdir -p /var/log/nginx",
-      'SUDO   echo "127.0.0.1 app.dev" >> /etc/hosts'
+      'SUDO   grep "127.0.0.1 app.dev" /etc/hosts || echo "127.0.0.1 app.dev" >> /etc/hosts'
     ].join("\n")
   end
 end

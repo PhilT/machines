@@ -4,6 +4,9 @@ appsroots:
   phil: /home/phil/workspace
   www: /home/www
 
+# Adds VBoxClient-all to xinitrc (needed when using a Window Manager that does not start /etc/xdg/autostart/*.desktop such as subtle)
+autostart_vbox_client: true
+
 # Create .bin/safe folder in bundler controlled projects
 # (https://twitter.com/#!/tpope/statuses/165631968996900865)
 # The post recommends .git/safe but I find this confusing and suggest using .bin as this is where binstubs

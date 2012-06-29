@@ -1,9 +1,7 @@
 module Machines
   module Database
     # Write the database.yml file from webapps.yml
-    # @param [Hash] options
-    # @option options [String] :to Directory to write the database.yml to
-    # @option options [String] :for Application name
+    # @param [AppBuilder] app
     def write_database_yml app
       yml = {$conf.environment.to_s => {
         'adapter' => 'mysql',
