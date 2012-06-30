@@ -28,8 +28,8 @@ describe 'Installation' do
     end
 
     it 'modifies echo command to grab the distribution name to be used in the source' do
-      subject = deb 'source DISTRIB_CODENAME', :key => 'gpg', :name => 'name'
-      subject.first.command.must_equal 'expr substr `cat /etc/lsb-release | grep DISTRIB_CODENAME` 18 20 | xargs -I DISTRIB_CODENAME echo deb source DISTRIB_CODENAME >> /etc/apt/sources.list'
+      subject = deb 'source YOUR_UBUNTU_VERSION_HERE', :key => 'gpg', :name => 'name'
+      subject.first.command.must_equal 'expr substr `cat /etc/lsb-release | grep DISTRIB_CODENAME` 18 20 | xargs -I YOUR_UBUNTU_VERSION_HERE echo deb source YOUR_UBUNTU_VERSION_HERE >> /etc/apt/sources.list'
     end
   end
 

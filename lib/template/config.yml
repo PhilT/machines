@@ -81,6 +81,11 @@ set_rails_env_for:
 
 timezone: GB
 
+# Where different packages exist for open and non open source
+# setting this to true prefers opensource - Currently only
+# used by chrome/chromium
+use_opensource: true
+
 # Settings used in webserver packages such as nginx and apache
 webserver:
   name: nginx

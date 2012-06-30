@@ -2,8 +2,7 @@ module Machines
   module Installation
     APTGET_QUIET = 'apt-get -q -y'
 
-    # Adds a PPA source
-    # @param [String] user The user of the PPA
+    # Adds a PPA source and updates apt
     # @param [String] name Name of the PPA
     # @param [String] key_name What to check in apt-key list to ensure it installed
     #     add_ppa 'mozillateam/firefox-stable', 'mozilla'
@@ -15,7 +14,7 @@ module Machines
     end
 
     # Adds a DEB source
-    # @param [String] source URL of the package. If DISTRIB_CODENAME is included then it
+    # @param [String] source URL of the package. If YOUR_UBUNTU_VERSION_HERE is included then it
     #                 is replaced by the Ubuntu version name
     # @param [Hash] options
     # @option options [String] :key URL of key
@@ -25,8 +24,8 @@ module Machines
     #       :name => 'Google'
     def deb source, options
       command = "echo deb #{source} >> /etc/apt/sources.list"
-      if source =~ /DISTRIB_CODENAME/
-        command = "expr substr `cat /etc/lsb-release | grep DISTRIB_CODENAME` 18 20 | xargs -I DISTRIB_CODENAME #{command}"
+      if source =~ /YOUR_UBUNTU_VERSION_HERE/
+        command = "expr substr `cat /etc/lsb-release | grep DISTRIB_CODENAME` 18 20 | xargs -I YOUR_UBUNTU_VERSION_HERE #{command}"
       end
       [
         Command.new(command, check_string(source.gsub(/ .*$/, ''), '/etc/apt/sources.list')),

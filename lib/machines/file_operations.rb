@@ -53,7 +53,7 @@ module Machines
     end
 
     # Create a path or paths on the remote host (Uses -p to be safe and create full path)
-    # @param [String, Array] A single path, multiple paths or array of paths to create
+    # @param [String, Array] dirs A single path, multiple paths or array of paths to create
     def mkdir *dirs
       dirs.flatten.map do |dir|
         Command.new("mkdir -p #{dir}", check_dir(dir))

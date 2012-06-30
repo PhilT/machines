@@ -31,7 +31,7 @@ end
 only :user => 'phil' do
   package :sudo_mods
   package :subtle
-  task(:chromium, 'Install Chromium') { sudo install ['chromium-browser'] }
+  package :chrome
   package :firefox
   package :gedit
   package :unison
