@@ -22,4 +22,6 @@
 [github]
 	token = YOUR_GITHUB_TOKEN
 	user = YOUR_GITHUB_USERNAME
+[merge]
+  ff = false
 

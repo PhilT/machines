@@ -8,6 +8,7 @@ DRY up per user config by creating a "common" user config that all users pull de
 DRY up further by having default templates in the same way that packages default to built-in ones
   (In other words remove as much as possible from evmachines)
 Complement this by providing a command to view packages and templates
+Move dotfiles to a repo so they can be managed across projects
 
 Cloud
 ----------------------------------------

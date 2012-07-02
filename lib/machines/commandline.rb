@@ -67,7 +67,7 @@ module Machines
     end
 
     def htpasswd options
-      path = File.join($conf.webserver, 'conf', 'htpasswd')
+      path = options.first
       say "Generate BasicAuth password and add to #{path}"
       username = ask('Username: ')
       password = enter_password 'users'
