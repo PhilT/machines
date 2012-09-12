@@ -11,9 +11,10 @@ Run commands like:
     run download $conf.nginx.url
     run create_from 'nginx/nginx.conf.erb', :to => File.join($conf.nginx.path, 'conf', 'nginx.conf')
 
-Rerun the passenger_nginx install:
+Upgrade passenger:
 
     machines build phil_workstation passenger_nginx
+
 
 Status
 -----------------------------------------------------------
