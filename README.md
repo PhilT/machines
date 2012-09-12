@@ -19,11 +19,11 @@ Upgrade passenger:
 Status
 -----------------------------------------------------------
 
-(June 2012)
+September 2012
 
-Working development and server builds.
-
-Cloud deployments to complete.
+* Released 0.5.1
+* Working development and server builds.
+* Cloud deployments to complete.
 
 Features
 -----------------------------------------------------------
