@@ -24,7 +24,7 @@ module Machines
     def chown user, path, options = {}
       recursive = '-R ' if options[:recursive]
       user = "#{user}:#{user}" unless user.index(':')
-      Command.new("chown #{recursive}#{user}:#{user} #{path}", check_owner(user, path))
+      Command.new("chown #{recursive}#{user} #{path}", check_owner(user, path))
     end
 
     # Copy a remote file or folder (will overwrite)
