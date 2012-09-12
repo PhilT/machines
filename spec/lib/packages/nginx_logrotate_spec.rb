@@ -47,7 +47,7 @@ describe 'packages/nginx_logrotate' do
         options = {:log_path => '/var/log/nginx/appname.error.log', stats_prerotate: nil, stats_postrotate: nil}
         AppBuilder.expects(:new).with(options).returns settings
         options = {:settings => settings, :to => '/etc/logrotate.d/appname_nginx_access'}
-        expects(:create_from).with('logrotate/nginx.erb', options).returns Command.new 'command', 'check'
+        expects(:create_from).with('logrotate/nginx.erb', options).returns Machines::Command.new 'command', 'check'
         eval_package
       end
     end
@@ -68,11 +68,11 @@ describe 'packages/nginx_logrotate' do
   describe 'apps logs template' do
     it 'generates correct template' do
       mock_settings = mock 'AppBuilder'
-      stubs(:create_from).returns Command.new 'command', 'check'
+      stubs(:create_from).returns Machines::Command.new 'command', 'check'
       AppBuilder.stubs(:new)
       AppBuilder.expects(:new).with(:log_path => 'apppath/shared/log/*.log').returns mock_settings
       options = {:settings => mock_settings, :to => '/etc/logrotate.d/appname_app'}
-      expects(:create_from).with('logrotate/app.erb', options).returns Command.new 'command', 'check'
+      expects(:create_from).with('logrotate/app.erb', options).returns Machines::Command.new 'command', 'check'
       eval_package
     end
   end
