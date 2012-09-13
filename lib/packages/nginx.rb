@@ -1,8 +1,8 @@
 task :nginx, 'Download and configure Nginx' do
-  sudo extract $conf.webserver.url
+  sudo extract "http://nginx.org/download/nginx-#{$conf.webserver.version}.tar.gz"
   modules = "#{$conf.webserver.modules} --add-module=#{$conf.passenger.nginx}"
   commands = [
-    "cd #{$conf.webserver.src_path}",
+    "cd /usr/local/src/nginx-#{$conf.webserver.version}",
     "./configure #{modules}",
     "make",
     "make install"
