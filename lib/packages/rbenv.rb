@@ -1,4 +1,4 @@
-task :rbenv, "Install ruby-build, rbenv, ruby #{$conf.ruby.version} and Bundler" do
+task :rbenv, "Install ruby-build, rbenv, ruby #{$conf.ruby.version}-#{$conf.ruby.build} and Bundler" do
   sudo install ['git-core', 'curl']
   run git_clone 'git://github.com/sstephenson/ruby-build.git'
   sudo 'cd ~/ruby-build && ./install.sh', check_file('/usr/local/bin/ruby-build')

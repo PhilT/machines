@@ -21,7 +21,7 @@ describe 'packages/rbenv' do
   it 'adds the following commands' do
     eval_package
     $conf.commands.map(&:info).join("\n").must_equal [
-      'TASK   rbenv - Install ruby-build, rbenv, ruby 1.9.2 and Bundler',
+      'TASK   rbenv - Install ruby-build, rbenv, ruby 1.9.2-p290 and Bundler',
       "SUDO   apt-get -q -y install git-core",
       "SUDO   apt-get -q -y install curl",
       'RUN    git clone --quiet git://github.com/sstephenson/ruby-build.git',
