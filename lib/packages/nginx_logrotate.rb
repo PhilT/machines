@@ -7,7 +7,7 @@ task :logrotate_nginx, 'Logrotate nginx access and error logs and optionally gen
       else
         stats_prerotate = stats_postrotate = nil
       end
-      settings = AppBuilder.new(
+      settings = Machines::AppSettings::AppBuilder.new(
         log_path: "/var/log/nginx/#{app.name}.#{type}.log",
         stats_prerotate: stats_prerotate,
         stats_postrotate: stats_postrotate
@@ -19,7 +19,7 @@ end
 
 task :logrotate_apps, 'Logrotate Rails app logs' do
   $conf.webapps.each do |app_name, app|
-    settings = AppBuilder.new(log_path: File.join(app.path, 'shared', 'log', '*.log'))
+    settings = Machines::AppSettings::AppBuilder.new(log_path: File.join(app.path, 'shared', 'log', '*.log'))
     sudo create_from 'logrotate/app.erb', settings: settings, to: File.join('/etc', 'logrotate.d', "#{app.name}_app")
   end
 end

@@ -10,8 +10,6 @@ Dir['spec/support/*.rb'].each {|file| require File.join('./spec', 'support', Fil
 require 'machines'
 application_dir = $conf.application_dir
 
-include Machines::AppSettings
-
 # This is done so that Machines::Core.run doesn't collide with MiniTest::Unit::TestCase.run when included
 module Machines::Core
   alias :run_command :run
