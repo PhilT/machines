@@ -14,7 +14,7 @@ module Machines
     end
 
     # Adds a DEB source
-    # @param [String] source URL of the package. If YOUR_UBUNTU_VERSION_HERE is included then it
+    # @param [String] source URL of the package. If `YOUR_UBUNTU_VERSION_HERE` is included then it
     #                 is replaced by the Ubuntu version name
     # @param [Hash] options
     # @option options [String] :key URL of key

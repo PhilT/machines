@@ -19,15 +19,16 @@ Gem::Specification.new do |s|
   end
 
   %w(
-    bluecloth
     guard
     guard-bundler
     guard-minitest
     fakefs
     fog
+    github-markup
     minitest
     mocha
     rake
+    redcarpet
     rev
     simplecov
     yard

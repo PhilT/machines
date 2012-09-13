@@ -1,5 +1,7 @@
-Machines - A custom Ubuntu system in less than 15 minutes
+Machines
 ===========================================================
+
+**A custom Ubuntu system in less than 15 minutes**
 
 Setup Ubuntu development and server **Machines** locally or in the cloud for developing and hosting Ruby, Rails and related environments.
 
@@ -21,7 +23,7 @@ Status
 
 September 2012
 
-* Released 0.5.1
+* Released 0.5.1 gem
 * Working development and server builds.
 * Cloud deployments to complete.
 
@@ -30,10 +32,16 @@ Features
 
 * An opinionated Ubuntu configuration script with sensible defaults
 * Easily override the defaults with configuration options and custom ruby
-* Supports several cloud services
+* Supports several cloud services [Not complete]
 * Default template supports Nginx, Passenger, Ruby, Rails, MySQL, Git, Monit, Logrotate
 * Preconfigured Ruby & Rails light development environment (Openbox or Subtle)
 * Bring up new instances fully configured in less than 15 minutes
+
+What it's Not
+-----------------------------------------------------------
+
+* It does not replace the base installation (Yet). A minimal Ubuntu must be installed prior to running the *Machines* install
+
 
 Motivation
 -----------------------------------------------------------
@@ -90,9 +98,8 @@ configuration settings for various programs, your `Machinesfile` and the various
   * [64bit ISO](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-amd64/current/images/netboot/mini.iso)
   * [32bit image](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-i386/current/images/netboot/boot.img.gz)
   * [32bit ISO](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-i386/current/images/netboot/mini.iso)
-* Images can be written to USB with (Be sure to eject the drive correctly):
-* `gunzip boot.img.gz && sudo dd if=boot.img of=/dev/sdX` where `sdX` is your USB device (use `dmesg` to get this)
-* Insert the USB stick and boot from it to install Ubuntu
+* Images can be written to USB with `gunzip boot.img.gz && sudo dd if=boot.img of=/dev/sdX` where `sdX` is your USB device (use `dmesg` to get this)
+* Insert the USB stick and boot from it to install Ubuntu (See **Setting up a test VM** below for installing on a Virtual Machine)
 * Install SSH Server & note the IP address
 
     sudo apt-get update && sudo apt-get -y install openssh-server && ifconfig
@@ -175,9 +182,10 @@ Make sure you've downloaded one of the ISOs from the list in *Prepare the target
   * Version: Ubuntu (64 bit)
 1. Settings -> Network -> Adapter 2 -> Enable Network Adapter
   * Attached to: Host-only Adapter
-1. Start -> Media Source Folder Icon -> mini.iso
-1. Installer boot menu -> Install -> Accept defaults except for:
-  * eth0 primary interface
+1. Start VM -> Next -> Media Source folder icon (next to dropdown) -> mini.iso -> Next -> Start
+1. Ubuntu Installer boot menu -> Install -> Accept defaults except for:
+  * Select correct country/keyboard
+  * Primary network interface: eth0
   * Full name for the new user: user
   * Username for your account: user
   * Choose a password for the new user: password
@@ -185,17 +193,18 @@ Make sure you've downloaded one of the ISOs from the list in *Prepare the target
   * YES to partition disks (choose partition entire disk if asked)
   * Add OpenSSH from application installer menu
 1. Devices -> CD/DVD Devices -> Uncheck mini.iso
-1. Reboot
-  * ubuntu Login: user
+1. Reboot and login
+  * <machine name> login: user
   * Password: password
-1. Run `ifconfig` and make a note of eth1 inet addr
+1. Run `ifconfig` and make a note of the `eth1` inet addr. It should be 192.168.56.101 if this is the first VM you've installed
+  * If you don't see `eth1` then `sudo nano /etc/network/interfaces` and add the lines `auto eth1` and `iface eth1 inet dhcp` as with `eth0`. Save and exit. Run `ifconfig` again and note the inet addr of `eth1`
 1. Take a snapshot (restore before each test run)
 
 
 What's happening under the hood
 -----------------------------------------------------------
 
-* An ssh connection is established to send all commands and uploads
+* An ssh connection is established to send all commands and uploads (similar to Capistrano)
 * Ssh uses the specified user and then sudo is added to commands that require it
 * When sudo is needed for file uploads. The file is uploaded to /tmp then sudo cp'd to the destination
 * When `package` is called in the `Machinesfile` that file is loaded either from the projects packages folder
