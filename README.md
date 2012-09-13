@@ -11,18 +11,19 @@ Run commands like:
     run download $conf.nginx.url
     run create_from 'nginx/nginx.conf.erb', :to => File.join($conf.nginx.path, 'conf', 'nginx.conf')
 
-Rerun the passenger_nginx install:
+Upgrade passenger:
 
     machines build phil_workstation passenger_nginx
+
 
 Status
 -----------------------------------------------------------
 
-(June 2012)
+September 2012
 
-Working development and server builds.
-
-Cloud deployments to complete.
+* Released 0.5.1
+* Working development and server builds.
+* Cloud deployments to complete.
 
 Features
 -----------------------------------------------------------

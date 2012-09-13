@@ -2,12 +2,14 @@ TODO next
 ----------------------------------------
 
 Support missing environment (e.g. scm machine)
-Move passwords to gpg file
 `machines dryrun/build` with no machine name should list the machines available
 DRY up per user config by creating a "common" user config that all users pull default config from
 DRY up further by having default templates in the same way that packages default to built-in ones
   (In other words remove as much as possible from evmachines)
 Complement this by providing a command to view packages and templates
+Move dotfiles to a repo so they can be managed across projects
+Handle apt-get error 110 and retry
+
 
 Cloud
 ----------------------------------------

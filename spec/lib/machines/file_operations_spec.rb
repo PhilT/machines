@@ -52,8 +52,8 @@ describe 'FileOperations' do
   end
 
   describe 'chown' do
-    subject { chown('owner', 'path') }
-    it { subject.command.must_equal 'chown owner:owner path' }
+    it { chown('owner', 'path').command.must_equal 'chown owner:owner path' }
+    it { chown('user:group', 'path').command.must_equal 'chown user:group path' }
   end
 
   describe 'copy' do

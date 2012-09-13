@@ -17,13 +17,14 @@ module Machines
     end
 
     # Change ownership of a path
-    # @param [String] user Owner to set
+    # @param [String] user sets user and group unless user:group is specified
     # @param [String] path Path to set
     # @param [Hash] options
     # @option options [String] :recursive Chowns recursively if true
     def chown user, path, options = {}
       recursive = '-R ' if options[:recursive]
-      Command.new("chown #{recursive}#{user}:#{user} #{path}", check_owner(user, path))
+      user = "#{user}:#{user}" unless user.index(':')
+      Command.new("chown #{recursive}#{user} #{path}", check_owner(user, path))
     end
 
     # Copy a remote file or folder (will overwrite)
