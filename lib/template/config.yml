@@ -54,10 +54,10 @@ monit:
 # Latest version including preferred nginx version:
 # https://github.com/FooBarWidget/passenger/blob/master/NEWS
 passenger:
-  version: 3.0.11
-# Set in passenger.rb package
-#  root: Points to passenger path in rubygems
-#  ruby: Points to the ruby executable in rbenv, rvm, compiled or installed by your package manager
+  version: 3.0.17
+  # Set in passenger.rb package
+  #  root: Points to passenger path in rubygems
+  #  ruby: Points to the ruby executable in rbenv, rvm, compiled or installed by your package manager
 
 # Uncomment to use RVM
 # Ruby will be installed using RVM
@@ -67,8 +67,12 @@ passenger:
 #  version: 1.9.2
 
 ruby:
-  version: 1.9.2
-  full_version: 1.9.2-p290
+  version: 1.9.3
+  build: p194
+  # Set in rbenv or rvm package
+  #gems_path: 
+  #executable: 
+
 #  gems_path: '.rvm/gems/1.9.2-p290/@global/gems'
 #  executable: .rvm/wrappers/1.9.2-p290@global/ruby
   gems_path: .rbenv/versions/1.9.2-p290/lib/ruby/gems/1.9.1/gems
@@ -91,6 +95,8 @@ webserver:
   name: nginx
   modules: --with-http_ssl_module
   version: 1.2.3
+  url: http://nginx.org/download/nginx-1.0.11.tar.gz
+  src_path: /usr/local/src/nginx-1.0.11
   path: /usr/local/nginx
   servers_dir: conf/servers
 
