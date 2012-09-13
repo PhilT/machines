@@ -16,9 +16,14 @@ task :rbenv, "Install ruby-build, rbenv, ruby #{$conf.ruby.version} and Bundler"
   run append path, :to => '~/.profile'
   rbenv = '$HOME/.rbenv/bin/rbenv'
 
-  run "#{rbenv} install #{$conf.ruby.full_version}", check_command("#{rbenv} versions", $conf.ruby.version)
+  full_version = "#{$conf.ruby.version}-#{$conf.ruby.build}"
+
+  $conf.ruby.gems_path = ".rbenv/versions/#{full_version}/lib/ruby/gems/1.9.1/gems"
+  $conf.ruby.executable = ".rbenv/versions/#{full_version}/bin/ruby"
+
+  run "#{rbenv} install #{full_version}", check_command("#{rbenv} versions", $conf.ruby.version)
   run "#{rbenv} rehash", check_command("#{path} which gem", '.rbenv/shims/gem')
-  run "#{rbenv} global #{$conf.ruby.full_version}", check_command("#{rbenv} exec ruby -v", $conf.ruby.version)
+  run "#{rbenv} global #{full_version}", check_command("#{rbenv} exec ruby -v", $conf.ruby.version)
 
   run write "gem: --no-rdoc --no-ri", :to => '.gemrc', :name => '.gemrc'
   run "#{rbenv} exec gem install bundler", check_command("#{rbenv} exec gem list", 'bundler')

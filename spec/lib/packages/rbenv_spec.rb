@@ -5,7 +5,17 @@ describe 'packages/rbenv' do
     load_package('rbenv')
     $conf.ruby = AppConf.new
     $conf.ruby.version = '1.9.2'
-    $conf.ruby.full_version = '1.9.2-p290'
+    $conf.ruby.build = 'p290'
+  end
+
+  it 'sets gems_path' do
+    eval_package
+    $conf.ruby.gems_path.must_equal '.rbenv/versions/1.9.2-p290/lib/ruby/gems/1.9.1/gems'
+  end
+
+  it 'sets executable' do
+    eval_package
+    $conf.ruby.executable.must_equal '.rbenv/versions/1.9.2-p290/bin/ruby'
   end
 
   it 'adds the following commands' do
