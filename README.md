@@ -23,7 +23,7 @@ Status
 
 September 2012
 
-* Released 0.5.1 gem
+* Released 0.5.2 gem
 * Working development and server builds.
 * Cloud deployments to complete.
 

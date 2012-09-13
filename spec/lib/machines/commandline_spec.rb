@@ -189,7 +189,7 @@ describe Machines::Commandline do
       $conf.webserver = 'server'
       $input.string = "user\npass\npass\n"
       htpasswd nil
-      File.read('server/conf/htpasswd').must_match /user:.{13}/
+      File.read('server/htpasswd').must_match /user:.{13}/
     end
   end
 
