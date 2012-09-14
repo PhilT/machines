@@ -7,7 +7,7 @@ describe Machines::Commandline do
 
   before(:each) do
     $conf.log_only = false
-    File.open('config.yml', 'w') { |f| f.puts "timezone: GB" }
+    File.open('config.yml', 'w') {|f| f.puts "timezone: GB" }
     FileUtils.mkdir_p 'log'
   end
 
@@ -24,23 +24,30 @@ describe Machines::Commandline do
       Net::SSH.stubs(:start).returns @ssh_stub
     end
 
+    it 'displays machines when no machine name specified' do
+      File.open('machines.yml', 'w') {|f| f.puts({'machines' => {'machine_1' => {}, 'machine_2' => {}}}.to_yaml) }
+      lambda { build [] }.must_output "machines build MACHINE\nMACHINE can be one of:\n  machine_1\n  machine_2\n"
+    end
+
     it 'sets machine_name' do
       build ['machine']
       $conf.machine_name.must_equal 'machine'
     end
 
     it 'starts an SCP session using password authentication' do
-      Net::SSH.expects(:start).with('target', 'username', :paranoid => false, :password => 'userpass').returns @ssh_stub
-      build []
+      options = {paranoid: false, password: 'userpass'}
+      Net::SSH.expects(:start).with('target', 'username', options).returns @ssh_stub
+      build ['machine']
     end
 
     it 'starts an SCP session using key based authentication' do
       $conf.machine.cloud = AppConf.new
       $conf.machine.cloud.private_key_path = 'path/to/private_key'
       $conf.machine.cloud.username = 'ubuntu'
-      Net::SSH.expects(:start).with('target', 'ubuntu', :paranoid => false, :keys => ['path/to/private_key']).returns @ssh_stub
+      options = {paranoid: false, keys: ['path/to/private_key']}
+      Net::SSH.expects(:start).with('target', 'ubuntu', options).returns @ssh_stub
 
-      build []
+      build ['machine']
     end
 
     it 'runs each command' do
@@ -49,7 +56,7 @@ describe Machines::Commandline do
 
       mock_command.expects(:run)
 
-      build []
+      build ['machine']
     end
 
     it 'flushes log file after running command' do
@@ -58,7 +65,7 @@ describe Machines::Commandline do
       $conf.commands = [command_stub]
 
       Machines::Command.file.expects(:flush)
-      build []
+      build ['machine']
     end
 
     it 'replaces commands with the single task when supplied' do
@@ -76,7 +83,7 @@ describe Machines::Commandline do
       $conf.commands = [mock('Machines::Command')]
       $conf.commands.first.expects(:run)
       $conf.log_only = true
-      build []
+      build ['machine']
     end
 
     describe 'interrupts' do
@@ -91,14 +98,15 @@ describe Machines::Commandline do
       it 'handles CTRL+C and calls handler' do
         expects(:prepare_to_exit)
         Kernel.expects(:trap).with('INT').yields
-        build []
+        build ['machine']
       end
 
 
       it 'sets exit flag and displays message' do
         prepare_to_exit
         $exit_requested.must_equal true
-        $console.next.must_equal colored("\nEXITING after current command completes...\n", :warning)
+        message = "\nEXITING after current command completes...\n"
+        $console.next.must_equal colored(message, :warning)
       end
 
       it 'second request to exit exits immediately' do
@@ -111,7 +119,7 @@ describe Machines::Commandline do
         $exit_requested = true
         expects(:exit)
 
-        build []
+        build ['machine']
       end
     end
   end

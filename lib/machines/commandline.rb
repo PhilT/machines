@@ -3,6 +3,7 @@ module Machines
     # Loads Machinesfile, opens an SCP connection and runs all commands and file uploads
     def build options
       $conf.machine_name = options.shift
+      return say(Help.new.machine_list) unless $conf.machine_name
       $conf.task = options.shift
       init
       load_machinesfile
