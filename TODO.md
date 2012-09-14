@@ -1,8 +1,6 @@
 TODO next
 ----------------------------------------
 
-Support missing environment (e.g. source repo machine)
-`machines dryrun/build` with no machine name should list the machines available
 DRY up per user config by creating a "common" user config that all users pull default config from
 DRY up further by having default templates in the same way that packages default to built-in ones
   (In other words remove as much as possible from evmachines)
