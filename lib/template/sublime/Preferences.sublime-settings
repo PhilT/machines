@@ -1,0 +1,12 @@
+{
+    "fold_buttons": false,
+    "tab_size": 2,
+    "translate_tabs_to_spaces": true,
+    "trim_automatic_white_space": false,
+    "highlight_line": true,
+    "trim_trailing_white_space_on_save": true,
+    "ensure_newline_at_eof_on_save": true,
+    "save_on_focus_lost": true,
+    "folder_exclude_patterns": [".git", ".bin", ".bundle", "doc", "coverage"]
+}
+

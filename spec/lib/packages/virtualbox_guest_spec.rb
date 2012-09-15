@@ -9,7 +9,7 @@ describe 'packages/virtualbox_guest' do
     eval_package
     $conf.commands.map(&:info).must_equal [
       "TASK   virtualbox_guest - Installs VirtualBox Guest Additions and fixes piix4_smbus error",
-      "SUDO   add-apt-repository ppa:debfx/virtualbox",
+      "SUDO   add-apt-repository -y ppa:debfx/virtualbox",
       "SUDO   apt-get -q -y update > /tmp/apt-update.log",
       'SUDO   apt-get -q -y install virtualbox-guest-additions',
       'SUDO   grep "blacklist i2c_piix4" /etc/modprobe.d/blacklist.conf || echo "blacklist i2c_piix4" >> /etc/modprobe.d/blacklist.conf'

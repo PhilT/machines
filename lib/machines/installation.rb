@@ -8,7 +8,7 @@ module Machines
     #     add_ppa 'mozillateam/firefox-stable', 'mozilla'
     def add_ppa name, key_name
       [
-        Command.new("add-apt-repository ppa:#{name}", "apt-key list | grep -i #{key_name} #{echo_result}"),
+        Command.new("add-apt-repository -y ppa:#{name}", "apt-key list | grep -i #{key_name} #{echo_result}"),
         update
       ]
     end

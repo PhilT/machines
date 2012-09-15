@@ -21,7 +21,7 @@ describe 'packages/chrome' do
     eval_package
     $conf.commands.map(&:info).must_equal [
       "TASK   chrome - Add chrome stable repo and installs (set use_opensource to use chromium)",
-      "SUDO   add-apt-repository ppa:chromium-daily/stable",
+      "SUDO   add-apt-repository -y ppa:chromium-daily/stable",
       "SUDO   apt-get -q -y update > /tmp/apt-update.log",
       "SUDO   apt-get -q -y install chromium-browser"
     ]

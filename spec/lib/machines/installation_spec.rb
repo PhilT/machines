@@ -8,7 +8,7 @@ describe 'Installation' do
   describe 'add_ppa' do
     it 'adds a ppa' do
       subject = add_ppa 'user/name', 'key'
-      subject.map(&:command).must_equal ['add-apt-repository ppa:user/name', 'apt-get -q -y update > /tmp/apt-update.log']
+      subject.map(&:command).must_equal ['add-apt-repository -y ppa:user/name', 'apt-get -q -y update > /tmp/apt-update.log']
     end
   end
 
