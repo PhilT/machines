@@ -4,9 +4,9 @@ module Machines
       @actions = {
         'htpasswd' => 'Generates basic auth in webserver/conf/htpasswd',
         'new <DIR>' => 'Generates an example machines project in DIR',
-        'dryrun [machine]' => 'Logs commands but does not run them. Lists machines if none specified',
+        'dryrun <machine>' => 'Logs commands but does not run them',
         'tasks' => 'Lists the available tasks',
-        'build [machine] [task]' => 'Builds your chosen machine. Optionally, build just one task. Lists machines if none specified',
+        'build <machine> [task]' => 'Builds your chosen machine. Optionally, build just one task',
         'list' => 'Lists the available machines',
         'packages' => 'Lists the available packages',
         'override <PACKAGE>' => 'Copies the default package into project/packages so it can be edited/overidden'
@@ -21,8 +21,7 @@ module Machines
       $conf.machines = AppConf.new
       $conf.load('machines.yml')
       <<-LIST
-machines build MACHINE
-MACHINE can be one of:
+Machines from machines.yml:
 #{$conf.machines.keys.map{|machine| "  #{machine}" }.join("\n")}
 LIST
     end

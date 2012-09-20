@@ -3,7 +3,7 @@ module Machines
     # Loads Machinesfile, opens an SCP connection and runs all commands and file uploads
     def build options
       $conf.machine_name = options.shift
-      return say(Help.new.machine_list) unless $conf.machine_name
+      return say(Help.new.syntax) unless $conf.machine_name
       $conf.task = options.shift
       init
       load_machinesfile
@@ -89,6 +89,10 @@ module Machines
       Command.file ||= Machines::Logger.new File.open('log/output.log', 'w')
       Command.debug ||= Machines::Logger.new File.open('log/debug.log', 'w')
       Command.console ||= Machines::Logger.new STDOUT, :truncate => true
+    end
+
+    def list
+      say Help.new.machine_list
     end
 
     def load_machinesfile

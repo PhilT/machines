@@ -24,9 +24,8 @@ describe Machines::Commandline do
       Net::SSH.stubs(:start).returns @ssh_stub
     end
 
-    it 'displays machines when no machine name specified' do
-      File.open('machines.yml', 'w') {|f| f.puts({'machines' => {'machine_1' => {}, 'machine_2' => {}}}.to_yaml) }
-      lambda { build [] }.must_output "machines build MACHINE\nMACHINE can be one of:\n  machine_1\n  machine_2\n"
+    it 'displays syntax when no machine name specified' do
+      lambda { build [] }.must_output Machines::Help.new.syntax
     end
 
     it 'sets machine_name' do
@@ -215,6 +214,13 @@ describe Machines::Commandline do
       Machines::Command.file.must_be_instance_of Machines::Logger
       Machines::Command.console.must_be_instance_of Machines::Logger
       Machines::Command.debug.must_be_instance_of Machines::Logger
+    end
+  end
+
+  describe 'list' do
+    it 'lists machines' do
+      File.open('machines.yml', 'w') {|f| f.puts({'machines' => {'machine_1' => {}, 'machine_2' => {}}}.to_yaml) }
+      lambda { list }.must_output "Machines from machines.yml:\n  machine_1\n  machine_2\n"
     end
   end
 
