@@ -91,7 +91,7 @@ module Machines
       Command.console ||= Machines::Logger.new STDOUT, :truncate => true
     end
 
-    def list
+    def list notused
       say Help.new.machine_list
     end
 
