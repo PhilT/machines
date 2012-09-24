@@ -63,20 +63,11 @@ passenger:
 # Ruby will be installed using RVM
 # Passenger will be installed using rvmsudo
 #rvm:
-#  url: https://rvm.beginrescueend.com/install/rvm
 #  version: 1.9.2
 
 ruby:
   version: 1.9.3
   build: p194
-  # Set in rbenv or rvm package
-  #gems_path: 
-  #executable: 
-
-#  gems_path: '.rvm/gems/1.9.2-p290/@global/gems'
-#  executable: .rvm/wrappers/1.9.2-p290@global/ruby
-  gems_path: .rbenv/versions/1.9.2-p290/lib/ruby/gems/1.9.1/gems
-  executable: .rbenv/versions/1.9.2-p290/bin/ruby
 
 set_rails_env_for:
   - qa

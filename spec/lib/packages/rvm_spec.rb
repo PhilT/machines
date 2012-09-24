@@ -3,13 +3,23 @@ require 'spec_helper'
 describe 'packages/rvm' do
   before(:each) do
     load_package('rvm')
-    $conf.from_hash(:ruby => {:version => '1.9'})
-    $conf.from_hash(:rvm => {:url => 'rvm_url', :version => '1.0'})
+    $conf.from_hash(ruby: {version: '1.9.2', build: 'p290'})
+    $conf.from_hash(rvm: {version:  '1.0'})
+  end
+
+  it 'sets gems_path' do
+    eval_package
+    $conf.ruby.gems_path.must_equal '.rvm/gems/1.9.2-p290/@global/gems'
+  end
+
+  it 'sets executable' do
+    eval_package
+    $conf.ruby.executable.must_equal '.rvm/wrappers/1.9.2-p290@global/ruby'
   end
 
   it 'adds the following commands' do
     eval_package
-    $conf.commands.map(&:info).must_equal [
+    $conf.commands.map(&:info).join("\n").must_equal [
       "TASK   rvm - Install RVM",
       "SUDO   apt-get -q -y install git-core",
       'RUN    bash -s 1.0 < <(wget -q https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )',
@@ -20,12 +30,12 @@ describe 'packages/rvm' do
       "TASK   rvm_prompt_off - turn off trust prompting for new .rvmrc files",
       "RUN    grep \"export rvm_trust_rvmrcs_flag=1\" .rvmrc || echo \"export rvm_trust_rvmrcs_flag=1\" >> .rvmrc",
 
-      'TASK   ruby - Install Ruby, make 1.9@global the default and install Bundler',
-      'RUN    rvm install 1.9',
-      'RUN    rvm 1.9@global --default',
+      'TASK   ruby - Install Ruby, make 1.9.2-p290@global the default and install Bundler',
+      'RUN    rvm install 1.9.2',
+      'RUN    rvm 1.9.2@global --default',
       'UPLOAD buffer from .gemrc to .gemrc',
       'RUN    gem install bundler'
-    ]
+    ].join("\n")
   end
 end
 
