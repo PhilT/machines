@@ -312,11 +312,12 @@ Project packages
         :task2 =>  {:description => 'description 2'},
         :task3 => {:description => 'description 3'}
       }
-      lambda { tasks nil }.must_output 'Tasks
+      lambda { tasks ['machine'] }.must_output 'Tasks
   task1                description 1
   task2                description 2
   task3                description 3
 '
+      $conf.machine_name.must_equal 'machine'
     end
   end
 end

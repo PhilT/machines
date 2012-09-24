@@ -130,7 +130,10 @@ module Machines
       end
     end
 
-    def tasks notused
+    def tasks options
+      $conf.machine_name = options.shift
+      return say(Help.new.syntax) unless $conf.machine_name
+
       $conf.log_only = true
       init
       load_machinesfile

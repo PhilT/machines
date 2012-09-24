@@ -5,7 +5,7 @@ module Machines
         'htpasswd' => 'Generates basic auth in webserver/conf/htpasswd',
         'new <DIR>' => 'Generates an example machines project in DIR',
         'dryrun <machine> [tasks]' => 'Display commands that would be run. Optionally, specify tasks to run',
-        'tasks' => 'Lists the available tasks',
+        'tasks <machine>' => 'Lists the available tasks for the specified machine',
         'build <machine> [tasks]' => 'Builds your chosen machine. Optionally, specify tasks to run',
         'list' => 'Lists the available machines',
         'packages' => 'Lists the available packages',
