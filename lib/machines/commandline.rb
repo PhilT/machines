@@ -44,7 +44,7 @@ module Machines
     end
 
     # Execute a given command e.g. dryrun, build, generate, htpasswd, packages, override, tasks
-    def execute(options)
+    def execute options
       help = Help.new
       action = options.shift
       if help.actions.include?(action)
@@ -130,7 +130,7 @@ module Machines
       end
     end
 
-    def tasks
+    def tasks notused
       $conf.log_only = true
       init
       load_machinesfile

@@ -230,7 +230,7 @@ describe Machines::Commandline do
   describe 'list' do
     it 'lists machines' do
       File.open('machines.yml', 'w') {|f| f.puts({'machines' => {'machine_1' => {}, 'machine_2' => {}}}.to_yaml) }
-      lambda { list [] }.must_output "Machines from machines.yml:\n  machine_1\n  machine_2\n"
+      lambda { list nil }.must_output "Machines from machines.yml:\n  machine_1\n  machine_2\n"
     end
   end
 
@@ -312,7 +312,7 @@ Project packages
         :task2 =>  {:description => 'description 2'},
         :task3 => {:description => 'description 3'}
       }
-      lambda { tasks }.must_output 'Tasks
+      lambda { tasks nil }.must_output 'Tasks
   task1                description 1
   task2                description 2
   task3                description 3
