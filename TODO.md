@@ -1,6 +1,7 @@
 TODO next
 ----------------------------------------
 
+Handle unknown tasks and display a proper error message (at the moment we get an obscure undefined method on NilClass)
 Support missing environment (e.g. source repo machine)
 `machines dryrun/build` with no machine name should list the machines available
 DRY up per user config by creating a "common" user config that all users pull default config from

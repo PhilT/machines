@@ -19,7 +19,7 @@ describe 'packages/cruisecontrol' do
     eval_package
     $conf.commands.map(&:info).join("\n").must_equal [
       "TASK   cruisecontrol - Install, configure and set to start on boot",
-      "RUN    git clone --quiet https://github.com/thoughtworks/cruisecontrol.rb.git",
+      "RUN    test -d cruisecontrol.rb && (cd cruisecontrol.rb && git pull) || git clone --quiet https://github.com/thoughtworks/cruisecontrol.rb.git",
       "RUN    cd cruisecontrol.rb &&  bundle",
       "RUN    cd cruisecontrol.rb &&  ruby ./cruise add Application -r github.com/project",
       "SUDO   cp -rf cruisecontrol.rb/daemon/cruise /etc/init.d/cruise",

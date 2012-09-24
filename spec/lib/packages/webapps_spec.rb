@@ -56,7 +56,7 @@ describe 'packages/webapps' do
     commandline.must_equal [
       "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",
       "SUDO   mkdir -p nginx_path/servers",
-      "RUN    git clone --quiet --branch master github.com/project /home/users/application",
+      "RUN    test -d /home/users/application && (cd /home/users/application && git pull) || git clone --quiet --branch master github.com/project /home/users/application",
       "RUN    cd /home/users/application && $HOME/.rbenv/bin/rbenv exec bundle",
       "RUN    cd /home/users/application && $HOME/.rbenv/bin/rbenv exec bundle --binstubs=.bin",
       "UPLOAD buffer from nginx/app_server.conf.erb to /tmp/application.conf",

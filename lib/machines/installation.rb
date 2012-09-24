@@ -73,7 +73,7 @@ module Machines
       Command.new("gem update #{options}", nil)
     end
 
-    # Clone a project from a Git repository
+    # Clone (or update) a project from a Git repository
     # @param [String] url URL to clone
     # @param [Hash] options
     # @option options [Optional String] :to Folder to clone to
@@ -83,7 +83,8 @@ module Machines
       raise ArgumentError.new('git_clone Must include a url and folder') if url.nil? || url.empty?
       raise ArgumentError.new('specifying :tag also requires :to') if options[:tag] && options[:to].nil?
       branch = "--branch #{options[:branch]} " if options[:branch]
-      command = "git clone --quiet #{branch}#{url}"
+      dir = options[:to] || url.gsub(/^.*\/|.git/, '')
+      command = "test -d #{dir} && (cd #{dir} && git pull) || git clone --quiet #{branch}#{url}"
       command << " #{options[:to]}" if options[:to]
       command = Command.new(command, check_dir(options[:to]))
       command = [command, Command.new("cd #{options[:to]} && git checkout #{options[:tag]}", "git name-rev --name-only HEAD | grep #{options[:tag]}")] if options[:tag]
