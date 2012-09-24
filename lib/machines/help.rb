@@ -4,9 +4,9 @@ module Machines
       @actions = {
         'htpasswd' => 'Generates basic auth in webserver/conf/htpasswd',
         'new <DIR>' => 'Generates an example machines project in DIR',
-        'dryrun <machine>' => 'Logs commands but does not run them',
-        'tasks' => 'Lists the available tasks',
-        'build <machine> [task]' => 'Builds your chosen machine. Optionally, build just one task',
+        'dryrun <machine> [tasks]' => 'Display commands that would be run. Optionally, specify tasks to run',
+        'tasks <machine>' => 'Lists the available tasks for the specified machine',
+        'build <machine> [tasks]' => 'Builds your chosen machine. Optionally, specify tasks to run',
         'list' => 'Lists the available machines',
         'packages' => 'Lists the available packages',
         'override <PACKAGE>' => 'Copies the default package into project/packages so it can be edited/overidden'

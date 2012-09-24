@@ -67,14 +67,18 @@ describe Machines::Commandline do
       build ['machine']
     end
 
-    it 'replaces commands with the single task when supplied' do
+    it 'only run specified tasks' do
       command_will_run = Machines::Command.new '', ''
+      command_also_run = Machines::Command.new '', ''
       command_wont_run = Machines::Command.new '', ''
-      $conf.tasks = { :task => {:block => Proc.new { run command_will_run }} }
+      $conf.tasks = { 
+        :task1 => {:block => Proc.new { run command_will_run }},
+        :task2 => {:block => Proc.new { run command_also_run }}
+      }
 
-      build ['machine', 'task']
+      build ['machine', 'task1', 'task2']
 
-      $conf.commands.must_equal [command_will_run]
+      $conf.commands.must_equal [command_will_run, command_also_run]
     end
 
     it 'logs instead of SSHing and running commands' do
@@ -129,6 +133,12 @@ describe Machines::Commandline do
       expects(:build).with options
       dryrun options
       $conf.log_only.must_equal true
+    end
+
+    it 'passes tasks to build' do
+      options = ['machine', 'task']
+      expects(:build).with options
+      dryrun options
     end
   end
 
@@ -220,7 +230,7 @@ describe Machines::Commandline do
   describe 'list' do
     it 'lists machines' do
       File.open('machines.yml', 'w') {|f| f.puts({'machines' => {'machine_1' => {}, 'machine_2' => {}}}.to_yaml) }
-      lambda { list [] }.must_output "Machines from machines.yml:\n  machine_1\n  machine_2\n"
+      lambda { list nil }.must_output "Machines from machines.yml:\n  machine_1\n  machine_2\n"
     end
   end
 
@@ -302,11 +312,12 @@ Project packages
         :task2 =>  {:description => 'description 2'},
         :task3 => {:description => 'description 3'}
       }
-      lambda { tasks }.must_output 'Tasks
+      lambda { tasks ['machine'] }.must_output 'Tasks
   task1                description 1
   task2                description 2
   task3                description 3
 '
+      $conf.machine_name.must_equal 'machine'
     end
   end
 end

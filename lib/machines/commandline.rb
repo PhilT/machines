@@ -4,11 +4,10 @@ module Machines
     def build options
       $conf.machine_name = options.shift
       return say(Help.new.syntax) unless $conf.machine_name
-      $conf.task = options.shift
       init
       load_machinesfile
 
-      task $conf.task.to_sym if $conf.task
+      task options if options.any?
 
       ssh_options = {:paranoid => false}
       if $conf.machine.cloud
@@ -45,7 +44,7 @@ module Machines
     end
 
     # Execute a given command e.g. dryrun, build, generate, htpasswd, packages, override, tasks
-    def execute(options)
+    def execute options
       help = Help.new
       action = options.shift
       if help.actions.include?(action)
@@ -131,7 +130,10 @@ module Machines
       end
     end
 
-    def tasks
+    def tasks options
+      $conf.machine_name = options.shift
+      return say(Help.new.syntax) unless $conf.machine_name
+
       $conf.log_only = true
       init
       load_machinesfile

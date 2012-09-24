@@ -1,6 +1,6 @@
 username = $conf.machine.user
 
-task :dotfiles, "Upload files in users/#{username}/dotfiles, prepend a dot and substitute some bashrc vars" do
+task :dotfiles, "Upload users/#{username}/dotfiles and set some env vars" do
   Dir["users/#{username}/dotfiles/*"].each do |source|
     run upload source, ".#{File.basename(source)}" if File.exists?(source)
   end
