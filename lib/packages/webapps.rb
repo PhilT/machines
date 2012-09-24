@@ -1,4 +1,4 @@
-task :webapps, 'Sets up Web apps in config/webapps.yml using app_server.conf.erb. Copies SSL certs.' do
+task :webapps, 'Sets up Web apps in config/webapps.yml using app_server.conf.erb' do
   sudo mkdir File.join($conf.webserver.path, $conf.webserver.servers_dir) if $conf.webserver.servers_dir
   $conf.webapps.each do |app_name, app|
     if $conf.environment == 'development'

@@ -14,7 +14,7 @@ describe 'packages/apps' do
     $conf.commands.map(&:info).must_equal [
       "TASK   file_roller - Install file-roller archive manager",
       "SUDO   apt-get -q -y install file-roller",
-      "TASK   file_roller_associations - Setup file associations for file-roller",
+      "TASK   file_roller_assoc - Setup file associations for file-roller",
       append_command('application/x-7z-compressed=file-roller.desktop'),
       append_command('application/x-7z-compressed-tar=file-roller.desktop'),
       append_command('application/x-ace=file-roller.desktop'),
