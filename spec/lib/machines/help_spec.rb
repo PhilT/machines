@@ -22,7 +22,7 @@ describe Machines::Help do
     it 'includes syntax' do
       subject.syntax.must_match /machines COMMAND/
       subject.syntax.must_match /COMMAND can be:/
-      subject.syntax.must_match /build \<machine\> \[task\]   Builds your chosen machine/
+      subject.syntax.must_match /build \<machine\> \[tasks\]  Builds your chosen machine/
     end
   end
 end

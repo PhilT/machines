@@ -130,6 +130,12 @@ describe Machines::Commandline do
       dryrun options
       $conf.log_only.must_equal true
     end
+
+    it 'passes tasks to build' do
+      options = ['machine', 'task']
+      expects(:build).with options
+      dryrun options
+    end
   end
 
   describe 'execute' do

@@ -1,6 +1,7 @@
 TODO next
 ----------------------------------------
 
+Support running multiple tasks - e.g. `machines build passenger passenger_nginx nginx`
 Support missing environment (e.g. source repo machine)
 `machines dryrun/build` with no machine name should list the machines available
 DRY up per user config by creating a "common" user config that all users pull default config from
@@ -36,7 +37,6 @@ EC2 - Look at assigning and freeing elastic IP addresses
 Package and Task Tasks
 ----------------------------------------
 
-Support running multiple tasks - e.g. `machines build passenger passenger_nginx nginx`
 Any methods other than `append` that cannot be repeatedly run?
 Display additional install notes for a particular package (at the end of installation) - e.g. printer setup requires Windows share to be setup
 CODE/DOC: Describe difference between package and task or merge packages with tasks if possible
