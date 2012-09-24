@@ -4,11 +4,10 @@ module Machines
     def build options
       $conf.machine_name = options.shift
       return say(Help.new.syntax) unless $conf.machine_name
-      $conf.task = options.shift
       init
       load_machinesfile
 
-      task $conf.task.to_sym if $conf.task
+      task options if options.any?
 
       ssh_options = {:paranoid => false}
       if $conf.machine.cloud

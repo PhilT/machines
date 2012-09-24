@@ -1,7 +1,6 @@
 TODO next
 ----------------------------------------
 
-Support running multiple tasks - e.g. `machines build passenger passenger_nginx nginx`
 Support missing environment (e.g. source repo machine)
 `machines dryrun/build` with no machine name should list the machines available
 DRY up per user config by creating a "common" user config that all users pull default config from

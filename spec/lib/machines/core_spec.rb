@@ -37,12 +37,21 @@ describe Machines::Core do
       $conf.tasks.must_equal :name => {:description => 'description', :block => block}
     end
 
-    it 'sets commands to only run those from the specified task' do
-      block_ran = false
-      block = Proc.new { block_ran = true }
-      $conf.tasks[:name] = {:block => block}
-      task :name, nil
-      block_ran.must_equal true
+    it 'sets commands to only run those from the specified tasks' do
+      block_run_count = 0
+      block = Proc.new { block_run_count += 1 }
+      $conf.tasks[:task1] = {:block => block}
+      $conf.tasks[:task2] = {:block => block}
+      task [:task1, 'task2']
+      block_run_count.must_equal 2
+    end
+
+    it 'sets commands to only run those of a single task' do
+      block_run = false
+      block = Proc.new { block_run = true }
+      $conf.tasks[:task] = {:block => block}
+      task :task
+      block_run.must_equal true
     end
 
     describe 'when dependent task' do

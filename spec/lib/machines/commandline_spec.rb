@@ -67,14 +67,18 @@ describe Machines::Commandline do
       build ['machine']
     end
 
-    it 'replaces commands with the single task when supplied' do
+    it 'only run specified tasks' do
       command_will_run = Machines::Command.new '', ''
+      command_also_run = Machines::Command.new '', ''
       command_wont_run = Machines::Command.new '', ''
-      $conf.tasks = { :task => {:block => Proc.new { run command_will_run }} }
+      $conf.tasks = { 
+        :task1 => {:block => Proc.new { run command_will_run }},
+        :task2 => {:block => Proc.new { run command_also_run }}
+      }
 
-      build ['machine', 'task']
+      build ['machine', 'task1', 'task2']
 
-      $conf.commands.must_equal [command_will_run]
+      $conf.commands.must_equal [command_will_run, command_also_run]
     end
 
     it 'logs instead of SSHing and running commands' do

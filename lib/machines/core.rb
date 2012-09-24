@@ -1,8 +1,8 @@
 module Machines
   module Core
     # If a block is given, store the task, log it and run it
-    # If no block is given, sets commands to only those of the specified task so they can be run standalone
-    # @param [Symbol] name Name of the task
+    # If no block is given, sets commands to only those of the specified tasks so they can be run standalone
+    # @param [Symbol, String, Array] name Name of the task or array of task names
     # @param [String] description Describe the task
     # @param [Hash] options
     # @option options [Symbol, Array] :if Dependent tasks that must already have been added for this task to be added
@@ -14,8 +14,11 @@ module Machines
         $conf.commands << LogCommand.new(name, description)
         yield
       else
+        tasks = [name].flatten
         $conf.commands = []
-        $conf.tasks[name][:block].call
+        tasks.each do |name|
+          $conf.tasks[name.to_sym][:block].call
+        end
       end
     end
 
