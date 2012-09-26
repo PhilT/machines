@@ -2,7 +2,7 @@
 
 * Implement `list` command to list available machines from machines.yml
 * Display syntax when `build` called with no machine
-* Support running multiple tasks - e.g. `machines build machine passenger passenger_nginx nginx`
+* Support running multiple tasks - e.g. `machines build machine passenger passenger_nginx nginx webapps`
 * modify git_clone to pull if the repo already exists
 
 == 0.5.2
