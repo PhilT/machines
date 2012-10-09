@@ -63,7 +63,7 @@ module Machines
 
     # Rename a remote file or folder
     # @param [String] oldname Existing filename
-    # @param [String] newname Rename to this =
+    # @param [String] newname Rename to this
     def rename oldname, newname
       Command.new("mv -f #{oldname} #{newname}", check_file(newname))
     end

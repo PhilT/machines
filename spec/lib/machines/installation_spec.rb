@@ -129,28 +129,37 @@ describe 'Installation' do
     end
   end
 
-  describe 'install' do
-    it 'instaniates commands to download, install and remove a DEB package ' do
+  describe 'install instaniates commands to' do
+    it 'download, extract and link to binary executable' do
+      subject = install 'http://some.url/package_name.tar.bz2', :bin => 'package'
+      subject.map(&:command).must_equal [
+        'cd /tmp && wget http://some.url/package_name.tar.bz2 && tar -xfj package_name.tar.bz2 && rm package_name.tar.bz2 && cd -',
+        'mv -f /tmp/package_name /usr/local/lib',
+        'ln -sf /usr/local/lib/package_name/package /usr/local/bin/package'
+      ]
+    end
+
+    it 'download, install and remove a DEB package ' do
       subject = install "http://some.url/package_name.deb"
       subject.map(&:command).must_equal [
         'cd /tmp && wget http://some.url/package_name.deb && dpkg -i --force-architecture package_name.deb && rm package_name.deb && cd -'
       ]
     end
 
-    it 'instaniates commands to download, extract, install and remove a group of DEB packages ' do
-      subject = install "http://some.url/package_name.tar.gz"
+    it 'download, extract, install and remove a group of DEB packages ' do
+      subject = install "http://some.url/package_name.tar.gz", :as => :dpkg
       subject.map(&:command).must_equal [
         'cd /tmp && wget http://some.url/package_name.tar.gz && tar -xfz package_name.tar.gz && rm package_name.tar.gz && cd -',
         'cd /tmp/package_name && dpkg -i --force-architecture *.deb && cd - && rm -rf /tmp/package_name'
       ]
     end
 
-    it 'instaniates a command to install a single apt package' do
+    it 'install a single apt package' do
       subject = install 'package1'
       subject.map(&:command).must_equal ['apt-get -q -y install package1']
     end
 
-    it 'instaniates a command to install multiple apt packages' do
+    it 'install multiple apt packages' do
       subject = install %w(package1 package2)
       subject.map(&:command).must_equal [
         'apt-get -q -y install package1',

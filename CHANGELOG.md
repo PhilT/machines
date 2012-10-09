@@ -1,6 +1,7 @@
 == 0.5.4
 
 * Added support extracting for bz2 archives
+* `install` can now download an archive and extract to /usr/local/lib and create a link in /usr/local/bin
 
 
 == 0.5.3

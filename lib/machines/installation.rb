@@ -1,5 +1,7 @@
 module Machines
   module Installation
+    include FileOperations
+
     APTGET_QUIET = 'apt-get -q -y'
 
     # Adds a PPA source and updates apt
@@ -103,13 +105,17 @@ module Machines
     # (See `extract` to just uncompress tar.gz or zip files)
     # @param [Symbol, String, Array] packages can be:
     #   URL::
-    #     Download from the specified URL and run `dpkg`
+    #     Download from URL and run `dpkg` (if `:as => :dpkg`)
+    #     Download URL to `/usr/local/lib` and link `:bin` to `/usr/local/bin`
     #   Array or string (with no URL)::
     #     Run `apt` to install specified packages in the array or string
     #       Packages are installed separately to aid progress feedback
     #       Ensure this is the main package as dpkg get-selections is used to validate installation
     #     install %w(build-essential libssl-dev mysql-server) #=> Installs apt packages
     #     install 'http://example.com/my_package.deb', :cleanup => true #=> Installs a deb using dpkg then removes the deb
+    # @param [Hash] options
+    # @option options [Optional Symbol] :as Identify the package type so appropriate command can run. Currently supports `:dpkg` only
+    # @option options [Optional String] :bin Specify the bin file to link to (implies archive will be copied to /usr/local/lib)
     def install packages, options = {}
       if packages.is_a?(String)
         if packages =~ /^http:\/\//
@@ -117,10 +123,15 @@ module Machines
           if packages =~ /\.deb$/i
             name = File.basename(packages)
             commands << Command.new("cd /tmp && wget #{packages} && dpkg -i --force-architecture #{name} && rm #{name} && cd -", nil)
-          else
+          elsif options[:as] == :dpkg
             commands << extract(packages, :to => '/tmp')
             name = File.basename(packages).gsub(/\.(tar|zip).*/, '')
             commands << Command.new("cd /tmp/#{name} && dpkg -i --force-architecture *.deb && cd - && rm -rf /tmp/#{name}", nil)
+          elsif options[:bin]
+            commands << extract(packages, :to => '/tmp')
+            name = File.basename(packages).gsub(/\.(tar|zip).*/, '')
+            commands << rename("/tmp/#{name}", "/usr/local/lib")
+            commands << link("/usr/local/lib/#{name}/#{options[:bin]}", "/usr/local/bin/#{options[:bin]}")
           end
           return commands
         else
