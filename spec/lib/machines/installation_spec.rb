@@ -41,9 +41,21 @@ describe 'Installation' do
   end
 
   describe 'extract' do
+    it 'instaniates commands to download, extract and remove a tar.gz archive' do
+      subject = extract 'http://url/package.tar.gz'
+      subject.command.must_equal 'cd /usr/local/src && wget http://url/package.tar.gz && tar -xfz package.tar.gz && rm package.tar.gz && cd -'
+      subject.check.must_equal 'test -d /usr/local/src/package && echo CHECK PASSED || echo CHECK FAILED'
+    end
+
+    it 'instaniates commands to download, extract and remove a tar.bz2 archive' do
+      subject = extract 'http://url/package.tar.bz2'
+      subject.command.must_equal 'cd /usr/local/src && wget http://url/package.tar.bz2 && tar -xfj package.tar.bz2 && rm package.tar.bz2 && cd -'
+      subject.check.must_equal 'test -d /usr/local/src/package && echo CHECK PASSED || echo CHECK FAILED'
+    end
+
     it 'instaniates commands to download, extract and remove a tar archive' do
-      subject = extract 'http://url/package.tar'
-      subject.command.must_equal 'cd /usr/local/src && wget http://url/package.tar && tar -zxf package.tar && rm package.tar && cd -'
+      subject = extract 'http://url/package.tar.gz'
+      subject.command.must_equal 'cd /usr/local/src && wget http://url/package.tar.gz && tar -xfz package.tar.gz && rm package.tar.gz && cd -'
       subject.check.must_equal 'test -d /usr/local/src/package && echo CHECK PASSED || echo CHECK FAILED'
     end
 
@@ -55,7 +67,7 @@ describe 'Installation' do
 
     it 'moves extracted contents to specified folder' do
       subject = extract 'http://url/package-1.0.tar.gz', :to => '/opt'
-      subject.command.must_equal 'cd /opt && wget http://url/package-1.0.tar.gz && tar -zxf package-1.0.tar.gz && rm package-1.0.tar.gz && cd -'
+      subject.command.must_equal 'cd /opt && wget http://url/package-1.0.tar.gz && tar -xfz package-1.0.tar.gz && rm package-1.0.tar.gz && cd -'
       subject.check.must_equal 'test -d /opt/package-1.0 && echo CHECK PASSED || echo CHECK FAILED'
     end
   end
@@ -128,7 +140,7 @@ describe 'Installation' do
     it 'instaniates commands to download, extract, install and remove a group of DEB packages ' do
       subject = install "http://some.url/package_name.tar.gz"
       subject.map(&:command).must_equal [
-        'cd /tmp && wget http://some.url/package_name.tar.gz && tar -zxf package_name.tar.gz && rm package_name.tar.gz && cd -',
+        'cd /tmp && wget http://some.url/package_name.tar.gz && tar -xfz package_name.tar.gz && rm package_name.tar.gz && cd -',
         'cd /tmp/package_name && dpkg -i --force-architecture *.deb && cd - && rm -rf /tmp/package_name'
       ]
     end

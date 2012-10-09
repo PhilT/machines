@@ -1,3 +1,8 @@
+== 0.5.4
+
+* Added support extracting for bz2 archives
+
+
 == 0.5.3
 
 * Implement `list` command to list available machines from machines.yml

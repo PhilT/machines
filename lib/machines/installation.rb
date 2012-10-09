@@ -45,13 +45,21 @@ module Machines
       Command.new(command, check)
     end
 
-    # Download, extract, and remove an archive. Currently supports `zip` or `tar.gz`.
+    # Download, extract, and remove an archive. Currently supports `zip`, `tar.gz`, `tar.bz2`.
     # @param [String] package Package name to extract
     # @param [Hash] options
     # @option options [Optional String] :to folder to clone or extract to (defaults to /usr/local/src)
     def extract package, options = {}
       name = File.basename(package)
-      cmd = package[/.zip/] ? 'unzip -qq' : 'tar -zxf'
+      if package[/.zip/]
+        cmd = 'unzip -qq'
+      elsif package[/.tar.gz/]
+        cmd = 'tar -xfz'
+      elsif package[/.tar.bz2/]
+        cmd = 'tar -xfj'
+      else
+        raise "extract: Unknown extension for #{package}"
+      end
       dir = cmd =~ /unzip/ ? File.basename(name, '.zip') : File.basename(name).gsub(/\.tar.*/, '')
       dest = options[:to] || '/usr/local/src'
       Command.new("cd #{dest} && wget #{package} && #{cmd} #{name} && rm #{name} && cd -", check_dir("#{File.join(dest, dir)}"))
