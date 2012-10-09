@@ -56,9 +56,9 @@ module Machines
       if package[/.zip/]
         cmd = 'unzip -qq'
       elsif package[/.tar.gz/]
-        cmd = 'tar -xfz'
+        cmd = 'tar -zxf'
       elsif package[/.tar.bz2/]
-        cmd = 'tar -xfj'
+        cmd = 'tar -jxf'
       else
         raise "extract: Unknown extension for #{package}"
       end
@@ -115,7 +115,7 @@ module Machines
     #     install 'http://example.com/my_package.deb', :cleanup => true #=> Installs a deb using dpkg then removes the deb
     # @param [Hash] options
     # @option options [Optional Symbol] :as Identify the package type so appropriate command can run. Currently supports `:dpkg` only
-    # @option options [Optional String] :bin Specify the bin file to link to (implies archive will be copied to /usr/local/lib)
+    # @option options [Optional String] :bin Specify the bin file to link to (e.g. '/bin/executable' will create a link /usr/local/bin/executable that points to /usr/local/lib/bin/executable)
     def install packages, options = {}
       if packages.is_a?(String)
         if packages =~ /^http:\/\//
@@ -131,7 +131,7 @@ module Machines
             commands << extract(packages, :to => '/tmp')
             name = File.basename(packages).gsub(/\.(tar|zip).*/, '')
             commands << rename("/tmp/#{name}", "/usr/local/lib")
-            commands << link("/usr/local/lib/#{name}/#{options[:bin]}", "/usr/local/bin/#{options[:bin]}")
+            commands << link("/usr/local/lib/#{name}/#{options[:bin]}", "/usr/local/bin/#{File.basename(options[:bin])}")
           end
           return commands
         else
