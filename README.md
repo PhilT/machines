@@ -21,9 +21,9 @@ Upgrade passenger:
 Status
 -----------------------------------------------------------
 
-September 2012
+February 2013
 
-* Released 0.5.2 gem
+* Released 0.5.4 gem
 * Working development and server builds.
 * Cloud deployments to complete.
 
