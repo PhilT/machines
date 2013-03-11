@@ -2,13 +2,12 @@ require 'spec_helper'
 
 describe 'packages/unison' do
   before(:each) do
-    load_package('unison')
     $conf.machine = AppConf.new
     $conf.machine.user = 'username'
+    eval_package
   end
 
   it 'adds the following commands' do
-    eval_package
     $conf.commands.map(&:info).must_equal [
       "TASK   unison - Install and configure Unison (users/username/.unison/default.prf)",
       "SUDO   apt-get -q -y install unison",

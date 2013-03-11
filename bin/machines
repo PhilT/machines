@@ -2,5 +2,4 @@
 
 require 'machines'
 
-Machines::Base.new.execute(ARGV)
-
+Machines::Commandline.execute(ARGV)

@@ -1,9 +1,6 @@
 require 'spec_helper'
 
-describe 'Installation' do
-  include Machines::Core
-  include Machines::Installation
-  include Machines::Configuration
+describe Commands::Installation do
 
   describe 'add_ppa' do
     it 'adds a ppa' do

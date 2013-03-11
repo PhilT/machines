@@ -2,14 +2,13 @@ require 'spec_helper'
 
 describe 'packages/awstats' do
   before(:each) do
-    load_package('awstats')
-    $conf.webapps = {'name' => AppBuilder.new({:name => 'appname', :path => 'apppath'})}
+    $conf.webapps = {'name' => AppSettings::AppBuilder.new({:name => 'appname', :path => 'apppath'})}
     FileUtils.mkdir('misc')
-    File.open('misc/awstats.conf.erb', 'w') {}
+    FileUtils.touch('misc/awstats.conf.erb')
+    eval_package
   end
 
   it 'adds the following commands' do
-    eval_package
     $conf.commands.map(&:info).join("\n").must_equal [
       "TASK   awstats - Install AWStats",
       "SUDO   apt-get -q -y install awstats",

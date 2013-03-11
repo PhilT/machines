@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 describe 'packages/amazon_mp3' do
-  before(:each) do
-    load_package('amazon_mp3')
-  end
-
   it 'adds the following commands' do
     eval_package
     $conf.commands.map(&:info).must_equal [

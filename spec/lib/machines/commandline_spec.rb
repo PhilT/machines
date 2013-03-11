@@ -1,11 +1,12 @@
 require 'spec_helper'
 
-describe Machines::Commandline do
-  include Machines::Core
-  include Machines::Commandline
-  include Machines::Questions
+describe Commandline do
+
+  subject { Commandline.new }
 
   before(:each) do
+    subject
+    Commandline.stubs(:new).returns subject
     $conf.log_only = false
     File.open('config.yml', 'w') {|f| f.puts "timezone: GB" }
     FileUtils.mkdir_p 'log'
@@ -13,7 +14,7 @@ describe Machines::Commandline do
 
   describe 'build' do
     before(:each) do
-      stubs(:init)
+      subject.stubs(:init)
       FileUtils.touch('Machinesfile')
       $conf.machine = AppConf.new
       $conf.machine.address = 'target'
@@ -25,18 +26,18 @@ describe Machines::Commandline do
     end
 
     it 'displays syntax when no machine name specified' do
-      lambda { build [] }.must_output Machines::Help.new.syntax
+      lambda { subject.build [] }.must_output Help.new.syntax
     end
 
     it 'sets machine_name' do
-      build ['machine']
+      subject.build ['machine']
       $conf.machine_name.must_equal 'machine'
     end
 
     it 'starts an SCP session using password authentication' do
       options = {paranoid: false, password: 'userpass'}
       Net::SSH.expects(:start).with('target', 'username', options).returns @ssh_stub
-      build ['machine']
+      subject.build ['machine']
     end
 
     it 'starts an SCP session using key based authentication' do
@@ -46,52 +47,53 @@ describe Machines::Commandline do
       options = {paranoid: false, keys: ['path/to/private_key']}
       Net::SSH.expects(:start).with('target', 'ubuntu', options).returns @ssh_stub
 
-      build ['machine']
+      subject.build ['machine']
     end
 
     it 'runs each command' do
-      mock_command = mock 'Machines::Command'
+      mock_command = mock 'Command'
       $conf.commands = [mock_command]
 
       mock_command.expects(:run)
 
-      build ['machine']
+      subject.build ['machine']
     end
 
     it 'flushes log file after running command' do
       $conf.log_only = false
-      command_stub = stub('Machines::Command', :run => nil)
+      command_stub = stub('command', :run => nil)
       $conf.commands = [command_stub]
 
-      Machines::Command.file.expects(:flush)
-      build ['machine']
+      Command.file.expects(:flush)
+      subject.build ['machine']
     end
 
     it 'only run specified tasks' do
-      command_will_run = Machines::Command.new '', ''
-      command_also_run = Machines::Command.new '', ''
-      command_wont_run = Machines::Command.new '', ''
-      $conf.tasks = { 
-        :task1 => {:block => Proc.new { run command_will_run }},
-        :task2 => {:block => Proc.new { run command_also_run }}
+      command_will_run = Command.new 'will run', ''
+      command_also_run = Command.new 'also run', ''
+      command_wont_run = Command.new 'wont run', ''
+      $conf.tasks = {
+        :task1 => {:block => lambda { $conf.commands << command_will_run }},
+        :task2 => {:block => lambda { $conf.commands << command_also_run }},
+        :task3 => {:block => lambda { $conf.commands << command_wont_run }}
       }
 
-      build ['machine', 'task1', 'task2']
+      subject.build ['machine', 'task1', 'task2']
 
       $conf.commands.must_equal [command_will_run, command_also_run]
     end
 
     it 'logs instead of SSHing and running commands' do
       Net::SCP.expects(:start).never
-      $conf.commands = [mock('Machines::Command')]
+      $conf.commands = [mock('command')]
       $conf.commands.first.expects(:run)
       $conf.log_only = true
-      build ['machine']
+      subject.build ['machine']
     end
 
     describe 'interrupts' do
       before(:each) do
-        mock_command = mock 'Machines::Command'
+        mock_command = mock 'command'
         $conf.commands = [mock_command]
 
         mock_command.stubs(:run)
@@ -99,14 +101,13 @@ describe Machines::Commandline do
       end
 
       it 'handles CTRL+C and calls handler' do
-        expects(:prepare_to_exit)
+        subject.expects(:prepare_to_exit)
         Kernel.expects(:trap).with('INT').yields
-        build ['machine']
+        subject.build ['machine']
       end
 
-
       it 'sets exit flag and displays message' do
-        prepare_to_exit
+        subject.send :prepare_to_exit
         $exit_requested.must_equal true
         message = "\nEXITING after current command completes...\n"
         $console.next.must_equal colored(message, :warning)
@@ -114,15 +115,15 @@ describe Machines::Commandline do
 
       it 'second request to exit exits immediately' do
         $exit_requested = true
-        expects(:exit)
-        prepare_to_exit
+        subject.expects(:exit)
+        subject.send :prepare_to_exit
       end
 
       it 'exits when exit requested' do
         $exit_requested = true
-        expects(:exit)
+        subject.expects(:exit)
 
-        build ['machine']
+        subject.build ['machine']
       end
     end
   end
@@ -130,54 +131,54 @@ describe Machines::Commandline do
   describe 'dryrun' do
     it 'asks build to only log commands' do
       options = []
-      expects(:build).with options
-      dryrun options
+      subject.expects(:build).with options
+      subject.dryrun options
       $conf.log_only.must_equal true
     end
 
     it 'passes tasks to build' do
       options = ['machine', 'task']
-      expects(:build).with options
-      dryrun options
+      subject.expects(:build).with options
+      subject.dryrun options
     end
   end
 
   describe 'execute' do
     it 'calls specified action' do
-      Machines::Help.new.actions.reject{|a| a == 'new'}.each do |action|
-        expects action
-        execute [action]
+      Help.new.actions.reject{|a| a == 'new'}.each do |action|
+        subject.expects action
+        Commandline.execute [action]
       end
     end
 
     it 'calls generate with folder' do
-      expects(:generate).with(['dir'])
-      execute ['new', 'dir']
+      subject.expects(:generate).with(['dir'])
+      Commandline.execute ['new', 'dir']
     end
 
     it 'calls generate without folder' do
-      expects(:generate).with([])
-      execute ['new']
+      subject.expects(:generate).with([])
+      Commandline.execute ['new']
     end
 
     it 'calls help when no matching command' do
-      lambda { execute ['anything'] }.must_output Machines::Help.new.syntax
+      lambda { Commandline.execute ['anything'] }.must_output Help.new.syntax
     end
   end
 
   describe 'generate' do
     it 'copies the template within ./' do
-      expects(:ask).with("Overwrite './' (y/n)? ").returns 'y'
+      subject.expects(:ask).with("Overwrite './' (y/n)? ").returns 'y'
       FileUtils.expects(:cp_r).with("#{$conf.application_dir}/template/.", './')
       FileUtils.expects(:mkdir_p).with('./packages')
-      generate []
+      subject.generate []
     end
 
     it 'copies the template within dir' do
       FileUtils.expects(:cp_r).with("#{$conf.application_dir}/template/.", 'dir')
       FileUtils.expects(:mkdir_p).with(File.join('dir', 'packages'))
-      expects(:say).with('Project created at dir/')
-      generate ['dir']
+      subject.expects(:say).with('Project created at dir/')
+      subject.generate ['dir']
     end
 
     describe 'when folder exists' do
@@ -186,17 +187,17 @@ describe Machines::Commandline do
       end
 
       it 'is overwritten after user confirmation' do
-        expects(:ask).with("Overwrite 'dir' (y/n)? ").returns 'y'
+        subject.expects(:ask).with("Overwrite 'dir' (y/n)? ").returns 'y'
         FileUtils.expects(:cp_r).with("#{$conf.application_dir}/template/.", 'dir')
         FileUtils.expects(:mkdir_p).with(File.join('dir', 'packages'))
-        generate ['dir']
+        subject.generate ['dir']
       end
 
       it 'generation is aborted at user request' do
-        expects(:ask).with("Overwrite 'dir' (y/n)? ").returns 'n'
+        subject.expects(:ask).with("Overwrite 'dir' (y/n)? ").returns 'n'
         FileUtils.expects(:cp_r).never
         FileUtils.expects(:mkdir_p).never
-        generate ['dir']
+        subject.generate ['dir']
       end
     end
   end
@@ -205,54 +206,32 @@ describe Machines::Commandline do
     it 'htpasswd is generated and saved' do
       $conf.webserver = 'server'
       $input.string = "user\npass\npass\n"
-      htpasswd nil
+      subject.htpasswd nil
       File.read('server/htpasswd').must_match /user:.{13}/
     end
   end
 
   describe 'init' do
     it 'initializes some $conf settings and loads configs' do
-      Machines::Command.file = nil
-      Machines::Command.console = nil
-      Machines::Command.debug = nil
-      init
+      Command.file = nil
+      Command.console = nil
+      Command.debug = nil
+      subject.init
       $conf.passwords.must_equal []
       $conf.commands.must_equal []
       $conf.tasks.must_equal({})
       $conf.timezone.must_equal 'GB'
       File.exists?('log/output.log').must_equal true
-      Machines::Command.file.must_be_instance_of Machines::Logger
-      Machines::Command.console.must_be_instance_of Machines::Logger
-      Machines::Command.debug.must_be_instance_of Machines::Logger
+      Command.file.must_be_instance_of Machines::Logger
+      Command.console.must_be_instance_of Machines::Logger
+      Command.debug.must_be_instance_of Machines::Logger
     end
   end
 
   describe 'list' do
     it 'lists machines' do
       File.open('machines.yml', 'w') {|f| f.puts({'machines' => {'machine_1' => {}, 'machine_2' => {}}}.to_yaml) }
-      lambda { list nil }.must_output "Machines from machines.yml:\n  machine_1\n  machine_2\n"
-    end
-  end
-
-  describe 'load_machinesfile' do
-    it 'raises LoadError with custom message when no Machinesfile' do
-      File.expects(:read).with("Machinesfile").raises LoadError.new('Machinesfile not found')
-
-      begin
-        load_machinesfile
-      rescue LoadError => e
-        e.message.must_equal 'Machinesfile does not exist. Use `machines new <DIR>` to create a template.'
-      end
-    end
-
-    it 'raises normal LoadError on other files' do
-      File.expects(:read).with("Machinesfile").raises LoadError
-
-      begin
-        load_machinesfile
-      rescue LoadError => e
-        e.message.must_equal 'LoadError'
-      end
+      lambda { subject.list nil }.must_output "Machines from machines.yml:\n  machine_1\n  machine_2\n"
     end
   end
 
@@ -264,7 +243,7 @@ describe Machines::Commandline do
     end
 
     it 'copies package to project folder' do
-      override ['base']
+      subject.override ['base']
       File.exists?('packages/base.rb').must_equal true
     end
 
@@ -275,14 +254,14 @@ describe Machines::Commandline do
 
       it 'terminates when user answer no' do
         $input.string = "n\n"
-        lambda { override ['base'] }.must_output 'Project package already exists. Overwrite? (y/n)
+        lambda { subject.override ['base'] }.must_output 'Project package already exists. Overwrite? (y/n)
 Aborted.
 '
       end
 
       it 'overwrites project package with default package' do
         $input.string = "y\n"
-        lambda { override ['base'] }.must_output 'Project package already exists. Overwrite? (y/n)
+        lambda { subject.override ['base'] }.must_output 'Project package already exists. Overwrite? (y/n)
 Package copied to packages/base.rb
 '
       end
@@ -295,7 +274,7 @@ Package copied to packages/base.rb
       FileUtils.mkdir_p 'packages'
       FileUtils.touch File.join($conf.application_dir, 'packages', 'base.rb')
       FileUtils.touch File.join('packages', 'apps.rb')
-      lambda { packages nil }.must_output 'Default packages
+      lambda { subject.packages nil }.must_output 'Default packages
  * base
 Project packages
  * apps
@@ -305,14 +284,14 @@ Project packages
 
   describe 'tasks' do
     it 'displays a list of tasks' do
-      expects(:init)
-      expects(:load_machinesfile)
+      subject.expects(:init)
+      Core.any_instance.expects(:package).with 'Machinesfile'
       $conf.tasks = {
         :task1 => {:description => 'description 1'},
         :task2 =>  {:description => 'description 2'},
         :task3 => {:description => 'description 3'}
       }
-      lambda { tasks ['machine'] }.must_output 'Tasks
+      lambda { subject.tasks ['machine'] }.must_output 'Tasks
   task1                description 1
   task2                description 2
   task3                description 3

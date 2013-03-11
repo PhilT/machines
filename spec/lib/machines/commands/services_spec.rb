@@ -1,9 +1,6 @@
 require 'spec_helper'
 
-describe 'Services' do
-  include Machines::Core
-  include Machines::FileOperations
-  include Machines::Services
+describe Commands::Services do
 
   describe 'restart' do
     subject { restart 'daemon' }

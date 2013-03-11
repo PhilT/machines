@@ -5,7 +5,7 @@ Machines
 
 Setup Ubuntu development and server **Machines** locally or in the cloud for developing and hosting Ruby, Rails and related environments.
 
-Run commands like:
+Write commands in Ruby like:
 
     sudo install %w(build-essential zlib1g-dev libpcre3-dev)
     sudo write "127.0.1.1\t#{$conf.hostname}", :to => '/etc/hosts'
@@ -13,7 +13,7 @@ Run commands like:
     run download $conf.nginx.url
     run create_from 'nginx/nginx.conf.erb', :to => File.join($conf.nginx.path, 'conf', 'nginx.conf')
 
-Upgrade passenger:
+Example to upgrade passenger:
 
     machines build phil_workstation passenger_nginx
 
@@ -21,11 +21,12 @@ Upgrade passenger:
 Status
 -----------------------------------------------------------
 
-February 2013
+**March 2013**
 
 * Released 0.5.4 gem
 * Working development and server builds.
-* Cloud deployments to complete.
+* Cloud deployments, cleaner API and some tidy up in development.
+
 
 Features
 -----------------------------------------------------------
@@ -36,11 +37,14 @@ Features
 * Default template supports Nginx, Passenger, Ruby, Rails, MySQL, Git, Monit, Logrotate
 * Preconfigured Ruby & Rails light development environment (Openbox or Subtle)
 * Bring up new instances fully configured in less than 15 minutes
+* The best form of documentation for your architecture
+
 
 What it's Not
 -----------------------------------------------------------
 
-* It does not replace the base installation (Yet). A minimal Ubuntu must be installed prior to running the *Machines* install
+* It does not replace the base installation (Yet). A minimal Ubuntu must be installed prior to running the *Machines* install (instructions provided below)
+* It's not a full blown configuration management tool such as Puppet or Chef although it can be used to run packages on the local machine to install new versions
 
 
 Motivation
@@ -52,9 +56,10 @@ Configuration management is a complex topic. I wanted to reduce some of the vari
 Overview
 -----------------------------------------------------------
 
-The top level script is the `Machinesfile`. This contains the packages to include. Packages contain the commands to run. Default packages are provided by Machines. Default packages can be overridden and new ones created.
+The top level script is the `Machinesfile`. This contains a list of packages to run. Packages contain one or more tasks and the tasks contain the commands to run.  Default packages are provided by Machines. Default packages can be overridden and new ones created.
 
 Commands are added to a queue with `sudo` or `run`. [lib/packages](https://github.com/PhilT/machines/tree/master/lib/packages) contains the packages you can add in the `Machinesfile` in Machines. Once the build starts the commands are run and shown with the current progress.
+
 
 Installation and Configuration
 -----------------------------------------------------------
@@ -63,26 +68,23 @@ Installation and Configuration
 
     gem install machines
 
-### Generate an example build script
+### Generate an example project
 
     machines new example
-
-Creates the `example` folder and copies in an example template.
 
 ### Configure your deployment
 
 Take a look at the generated project. It contains several folders with templates and
 configuration settings for various programs, your `Machinesfile` and the various `.yml` files.
 
-`machines.yml` is your machine architecture. Here you'll add all the computers in your environment.
+* `machines.yml` is your architecture. Here you'll add all the computers in your setup.
+* `webapps.yml` contains the web applications you develop and maintain.
+* `config.yml` contains settings for various packages. Versions, Cloud setup, paths, etc.
+* `users/` contains user specific preferences, dotfiles, etc
 
-`webapps.yml` lists the web applications you develop and maintain.
+So here is the recommended approach to configuring your environment:
 
-`config.yml` contains settings for various packages. Version numbers, Cloud configuration, paths, etc.
-
-`users/` contains user specific preferences, dotfiles, etc
-
-* Create your architecture in `machines.yml`
+* Create your architecture in `machines.yml` (see notes in file)
 * Add you webapps in `webapps.yml`
 * Edit the build script (`Machinesfile`)
 * Add your websites certificates and amazon private key (if required)
@@ -109,12 +111,10 @@ configuration settings for various programs, your `Machinesfile` and the various
     machines dryrun <machine>
     cat log/output.log
 
-
 ### Check the machine
 
     ssh-keygen -R <host ip> # remove host from known_hosts file (handy when testing)
     $ ssh <IP ADDRESS>      # Make sure you can connect to the machine
-
 
 ### Build the machine
 
@@ -131,7 +131,11 @@ Console output:
 
 While running open another terminal to view detailed output:
 
-    tail -f output.log
+    tail -f log/output.log
+
+or debug:
+
+    tail -f log/debug.log
 
 
 Commandline Options
@@ -169,6 +173,19 @@ Some of the settings set and used by Machines are:
 
 Take a look at `template/*.yml` for more.
 
+Commands
+-----------------------------------------------------------
+
+Commands you can use with `run` or `sudo` are in the following modules:
+
+* [Configuration](http://rdoc.info/github/PhilT/machines/Machines/Commands/Configuration)
+* [Database](http://rdoc.info/github/PhilT/machines/Machines/Commands/Database)
+* [FileOperations](http://rdoc.info/github/PhilT/machines/Machines/Commands/FileOperations)
+* [Installation](http://rdoc.info/github/PhilT/machines/Machines/Commands/Installation)
+* [Services](http://rdoc.info/github/PhilT/machines/Machines/Commands/Services)
+
+When creating your own commands the [Checks](http://rdoc.info/github/PhilT/machines/Machines/Commands/Checks) module should be useful.
+
 
 Setting up a test VM
 -----------------------------------------------------------
@@ -204,11 +221,12 @@ Make sure you've downloaded one of the ISOs from the list in *Prepare the target
 What's happening under the hood
 -----------------------------------------------------------
 
-* An ssh connection is established to send all commands and uploads (similar to Capistrano)
-* Ssh uses the specified user and then sudo is added to commands that require it
-* When sudo is needed for file uploads. The file is uploaded to /tmp then sudo cp'd to the destination
+* An SSH connection is established to send all commands and uploads (similar to Capistrano) to the target machine
+* SSH uses the specified user and then sudo is added to commands that require it
+* When sudo is needed for file uploads. The file is uploaded to `/tmp` then `sudo cp`'d to the destination
 * When `package` is called in the `Machinesfile` that file is loaded either from the projects packages folder
   or from the Machines packages if not found in the project
+* It is executed within the context of the Core class. This class defines basic commands such as `task`, `run`, `sudo` and includes all the Commands modules so they are available to the running package
 
 
 Limitations
@@ -218,8 +236,9 @@ Limitations
 * Servers use www (by default) for nginx/apache, passenger and deployments
 * The system has been designed to allow a certain flexibility in the configuration although some things
   may not yet be totally configurable it should be possible to add or modify the relevant package
-* We are currently focused on Ruby 1.9.2 (Moving to 1.9.3 soon), Rails 3 and Passenger 3
+* We are currently focused on Ruby 1.9.3 (Moving to 2.0 soon), Rails 3 and Passenger 3
 * Some commands may not properly escape quotes when used with sudo (e.g. append and replace). This may be addressed in a future release
+* Tasks not configured to run for a particular setup will not be available to run explicitly from the commandline
 
 
 Development, Patches, Pull Requests
@@ -229,8 +248,8 @@ Development, Patches, Pull Requests
 * Test drive your feature addition or bug fix
 * Commit, do not mess with Rakefile, version, or history
 * Send me a pull request. Please use topic branches
-* Feel free to add/enhance packages and submit pull requests
-* Package tests are a bit of a pain but do catch a lot of potential issues
+* Feel free to add, enhance or update packages and submit pull requests
+* Package tests are a bit of a pain but do catch a lot of potential issues so please add these
 
 
 References
@@ -276,5 +295,5 @@ Thanks to all the people that published the hundreds of articles, blog posts and
 Copyright
 -----------------------------------------------------------
 
-Copyright (c) 2010, 2011, 2012 Phil Thompson. See LICENSE for details.
+Copyright (c) 2010, 2011, 2012, 2013 Phil Thompson. See LICENSE for details.
 

@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe 'packages/passenger' do
   before(:each) do
-    load_package('passenger')
     $conf.user_home = '/home/user'
     $conf.from_hash(:passenger => {:version => '3.0.7'})
     $conf.from_hash(:ruby => {:gems_path => 'ruby/gems', :executable => 'bin/ruby'})

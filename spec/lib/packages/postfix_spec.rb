@@ -1,12 +1,8 @@
 require 'spec_helper'
 
 describe 'packages/postfix' do
-  before(:each) do
-    load_package('postfix')
-    $conf.from_hash(:mail => {:domain => 'domain'})
-  end
-
   it 'adds the following commands' do
+    $conf.from_hash(:mail => {:domain => 'domain'})
     eval_package
     $conf.commands.map(&:info).must_equal [
       "TASK   postfix - Install postfix mail",

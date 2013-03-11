@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe 'packages/nginx' do
   before(:each) do
-    load_package('nginx')
     $conf.from_hash(webserver: {name: 'nginx', version: '1.2.3',
       path: 'nginx_path', conf_path: 'conf', modules: '--with-http_ssl_module'})
     $conf.from_hash(:passenger => {:nginx => '/passenger/path/ext/nginx'})

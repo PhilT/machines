@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 describe 'packages/chrome' do
-  before(:each) do
-    load_package('chrome')
-  end
-
   it 'adds chrome ppa and installs' do
     eval_package
     $conf.commands.map(&:info).must_equal [

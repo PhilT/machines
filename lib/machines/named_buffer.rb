@@ -1,9 +1,10 @@
-class NamedBuffer < StringIO
-  attr_reader :name
+module Machines
+  class NamedBuffer < StringIO
+    attr_reader :name
 
-  def initialize name, string
-    super string
-    @name = name
+    def initialize name, string
+      super string
+      @name = name
+    end
   end
 end
-

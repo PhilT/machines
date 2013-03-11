@@ -1,8 +1,9 @@
 require 'spec_helper'
 require 'fog'
 
-describe 'CloudMachine' do
-  include Machines::CloudMachine
+describe CloudMachine do
+
+  subject { CloudMachine.new }
 
   before do
     Fog.mock!
@@ -11,11 +12,11 @@ describe 'CloudMachine' do
   end
 
   it 'displays an error message when fog gem is not available' do
-    stubs(:require)
-    expects(:require).with('fog').raises LoadError
+    subject.stubs(:require)
+    subject.expects(:require).with('fog').raises LoadError
     lambda do
       begin
-        connect_to_cloud
+        subject.connect_to_cloud
       rescue LoadError
       end
     end.must_output "fog gem required to use cloud features.
@@ -24,13 +25,13 @@ Please \"gem install fog\".
   end
 
   it 'sets correct options and connects' do
-    connect_to_cloud
+    subject.connect_to_cloud
     $conf.cloud.connection.must_be_kind_of Fog::Compute::AWS::Mock
   end
 
   it 'creates a server' do
-    connect_to_cloud
-    create_server
+    subject.connect_to_cloud
+    subject.create_server
   end
 end
 

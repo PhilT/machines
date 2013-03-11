@@ -1,13 +1,14 @@
 require 'spec_helper'
 
-describe 'AppSettings' do
-  include Machines::AppSettings
+describe AppSettings do
+
+  subject { AppSettings.new }
 
   describe 'load_and_generate_passwords_for_webapps' do
     it 'generates passwords and saves to webapps.yml' do
       File.open('webapps.yml', 'w') {|f| f.puts "###\n\n---\nwebapps:\n  my_app:\n    development:\n      password: \n" }
-      stubs(:generate_password).returns 'random'
-      load_and_generate_passwords_for_webapps
+      subject.stubs(:generate_password).returns 'random'
+      subject.load_and_generate_passwords_for_webapps
       File.read('webapps.yml').must_equal "###\n\n---\nwebapps:\n  my_app:\n    development:\n      password: random\n"
     end
   end
@@ -30,9 +31,9 @@ EOF
     end
 
     it 'loads the app settings for selected apps' do
-      load_app_settings ['app']
+      subject.load_app_settings ['app']
       $conf.webapps.must_equal({
-        'app' => AppBuilder.new(
+        'app' => AppSettings::AppBuilder.new(
           :scm => 'scm://project.git',
           :name => 'app',
           :path => '/home/user/app',
@@ -45,9 +46,9 @@ EOF
 
     it 'handles ssl settings' do
       File.open('webapps.yml', 'w') {|f| f.puts @settings }
-      load_app_settings ['app']
+      subject.load_app_settings ['app']
       $conf.webapps.must_equal({
-        'app' => AppBuilder.new(
+        'app' => AppSettings::AppBuilder.new(
           :name => 'app',
           :scm => 'scm://project.git',
           :path => '/home/user/app',
@@ -64,7 +65,7 @@ EOF
 
     it 'does not fail when settings not included for specified environment' do
       File.open('webapps.yml', 'w') {|f| f.puts "---\nwebapps:\n  app:\n    path: path\n" }
-      load_app_settings(['app'])
+      subject.load_app_settings(['app'])
     end
 
     it 'loads settings for all apps when none specified' do
@@ -83,16 +84,16 @@ webapps:
       password: secure
       EOF
       File.open('webapps.yml', 'w') {|f| f.puts settings }
-      load_app_settings nil
+      subject.load_app_settings nil
       $conf.webapps.must_equal({
-        'app' => AppBuilder.new(
+        'app' => AppSettings::AppBuilder.new(
           :name => 'app',
           :path => '/home/user/app',
           :scm => 'scm://project.git',
           :root => '/home/user/app/current/public',
           :setting => 'setting',
           :password => 'secure'),
-        'other' => AppBuilder.new(
+        'other' => AppSettings::AppBuilder.new(
           :name => 'other',
           :root => '/home/user/other/current/public',
           :scm => 'scm://other_project',

@@ -1,10 +1,6 @@
 require 'spec_helper'
 
-describe 'packages/apps' do
-  before(:each) do
-    load_package('file_roller')
-  end
-
+describe 'packages/file_roller' do
   def append_command text
     "RUN    grep \"#{text}\" .local/share/applications/mimeapps.list || echo \"#{text}\" >> .local/share/applications/mimeapps.list"
   end

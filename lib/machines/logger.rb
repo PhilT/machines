@@ -1,5 +1,3 @@
-require 'date'
-
 module Machines
   class Logger
     HighLine.color_scheme = HighLine::ColorScheme.new do |cs|

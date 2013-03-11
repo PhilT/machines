@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe 'packages/hosts' do
   before(:each) do
-    load_package('hosts')
     $conf.machine = AppConf.new
     $conf.machine.hostname = 'hostname'
     $conf.from_hash(:hosts => {'some.domain' => '1.2.3.4'})

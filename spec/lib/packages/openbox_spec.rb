@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 describe 'packages/openbox' do
-  before(:each) do
-    load_package('openbox')
-  end
-
   it 'adds the following commands' do
     eval_package
     $conf.commands.map(&:info).join("\n").must_equal [

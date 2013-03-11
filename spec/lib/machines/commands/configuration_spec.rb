@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-describe 'Configuration' do
-  include Machines::Core
-  include Machines::Configuration
+describe Commands::Configuration do
 
   describe 'add_user' do
     it do
@@ -20,6 +18,7 @@ describe 'Configuration' do
 
   describe 'add' do
     it 'add an existing user to a group' do
+      stubs(:required_options)
       command = add :user => 'phil', :to => 'group'
       command.command.must_equal 'usermod -a -G group phil'
     end

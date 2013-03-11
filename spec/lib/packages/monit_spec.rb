@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe 'packages/monit' do
   before(:each) do
-    load_package('monit')
     FileUtils.mkdir_p 'monit/conf.d'
     File.open('monit/monitrc.erb', 'w') {}
     File.open('monit/upstart.conf.erb', 'w') {}

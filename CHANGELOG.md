@@ -1,3 +1,7 @@
+== 0.5.5
+
+* Cleaned up API - moved all commands into Commands module and turned non-commands into classes
+
 == 0.5.4
 
 * Added support extracting for bz2 archives

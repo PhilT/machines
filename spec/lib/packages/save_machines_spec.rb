@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe 'packages/save_machines' do
   before(:each) do
-    load_package('save_machines')
     $conf.machines_changed = true
     $conf.from_hash({'machines' => {'a_machine' => {'hostname' => 'something', 'environment' => 'development'}}})
   end

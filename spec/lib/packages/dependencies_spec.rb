@@ -2,12 +2,11 @@ require 'spec_helper'
 
 describe 'packages/dependencies' do
   before(:each) do
-    load_package('dependencies')
     $conf.hostname = 'hostname'
+    eval_package
   end
 
   it 'adds the following commands' do
-    eval_package
     $conf.commands.map(&:info).must_equal [
       "TASK   dependencies - Dependencies required for various commands to run",
       "SUDO   apt-get -q -y update > /tmp/apt-update.log",

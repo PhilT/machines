@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Checks' do
+describe Commands::Checks do
   describe 'echo_result' do
     it do
       echo_result.must_equal '&& echo CHECK PASSED || echo CHECK FAILED'

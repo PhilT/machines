@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 describe 'packages/docky' do
-  before(:each) do
-    load_package('docky')
-  end
-
   it 'adds the following commands' do
     eval_package
     $conf.commands.map(&:info).must_equal [

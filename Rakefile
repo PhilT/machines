@@ -1,7 +1,6 @@
 require 'bundler'
 require 'yard'
 require 'highline/import'
-require 'rake'
 require 'rake/testtask'
 
 task :default => [:coverage, :yard, :install]
@@ -39,13 +38,6 @@ task :install do
   else
     raise result
   end
-end
-
-desc 'Run machines'
-task :run do
-  $LOAD_PATH << 'lib'
-  require 'machines'
-  Machines::Base.new.start(ARGV[1])
 end
 
 desc 'Git tags and sends the gem to rubygems'

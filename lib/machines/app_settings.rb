@@ -1,5 +1,5 @@
 module Machines
-  module AppSettings
+  class AppSettings
     class AppBuilder < OpenStruct
       def get_binding
         binding

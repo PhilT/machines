@@ -2,12 +2,11 @@ require 'spec_helper'
 
 describe 'packages/virtualbox' do
   before(:each) do
-    load_package('virtualbox')
     $conf.user = 'phil'
+    eval_package
   end
 
   it 'adds the following commands' do
-    eval_package
     $conf.commands.map(&:info).join("\n").must_equal [
       "TASK   virtualbox - Install VirtualBox",
       "SUDO   apt-get -q -y install dkms",

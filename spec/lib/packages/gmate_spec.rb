@@ -1,12 +1,8 @@
 require 'spec_helper'
 
 describe 'packages/gmate' do
-  before(:each) do
-    load_package('gmate')
-    $conf.appsroot = 'apps_root'
-  end
-
   it 'adds the following commands' do
+    $conf.appsroot = 'apps_root'
     eval_package
     $conf.commands.map(&:info).must_equal [
       "TASK   gmate - Clone and install gmate for gEdit from Github and set some preferences and plugins",

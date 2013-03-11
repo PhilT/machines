@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe 'packages/dotfiles' do
   before(:each) do
-    load_package('dotfiles')
     $conf.machine = AppConf.new
     $conf.machine.user = 'username'
     $conf.appsroot = 'appsroot'
@@ -32,13 +31,15 @@ describe 'packages/dotfiles' do
   it 'sets RAILS_ENV when specified in set_rails_env_for' do
     $conf.set_rails_env_for = ['railsenv']
     eval_package
-    $conf.commands.map(&:info).join("\n").must_match /RUN    grep \"export RAILS_ENV=railsenv\" .profile || echo \"export RAILS_ENV=railsenv\" >> .profile/
+    expected = /RUN    grep \"export RAILS_ENV=railsenv\" .profile || echo \"export RAILS_ENV=railsenv\" >> .profile/
+    $conf.commands.map(&:info).join("\n").must_match expected
   end
 
   it 'RAILS_ENV not set when not specified in set_rails_env_for' do
     $conf.set_rails_env_for = ['some_other_env']
     eval_package
-    $conf.commands.map(&:info).join("\n").wont_match /RUN    grep \"export RAILS_ENV=railsenv\" .profile \|\| echo \"export RAILS_ENV=railsenv\" >> .profile/
+    expected = /RUN    grep \"export RAILS_ENV=railsenv\" .profile \|\| echo \"export RAILS_ENV=railsenv\" >> .profile/
+    $conf.commands.map(&:info).join("\n").wont_match expected
   end
 end
 

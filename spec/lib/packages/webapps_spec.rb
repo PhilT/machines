@@ -2,11 +2,9 @@ require 'spec_helper'
 
 describe 'packages/webapps' do
   before(:each) do
-    load_package('webapps')
-
     $conf.from_hash(:user => {:name => 'username', :home => 'home_dir'}, :ruby => {:version => 'ruby_version'})
     $conf.webapps = {'application' =>
-      AppBuilder.new(
+      AppSettings::AppBuilder.new(
         'scm' => 'github.com/project',
         'branch' => 'master',
         'name' => 'application',

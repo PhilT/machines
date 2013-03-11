@@ -1,10 +1,6 @@
 require 'spec_helper'
 
-describe 'packages/apps' do
-  before(:each) do
-    load_package('abiword')
-  end
-
+describe 'packages/abiword' do
   it 'adds the following commands' do
     eval_package
     $conf.commands.map(&:info).must_equal [

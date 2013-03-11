@@ -1,5 +1,5 @@
 module Machines
-  module CloudMachine
+  class CloudMachine
     def connect_to_cloud
       begin
         require 'fog'

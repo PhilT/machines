@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-describe 'Questions' do
-  include Machines::Questions
-
+describe Machines::Commands::Questions do
   describe 'enter_password' do
     before(:each) do
       stubs(:ask).returns 'pa55word'

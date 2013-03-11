@@ -1,12 +1,6 @@
 require 'spec_helper'
 
-describe 'Database' do
-  include Machines::Core
-  include Machines::Configuration
-  include Machines::Database
-  include Machines::AppSettings
-  include Machines::FileOperations
-
+describe Commands::Database do
   describe 'write_database_yml' do
     before do
       $conf.environment = 'staging'
@@ -15,7 +9,7 @@ describe 'Database' do
     end
 
     it 'supplies correct parameters' do
-      file = write_database_yml AppBuilder.new(:name => 'app', :password => 'password', :path => 'path')
+      file = write_database_yml AppSettings::AppBuilder.new(:name => 'app', :password => 'password', :path => 'path')
       file.local.read.must_equal <<-EOF
 ---
 staging:
@@ -29,12 +23,12 @@ EOF
     end
 
     it 'writes file to specified path' do
-      file = write_database_yml AppBuilder.new(:name => 'app', :password => 'password', :path => 'path')
+      file = write_database_yml AppSettings::AppBuilder.new(:name => 'app', :password => 'password', :path => 'path')
       file.remote.must_equal 'path/shared/config/database.yml'
     end
 
     it 'overrides database name when supplied' do
-      file = write_database_yml AppBuilder.new(:name => 'app', :password => 'password', :username => 'phil', :database => 'myapp', :path => 'path')
+      file = write_database_yml AppSettings::AppBuilder.new(:name => 'app', :password => 'password', :username => 'phil', :database => 'myapp', :path => 'path')
       file.local.read.must_equal <<-EOF
 ---
 staging:

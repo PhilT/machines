@@ -1,21 +1,20 @@
 require 'spec_helper'
 
 describe 'packages/load_machines' do
-  let(:settings) do
+  let(:settings) {
     {'machines' => {'a_machine' => {'hostname' => 'something', 'user' => 'phil', 'address' => '1.2.3.4'}}}
-  end
+  }
 
   def save_settings
     File.open('machines.yml', 'w') {|f| f.puts settings.to_yaml }
   end
 
   before(:each) do
-    load_package('load_machines')
     $conf.machine_name = 'a_machine'
     $conf.from_hash('appsroots' => {'phil' => '/home/phil'})
-    stubs(:load_app_settings)
-    stubs(:connect)
-    stubs(:run_instance)
+    core.stubs(:load_app_settings)
+    core.stubs(:connect)
+    core.stubs(:run_instance)
   end
 
   describe 'loading machines.yml' do
@@ -46,10 +45,13 @@ describe 'packages/load_machines' do
   end
 
   describe 'setting address' do
+    #TODO: should move from load_machines
+    class Core::ConfigError < StandardError; end
+
     it 'raises an exception when no address' do
       settings['machines']['a_machine']['address'] = nil
       save_settings
-      lambda { eval_package }.must_raise ConfigError
+      lambda { eval_package }.must_raise Core::ConfigError
     end
 
     describe 'when EC2' do
@@ -59,29 +61,29 @@ describe 'packages/load_machines' do
 
       it 'does not throw or connect when address set' do
         save_settings
-        expects(:connect).never
+        core.expects(:connect).never
         eval_package
       end
 
       it 'starts a new instance when no address' do
         settings['machines']['a_machine']['address'] = nil
         save_settings
-        expects(:connect).returns true
-        expects(:run_instance)
+        core.expects(:connect).returns true
+        core.expects(:run_instance)
         eval_package
       end
     end
   end
 
   it 'sets root_pass when not set' do
-    stubs(:generate_password).returns '1234'
+    core.stubs(:generate_password).returns '1234'
     save_settings
     eval_package
     $conf.machines.a_machine.root_pass.must_equal '1234'
   end
 
   it 'sets $conf.machines_changed when passwords are generated' do
-    stubs(:generate_password).returns '1234'
+    core.stubs(:generate_password).returns '1234'
     save_settings
     eval_package
     $conf.machines_changed.wont_equal nil
@@ -95,7 +97,7 @@ describe 'packages/load_machines' do
   end
 
   it 'does not overwrite root_pass' do
-    expects(:generate_password).never
+    core.expects(:generate_password).never
     settings['machines']['a_machine']['root_pass'] = 'something'
     save_settings
     eval_package
@@ -111,8 +113,7 @@ describe 'packages/load_machines' do
   it 'loads app settings' do
     settings['machines']['a_machine']['apps'] = ['app1', 'app2']
     save_settings
-    expects(:load_app_settings).with(['app1', 'app2'])
+    core.expects(:load_app_settings).with(['app1', 'app2'])
     eval_package
   end
 end
-

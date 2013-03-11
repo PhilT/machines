@@ -2,8 +2,6 @@ require 'spec_helper'
 
 describe 'packages/mysql' do
   before(:each) do
-    load_package('mysql')
-
     $conf.from_hash(:machine => {
       :address => 'DB_IP',
       :root_pass => 'DB_PASS',
@@ -38,7 +36,7 @@ describe 'packages/mysql' do
   describe 'dbmaster role' do
     it 'sets permissions for each app to access database and grants replication rights for slave' do
       $conf.roles = :dbmaster
-      $conf.webapps = {'name' => AppBuilder.new({:name => 'name', :password => 'PASSWORD'})}
+      $conf.webapps = {'name' => AppSettings::AppBuilder.new({:name => 'name', :password => 'PASSWORD'})}
       eval_package
       $conf.commands.map(&:info).must_equal [
         "TASK   dbperms - Grant applications access to the database",

@@ -1,13 +1,30 @@
 module Machines
-  module Commandline
+  class Commandline
+
+    def initialize
+      @core = Core.new
+    end
+
+    # Execute a command (build dryrun generate htpasswd packages override tasks)
+    def self.execute options
+      help = Help.new
+      action = options.shift
+      if help.actions.include?(action)
+        action.gsub!('new', 'generate')
+        new.send action, options
+      else
+        say help.syntax
+      end
+    end
+
     # Loads Machinesfile, opens an SCP connection and runs all commands and file uploads
     def build options
       $conf.machine_name = options.shift
       return say(Help.new.syntax) unless $conf.machine_name
       init
-      load_machinesfile
+      @core.package 'Machinesfile'
 
-      task options if options.any?
+      @core.task options if options.any?
 
       ssh_options = {:paranoid => false}
       if $conf.machine.cloud
@@ -43,18 +60,6 @@ module Machines
       build options
     end
 
-    # Execute a given command e.g. dryrun, build, generate, htpasswd, packages, override, tasks
-    def execute options
-      help = Help.new
-      action = options.shift
-      if help.actions.include?(action)
-        action = 'generate' if action == 'new'
-        send action, options
-      else
-        say help.syntax
-      end
-    end
-
     def generate options
       dir = options.first || './'
       if File.exists? dir
@@ -85,23 +90,13 @@ module Machines
       $conf.tasks = {}
       $conf.load('config.yml')
 
-      Command.file ||= Machines::Logger.new File.open('log/output.log', 'w')
-      Command.debug ||= Machines::Logger.new File.open('log/debug.log', 'w')
-      Command.console ||= Machines::Logger.new STDOUT, :truncate => true
+      Command.file ||= Logger.new File.open('log/output.log', 'w')
+      Command.debug ||= Logger.new File.open('log/debug.log', 'w')
+      Command.console ||= Logger.new STDOUT, :truncate => true
     end
 
     def list notused
       say Help.new.machine_list
-    end
-
-    def load_machinesfile
-      eval File.read('Machinesfile'), nil, "eval: Machinesfile"
-    rescue LoadError => e
-      if e.message =~ /Machinesfile/
-        raise LoadError, "Machinesfile does not exist. Use `machines new <DIR>` to create a template."
-      else
-        raise
-      end
     end
 
     def packages notused
@@ -136,7 +131,7 @@ module Machines
 
       $conf.log_only = true
       init
-      load_machinesfile
+      @core.package 'Machinesfile'
       say 'Tasks'
       $conf.tasks.each do |task_name, settings|
         say "  %-20s #{settings[:description]}" % task_name

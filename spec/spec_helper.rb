@@ -10,22 +10,11 @@ Dir['spec/support/*.rb'].each {|file| require File.join('./spec', 'support', Fil
 require 'machines'
 application_dir = $conf.application_dir
 
-include Machines::AppSettings
-
-# This is done so that Machines::Core.run doesn't collide with MiniTest::Unit::TestCase.run when included
-module Machines::Core
-  alias :run_command :run
-  remove_method :run
-end
-MiniTest::Spec.add_setup_hook do |klass|
-  klass.instance_eval do
-    alias :run :run_command if respond_to?(:run_command)
-  end
-end
+include Machines
+modules = %w(Checks Configuration Database FileOperations Installation Questions Services)
+modules.each { |m| include eval("Machines::Commands::#{m}") }
 
 MiniTest::Spec.add_setup_hook do
-  include Machines::Checks
-
   $conf.clear
   $conf.passwords = []
   $conf.commands = []
@@ -61,31 +50,34 @@ module MiniTest
   end
 end
 
-class MiniTest::Spec::Package < MiniTest::Spec
-  include Machines
-  include AppSettings, CloudMachine, Commandline, Configuration, Core, Database
-  include FileOperations, Installation, Machinesfile, Questions, Services
-end
-
-MiniTest::Spec.register_spec_type(/packages\//, MiniTest::Spec::Package)
-
-def RealFS &block
-  FakeFS.deactivate!
-  yield block
-ensure
-  FakeFS.activate!
-end
-
-def load_package name
-  RealFS do
-    @package_path = File.join($conf.application_dir, File.join('packages', "#{name}.rb"))
-    @package = File.read(@package_path)
+class Machines::Core
+  def eval_package content, name
+    eval content, nil, "eval: #{name}"
   end
 end
 
-def eval_package
-  eval @package, nil, @package_path
+class MiniTest::Spec::Package < MiniTest::Spec
+  def core
+    @core ||= Core.new
+  end
+
+  def load_package
+    @package_name = File.basename(self.class.name).split('::').first
+    FakeFS.deactivate!
+    @package = File.read File.join($conf.application_dir, 'packages', "#{@package_name}.rb")
+    FakeFS.activate!
+  end
+
+  def eval_package
+    core.eval_package(@package, @package_name)
+  end
+
+  add_setup_hook do |desc|
+    desc.load_package
+  end
 end
+
+MiniTest::Spec.register_spec_type(/packages\//, MiniTest::Spec::Package)
 
 def save_yaml contents, path
   File.open(path, 'w') do |f|
@@ -100,4 +92,3 @@ def colored string, color
 end
 
 require 'minitest/autorun'
-

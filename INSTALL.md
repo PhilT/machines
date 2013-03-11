@@ -1,3 +1,5 @@
+If installing to VirtualBox on a Windows host (as in my case) read on.
+
 Install freeSSHd
 ----------------------------------------
 
@@ -8,6 +10,7 @@ Install freeSSHd
 ** Authorization: Public key
 ** User can use: Shell
 * Copy the public rsa key from your Ubuntu VM and save it in `C:\Program Files (x86)\freeSSHd\vbuser` with no extension
+
 
 Install VM
 ----------------------------------------

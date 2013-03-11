@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe 'packages/passenger_nginx' do
   before(:each) do
-    load_package('passenger_nginx')
     $conf.from_hash(:webserver => {:path => 'nginx_dest', :version => '1.0.2'})
     $conf.password = 'pass'
     $conf.from_hash(:passenger => {:root => '/home/user/gems/passenger-1.2.3'})

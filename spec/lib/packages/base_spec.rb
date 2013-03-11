@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe 'packages/base' do
   it 'adds the following commands' do
-    load_package('base')
     eval_package
     $conf.commands.map(&:info).join("\n").must_equal [
       "TASK   base - Install base packages for compiling Ruby and libraries",

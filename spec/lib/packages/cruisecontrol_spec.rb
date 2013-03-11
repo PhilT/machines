@@ -2,10 +2,9 @@ require 'spec_helper'
 
 describe 'packages/cruisecontrol' do
   before(:each) do
-    load_package('cruisecontrol')
     $conf.from_hash(ruby: {gems_path: 'ruby/gems'})
     $conf.webapps = {'application' =>
-      AppBuilder.new(
+      AppSettings::AppBuilder.new(
         'scm' => 'github.com/project',
         'title' => 'Application'
       )

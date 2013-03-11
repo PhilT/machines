@@ -1,9 +1,6 @@
 require 'spec_helper'
 
-describe 'FileOperations' do
-  include Machines::FileOperations
-  include Machines::Core
-
+describe Commands::FileOperations do
   describe 'append' do
     it 'escapes backslashes (\\)' do
       subject = append '\\', :to => 'file'
@@ -62,11 +59,9 @@ describe 'FileOperations' do
   end
 
   describe 'create_from' do
-    include Machines::AppSettings
-
     it 'loads ERB template, applies settings and writes to remote machine' do
       File.expects(:read).with('erb_path').returns('<%= method_on_binding %>')
-      app_builder = AppBuilder.new(:method_on_binding => 'result')
+      app_builder = AppSettings::AppBuilder.new(:method_on_binding => 'result')
       expects(:write).with('result', {:settings => app_builder, :to => 'file', :name => 'erb_path'})
       create_from('erb_path', :settings => app_builder, :to => 'file')
     end
@@ -107,6 +102,7 @@ describe 'FileOperations' do
   end
 
   describe 'replace' do
+    before { stubs(:required_options) }
     subject { replace('something', :with => 'some/path', :in => 'file') }
     it { subject.command.must_equal "sed -i \"s/something/some\\/path/\" file" }
     it { lambda{replace('something')}.must_raise ArgumentError }

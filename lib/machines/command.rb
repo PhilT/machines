@@ -1,5 +1,3 @@
-require 'machines/logger'
-
 module Machines
   class Command
     class << self

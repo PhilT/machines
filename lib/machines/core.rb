@@ -1,5 +1,5 @@
 module Machines
-  module Core
+  class Core
     # If a block is given, store the task, log it and run it
     # If no block is given, sets commands to only those of the specified tasks so they can be run standalone
     # @param [Symbol, String, Array] name Name of the task or array of task names
@@ -26,12 +26,6 @@ module Machines
       $conf.tasks[name] = {:description => description, :block => block}
     end
 
-    def list_tasks
-      $conf.tasks.each do |name, task|
-        say "  #{"%-20s" % name}#{task[:description]}"
-      end
-    end
-
     def generate_password
       WEBrick::Utils.random_string(20)
     end
@@ -46,25 +40,18 @@ module Machines
       yield unless matched(options)
     end
 
-    def matched options
-      options.each do |key, value|
-        value = value.is_a?(Array) ? value.map{|o| o.to_s } : value.to_s
-        if $conf[key].is_a?(Array)
-          values = $conf[key].map{|o| o.to_s }
-          if value.is_a?(Array)
-            return unless values.reject{ |symbol| !value.include?(symbol.to_s) }.any?
-          else
-            return unless values.include?(value)
-          end
-        else
-          if value.is_a?(Array)
-            return unless value.include?($conf[key].to_s)
-          else
-            return unless value == $conf[key].to_s
-          end
-        end
+    # Loads the Machinesfile or a package
+    def package name
+      if name == 'Machinesfile'
+        custom_name = builtin_name = 'Machinesfile'
+        error = "Cannot find 'Machinesfile'. Use `machines new` to create a template."
+      else
+        custom_name = File.join('packages', "#{name}.rb")
+        builtin_name = File.join($conf.application_dir, 'packages', "#{name}.rb")
+        error = "Cannot find custom or built-in package '#{name}'."
       end
-      true
+      package = load_and_eval(custom_name) || load_and_eval(builtin_name)
+      package || raise(LoadError, error, caller)
     end
 
     # Queue up command(s) to run remotely
@@ -112,9 +99,40 @@ module Machines
       end
     end
 
+  #TODO: Move matched into separate class to test
+    def matched options
+      options.each do |key, value|
+        value = value.is_a?(Array) ? value.map{|o| o.to_s } : value.to_s
+        if $conf[key].is_a?(Array)
+          values = $conf[key].map{|o| o.to_s }
+          if value.is_a?(Array)
+            return unless values.reject{ |symbol| !value.include?(symbol.to_s) }.any?
+          else
+            return unless values.include?(value)
+          end
+        else
+          if value.is_a?(Array)
+            return unless value.include?($conf[key].to_s)
+          else
+            return unless value == $conf[key].to_s
+          end
+        end
+      end
+      true
+    end
+
+  private
+    def load_and_eval package_name
+      if File.exists?(package_name)
+        eval(File.read(package_name), nil, "eval: #{package_name}")
+        true
+      end
+    end
+
     def command_from_string commands
       commands.first.is_a?(String) ? [Command.new(commands[0], commands[1])] : commands
     end
+
   end
 end
 

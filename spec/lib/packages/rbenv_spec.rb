@@ -2,24 +2,21 @@ require 'spec_helper'
 
 describe 'packages/rbenv' do
   before(:each) do
-    load_package('rbenv')
     $conf.ruby = AppConf.new
     $conf.ruby.version = '1.9.2'
     $conf.ruby.build = 'p290'
+    eval_package
   end
 
   it 'sets gems_path' do
-    eval_package
     $conf.ruby.gems_path.must_equal '.rbenv/versions/1.9.2-p290/lib/ruby/gems/1.9.1/gems'
   end
 
   it 'sets executable' do
-    eval_package
     $conf.ruby.executable.must_equal '.rbenv/versions/1.9.2-p290/bin/ruby'
   end
 
   it 'adds the following commands' do
-    eval_package
     $conf.commands.map(&:info).join("\n").must_equal [
       'TASK   rbenv - Install ruby-build, rbenv, ruby 1.9.2-p290 and Bundler',
       "SUDO   apt-get -q -y install git-core",

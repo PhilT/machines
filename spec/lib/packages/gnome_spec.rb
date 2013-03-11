@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 describe 'packages/gnome' do
-  before(:each) do
-    load_package('gnome')
-  end
-
   it 'adds the following commands' do
     eval_package
     $conf.commands.map(&:info).must_equal [

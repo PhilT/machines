@@ -2,23 +2,20 @@ require 'spec_helper'
 
 describe 'packages/rvm' do
   before(:each) do
-    load_package('rvm')
     $conf.from_hash(ruby: {version: '1.9.2', build: 'p290'})
     $conf.from_hash(rvm: {version:  '1.0'})
+    eval_package
   end
 
   it 'sets gems_path' do
-    eval_package
     $conf.ruby.gems_path.must_equal '.rvm/gems/1.9.2-p290/@global/gems'
   end
 
   it 'sets executable' do
-    eval_package
     $conf.ruby.executable.must_equal '.rvm/wrappers/1.9.2-p290@global/ruby'
   end
 
   it 'adds the following commands' do
-    eval_package
     $conf.commands.map(&:info).join("\n").must_equal [
       "TASK   rvm - Install RVM",
       "SUDO   apt-get -q -y install git-core",
