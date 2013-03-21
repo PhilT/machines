@@ -8,6 +8,7 @@ module Machines
       # Adds a PPA source and updates apt
       # @param [String] name Name of the PPA
       # @param [String] key_name What to check in apt-key list to ensure it installed
+      # @example
       #     add_ppa 'mozillateam/firefox-stable', 'mozilla'
       def add_ppa name, key_name
         [
@@ -22,9 +23,10 @@ module Machines
       # @param [Hash] options
       # @option options [String] :key URL of key
       # @option options [String] :name Used to check `apt-key list` to ensure it installed
+      # @example
       #     sudo deb 'http://dl.google.com/linux/deb/ stable main',
-      #       :key => 'https://dl-ssl.google.com/linux/linux_signing_key.pub',
-      #       :name => 'Google'
+      #               key: 'https://dl-ssl.google.com/linux/linux_signing_key.pub',
+      #               name: 'Google'
       def deb source, options
         command = "echo deb #{source} >> /etc/apt/sources.list"
         if source =~ /YOUR_UBUNTU_VERSION_HERE/
@@ -102,21 +104,21 @@ module Machines
         command
       end
 
-      # Installs one or more packages using apt, deb or git clone and install.sh (Ignores architecture differences)
-      # (See `extract` to just uncompress tar.gz or zip files)
-      # @param [Symbol, String, Array] packages can be:
-      #   URL::
-      #     Download from URL and run `dpkg` (if `:as => :dpkg`)
-      #     Download URL to `/usr/local/lib` and link `:bin` to `/usr/local/bin`
-      #   Array or string (with no URL)::
-      #     Run `apt` to install specified packages in the array or string
-      #       Packages are installed separately to aid progress feedback
-      #       Ensure this is the main package as dpkg get-selections is used to validate installation
-      #     install %w(build-essential libssl-dev mysql-server) #=> Installs apt packages
-      #     install 'http://example.com/my_package.deb', :cleanup => true #=> Installs a deb using dpkg then removes the deb
+      # Installs one or more packages using apt, deb or git clone and install.sh
+      # (See `extract` to just uncompress tar.gz or zip files).
+      # Packages are installed separately to aid progress feedback.
+      # Ensure this is the main package as dpkg get-selections is used to validate installation.
+      # @param [Symbol, String, Array] URL to download and install, single or array of apt packages
       # @param [Hash] options
-      # @option options [Optional Symbol] :as Identify the package type so appropriate command can run. Currently supports `:dpkg` only
-      # @option options [Optional String] :bin Specify the bin file to link to (e.g. '/bin/executable' will create a link /usr/local/bin/executable that points to /usr/local/lib/bin/executable)
+      # @option options [Optional Symbol] :as Specify `:dpkg` to download URL and run `dpkg`
+      # @option options [Optional String] :bin Specify the bin file to link to (e.g. '/bin/executable'
+      #  will create a link /usr/local/bin/executable that points to /usr/local/lib/bin/executable)
+      # @example Install apt packages
+      #     install %w(build-essential libssl-dev mysql-server)
+      # @example Download and install a deb using dpkg then remove the deb
+      #     install 'http://example.com/my_package.deb'
+      # @example Download and install to `/usr/local/lib` and add `bin/phantomjs` to `/usr/local/bin`
+      #     install 'http://phantomjs.googlecode.com/files/phantomjs-1.7.0-linux-x86_64.tar.bz2', bin: 'bin/phantomjs'
       def install packages, options = {}
         if packages.is_a?(String)
           if packages =~ /^http:\/\//
@@ -162,8 +164,8 @@ module Machines
       end
 
       # Update, upgrade, autoremove, autoclean apt packages
-      # TODO: Check that check_command really checks the correct command with 'echo $?'
       def upgrade
+        # TODO: Check that check_command really checks the correct command with `echo $?`
         %w(update upgrade autoremove autoclean).map do |command|
           Command.new("#{APTGET_QUIET} #{command}", check_command('echo $?', '0'))
         end
