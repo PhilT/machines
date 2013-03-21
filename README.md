@@ -17,6 +17,7 @@ Example to upgrade passenger:
 
     machines build phil_workstation passenger_nginx
 
+[RubyDoc.info documentation](http://rdoc.info/github/PhilT/machines/)
 
 Status
 -----------------------------------------------------------
@@ -33,7 +34,6 @@ Features
 
 * An opinionated Ubuntu configuration script with sensible defaults
 * Easily override the defaults with configuration options and custom ruby
-* Supports several cloud services [Not complete]
 * Default template supports Nginx, Passenger, Ruby, Rails, MySQL, Git, Monit, Logrotate
 * Preconfigured Ruby & Rails light development environment (Openbox or Subtle)
 * Bring up new instances fully configured in less than 15 minutes
@@ -176,7 +176,7 @@ Take a look at `template/*.yml` for more.
 Commands
 -----------------------------------------------------------
 
-Commands you can use with `run` or `sudo` are in the following modules:
+Commands you can use with `run` or `sudo` are in the following modules (links to rdoc):
 
 * [Configuration](http://rdoc.info/github/PhilT/machines/Machines/Commands/Configuration)
 * [Database](http://rdoc.info/github/PhilT/machines/Machines/Commands/Database)

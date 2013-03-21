@@ -163,6 +163,15 @@ describe Commands::Installation do
         'apt-get -q -y install package2'
       ]
     end
+
+    it 'download and run make clean install' do
+      subject = install 'http://some.url/package_name.tar.gz', make: true
+      subject.map(&:command).join("\n").must_equal [
+        'cd /tmp && wget http://some.url/package_name.tar.gz && tar -zxf package_name.tar.gz && rm package_name.tar.gz && cd -',
+        'mv -f /tmp/package_name /usr/local/src',
+        'cd /usr/local/src/package_name && make clean install'
+      ].join("\n")
+    end
   end
 
   describe 'uninstall' do

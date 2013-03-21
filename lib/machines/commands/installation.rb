@@ -53,7 +53,9 @@ module Machines
       # Download, extract, and remove an archive. Currently supports `zip`, `tar.gz`, `tar.bz2`.
       # @param [String] package Package name to extract
       # @param [Hash] options
-      # @option options [Optional String] :to folder to clone or extract to (defaults to /usr/local/src)
+      # @option options [Optional String] :to folder to clone or extract to (defaults to `/usr/local/src`)
+      # @example
+      #     sudo extract 'http://dl.suckless.org/dwm/dwm-6.0.tar.gz'
       def extract package, options = {}
         name = File.basename(package)
         if package[/.zip/]
@@ -108,17 +110,20 @@ module Machines
       # (See `extract` to just uncompress tar.gz or zip files).
       # Packages are installed separately to aid progress feedback.
       # Ensure this is the main package as dpkg get-selections is used to validate installation.
-      # @param [Symbol, String, Array] URL to download and install, single or array of apt packages
+      # @param [Symbol, String, Array] packages URL to download and install, string or array of apt packages
       # @param [Hash] options
       # @option options [Optional Symbol] :as Specify `:dpkg` to download URL and run `dpkg`
       # @option options [Optional String] :bin Specify the bin file to link to (e.g. '/bin/executable'
       #  will create a link /usr/local/bin/executable that points to /usr/local/lib/bin/executable)
+      # @option options [Optional Boolean] :make Set to true to run `sudo make clean install`
       # @example Install apt packages
       #     install %w(build-essential libssl-dev mysql-server)
       # @example Download and install a deb using dpkg then remove the deb
       #     install 'http://example.com/my_package.deb'
-      # @example Download and install to `/usr/local/lib` and add `bin/phantomjs` to `/usr/local/bin`
+      # @example Download and phantomjs to `/usr/local/lib` and add `bin/phantomjs` to `/usr/local/bin`
       #     install 'http://phantomjs.googlecode.com/files/phantomjs-1.7.0-linux-x86_64.tar.bz2', bin: 'bin/phantomjs'
+      # @example Download dwm into `/usr/local/src/dwm-6.0` and install
+      #     install 'http://dl.suckless.org/dwm/dwm-6.0.tar.gz', make: true
       def install packages, options = {}
         if packages.is_a?(String)
           if packages =~ /^http:\/\//
@@ -126,15 +131,19 @@ module Machines
             if packages =~ /\.deb$/i
               name = File.basename(packages)
               commands << Command.new("cd /tmp && wget #{packages} && dpkg -i --force-architecture #{name} && rm #{name} && cd -", nil)
-            elsif options[:as] == :dpkg
+            else
               commands << extract(packages, :to => '/tmp')
               name = File.basename(packages).gsub(/\.(tar|zip).*/, '')
-              commands << Command.new("cd /tmp/#{name} && dpkg -i --force-architecture *.deb && cd - && rm -rf /tmp/#{name}", nil)
-            elsif options[:bin]
-              commands << extract(packages, :to => '/tmp')
-              name = File.basename(packages).gsub(/\.(tar|zip).*/, '')
-              commands << rename("/tmp/#{name}", "/usr/local/lib")
-              commands << link("/usr/local/lib/#{name}/#{options[:bin]}", "/usr/local/bin/#{File.basename(options[:bin])}")
+
+              if options[:as] == :dpkg
+                commands << Command.new("cd /tmp/#{name} && dpkg -i --force-architecture *.deb && cd - && rm -rf /tmp/#{name}", nil)
+              elsif options[:bin]
+                commands << rename("/tmp/#{name}", "/usr/local/lib")
+                commands << link("/usr/local/lib/#{name}/#{options[:bin]}", "/usr/local/bin/#{File.basename(options[:bin])}")
+              elsif options[:make]
+                commands << rename("/tmp/#{name}", "/usr/local/src")
+                commands << Command.new("cd /usr/local/src/#{name} && make clean install", nil)
+              end
             end
             return commands
           else

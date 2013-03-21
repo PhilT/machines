@@ -30,7 +30,8 @@ end
 
 only :user => 'phil' do
   package :sudo_mods
-  package :subtle
+  package :slim
+  package :dwm
   package :chrome
   package :firefox
   package :gedit

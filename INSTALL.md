@@ -1,4 +1,4 @@
-If installing to VirtualBox on a Windows host (as in my case) read on.
+**If installing to VirtualBox on a Windows host read on.**
 
 Install freeSSHd
 ----------------------------------------

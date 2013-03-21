@@ -1,2 +1,8 @@
 --markup-provider=redcarpet
 --markup=markdown
+-
+CHANGELOG.md
+EXAMPLES.md
+INSTALL.md
+TODO.md
+LICENSE

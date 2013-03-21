@@ -33,4 +33,3 @@ task :docky, 'Install and configure Docky a dock and app launcher' do
   run configure '/apps/docky-2/WeatherDocklet/WeatherPreferences/Location' => ['London\\, United Kingdom']
   run configure '/apps/docky-2/WeatherDocklet/WeatherPreferences/Metric' => true
 end
-
