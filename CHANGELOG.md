@@ -1,11 +1,9 @@
-
-
 ## 0.5.5
 
 * Cleaned up API - moved all commands into Commands module and turned non-commands into classes
 * Switched to dwm and slim for default template window manager/login manager
 * Added make clean install to `install` command
-
+* BUG: fixed incorrect link command in timezone package
 
 ## 0.5.4
 
