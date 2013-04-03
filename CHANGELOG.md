@@ -1,6 +1,7 @@
 == 0.5.5
 
 * Cleaned up API - moved all commands into Commands module and turned non-commands into classes
+* BUG: fixed incorrect link command in timezone package
 
 == 0.5.4
 
