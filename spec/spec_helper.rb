@@ -1,44 +1,52 @@
 $LOAD_PATH << 'lib'
 
 require 'bundler/setup'
-require 'minitest/spec'
-require 'mocha'
+require 'minitest/autorun'
+require 'mocha/setup'
 require 'stringio'
 require 'fakefs/safe'
 
 Dir['spec/support/*.rb'].each {|file| require File.join('./spec', 'support', File.basename(file)) }
 require 'machines'
-application_dir = $conf.application_dir
+$application_dir = $conf.application_dir
 
 include Machines
 modules = %w(Checks Configuration Database FileOperations Installation Questions Services)
 modules.each { |m| include eval("Machines::Commands::#{m}") }
 
-MiniTest::Spec.add_setup_hook do
-  $conf.clear
-  $conf.passwords = []
-  $conf.commands = []
-  $conf.tasks = {}
-  $conf.application_dir = application_dir
+module MiniTestSetup
+  def before_setup
+    super
+    $conf.clear
+    $conf.passwords = []
+    $conf.commands = []
+    $conf.tasks = {}
+    $conf.application_dir = $application_dir
 
-  $input = StringIO.new
-  $output = StringIO.new
-  $terminal = HighLine.new($input, $output)
+    $input = StringIO.new
+    $output = StringIO.new
+    $terminal = HighLine.new($input, $output)
 
-  $debug = FakeOut.new
-  $file = FakeOut.new
-  $console = FakeOut.new
-  Machines::Command.debug = Machines::Logger.new $debug
-  Machines::Command.file = Machines::Logger.new $file
-  Machines::Command.console = Machines::Logger.new $console, :truncate => true
+    $debug = FakeOut.new
+    $file = FakeOut.new
+    $console = FakeOut.new
+    Machines::Command.debug = Machines::Logger.new $debug
+    Machines::Command.file = Machines::Logger.new $file
+    Machines::Command.console = Machines::Logger.new $console, :truncate => true
 
-  FakeFS.activate!
-  FileUtils.mkdir_p 'tmp'
+    FakeFS.activate!
+    FileUtils.mkdir_p 'tmp'
+  end
+
+  def after_teardown
+    FakeFS.deactivate!
+    FakeFS::FileSystem.clear
+    super
+  end
 end
 
-MiniTest::Spec.add_teardown_hook do
-  FakeFS.deactivate!
-  FakeFS::FileSystem.clear
+class MiniTest::Test
+  include MiniTestSetup
 end
 
 module MiniTest
@@ -62,8 +70,8 @@ class MiniTest::Spec::Package < MiniTest::Spec
   end
 
   def load_package
-    @package_name = File.basename(self.class.name).split('::').first
     FakeFS.deactivate!
+    @package_name = File.basename(self.class.name).split('::').first
     @package = File.read File.join($conf.application_dir, 'packages', "#{@package_name}.rb")
     FakeFS.activate!
   end
@@ -72,8 +80,9 @@ class MiniTest::Spec::Package < MiniTest::Spec
     core.eval_package(@package, @package_name)
   end
 
-  add_setup_hook do |desc|
-    desc.load_package
+  def before_setup
+    super
+    load_package
   end
 end
 
@@ -90,5 +99,3 @@ def colored string, color
   string.sub!(/(\n|\r)$/, '')
   $terminal.color(string, color.to_sym) + ending.to_s
 end
-
-require 'minitest/autorun'

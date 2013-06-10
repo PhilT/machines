@@ -1,5 +1,13 @@
 module Machines
   class Core
+    include Commands::Checks
+    include Commands::Configuration
+    include Commands::Database
+    include Commands::FileOperations
+    include Commands::Installation
+    include Commands::Questions
+    include Commands::Services
+
     # If a block is given, store the task, log it and run it
     # If no block is given, sets commands to only those of the specified tasks so they can be run standalone
     # @param [Symbol, String, Array] name Name of the task or array of task names
@@ -38,6 +46,10 @@ module Machines
     # Does not execute the code if $conf parameters match what is given in args
     def except options, &block
       yield unless matched(options)
+    end
+
+    def load_app_settings(apps)
+      AppSettings.new.load_app_settings(apps)
     end
 
     # Loads the Machinesfile or a package

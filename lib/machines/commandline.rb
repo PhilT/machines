@@ -10,8 +10,7 @@ module Machines
       help = Help.new
       action = options.shift
       if help.actions.include?(action)
-        action.gsub!('new', 'generate')
-        new.send action, options
+        new.send action.gsub('new', 'generate'), options
       else
         say help.syntax
       end

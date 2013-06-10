@@ -17,7 +17,7 @@ describe 'packages/dotfiles' do
     eval_package
     $conf.commands.map(&:info).join("\n").must_equal [
       "TASK   dotfiles - Upload users/username/dotfiles and set some env vars",
-      "UPLOAD #{File.expand_path('users/username/dotfiles/bashrc')} to .bashrc",
+      "UPLOAD users/username/dotfiles/bashrc to .bashrc",
       "RUN    mkdir -p $HOME/.ssh",
       "RUN    chmod 700 $HOME/.ssh",
       "RUN    ssh-keyscan -H somehost >> $HOME/.ssh/known_hosts",

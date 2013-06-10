@@ -16,6 +16,11 @@ require 'yaml'
 $conf = AppConf.new
 $conf.application_dir = File.dirname(__FILE__)
 
+files = Dir[File.join($conf.application_dir, 'machines/commands/*.rb')]
+files.sort.each do |file|
+  require file
+end
+
 require 'machines/logger'
 require 'machines/named_buffer'
 require 'machines/app_settings'
@@ -27,7 +32,3 @@ require 'machines/commandline'
 require 'machines/cloud_machine'
 require 'machines/help'
 
-files = Dir[File.join($conf.application_dir, 'machines/commands/*.rb')]
-files.sort.each do |file|
-  require file
-end

@@ -1,3 +1,8 @@
+## 0.5.6
+
+* Gem updates - spec_helper updated to handle features removed from minitest
+* Fixed bug introducted in API cleanup where commands were not included in Core
+
 ## 0.5.5
 
 * Cleaned up API - moved all commands into Commands module and turned non-commands into classes
