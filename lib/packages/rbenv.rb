@@ -21,7 +21,7 @@ task :rbenv, "Install ruby-build, rbenv, ruby #{$conf.ruby.version}-#{$conf.ruby
   $conf.ruby.gems_path = ".rbenv/versions/#{full_version}/lib/ruby/gems/1.9.1/gems"
   $conf.ruby.executable = ".rbenv/versions/#{full_version}/bin/ruby"
 
-  run "#{rbenv} install #{full_version}", check_command("#{rbenv} versions", $conf.ruby.version)
+  run "#{rbenv} install -f #{full_version}", check_command("#{rbenv} versions", $conf.ruby.version)
   run "#{rbenv} rehash", check_command("#{path} which gem", '.rbenv/shims/gem')
   run "#{rbenv} global #{full_version}", check_command("#{rbenv} exec ruby -v", $conf.ruby.version)
 
