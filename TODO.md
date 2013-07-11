@@ -1,6 +1,7 @@
 TODO next
 ----------------------------------------
 
+* Move upload method from core to FileOps
 * Move dotfiles into separate repo (managed by user)
 * stubs :required_options should be tested
 * replace subtle window manager with dwm

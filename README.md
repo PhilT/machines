@@ -10,7 +10,7 @@ Write commands in Ruby like:
     sudo install %w(build-essential zlib1g-dev libpcre3-dev)
     sudo write "127.0.1.1\t#{$conf.hostname}", :to => '/etc/hosts'
     sudo append "192.168.1.2\tserver", :to => '/etc/hosts'
-    run download $conf.nginx.url
+    run install $conf.nginx.url
     run create_from 'nginx/nginx.conf.erb', :to => File.join($conf.nginx.path, 'conf', 'nginx.conf')
 
 Example to upgrade passenger:
@@ -99,13 +99,25 @@ So here is the recommended approach to configuring your environment:
 
 ### Prepare the target machine
 
-* Download the latest minimal Ubuntu 12.04 image or ISO (Precise Pangolin)
+Grab a suitable ISO from https://help.ubuntu.com/community/Installation/MinimalCD (Tested with 13.04)
+
+Ubuntu 13.04 ISO works with CD or USB
+  * To copy to USB
+
+    `dd if=mini.iso of=/dev/sdX` where `sdX` is your USB device (use `dmesg` to get this)
+
+Older ISOs do not allow USB stick install. You need to download the image instead.
+
+* Grab an ISO or image to install a minimal Ubuntu 12.04 (LTS)
   * [64bit image](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-amd64/current/images/netboot/boot.img.gz)
   * [64bit ISO](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-amd64/current/images/netboot/mini.iso)
   * [32bit image](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-i386/current/images/netboot/boot.img.gz)
   * [32bit ISO](http://archive.ubuntu.com/ubuntu/dists/precise/main/installer-i386/current/images/netboot/mini.iso)
 * Images can be written to USB with `gunzip boot.img.gz && sudo dd if=boot.img of=/dev/sdX` where `sdX` is your USB device (use `dmesg` to get this)
-* Insert the USB stick and boot from it to install Ubuntu (See **Setting up a test VM** below for installing on a Virtual Machine)
+
+Insert the USB stick and boot from it to install Ubuntu (See **Setting up a test VM** below for installing on a Virtual Machine)
+
+
 * Install SSH Server & note the IP address
 
     sudo apt-get update && sudo apt-get -y install openssh-server && ifconfig
