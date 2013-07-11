@@ -26,7 +26,7 @@ describe 'packages/rbenv' do
       'RUN    test -d ~/.rbenv && (cd ~/.rbenv && git pull) || git clone --quiet git://github.com/sstephenson/rbenv.git ~/.rbenv',
       'RUN    grep "PATH=.bin/safe/../../.bin:\\$HOME/.rbenv/bin:\\$HOME/.rbenv/shims:\\$PATH" ~/.profile || echo "PATH=.bin/safe/../../.bin:\\$HOME/.rbenv/bin:\\$HOME/.rbenv/shims:\\$PATH" >> ~/.profile',
 
-      'RUN    $HOME/.rbenv/bin/rbenv install 1.9.2-p290',
+      'RUN    $HOME/.rbenv/bin/rbenv install -f 1.9.2-p290',
       'RUN    $HOME/.rbenv/bin/rbenv rehash',
       'RUN    $HOME/.rbenv/bin/rbenv global 1.9.2-p290',
 

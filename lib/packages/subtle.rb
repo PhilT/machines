@@ -26,4 +26,3 @@ task :subtle, 'Install Subtle tiling window manager and associated fonts, themes
   run append 'ck-launch-session subtle', to: '~/.xinitrc'
   sudo append 'snd_mixer_oss', to: '/etc/modules'
 end
-

@@ -3,7 +3,7 @@ guard 'bundler' do
   watch('machines.gemspec')
 end
 
-guard 'minitest', :test_file_patterns => 'lib/**/*_spec.rb', :cli => '-Ilib' do
+guard 'minitest', :test_file_patterns => 'lib/**/*_spec.rb' do
   watch(%r{^spec/(.*)_spec\.rb$})
   watch(%r{^lib/(machines|packages)(.+)\.rb$}) { |m| "spec/lib/#{m[1]}#{m[2]}_spec.rb" }
   watch(%r{^spec/support/(.+)\.rb$}) { |m| "spec/support_specs/#{m[1]}_spec.rb" }

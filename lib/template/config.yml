@@ -23,6 +23,9 @@ cloud:
   aws_access_key_id: 123
   aws_secret_access_key: 456
 
+dwm:
+  repo: git@github.com:PhilT/dwm.git
+
 # IP hosts. These are added to /etc/hosts by the hosts task in the base package
 # They are also added to known hosts but the host must be accessible at this point
 # Note:
