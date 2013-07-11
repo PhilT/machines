@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+gem 'machines'
 require 'machines'
 
 Machines::Commandline.execute(ARGV)

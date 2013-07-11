@@ -1,17 +1,14 @@
 TODO next
 ----------------------------------------
 
+* Encrypt keys/passwords etc
+* Clarify db_server usage
 * Move upload method from core to FileOps
-* Move dotfiles into separate repo (managed by user)
+* Move dotfiles to a separate repo so they can be managed across projects by their user
 * stubs :required_options should be tested
-* replace subtle window manager with dwm
-* reorg packages into folders by category
 
 EC2 support
 -----------
-
-* Encrypt keys/passwords etc
-
 
 * Handle unknown tasks and display a proper error message (at the moment we get an obscure undefined method on NilClass)
 * Support missing environment (e.g. source repo machine)
@@ -20,7 +17,6 @@ EC2 support
 * DRY up further by having default templates in the same way that packages default to built-in ones
   (In other words remove as much as possible from evmachines)
 * Complement this by providing a command to view packages and templates
-* Move dotfiles to a repo so they can be managed across projects
 * Handle apt-get error 110 and retry
 * Move packages into a separate gem
 * Move template into a separate gem
@@ -51,6 +47,7 @@ EC2 - Look at assigning and freeing elastic IP addresses
 Package and Task Tasks
 ----------------------------------------
 
+* reorg packages into folders by category
 * Any methods other than `append` that cannot be repeatedly run?
 * Display additional install notes for a particular package (at the end of installation) - e.g. printer setup requires Windows share to be setup
 * CODE/DOC: Describe difference between package and task or merge packages with tasks if possible
