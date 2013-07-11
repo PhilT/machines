@@ -1,7 +1,9 @@
 task :virtualbox, 'Install VirtualBox' do
   sudo install %w(dkms) # Ensures kernal modules are updated when upgrading virtual box
 
-  sudo add_ppa 'debfx/virtualbox', 'felix'
+  sudo deb 'http://download.virtualbox.org/virtualbox/debian precise contrib',
+    key: 'http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc',
+    name: 'VirtualBox'
 
   sudo install 'virtualbox'
   sudo add :user => $conf.user, :to => 'vboxusers'

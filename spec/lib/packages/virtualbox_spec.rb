@@ -10,7 +10,8 @@ describe 'packages/virtualbox' do
     $conf.commands.map(&:info).join("\n").must_equal [
       "TASK   virtualbox - Install VirtualBox",
       "SUDO   apt-get -q -y install dkms",
-      "SUDO   add-apt-repository ppa:debfx/virtualbox",
+      "SUDO   echo deb http://download.virtualbox.org/virtualbox/debian precise contrib >> /etc/apt/sources.list",
+      "SUDO   wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O - | apt-key add -",
       "SUDO   apt-get -q -y update > /tmp/apt-update.log",
       "SUDO   apt-get -q -y install virtualbox",
       "SUDO   usermod -a -G vboxusers phil",
