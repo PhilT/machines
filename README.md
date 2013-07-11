@@ -22,11 +22,15 @@ Example to upgrade passenger:
 Status
 -----------------------------------------------------------
 
-**March 2013**
+**July 2013**
 
-* Released 0.5.4 gem
+* Released 0.5.6 gem
+* Some gem updates, cleaned up API
 * Working development and server builds.
-* Cloud deployments, cleaner API and some tidy up in development.
+
+Working on:
+
+* Cloud deployments
 
 
 Features
