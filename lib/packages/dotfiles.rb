@@ -13,7 +13,7 @@ task :dotfiles, "Upload users/#{username}/dotfiles and set some env vars" do
   end if $conf.hosts
 
   if $conf.set_rails_env_for.nil? || $conf.set_rails_env_for.include?($conf.environment)
-    run append "export RAILS_ENV=#{$conf.environment}", to: '.profile' 
+    run append "export RAILS_ENV=#{$conf.environment}", to: '.profile'
   end
   run append "export CDPATH=#{$conf.appsroot}", to: '.profile'
 
@@ -23,4 +23,3 @@ task :dotfiles, "Upload users/#{username}/dotfiles and set some env vars" do
     run chmod 600, '.ssh/authorized_keys'
   end
 end
-

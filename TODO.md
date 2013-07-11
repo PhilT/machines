@@ -1,8 +1,12 @@
 TODO next
 ----------------------------------------
 
+* need to install X for dwm - check subtle
+* Fix clipboard
+* Fix mysql-navigator
+* Describe default packages in a bit more detail
 * Encrypt keys/passwords etc
-* Clarify db_server usage
+* Clarify db_server, root_pass usage
 * Move upload method from core to FileOps
 * Move dotfiles to a separate repo so they can be managed across projects by their user
 * stubs :required_options should be tested
