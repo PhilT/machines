@@ -1,5 +1,5 @@
 task :dwm, 'Download, build and install custom dwm' do
-  sudo install %w(build-essential libx11-dev libxinerama-dev sharutils)
+  sudo install %w(build-essential libx11-dev libxft-dev libxinerama-dev sharutils)
 
   dwm_dir = File.join($conf.appsroot, 'dwm')
   run git_clone $conf.dwm.repo, to: dwm_dir
