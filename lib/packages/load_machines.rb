@@ -10,7 +10,7 @@ task :load_machines, 'Loads the machines.yml' do
 
   if machine.root_pass.nil?
     machine.root_pass = generate_password
-    $conf.machines_changed = true
+    $conf.save(:machines, 'machines.yml')
   end
 
   $conf.user_home = "/home/#{machine.user}"

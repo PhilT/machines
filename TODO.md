@@ -1,11 +1,11 @@
 TODO next
 ----------------------------------------
 
-* need to install X for dwm - check subtle
-* Fix clipboard
-* Fix mysql-navigator
+* check if we're documenting generated paths and doc them if not (ruby.gems_path, passenger.root, passenger.ruby)
+* BUG: Handle Net::SCP::Error raised when no such file or directory
+* Setup complete example install (dev, production and database servers)
 * Describe default packages in a bit more detail
-* Encrypt keys/passwords etc
+* Encrypt keys/passwords etc - won't need to save machines after that (in load_machines)
 * Clarify db_server, root_pass usage
 * Move upload method from core to FileOps
 * Move dotfiles to a separate repo so they can be managed across projects by their user
