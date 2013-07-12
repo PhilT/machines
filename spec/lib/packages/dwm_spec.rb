@@ -13,6 +13,7 @@ describe 'packages/dwm' do
       "TASK   dwm - Download, build and install custom dwm",
       "SUDO   apt-get -q -y install build-essential",
       "SUDO   apt-get -q -y install libx11-dev",
+      "SUDO   apt-get -q -y install libxft-dev",
       "SUDO   apt-get -q -y install libxinerama-dev",
       "SUDO   apt-get -q -y install sharutils",
       "RUN    test -d apps_root/dwm && (cd apps_root/dwm && git pull) || git clone --quiet github:dwm:repo apps_root/dwm",

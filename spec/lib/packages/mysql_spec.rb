@@ -3,16 +3,16 @@ require 'spec_helper'
 describe 'packages/mysql' do
   before(:each) do
     $conf.from_hash(:machine => {
-      :address => 'DB_IP',
-      :root_pass => 'DB_PASS',
-      :replication_user => 'REPL_USER',
-      :replication_pass => 'REPL_PASS'
+      :address => 'db_ip',
+      :root_pass => 'db_pass',
+      :replication_user => 'repl_user',
+      :replication_pass => 'repl_pass'
     })
     $conf.from_hash(:db_server => {
-      :address => 'SERVER_IP',
-      :root_pass => 'SERVER_PASS',
-      :replication_user => 'REPL_USER',
-      :replication_pass => 'REPL_PASS'
+      :address => 'server_ip',
+      :root_pass => 'server_pass',
+      :replication_user => 'repl_user',
+      :replication_pass => 'repl_pass'
     })
   end
 
@@ -23,8 +23,8 @@ describe 'packages/mysql' do
       eval_package
       $conf.commands.map(&:info).must_equal [
         "TASK   mysql - Install MySQL",
-        "SUDO   echo mysql-server-5.5 mysql-server/root_password password DB_PASS | debconf-set-selections",
-        "SUDO   echo mysql-server-5.5 mysql-server/root_password_again password DB_PASS | debconf-set-selections",
+        "SUDO   echo mysql-server-5.5 mysql-server/root_password password db_pass | debconf-set-selections",
+        "SUDO   echo mysql-server-5.5 mysql-server/root_password_again password db_pass | debconf-set-selections",
         "SUDO   apt-get -q -y install mysql-server",
         "SUDO   apt-get -q -y install mysql-client",
         "SUDO   apt-get -q -y install libmysqlclient-dev",
@@ -36,17 +36,17 @@ describe 'packages/mysql' do
   describe 'dbmaster role' do
     it 'sets permissions for each app to access database and grants replication rights for slave' do
       $conf.roles = :dbmaster
-      $conf.webapps = {'name' => AppSettings::AppBuilder.new({:name => 'name', :password => 'PASSWORD'})}
+      $conf.webapps = {'name' => AppSettings::AppBuilder.new({database: 'database', username: 'username', password: 'password'})}
       eval_package
-      $conf.commands.map(&:info).must_equal [
+      $conf.commands.map(&:info).join("\n").must_equal [
         "TASK   dbperms - Grant applications access to the database",
-        %{RUN    echo "GRANT ALL ON *.* TO 'name'@'%' IDENTIFIED BY 'PASSWORD';" | mysql -u root -pDB_PASS},
+        %{RUN    echo "GRANT ALL ON database.* TO 'username'@'%' IDENTIFIED BY 'password';" | mysql -u root -pdb_pass},
         "TASK   replication - Grant replication access to this machine",
         "UPLOAD mysql/dbmaster.cnf to /tmp/dbmaster.cnf",
         "SUDO   cp -rf /tmp/dbmaster.cnf /etc/mysql/conf.d/dbmaster.cnf",
         "RUN    rm -rf /tmp/dbmaster.cnf",
-        "RUN    echo \"GRANT REPLICATION SLAVE ON *.* TO 'REPL_USER'@'%' IDENTIFIED BY 'REPL_PASS';\" | mysql -u root -pDB_PASS"
-      ]
+        "RUN    echo \"GRANT REPLICATION SLAVE ON *.* TO 'repl_user'@'%' IDENTIFIED BY 'repl_pass';\" | mysql -u root -pdb_pass"
+      ].join("\n")
     end
   end
 
@@ -59,7 +59,7 @@ describe 'packages/mysql' do
         "UPLOAD mysql/dbslave.cnf to /tmp/dbslave.cnf",
         "SUDO   cp -rf /tmp/dbslave.cnf /etc/mysql/conf.d/dbslave.cnf",
         "RUN    rm -rf /tmp/dbslave.cnf",
-        "RUN    echo \"CHANGE MASTER TO MASTER_HOST='SERVER_IP', MASTER_USER='REPL_USER' MASTER_PASSWORD='REPL_PASS';\" | mysql -u root -pDB_PASS"
+        "RUN    echo \"CHANGE MASTER TO MASTER_HOST='server_ip', MASTER_USER='repl_user' MASTER_PASSWORD='repl_pass';\" | mysql -u root -pdb_pass"
       ]
     end
   end

@@ -82,20 +82,6 @@ describe 'packages/load_machines' do
     $conf.machines.a_machine.root_pass.must_equal '1234'
   end
 
-  it 'sets $conf.machines_changed when passwords are generated' do
-    core.stubs(:generate_password).returns '1234'
-    save_settings
-    eval_package
-    $conf.machines_changed.wont_equal nil
-  end
-
-  it '$conf.machines_changed not set when no passwords are generated' do
-    settings['machines']['a_machine']['root_pass'] = '1234'
-    save_settings
-    eval_package
-    $conf.machines_changed.must_equal nil
-  end
-
   it 'does not overwrite root_pass' do
     core.expects(:generate_password).never
     settings['machines']['a_machine']['root_pass'] = 'something'

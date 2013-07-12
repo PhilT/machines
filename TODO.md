@@ -12,6 +12,8 @@ TODO next
 * Move dotfiles to a separate repo so they can be managed across projects by their user
 * stubs :required_options should be tested
 * Create custom Ubuntu CD for simpler base deployments (https://help.ubuntu.com/community/InstallCDCustomization)
+* Fix pending specs (or remove)
+
 
 EC2 support
 -----------
