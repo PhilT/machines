@@ -1,8 +1,9 @@
 TODO next
 ----------------------------------------
 
+* Fix ssh uninitalized class var @@ssh (command.rb:18) when Net::Ssh fails to connect
 * check if we're documenting generated paths and doc them if not (ruby.gems_path, passenger.root, passenger.ruby)
-* BUG: Handle Net::SCP::Error raised when no such file or directory
+* BUG: Handle Net::SCP::Error raised when no such file or directory both for local and remote
 * Setup complete example install (dev, production and database servers)
 * Describe default packages in a bit more detail
 * Encrypt keys/passwords etc - won't need to save machines after that (in load_machines)
@@ -76,8 +77,6 @@ Misc Tasks
 * ?? base package may not be needed on DB installs
 * ?? Default path for Nginx install is /usr/local - Is it installed correctly for non-default paths?
 * ?? I have a new webapp - How can I add it to a server that has already been installed?
-* BUG: Uploads throw exception if local file is missing - Get upload to check file existence when adding to queue
-* BUG: CTRL+C doesn't quite exit cleanly
 * Check $conf.db_server is picked up and used to write database.yml on qa/staging/production
 
 * Allow $conf.webapps[app].path to be overridden from webapps.yml
