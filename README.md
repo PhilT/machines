@@ -39,7 +39,7 @@ Features
 * An opinionated Ubuntu configuration script with sensible defaults
 * Easily override the defaults with configuration options and custom ruby
 * Default template supports Nginx, Passenger, Ruby, Rails, MySQL, Git, Monit, Logrotate
-* Preconfigured Ruby & Rails light development environment (Openbox or Subtle)
+* Preconfigured Ruby & Rails light development environment (Openbox, Subtle, dwm)
 * Bring up new instances fully configured in less than 15 minutes
 * The best form of documentation for your architecture
 

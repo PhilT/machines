@@ -5,6 +5,7 @@
 #
 # TODO: Move passwords to separate GPG encrypted file
 #
+# title: TODO: WHAT DOES THIS DO?
 # password: Password for application database - Leave blank to generate one
 # database: Database name to write to database.yml - Leave blank to use application name
 # username: Username to write to database.yml - Leave blank to use application name

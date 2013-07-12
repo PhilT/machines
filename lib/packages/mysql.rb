@@ -17,7 +17,7 @@ end
 only roles: :dbmaster do
   task :dbperms, 'Grant applications access to the database' do
     $conf.webapps.values.each do |app|
-      mysql_execute "GRANT ALL ON *.* TO '#{app.name}'@'%' " +
+      mysql_execute "GRANT ALL ON #{app.database}.* TO '#{app.username}'@'%' " +
         "IDENTIFIED BY '#{app.password}';", password: $conf.machine.root_pass
     end
   end
@@ -43,4 +43,3 @@ end
 task :monit_mysql, 'Configure monit for MySQL', if: [:monit, :mysql] do
   sudo create_from 'monit/conf.d/mysql.erb', to: '/etc/monit/conf.d/mysql'
 end
-
