@@ -283,31 +283,25 @@ describe Core do
         $conf.commands.first.check.must_equal 'check'
       end
     end
-  end
 
-  describe 'upload' do
-    let(:upload) { subject.upload 'source', 'dest' }
-    it { upload.local.must_equal 'source' }
-    it { upload.remote.must_equal 'dest' }
-  end
+    describe 'upload' do
+      it 'modifies Upload to send it to a temp file and sudos to copy it to destination' do
+        File.stubs(:directory?).returns false
+        subject.sudo subject.upload 'source', 'dest'
 
-  describe 'sudo upload' do
-    it 'modifies Upload to send it to a temp file and sudos to copy it to destination' do
-      File.stubs(:directory?).returns false
-      subject.sudo subject.upload 'source', 'dest'
+        $conf.commands.map(&:command).must_equal [nil, "cp -rf /tmp/dest dest", "rm -rf /tmp/dest"]
+        $conf.commands.map(&:check).must_equal [
+          "test -s /tmp/dest && echo CHECK PASSED || echo CHECK FAILED",
+          "test -s dest && echo CHECK PASSED || echo CHECK FAILED",
+          "test ! -s /tmp/dest && echo CHECK PASSED || echo CHECK FAILED"
+        ]
+      end
 
-      $conf.commands.map(&:command).must_equal [nil, "cp -rf /tmp/dest dest", "rm -rf /tmp/dest"]
-      $conf.commands.map(&:check).must_equal [
-        "test -s /tmp/dest && echo CHECK PASSED || echo CHECK FAILED",
-        "test -s dest && echo CHECK PASSED || echo CHECK FAILED",
-        "test ! -s /tmp/dest && echo CHECK PASSED || echo CHECK FAILED"
-      ]
-    end
-
-    it 'adds /. to the end of folder paths' do
-      File.stubs(:directory?).with('source').returns true
-      subject.sudo subject.upload 'source', 'dest'
-      $conf.commands.map(&:command).must_equal [nil, "cp -rf /tmp/dest/. dest", "rm -rf /tmp/dest"]
+      it 'adds /. to the end of folder paths' do
+        File.stubs(:directory?).with('source').returns true
+        subject.sudo subject.upload 'source', 'dest'
+        $conf.commands.map(&:command).must_equal [nil, "cp -rf /tmp/dest/. dest", "rm -rf /tmp/dest"]
+      end
     end
   end
 

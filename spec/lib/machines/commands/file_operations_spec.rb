@@ -108,6 +108,12 @@ describe Commands::FileOperations do
     it { lambda{replace('something')}.must_raise ArgumentError }
   end
 
+  describe 'upload' do
+    subject { upload 'source', 'dest' }
+    it { subject.local.must_equal 'source' }
+    it { subject.remote.must_equal 'dest' }
+  end
+
   describe 'write' do
     it 'uploads from a buffer' do
       mock_named_buffer = mock 'NamedBuffer'
