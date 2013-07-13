@@ -117,6 +117,19 @@ describe Machines::Command do
         $file.next.must_equal colored("Exception\n", :failure)
       end
 
+      it 'ensure file upload errors are logged' do
+        @mock_ssh.expects(:exec!).with('export TERM=linux && check').raises Net::SCP::Error
+
+        lambda {subject.run}.must_raise Net::SCP::Error
+
+        $console.next.must_equal "100% RUN    command\r"
+        $console.next.must_equal colored("100% RUN    command\n", :failure)
+
+        $file.next.must_equal colored("RUN    command\n", :highlight)
+        $file.next.must_equal "result\n"
+        $file.next.must_equal colored("Net::SCP::Error\n", :failure)
+      end
+
       it 'ensure logging failures do not stop app exiting gracefully' do
         @mock_ssh.expects(:exec!).with('export TERM=linux && check').raises Exception
         Machines::Command.file.stubs(:log)

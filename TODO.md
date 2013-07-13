@@ -1,7 +1,6 @@
 TODO next
 ----------------------------------------
 
-* BUG: Handle Net::SCP::Error raised when no such file or directory both for local and remote
 * Setup complete example install (dev, production and database servers)
 * Describe default packages in a bit more detail
 * Encrypt keys/passwords etc - won't need to save machines after that (in load_machines)

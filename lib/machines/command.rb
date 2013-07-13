@@ -58,7 +58,7 @@ module Machines
           color = color_for(result)
           Command.file.log result, :color => color
           Command.console.log progress + info, :color => color
-        rescue Exception => e
+        rescue Exception, Net::SCP::Error => e
           Command.console.log(progress + info, :color => :failure) rescue nil
           Command.file.log(e.to_s, :color => :failure) rescue nil
           raise e
