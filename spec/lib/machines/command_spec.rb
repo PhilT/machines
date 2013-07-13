@@ -8,6 +8,11 @@ describe Machines::Command do
       subject.command.must_equal 'command'
       subject.check.must_equal 'check'
     end
+
+    it 'class variables are initialized' do
+      Machines::Command.ssh.must_equal nil
+      Machines::Command.scp.must_equal nil
+    end
   end
 
   describe 'run' do

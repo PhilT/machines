@@ -1,7 +1,6 @@
 TODO next
 ----------------------------------------
 
-* Fix ssh uninitalized class var @@ssh (command.rb:18) when Net::Ssh fails to connect
 * check if we're documenting generated paths and doc them if not (ruby.gems_path, passenger.root, passenger.ruby)
 * BUG: Handle Net::SCP::Error raised when no such file or directory both for local and remote
 * Setup complete example install (dev, production and database servers)
@@ -103,3 +102,8 @@ Misc Tasks
 * rvm ruby@gemset --rvmrc to generate passenger compatible .rvmrc
 * passenger_nginx was installed with rvmsudo. Need to test it still works with just sudo
 
+
+Design issues
+----------------------------------------
+
+* Why is ssh and scp exposed in Command? Can we create a facade around it?

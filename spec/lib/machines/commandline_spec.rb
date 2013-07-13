@@ -22,7 +22,6 @@ describe Commandline do
       $conf.password = 'userpass'
       Net::SCP.stubs(:new)
       @ssh_stub = stub('Net::SSH', :close => nil, :exec! => nil)
-      Net::SSH.stubs(:start).returns @ssh_stub
     end
 
     it 'displays syntax when no machine name specified' do
@@ -32,6 +31,23 @@ describe Commandline do
     it 'sets machine_name' do
       subject.build ['machine']
       $conf.machine_name.must_equal 'machine'
+    end
+
+    it 'handles timeout errors' do
+      Net::SSH.expects(:start).raises Errno::ETIMEDOUT
+      proc { subject.build ['machine'] }.must_output /Connection timed out.*Check the IP address in machines.yml/m
+    end
+
+    it 'SSH connection not closed when no connection previously established' do
+      Net::SSH.expects(:start).raises Errno::ETIMEDOUT
+      subject.build ['machine']
+    end
+
+    it 'ensures SSH connection closed when error' do
+      Net::SSH.expects(:start).returns @ssh_stub
+      Net::SCP.expects(:new).raises Errno::ETIMEDOUT
+      @ssh_stub.expects(:close)
+      subject.build ['machine']
     end
 
     it 'starts an SCP session using password authentication' do
@@ -51,6 +67,7 @@ describe Commandline do
     end
 
     it 'runs each command' do
+      Net::SSH.stubs(:start).returns @ssh_stub
       mock_command = mock 'Command'
       $conf.commands = [mock_command]
 
@@ -60,6 +77,7 @@ describe Commandline do
     end
 
     it 'flushes log file after running command' do
+      Net::SSH.stubs(:start).returns @ssh_stub
       $conf.log_only = false
       command_stub = stub('command', :run => nil)
       $conf.commands = [command_stub]
@@ -120,6 +138,7 @@ describe Commandline do
       end
 
       it 'exits when exit requested' do
+        Net::SSH.stubs(:start).returns @ssh_stub
         $exit_requested = true
         subject.expects(:exit)
 

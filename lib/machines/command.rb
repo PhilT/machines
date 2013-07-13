@@ -6,6 +6,8 @@ module Machines
 
     attr_accessor :command, :check
 
+    @@ssh = @@scp = nil
+
     def self.scp= scp
       @@scp = scp
     end

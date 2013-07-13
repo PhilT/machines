@@ -48,8 +48,11 @@ module Machines
             Command.file.flush
             exit if $exit_requested
           end
+        rescue => e
+          say e.message
+          say 'Check the IP address in machines.yml'
         ensure
-          Command.ssh.close
+          Command.ssh.close if Command.ssh
         end
       end
     end
