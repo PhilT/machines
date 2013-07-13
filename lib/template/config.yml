@@ -20,6 +20,9 @@ cloud:
   aws_access_key_id: 123
   aws_secret_access_key: 456
 
+chrome:
+  download_path: /home/phil/downloads
+
 dwm:
   repo: git@github.com:PhilT/dwm.git
 

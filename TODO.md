@@ -9,7 +9,6 @@ TODO next
 * Create custom Ubuntu CD for simpler base deployments (https://help.ubuntu.com/community/InstallCDCustomization)
 * Fix pending specs (or remove)
 
-
 EC2 support
 -----------
 
@@ -69,7 +68,7 @@ Misc Tasks
 * Add the check that was run to `CHECK_FAILED/CHECK_PASSED`
 * Output progress to log/<machine_name>_progress.log
 * Rename output log to log/<machine_name>_output.log
-* DOC: machines desc <package> - Should display a detailed description of the package
+* DOC: machines desc <package> - Should display a detailed description of the package (including what config.yml settings it uses)
 * machines list - Display a list of machines to build (or maybe machines build/dryrun with no machinename)
 * ?? base package may not be needed on DB installs
 * ?? Default path for Nginx install is /usr/local - Is it installed correctly for non-default paths?

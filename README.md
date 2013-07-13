@@ -3,7 +3,7 @@ Machines
 
 **A custom Ubuntu system in less than 15 minutes**
 
-Setup Ubuntu development and server **Machines** locally or in the cloud for developing and hosting Ruby, Rails and related environments.
+Setup customised Ubuntu development and server **Machines** locally or in the cloud for developing and hosting Ruby, Rails and related technologies.
 
 Write commands in Ruby like:
 
@@ -39,9 +39,10 @@ Features
 * An opinionated Ubuntu configuration script with sensible defaults
 * Easily override the defaults with configuration options and custom ruby
 * Default template supports Nginx, Passenger, Ruby, Rails, MySQL, Git, Monit, Logrotate
-* Preconfigured Ruby & Rails light development environment (Openbox, Subtle, dwm)
+* Preconfigured Ruby & Rails minimal development environment (Openbox, Subtle, dwm)
 * Bring up new instances fully configured in less than 15 minutes
 * The best form of documentation for your architecture
+* More secure (by installing only what you want)
 
 
 What it's Not

@@ -10,7 +10,7 @@
 # database servers must be created before application servers.
 #
 # Edit this file to setup your initial machines. If using EC2, Machines will populate the
-# address setting with the new instance that is created.
+# address setting with the new instance that is created. [EC2 not completed yet]
 #
 # For example:
 #     machines build maindb # creates the master database and sets address in machines.yml
