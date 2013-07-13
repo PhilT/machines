@@ -4,7 +4,7 @@ describe Commandline do
 
   subject { Commandline.new }
 
-  before(:each) do
+  before do
     subject
     Commandline.stubs(:new).returns subject
     $conf.log_only = false
@@ -13,7 +13,7 @@ describe Commandline do
   end
 
   describe 'build' do
-    before(:each) do
+    before do
       subject.stubs(:init)
       FileUtils.touch('Machinesfile')
       $conf.machine = AppConf.new
@@ -28,79 +28,6 @@ describe Commandline do
       lambda { subject.build [] }.must_output Help.new.syntax
     end
 
-    it 'sets machine_name' do
-      subject.build ['machine']
-      $conf.machine_name.must_equal 'machine'
-    end
-
-    it 'handles timeout errors' do
-      Net::SSH.expects(:start).raises Errno::ETIMEDOUT
-      proc { subject.build ['machine'] }.must_output /Connection timed out.*Check the IP address in machines.yml/m
-    end
-
-    it 'SSH connection not closed when no connection previously established' do
-      Net::SSH.expects(:start).raises Errno::ETIMEDOUT
-      subject.build ['machine']
-    end
-
-    it 'ensures SSH connection closed when error' do
-      Net::SSH.expects(:start).returns @ssh_stub
-      Net::SCP.expects(:new).raises Errno::ETIMEDOUT
-      @ssh_stub.expects(:close)
-      subject.build ['machine']
-    end
-
-    it 'starts an SCP session using password authentication' do
-      options = {paranoid: false, password: 'userpass'}
-      Net::SSH.expects(:start).with('target', 'username', options).returns @ssh_stub
-      subject.build ['machine']
-    end
-
-    it 'starts an SCP session using key based authentication' do
-      $conf.machine.cloud = AppConf.new
-      $conf.machine.cloud.private_key_path = 'path/to/private_key'
-      $conf.machine.cloud.username = 'ubuntu'
-      options = {paranoid: false, keys: ['path/to/private_key']}
-      Net::SSH.expects(:start).with('target', 'ubuntu', options).returns @ssh_stub
-
-      subject.build ['machine']
-    end
-
-    it 'runs each command' do
-      Net::SSH.stubs(:start).returns @ssh_stub
-      mock_command = mock 'Command'
-      $conf.commands = [mock_command]
-
-      mock_command.expects(:run)
-
-      subject.build ['machine']
-    end
-
-    it 'flushes log file after running command' do
-      Net::SSH.stubs(:start).returns @ssh_stub
-      $conf.log_only = false
-      command_stub = stub('command', :run => nil)
-      $conf.commands = [command_stub]
-
-      Command.file.expects(:flush)
-      subject.build ['machine']
-    end
-
-    it 'only run specified tasks' do
-      command_will_run = Command.new 'will run', ''
-      command_also_run = Command.new 'also run', ''
-      command_wont_run = Command.new 'wont run', ''
-      $conf.tasks = {
-        :task1 => {:block => lambda { $conf.commands << command_will_run }},
-        :task2 => {:block => lambda { $conf.commands << command_also_run }},
-        :task3 => {:block => lambda { $conf.commands << command_wont_run }}
-      }
-
-      subject.build ['machine', 'task1', 'task2']
-
-      $conf.commands.must_equal [command_will_run, command_also_run]
-    end
-
     it 'logs instead of SSHing and running commands' do
       Net::SCP.expects(:start).never
       $conf.commands = [mock('command')]
@@ -109,13 +36,93 @@ describe Commandline do
       subject.build ['machine']
     end
 
+    describe 'when connected' do
+      before do
+        Net::SSH.stubs(:start).returns @ssh_stub
+      end
+
+      it 'sets machine_name' do
+        subject.build ['machine']
+        $conf.machine_name.must_equal 'machine'
+      end
+
+      it 'runs each command' do
+        mock_command = mock 'Command'
+        $conf.commands = [mock_command]
+
+        mock_command.expects(:run)
+
+        subject.build ['machine']
+      end
+
+      it 'flushes log file after running command' do
+        $conf.log_only = false
+        command_stub = stub('command', :run => nil)
+        $conf.commands = [command_stub]
+
+        Command.file.expects(:flush)
+        subject.build ['machine']
+      end
+
+      it 'only run specified tasks' do
+        command_will_run = Command.new 'will run', ''
+        command_also_run = Command.new 'also run', ''
+        command_wont_run = Command.new 'wont run', ''
+        $conf.tasks = {
+          :task1 => {:block => lambda { $conf.commands << command_will_run }},
+          :task2 => {:block => lambda { $conf.commands << command_also_run }},
+          :task3 => {:block => lambda { $conf.commands << command_wont_run }}
+        }
+
+        subject.build ['machine', 'task1', 'task2']
+
+        $conf.commands.must_equal [command_will_run, command_also_run]
+      end
+
+      it 'starts an SCP session using password authentication' do
+        options = {paranoid: false, password: 'userpass'}
+        Net::SSH.expects(:start).with('target', 'username', options).returns @ssh_stub
+        subject.build ['machine']
+      end
+
+      it 'starts an SCP session using key based authentication' do
+        $conf.machine.cloud = AppConf.new
+        $conf.machine.cloud.private_key_path = 'path/to/private_key'
+        $conf.machine.cloud.username = 'ubuntu'
+        options = {paranoid: false, keys: ['path/to/private_key']}
+        Net::SSH.expects(:start).with('target', 'ubuntu', options).returns @ssh_stub
+
+        subject.build ['machine']
+      end
+    end
+
+    describe 'when not connected' do
+      it 'handles timeout errors' do
+        Net::SSH.expects(:start).raises Errno::ETIMEDOUT
+        proc { subject.build ['machine'] }.must_output /Connection timed out.*Check the IP address in machines.yml/m
+      end
+
+      it 'SSH connection not closed when no connection previously established' do
+        Net::SSH.expects(:start).returns nil
+        subject.build ['machine']
+      end
+
+      it 'ensures SSH connection closed when error' do
+        Net::SSH.expects(:start).returns @ssh_stub
+        Net::SCP.expects(:new).raises Errno::ETIMEDOUT
+        @ssh_stub.expects(:close)
+        subject.build ['machine']
+      end
+    end
+
     describe 'interrupts' do
-      before(:each) do
+      before do
         mock_command = mock 'command'
         $conf.commands = [mock_command]
 
         mock_command.stubs(:run)
         $exit_requested = false
+        Net::SSH.stubs(:start).returns @ssh_stub
       end
 
       it 'handles CTRL+C and calls handler' do
@@ -138,7 +145,6 @@ describe Commandline do
       end
 
       it 'exits when exit requested' do
-        Net::SSH.stubs(:start).returns @ssh_stub
         $exit_requested = true
         subject.expects(:exit)
 
@@ -201,7 +207,7 @@ describe Commandline do
     end
 
     describe 'when folder exists' do
-      before(:each) do
+      before do
         FileUtils.mkdir_p('dir')
       end
 
@@ -255,7 +261,7 @@ describe Commandline do
   end
 
   describe 'override' do
-    before(:each) do
+    before do
       FileUtils.mkdir_p File.join($conf.application_dir, 'packages')
       FileUtils.mkdir_p 'packages'
       FileUtils.touch File.join($conf.application_dir, 'packages', 'base.rb')
@@ -267,7 +273,7 @@ describe Commandline do
     end
 
     describe 'when copying over existing package' do
-      before(:each) do
+      before do
         FileUtils.touch 'packages/base.rb'
       end
 

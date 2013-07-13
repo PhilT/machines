@@ -48,7 +48,7 @@ module Machines
             Command.file.flush
             exit if $exit_requested
           end
-        rescue => e
+        rescue Errno::ETIMEDOUT => e
           say e.message
           say 'Check the IP address in machines.yml'
         ensure
