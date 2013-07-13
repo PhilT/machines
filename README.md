@@ -187,6 +187,13 @@ Some of the settings set and used by Machines are:
 * `$conf.users` - A list of the available users
 * `$conf.webapps` - A hash of webapps keyed from the name of the webapp specified in webapps.yml
 
+The following settings are set rbenv, rvm, passenger and used by passenger_nginx packages:
+
+* `$conf.ruby.gems_path` - e.g. `.rbenv/versions/1.9.3-p448/lib/ruby/gems/1.9.1/gems`
+* `$conf.ruby.executable` - e.g. `.rbenv/versions/1.9.3-p448/bin/ruby`
+* `$conf.passenger.root` - Is just the ruby gems path plus passenger-version
+* `$conf.passenger.ruby` - Is simply the absolute path to the ruby executable
+
 Take a look at `template/*.yml` for more.
 
 Commands
