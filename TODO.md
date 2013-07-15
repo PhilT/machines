@@ -1,16 +1,24 @@
+ require 'gpgme'
+irb(main):002:0> crypto = GPGME::Crypto.new password: 'pass'
+irb(main):003:0> crypto.encrypt 'Some text', symmetric: true
+irb(main):004:0> encrypted = crypto.encrypt 'Some text', symmetric: true
+irb(main):005:0> crypto.decrypt encrypted
+
+
 TODO next
 ----------------------------------------
 
+* Generate SSH keys (instead of copying - bad!)
+* Added use_local_ssh_id flag to machines.yml instead of generating one every time (for testing)
+* Move passwords from machines.yml and webapps.yml into encrypted file
 * Setup complete example install (dev, production and database servers)
-* Encrypt keys/passwords etc - won't need to save machines after that (in load_machines)
-* Clarify db_server, root_pass usage
 * Move dotfiles to a separate repo so they can be managed across projects by their user
 * stubs :required_options should be tested
-* Create custom Ubuntu CD for simpler base deployments (https://help.ubuntu.com/community/InstallCDCustomization)
 * Fix pending specs (or remove)
+* replace $conf.commands.map(&:info).join("\n") with queued_commands in specs
 
-EC2 support
------------
+EC2/Cloud support (with Fog)
+----------------------------------------
 
 * Handle unknown tasks and display a proper error message (at the moment we get an obscure undefined method on NilClass)
 * Support missing environment (e.g. source repo machine)
@@ -60,6 +68,7 @@ Package and Task Tasks
 Misc Tasks
 ----------------------------------------
 
+* DOC: put in a link to highline for keyboard input (ask, say, etc, enter_password)
 * Remove percentage from progress once command has completed
 * DOC: How webapps environment specific settings override default settings and how to set your own
 * DOC: All config files
@@ -96,7 +105,7 @@ Misc Tasks
       path :appsroot, 'subfolder'
 * rvm ruby@gemset --rvmrc to generate passenger compatible .rvmrc
 * passenger_nginx was installed with rvmsudo. Need to test it still works with just sudo
-
+* Have a default_config.yml that gets overwritten with new versions. config.yml would override settings in default_config.yml
 
 Design issues
 ----------------------------------------

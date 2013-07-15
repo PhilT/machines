@@ -62,6 +62,10 @@ class Machines::Core
   def eval_package content, name
     eval content, nil, "eval: #{name}"
   end
+
+  def queued_commands
+    $conf.commands.map(&:info).join("\n")
+  end
 end
 
 class MiniTest::Spec::Package < MiniTest::Spec
@@ -78,6 +82,10 @@ class MiniTest::Spec::Package < MiniTest::Spec
 
   def eval_package
     core.eval_package(@package, @package_name)
+  end
+
+  def queued_commands
+    $conf.commands.map(&:info).join("\n")
   end
 
   def before_setup

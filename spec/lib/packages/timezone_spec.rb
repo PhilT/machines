@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'packages/timezone' do
-  before(:each) do
+  before do
     $conf.timezone = 'GB'
   end
 

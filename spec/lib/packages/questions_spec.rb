@@ -6,7 +6,7 @@ describe 'packages/questions' do
   end
 
   it 'asks for a password' do
-    Core.any_instance.expects(:enter_password).with('users', false)
+    Core.any_instance.expects(:enter_password).with("user's", false)
     eval_package
   end
 

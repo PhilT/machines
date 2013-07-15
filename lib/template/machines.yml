@@ -1,9 +1,8 @@
 # BE CAREFUL: THIS FILE IS ALSO WRITTEN TO BY MACHINES
 # This config file is used to read and also write machine settings.
-# You can replace these comments with your own. Comment lines will be retained upto
-# the ---.
+# Comments are retained upto the ---.
 #
-# THIS CONTAINS A NUMBER OF PASSWORDS. SETTING PROPER PERMISSIONS IS HIGHLY RECOMMENDED.
+# Passwords are stored in passwords.gpg - DON'T SET THEM HERE!
 #
 # Each machine represents a physical (or virtual) computer in your server architecture. This file
 # is used to determine where to point database connections from app servers. Because of this,
@@ -20,25 +19,25 @@
 # machines:
 #   <machine_name>:
 #     hostname: Used to set the hostname of the machine (e.g. main.electricvisions.com)
-#     address: IP or DNS name of the machine (this is populated automatically when creating EC2 machines)
+#     address: IP or DNS name of the machine (this is populated when creating EC2 machines)
 #     user: User to login as and to identify the  users/ folder to use
 #     environment: Rails.env to use
 #     apps: An array of app names to setup on this machine (nil for all, [] for none)
 #     roles: Roles of the server (Roles known by standard template are: app, db, dbmaster, dbslave)
-#     db_server: name of DB server that will be used or replicated from (For dev machines this is normally the same as the machine name)
-#     root_pass: Root password for db servers - Leave blank to generate one
+#     db_server: <machine_name> of DB server that will be used or replicated from
+#               (For dev machines this is normally the same as the machine name (local DB))
+#     db_root_pass: Root DB password for db servers (stored in passwords.gpg)
 #     replication_user: User to connect with when replicating
-#     replication_pass: Password to connect with when replicating
+#     replication_pass: Password to connect with when replicating (stored in passwords.gpg)
 #     ec2: tells Machines to create a new ec2 instance (unless address is already set)
-#       type: Size of EC2 instance
-#         32 bit instances - t1.micro, m1.small, m1.medium
-#         64 bit instances - m1.large, m1.xlarge, c1.xlarge, cc1.4xlarge, cg1.4xlarge, m2.xlarge, m2.2xlarge, m2.4xlarge
-#       ami: Amazon Machine Image - Choose your preferred AMI at http://alestic.com/ (e.g. ami-11f0cc65 - EU West 32 bit Ubuntu 11.10 EBS)
+#       type: EC2 Instance Type (e.g. t1.micro, m1.large, c1.xlarge)
+#       ami: Amazon Machine Image (e.g. ami-11f0cc65 - EU West 32 bit Ubuntu 11.10 EBS)
 #       region: Location of instance (e.g. ec2.eu-west-1.amazonaws.com)
 #       public_key_path: Path to public key file
 #       private_key_path: Path to private key file
 #       username: Instance username (Canonical uses 'ubuntu' in it's AMIs)
 #       security_group: Security group you setup on Amazon -  (e.g. ev-public)
+#     use_local_ssh_id: Copies local SSH keys instead of generating new ones (for testing)
 
 ---
 machines:
@@ -46,7 +45,6 @@ machines:
     hostname: main.electricvisions.com
     address: machinesvm
     user: phil
-    password: password
     environment: development
     apps:
       - condensd
@@ -56,6 +54,7 @@ machines:
       - app
       - db
     db_server: testvm
+    use_local_ssh_id: true
 
   philworkstation:
     hostname: main.electricvisions.com
@@ -76,7 +75,6 @@ machines:
       - app
       - db
     db_server: philworkstation
-    root_pass: secure
 
   maindb:
     hostname: dbmaster.electricvisions.com
@@ -93,15 +91,11 @@ machines:
     roles:
       - db
       - dbmaster
-    root_pass: secure
     replication_user: repl
-    replication_pass: secure
     cloud:
       flavor_id: t1.micro
       image_id: ami-11f0cc65 # EU WEST 1 Ubuntu x32 11.10 EBS
       region: eu-west-1
-      public_key_path: ssh/id_rsa.pub
-      private_key_path: ssh/id_rsa
       username: ubuntu
 
   backupdb:
@@ -119,14 +113,11 @@ machines:
     roles:
       - db
       - dbslave
-    root_pass: secure
     db_server: maindb
     cloud:
       flavor_id: t1.micro
       image_id: ami-11f0cc65 # EU WEST 1 Ubuntu x32 11.10 EBS
       region: eu-west-1
-      public_key_path: ssh/id_rsa.pub
-      private_key_path: ssh/id_rsa
       username: ubuntu
 
   staging:
@@ -145,13 +136,10 @@ machines:
       - app
       - db
     db_server: staging
-    root_pass: secure
     cloud:
       flavor_id: t1.micro
       image_id: ami-11f0cc65 # EU WEST 1 Ubuntu x32 11.10 EBS
       region: eu-west-1
-      public_key_path: ssh/id_rsa.pub
-      private_key_path: ssh/id_rsa
       username: ubuntu
 
   production:
@@ -173,7 +161,4 @@ machines:
       flavor_id: t1.micro
       image_id: ami-11f0cc65 # EU WEST 1 Ubuntu x32 11.10 EBS
       region: eu-west-1
-      public_key_path: ssh/id_rsa.pub
-      private_key_path: ssh/id_rsa
       username: ubuntu
-

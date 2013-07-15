@@ -1,4 +1,5 @@
 package :load_machines
+package :ssh_keygen
 package :questions
 
 package :dependencies

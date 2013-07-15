@@ -14,7 +14,15 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.rubyforge_project = 'machines'
 
-  %w(activesupport app_conf highline i18n net-ssh net-scp).each do |name|
+  %w(
+    activesupport
+    app_conf
+    gpgme
+    highline
+    i18n
+    net-ssh
+    net-scp
+  ).each do |name|
     s.add_dependency name
   end
 

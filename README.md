@@ -1,7 +1,7 @@
 Machines
 ===========================================================
 
-**A custom Ubuntu system in less than 15 minutes**
+**A custom Ubuntu system in less than 15 minutes (Deploy time)**
 
 Setup customised Ubuntu development and server **Machines** locally or in the cloud for developing and hosting Ruby, Rails and related technologies.
 
@@ -22,15 +22,12 @@ Example to upgrade passenger:
 Status
 -----------------------------------------------------------
 
-**July 2013**
+**July 2013** Working on 0.6.0
 
-* Released 0.5.6 gem
-* Some gem updates, cleaned up API
-* Working development and server builds.
-
-Working on:
-
-* Cloud deployments
+* Generate SSH keys (instead of copying existing ones - bad!)
+* Move passwords from machines.yml and webapps.yml into encrypted file
+* Lots of fixes
+* Updated to Ubuntu 13.04 (not supporting actively supporting older versions yet)
 
 
 Features
@@ -50,6 +47,7 @@ What it's Not
 
 * It does not replace the base installation (Yet). A minimal Ubuntu must be installed prior to running the *Machines* install (instructions provided below)
 * It's not a full blown configuration management tool such as Puppet or Chef although it can be used to run packages on the local machine to install new versions
+* It's not very good at supporting older distros (e.g. if package names change. This may change if packages are moved into separate repo)
 
 
 Motivation

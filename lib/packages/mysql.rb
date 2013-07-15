@@ -7,8 +7,8 @@ only roles: :db do
   task :mysql, 'Install MySQL' do
     name = 'mysql-server-5.5'
     key = 'mysql-server/root_password'
-    sudo debconf name, key, 'password', $conf.machine.root_pass
-    sudo debconf name, "#{key}_again", 'password', $conf.machine.root_pass
+    sudo debconf name, key, 'password', $conf.machine.db_root_pass
+    sudo debconf name, "#{key}_again", 'password', $conf.machine.db_root_pass
     sudo install %w(mysql-server mysql-client libmysqlclient-dev)
     run restart 'mysql'
   end
@@ -18,7 +18,7 @@ only roles: :dbmaster do
   task :dbperms, 'Grant applications access to the database' do
     $conf.webapps.values.each do |app|
       mysql_execute "GRANT ALL ON #{app.database}.* TO '#{app.username}'@'%' " +
-        "IDENTIFIED BY '#{app.password}';", password: $conf.machine.root_pass
+        "IDENTIFIED BY '#{app.password}';", password: $conf.machine.db_root_pass
     end
   end
 
@@ -26,7 +26,7 @@ only roles: :dbmaster do
     sudo upload "mysql/dbmaster.cnf", "/etc/mysql/conf.d/dbmaster.cnf"
     mysql_execute "GRANT REPLICATION SLAVE ON *.* " +
       "TO '#{$conf.machine.replication_user}'@'%' " +
-      "IDENTIFIED BY '#{$conf.machine.replication_pass}';", password: $conf.machine.root_pass
+      "IDENTIFIED BY '#{$conf.machine.replication_pass}';", password: $conf.machine.db_root_pass
   end
 end
 
@@ -36,7 +36,7 @@ only roles: :dbslave do
     mysql_execute "CHANGE MASTER TO " +
       "MASTER_HOST='#{$conf.db_server.address}', " +
       "MASTER_USER='#{$conf.db_server.replication_user}' " +
-      "MASTER_PASSWORD='#{$conf.db_server.replication_pass}';", password: $conf.machine.root_pass
+      "MASTER_PASSWORD='#{$conf.db_server.replication_pass}';", password: $conf.machine.db_root_pass
   end
 end
 

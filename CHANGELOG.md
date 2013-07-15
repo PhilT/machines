@@ -1,3 +1,14 @@
+## 0.6.0
+
+* Configure Chrome/Chromium download directory
+* Don't terminate on file upload errors (missing source or dest)
+* Display better message when initial connection fails
+* documented some generated settings
+* Added dwm (Dynamic Window Manager) package
+* Some fixes to mysql package
+* Some updates for Ubuntu 13.04 (this may break older distros)
+* A load more fixes
+
 ## 0.5.6
 
 * Gem updates - spec_helper updated to handle features removed from minitest
