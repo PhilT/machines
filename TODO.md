@@ -16,6 +16,14 @@ TODO next
 * stubs :required_options should be tested
 * Fix pending specs (or remove)
 * replace $conf.commands.map(&:info).join("\n") with queued_commands in specs
+* Add rspec bundle to sublime
+* FIX: passenger_nginx check still failing
+* FIX: chrome config not created so can't edit it (chrome package replace fails)
+* VBoxClient --clipboard in xinitrc not should exist on non-vm machines
+* Maybe remove .xinitrc wm start (or comment out until tested)
+* Add ssh-agent to .profile
+* workspace not added to bookmarks
+
 
 EC2/Cloud support (with Fog)
 ----------------------------------------

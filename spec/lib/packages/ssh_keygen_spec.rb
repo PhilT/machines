@@ -13,6 +13,7 @@ describe 'packages/ssh_keygen' do
     proc { eval_package }.must_output /Copy the following key.*ssh-rsa/m
 
     $conf.id_rsa.must_match /BEGIN RSA PRIVATE KEY/
+    $conf.id_rsa_pub.must_match /ssh-rsa/
     File.exists?('tmp/machine_id_rsa').must_equal false
     File.exists?('tmp/machine_id_rsa.pub').must_equal false
   end
@@ -29,17 +30,14 @@ describe 'packages/ssh_keygen' do
   it "uses user's key on dryrun" do
     FileUtils.mkdir_p(File.join(ENV['HOME'], '.ssh'))
     File.open(File.join(ENV['HOME'], '.ssh/id_rsa'), 'w') { |f| f.write 'rsa private key' }
+    File.open(File.join(ENV['HOME'], '.ssh/id_rsa.pub'), 'w') { |f| f.write 'rsa public key' }
     FileUtils.touch File.join(ENV['HOME'], '.ssh/id_rsa.pub')
     $conf.log_only = true
     eval_package
     $conf.id_rsa.must_equal 'rsa private key'
+    $conf.id_rsa_pub.must_equal 'rsa public key'
     queued_commands.must_equal [
       "TASK   ssh_keygen - Generate SSH key and present it"
     ].join("\n")
-  end
-
-  it 'displays public key' do
-#    eval_package
-
   end
 end
