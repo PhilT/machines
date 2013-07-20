@@ -11,7 +11,7 @@ describe 'packages/monit' do
 
   it 'adds the following commands' do
     eval_package
-    $conf.commands.map(&:info).join("\n").must_equal [
+    queued_commands.must_equal [
       "TASK   monit - Install and configure monit",
       "SUDO   apt-get -q -y install monit",
       "SUDO   /etc/init.d/monit stop && update-rc.d -f monit remove",

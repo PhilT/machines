@@ -1,7 +1,7 @@
 task :ssh_keygen, 'Generate SSH key and present it' do
   if $conf.machine.use_local_ssh_id || $conf.log_only
     $conf.id_rsa = File.read(File.join(ENV['HOME'], '.ssh/id_rsa'))
-    $conf.id_rsa = File.read(File.join(ENV['HOME'], '.ssh/id_rsa.pub'))
+    $conf.id_rsa_pub = File.read(File.join(ENV['HOME'], '.ssh/id_rsa.pub'))
   else
     begin
       system %(ssh-keygen -q -f tmp/#{$conf.machine_name}_id_rsa -N "")
@@ -17,4 +17,8 @@ task :ssh_keygen, 'Generate SSH key and present it' do
 
     exit unless agree('Ready to continue? ("y", or "n" to abort)')
   end
+
+  run mkdir '.ssh'
+  run write $conf.id_rsa, to: '.ssh/id_rsa', name: 'private ssh key'
+  run write $conf.id_rsa_pub, to: '.ssh/id_rsa.pub', name: 'public ssh key'
 end

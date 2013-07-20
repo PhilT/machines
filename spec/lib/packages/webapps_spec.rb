@@ -24,7 +24,7 @@ describe 'packages/webapps' do
   it 'adds the following commands' do
     $conf.environment = 'production'
     eval_package
-    $conf.commands.map(&:info).join("\n").must_equal [
+    queued_commands.must_equal [
       "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",
       "SUDO   mkdir -p nginx_path/servers",
       "RUN    mkdir -p /home/users/application/releases",
@@ -43,14 +43,14 @@ describe 'packages/webapps' do
     $conf.environment = 'production'
     $conf.webapps['application'].write_yml = true
     eval_package
-    $conf.commands.map(&:info).join("\n").must_match 'UPLOAD buffer from database.yml to /home/users/application/shared/config/database.yml'
+    queued_commands.must_match 'UPLOAD buffer from database.yml to /home/users/application/shared/config/database.yml'
   end
 
   it "doesn't make app structure when target is a development machine" do
     $conf.from_hash(:ruby => {:gems_path => '.rbenv'})
     $conf.environment = 'development'
     eval_package
-    commandline = $conf.commands.map(&:info).join("\n")
+    commandline = queued_commands
     commandline.must_equal [
       "TASK   webapps - Sets up Web apps in config/webapps.yml using app_server.conf.erb",
       "SUDO   mkdir -p nginx_path/servers",

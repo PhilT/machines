@@ -15,7 +15,7 @@ describe 'packages/dotfiles' do
 
   it 'adds the following commands' do
     eval_package
-    $conf.commands.map(&:info).join("\n").must_equal [
+    queued_commands.must_equal [
       "TASK   dotfiles - Upload users/username/dotfiles and set some env vars",
       "UPLOAD users/username/dotfiles/bashrc to .bashrc",
       "RUN    mkdir -p $HOME/.ssh",
@@ -32,14 +32,14 @@ describe 'packages/dotfiles' do
     $conf.set_rails_env_for = ['railsenv']
     eval_package
     expected = /RUN    grep \"export RAILS_ENV=railsenv\" .profile || echo \"export RAILS_ENV=railsenv\" >> .profile/
-    $conf.commands.map(&:info).join("\n").must_match expected
+    queued_commands.must_match expected
   end
 
   it 'RAILS_ENV not set when not specified in set_rails_env_for' do
     $conf.set_rails_env_for = ['some_other_env']
     eval_package
     expected = /RUN    grep \"export RAILS_ENV=railsenv\" .profile \|\| echo \"export RAILS_ENV=railsenv\" >> .profile/
-    $conf.commands.map(&:info).join("\n").wont_match expected
+    queued_commands.wont_match expected
   end
 end
 

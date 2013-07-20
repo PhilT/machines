@@ -13,7 +13,7 @@ describe 'packages/nginx' do
   it 'adds the following commands for staging environment' do
     $conf.environment = 'staging'
     eval_package
-    $conf.commands.map(&:info).join("\n").must_equal [
+    queued_commands.must_equal [
       "TASK   nginx - Download and configure Nginx",
       "SUDO   cd /usr/local/src && wget http://nginx.org/download/nginx-1.2.3.tar.gz && tar -zxf nginx-1.2.3.tar.gz && rm nginx-1.2.3.tar.gz && cd -",
       'SUDO   cd /usr/local/src/nginx-1.2.3 && ./configure --with-http_ssl_module --add-module=/passenger/path/ext/nginx && make && make install',
@@ -29,7 +29,7 @@ describe 'packages/nginx' do
   it 'adds the following commands for development environment' do
     $conf.environment = 'development'
     eval_package
-    $conf.commands.map(&:info).join("\n").must_equal [
+    queued_commands.must_equal [
       "TASK   nginx - Download and configure Nginx",
       "SUDO   cd /usr/local/src && wget http://nginx.org/download/nginx-1.2.3.tar.gz && tar -zxf nginx-1.2.3.tar.gz && rm nginx-1.2.3.tar.gz && cd -",
       'SUDO   cd /usr/local/src/nginx-1.2.3 && ./configure --with-http_ssl_module --add-module=/passenger/path/ext/nginx && make && make install',

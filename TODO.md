@@ -8,14 +8,12 @@ irb(main):005:0> crypto.decrypt encrypted
 TODO next
 ----------------------------------------
 
-* Generate SSH keys (instead of copying - bad!)
-* Added use_local_ssh_id flag to machines.yml instead of generating one every time (for testing)
 * Move passwords from machines.yml and webapps.yml into encrypted file
 * Setup complete example install (dev, production and database servers)
 * Move dotfiles to a separate repo so they can be managed across projects by their user
 * stubs :required_options should be tested
 * Fix pending specs (or remove)
-* replace $conf.commands.map(&:info).join("\n") with queued_commands in specs
+* replace queued_commands with queued_commands in specs
 * Add rspec bundle to sublime
 * FIX: passenger_nginx check still failing
 * FIX: chrome config not created so can't edit it (chrome package replace fails)
@@ -23,6 +21,7 @@ TODO next
 * Maybe remove .xinitrc wm start (or comment out until tested)
 * Add ssh-agent to .profile
 * workspace not added to bookmarks
+* How to handle adding public ssh key to authorized_keys of servers? Could have a task that adds the key for the dev machine to all servers
 
 
 EC2/Cloud support (with Fog)

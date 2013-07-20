@@ -1,5 +1,7 @@
 ## 0.6.0
 
+* Generate SSH keys (instead of copying - bad!)
+* Added use_local_ssh_id flag to machines.yml instead of generating one every time (for testing)
 * Configure Chrome/Chromium download directory
 * Don't terminate on file upload errors (missing source or dest)
 * Display better message when initial connection fails

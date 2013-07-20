@@ -20,21 +20,21 @@ describe 'packages/hosts' do
 
   it 'adds the following commands' do
     eval_package
-    $conf.commands.map(&:info).join("\n").must_equal (@hosts).join("\n")
+    queued_commands.must_equal (@hosts).join("\n")
   end
 
   it 'does not add hosts when nil' do
     $conf.clear :hosts
     @hosts.pop
     eval_package
-    $conf.commands.map(&:info).join("\n").must_equal (@hosts).join("\n")
+    queued_commands.must_equal (@hosts).join("\n")
   end
 
   it 'does not add host when address is nil' do
     $conf.from_hash(:hosts => {'some.domain' => nil})
     @hosts.pop
     eval_package
-    $conf.commands.map(&:info).join("\n").must_equal (@hosts).join("\n")
+    queued_commands.must_equal (@hosts).join("\n")
   end
 end
 

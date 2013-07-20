@@ -9,7 +9,7 @@ describe 'packages/awstats' do
   end
 
   it 'adds the following commands' do
-    $conf.commands.map(&:info).join("\n").must_equal [
+    queued_commands.must_equal [
       "TASK   awstats - Install AWStats",
       "SUDO   apt-get -q -y install awstats",
       "SUDO   wget https://raw.github.com/PhilT/bin/master/awstats_render -O /usr/local/bin/awstats_render",

@@ -4,7 +4,6 @@ describe 'packages/ssh_keygen' do
   before do
     $conf.machine_name = 'machine'
     $conf.machine = AppConf.new
-    $conf.use_local_ssh_id = false
   end
 
   it 'generates an ssh key locally, stores in memory and removes' do
@@ -27,17 +26,36 @@ describe 'packages/ssh_keygen' do
     eval_package
   end
 
-  it "uses user's key on dryrun" do
-    FileUtils.mkdir_p(File.join(ENV['HOME'], '.ssh'))
-    File.open(File.join(ENV['HOME'], '.ssh/id_rsa'), 'w') { |f| f.write 'rsa private key' }
-    File.open(File.join(ENV['HOME'], '.ssh/id_rsa.pub'), 'w') { |f| f.write 'rsa public key' }
-    FileUtils.touch File.join(ENV['HOME'], '.ssh/id_rsa.pub')
-    $conf.log_only = true
-    eval_package
-    $conf.id_rsa.must_equal 'rsa private key'
-    $conf.id_rsa_pub.must_equal 'rsa public key'
-    queued_commands.must_equal [
-      "TASK   ssh_keygen - Generate SSH key and present it"
-    ].join("\n")
+  describe 'using local keys' do
+    before do
+      FileUtils.mkdir_p(File.join(ENV['HOME'], '.ssh'))
+      File.open(File.join(ENV['HOME'], '.ssh/id_rsa'), 'w') { |f| f.write 'rsa private key' }
+      File.open(File.join(ENV['HOME'], '.ssh/id_rsa.pub'), 'w') { |f| f.write 'rsa public key' }
+    end
+
+    it 'uses local key on dryrun' do
+      $conf.log_only = true
+      eval_package
+      $conf.id_rsa.must_equal 'rsa private key'
+      $conf.id_rsa_pub.must_equal 'rsa public key'
+    end
+
+    it 'uses local key when use_local_ssh_id is set' do
+      $conf.machine.use_local_ssh_id = true
+      eval_package
+      $conf.id_rsa.must_equal 'rsa private key'
+      $conf.id_rsa_pub.must_equal 'rsa public key'
+    end
+
+    it 'adds commands to write ssh keys' do
+      $conf.log_only = true
+      eval_package
+      queued_commands.must_equal [
+        'TASK   ssh_keygen - Generate SSH key and present it',
+        'RUN    mkdir -p .ssh',
+        'UPLOAD buffer from private ssh key to .ssh/id_rsa',
+        'UPLOAD buffer from public ssh key to .ssh/id_rsa.pub'
+      ].join("\n")
+    end
   end
 end

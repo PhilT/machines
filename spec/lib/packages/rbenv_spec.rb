@@ -17,7 +17,7 @@ describe 'packages/rbenv' do
   end
 
   it 'adds the following commands' do
-    $conf.commands.map(&:info).join("\n").must_equal [
+    queued_commands.must_equal [
       'TASK   rbenv - Install ruby-build, rbenv, ruby 1.9.2-p290 and Bundler',
       "SUDO   apt-get -q -y install git-core",
       "SUDO   apt-get -q -y install curl",

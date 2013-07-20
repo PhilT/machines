@@ -16,7 +16,7 @@ describe 'packages/rvm' do
   end
 
   it 'adds the following commands' do
-    $conf.commands.map(&:info).join("\n").must_equal [
+    queued_commands.must_equal [
       "TASK   rvm - Install RVM",
       "SUDO   apt-get -q -y install git-core",
       'RUN    bash -s 1.0 < <(wget -q https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )',

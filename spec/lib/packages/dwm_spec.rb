@@ -9,7 +9,7 @@ describe 'packages/dwm' do
 
   it 'adds the following commands' do
     eval_package
-    $conf.commands.map(&:info).join("\n").must_equal [
+    queued_commands.must_equal [
       "TASK   dwm - Download, build and install custom dwm",
       "SUDO   apt-get -q -y install build-essential",
       "SUDO   apt-get -q -y install libx11-dev",
@@ -34,7 +34,7 @@ describe 'packages/dwm' do
       "SUDO   apt-get -q -y install xautolock",
       "SUDO   apt-get -q -y install xorg",
       "SUDO   grep \"inode/directory=pcmanfm.desktop\" .local/share/applications/mimeapps.list || echo \"inode/directory=pcmanfm.desktop\" >> .local/share/applications/mimeapps.list",
-      "RUN    grep \"startdwm\" ~/.xinitrc || echo \"startdwm\" >> ~/.xinitrc"
+      "RUN    grep \"ck-launch-session dbus-launch startdwm\" ~/.xinitrc || echo \"ck-launch-session dbus-launch startdwm\" >> ~/.xinitrc"
     ].join("\n")
   end
 end

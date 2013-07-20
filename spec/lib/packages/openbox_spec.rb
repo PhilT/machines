@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'packages/openbox' do
   it 'adds the following commands' do
     eval_package
-    $conf.commands.map(&:info).join("\n").must_equal [
+    queued_commands.must_equal [
       "TASK   openbox - Install Openbox window manager and associated fonts, themes, etc",
       "SUDO   echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula boolean true | debconf-set-selections",
       "SUDO   apt-get -q -y install dmz-cursor-theme",

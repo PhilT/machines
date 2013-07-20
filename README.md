@@ -94,9 +94,13 @@ So here is the recommended approach to configuring your environment:
 * Edit settings in `config.yml`
 * Run `machines override <package>` to copy a default package to your project for alteration (Use `machines packages` to see a list)
 * Setup your `users/` folders
-* Add `~/.ssh/id_rsa.pub` public key from all users machines that need access, to the `users/www/authorized_keys` file
 
 ### Prepare the target machine
+
+The order in which you provision new machines is important in certain cases.
+
+* If you don't know what addresses your DB servers will be then you must create these first as they are needed when setting up the app servers
+* Create you dev machines last as they pass their SSH key to authorized keys on the servers
 
 Grab a suitable ISO from https://help.ubuntu.com/community/Installation/MinimalCD (Tested with 13.04)
 

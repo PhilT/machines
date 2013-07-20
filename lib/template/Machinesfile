@@ -30,7 +30,7 @@ only :roles => :app do
 end
 
 only :user => 'phil' do
-  package :sudo_mods
+  package :sudo_mods if $conf.environment == 'development'
   package :slim
   package :dwm
   package :chrome

@@ -16,7 +16,7 @@ describe 'packages/cruisecontrol' do
 
   it 'adds the following commands' do
     eval_package
-    $conf.commands.map(&:info).join("\n").must_equal [
+    queued_commands.must_equal [
       "TASK   cruisecontrol - Install, configure and set to start on boot",
       "RUN    test -d cruisecontrol.rb && (cd cruisecontrol.rb && git pull) || git clone --quiet https://github.com/thoughtworks/cruisecontrol.rb.git",
       "RUN    cd cruisecontrol.rb &&  bundle",

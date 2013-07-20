@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'packages/base' do
   it 'adds the following commands' do
     eval_package
-    $conf.commands.map(&:info).join("\n").must_equal [
+    queued_commands.must_equal [
       "TASK   base - Install base packages for compiling Ruby and libraries",
       "SUDO   apt-get -q -y install build-essential",
       "SUDO   apt-get -q -y install zlib1g-dev",

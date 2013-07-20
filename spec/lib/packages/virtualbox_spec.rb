@@ -7,7 +7,7 @@ describe 'packages/virtualbox' do
   end
 
   it 'adds the following commands' do
-    $conf.commands.map(&:info).join("\n").must_equal [
+    queued_commands.must_equal [
       "TASK   virtualbox - Install VirtualBox",
       "SUDO   apt-get -q -y install dkms",
       "SUDO   echo deb http://download.virtualbox.org/virtualbox/debian precise contrib >> /etc/apt/sources.list",

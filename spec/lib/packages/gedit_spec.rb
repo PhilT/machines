@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'packages/gedit' do
   it 'adds the following commands' do
     eval_package
-    $conf.commands.map(&:info).join("\n").must_equal [
+    queued_commands.must_equal [
       "TASK   gedit - Install basic programmers editor and set associations",
       "SUDO   apt-get -q -y install python-gi-cairo",
       "SUDO   apt-get -q -y install gedit",

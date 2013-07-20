@@ -26,6 +26,6 @@ task :xwindows, 'Install X, fonts, themes, tools, etc' do
 
   sudo append 'inode/directory=pcmanfm.desktop', to: '.local/share/applications/mimeapps.list'
 
-  run append 'startdwm', to: '~/.xinitrc'
+  run append 'ck-launch-session dbus-launch startdwm', to: '~/.xinitrc'
 end
 
