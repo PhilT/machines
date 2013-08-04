@@ -21,6 +21,7 @@ files.sort.each do |file|
   require file
 end
 
+require 'machines/version'
 require 'machines/logger'
 require 'machines/named_buffer'
 require 'machines/app_settings'

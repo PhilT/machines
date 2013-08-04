@@ -11,8 +11,8 @@ describe Core do
 
   describe 'generate_password' do
     it 'generates a random password' do
-      WEBrick::Utils.stubs(:random_string).with(20).returns '01234567890123456789'
-      subject.generate_password.must_equal '01234567890123456789'
+      WEBrick::Utils.stubs(:random_string).with(20).returns 'random'
+      subject.generate_password.must_equal 'random'
     end
   end
 

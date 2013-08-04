@@ -6,7 +6,7 @@ describe 'packages/cruisecontrol' do
     $conf.webapps = {'application' =>
       AppSettings::AppBuilder.new(
         'scm' => 'github.com/project',
-        'title' => 'Application'
+        'name' => 'application'
       )
     }
     $conf.from_hash(:mail => {address: 'mailserver', domain: 'domain.net' })
@@ -20,7 +20,7 @@ describe 'packages/cruisecontrol' do
       "TASK   cruisecontrol - Install, configure and set to start on boot",
       "RUN    test -d cruisecontrol.rb && (cd cruisecontrol.rb && git pull) || git clone --quiet https://github.com/thoughtworks/cruisecontrol.rb.git",
       "RUN    cd cruisecontrol.rb &&  bundle",
-      "RUN    cd cruisecontrol.rb &&  ruby ./cruise add Application -r github.com/project",
+      "RUN    cd cruisecontrol.rb &&  ruby ./cruise add application -r github.com/project",
       "SUDO   cp -rf cruisecontrol.rb/daemon/cruise /etc/init.d/cruise",
       "SUDO   update-rc.d cruise defaults",
       "SUDO   sed -i \"s/CRUISE_USER = .*/CRUISE_USER = 'user'/\" /etc/init.d/cruise",

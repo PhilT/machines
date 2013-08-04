@@ -7,13 +7,13 @@ describe AppSettings do
   describe 'load_and_generate_passwords_for_webapps' do
     it 'generates passwords and saves to webapps.yml' do
       File.open('webapps.yml', 'w') {|f| f.puts "###\n\n---\nwebapps:\n  my_app:\n    development:\n      password: \n" }
-      subject.stubs(:generate_password).returns 'random'
+      WEBrick::Utils.stubs(:random_string).returns 'random'
       subject.load_and_generate_passwords_for_webapps
       File.read('webapps.yml').must_equal "###\n\n---\nwebapps:\n  my_app:\n    development:\n      password: random\n"
     end
   end
 
-  describe 'load_app_settings' do
+  describe 'load' do
     before do
       $conf.environment = :test
       $conf.appsroot = '/home/user'
@@ -31,7 +31,7 @@ EOF
     end
 
     it 'loads the app settings for selected apps' do
-      subject.load_app_settings ['app']
+      subject.load ['app']
       $conf.webapps.must_equal({
         'app' => AppSettings::AppBuilder.new(
           :scm => 'scm://project.git',
@@ -46,7 +46,7 @@ EOF
 
     it 'handles ssl settings' do
       File.open('webapps.yml', 'w') {|f| f.puts @settings }
-      subject.load_app_settings ['app']
+      subject.load ['app']
       $conf.webapps.must_equal({
         'app' => AppSettings::AppBuilder.new(
           :name => 'app',
@@ -65,7 +65,7 @@ EOF
 
     it 'does not fail when settings not included for specified environment' do
       File.open('webapps.yml', 'w') {|f| f.puts "---\nwebapps:\n  app:\n    path: path\n" }
-      subject.load_app_settings(['app'])
+      subject.load(['app'])
     end
 
     it 'loads settings for all apps when none specified' do
@@ -84,7 +84,7 @@ webapps:
       password: secure
       EOF
       File.open('webapps.yml', 'w') {|f| f.puts settings }
-      subject.load_app_settings nil
+      subject.load nil
       $conf.webapps.must_equal({
         'app' => AppSettings::AppBuilder.new(
           :name => 'app',

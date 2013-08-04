@@ -190,7 +190,7 @@ Some of the settings set and used by Machines are:
 * `$conf.users` - A list of the available users
 * `$conf.webapps` - A hash of webapps keyed from the name of the webapp specified in webapps.yml
 
-The following settings are set rbenv, rvm, passenger and used by passenger_nginx packages:
+The following settings are set/used in rbenv, rvm, passenger, passenger_nginx packages:
 
 * `$conf.ruby.gems_path` - e.g. `.rbenv/versions/1.9.3-p448/lib/ruby/gems/1.9.1/gems`
 * `$conf.ruby.executable` - e.g. `.rbenv/versions/1.9.3-p448/bin/ruby`
@@ -257,14 +257,24 @@ What's happening under the hood
 
 Limitations
 -----------------------------------------------------------
+
 * Only one user per machine. Although other users could be setup with additional build runs.
 * One environment per machine - Again additional machines could be configured to use the same physical machine (although could be problems with some environment settings)
 * Servers use www (by default) for nginx/apache, passenger and deployments
-* The system has been designed to allow a certain flexibility in the configuration although some things
-  may not yet be totally configurable it should be possible to add or modify the relevant package
-* We are currently focused on Ruby 1.9.3 (Moving to 2.0 soon), Rails 3 and Passenger 3
+* The system has been designed to allow a certain flexibility in the configuration. Although some things may not yet be totally configurable, it should be possible to add or modify the relevant package
+* Ruby 1.9.3 is the current focus (Moving to 2.0 soon), Rails 3 and Passenger 3
 * Some commands may not properly escape quotes when used with sudo (e.g. append and replace). This may be addressed in a future release
-* Tasks not configured to run for a particular setup will not be available to run explicitly from the commandline
+* Tasks that do not run for a particular configuration will not be available to run explicitly via `machines build <machine> <task>`
+
+
+Out of date packages
+-----------------------------------------------------------
+
+Some of the packages are not getting much attention at the moment as I tend to stick to one type of package where possible. Patches are welcome.
+
+* I now use rbenv exclusively so the rvm package will be out of date
+* subtle and openbox packages are also out of date as I now use dwm
+* I've not written an apache package but it should be fairly simple based off nginx one
 
 
 Development, Patches, Pull Requests

@@ -1,11 +1,9 @@
 # BE CAREFUL: THIS FILE IS ALSO WRITTEN TO BY MACHINES
 # This config file is used to read and also write application settings.
-# You can replace these comments with your own. Comment lines will be retained upto
+# You can add to/replace these comments with your own. Comment lines will be retained upto
 # the ---.
 #
-# TODO: Move passwords to separate GPG encrypted file
 #
-# title: TODO: WHAT DOES THIS DO?
 # password: Password for application database - Leave blank to generate one
 # database: Database name to write to database.yml - Leave blank to use application name
 # username: Username to write to database.yml - Leave blank to use application name
@@ -22,15 +20,12 @@ webapps:
     write_yml: true
     development:
       server_name: condensd.dev
-      password: condensd
     staging:
       server_name: staging.condensd.com
-      password:
       monitor_delayed_job: true
       monit_web: true
     production:
       server_name: condensd.com
-      password:
       monitor_delayed_job: true
       monit_web: true
 
@@ -42,18 +37,15 @@ webapps:
     write_yml: true
     development:
       server_name: fountainwiki.dev
-      password: fountain
     staging:
       server_name: staging.fountainwiki.com
       username: fountain
-      password:
       monitor_delayed_job: true
     production:
       server_name: fountainwiki.com
-      password:
       monitor_delayed_job: true
 
-  velocitytracking:
+  velocity:
     scm: git://github.com/PhilT/velocity.git
     database: velocity
     username: velocity
@@ -61,13 +53,8 @@ webapps:
     write_yml: true
     development:
       server_name: velocitytracking.dev
-      password: velocity
-    staging:
       server_name: staging.velocitytracking.com
-      password:
       cert: selfsigned
     production:
       server_name: velocitytracking.com
-      password:
       cert: velocitytracking.com
-

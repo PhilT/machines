@@ -35,7 +35,7 @@ module Machines
     end
 
     def generate_password
-      WEBrick::Utils.random_string(20)
+      app_settings.generate_password
     end
 
     # Only executes the code if $conf parameters match what is given in args
@@ -49,7 +49,7 @@ module Machines
     end
 
     def load_app_settings(apps)
-      AppSettings.new.load_app_settings(apps)
+      app_settings.load(apps)
     end
 
     # Loads the Machinesfile or a package
@@ -125,6 +125,10 @@ module Machines
     end
 
   private
+    def app_settings
+      @app_settings ||= AppSettings.new
+    end
+
     def load_and_eval package_name
       if File.exists?(package_name)
         eval(File.read(package_name), nil, "eval: #{package_name}")

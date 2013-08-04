@@ -6,6 +6,10 @@ module Machines
       end
     end
 
+    def generate_password
+      WEBrick::Utils.random_string(20)
+    end
+
     def generate_passwords
       $conf.webapps.keys.each do |webapp|
         $conf.webapps[webapp].keys.each do |environment|
@@ -25,7 +29,7 @@ module Machines
     # Loads application settings from webapps.yml and makes them available in $conf.webapps as an
     # AppBuilder (bindable OpenStruct) so it can be used in ERB templates to generate config files
     # @param [Array] apps Names of the apps to configure
-    def load_app_settings(apps)
+    def load(apps)
       load_and_generate_passwords_for_webapps
       webapps = $conf.webapps.to_hash
       $conf.clear :webapps

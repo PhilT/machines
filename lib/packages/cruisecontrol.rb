@@ -1,3 +1,4 @@
+# Not sure if cruisecontrol.rb is working at the moment. Needs testing
 task :cruisecontrol, 'Install, configure and set to start on boot' do
   run git_clone 'https://github.com/thoughtworks/cruisecontrol.rb.git'
   #HACK: PATHS are added to .profile which is not run on a non-login shell. NET::Ssh creates non-login shells
@@ -9,7 +10,7 @@ task :cruisecontrol, 'Install, configure and set to start on boot' do
 
   run "cd cruisecontrol.rb && #{bin} bundle"
   $conf.webapps.each do |name, webapp|
-    run "cd cruisecontrol.rb && #{bin} ruby ./cruise add #{webapp.title} -r #{webapp.scm}"
+    run "cd cruisecontrol.rb && #{bin} ruby ./cruise add #{webapp.name} -r #{webapp.scm}"
   end
 
   sudo copy 'cruisecontrol.rb/daemon/cruise', '/etc/init.d/cruise'
