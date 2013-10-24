@@ -1,6 +1,9 @@
 $LOAD_PATH << 'lib'
 
+gem 'minitest'
+
 require 'bundler/setup'
+require 'turn/autorun'
 require 'minitest/autorun'
 require 'mocha/setup'
 require 'stringio'
@@ -45,6 +48,8 @@ module MiniTestSetup
   end
 end
 
+Turn.config
+
 class MiniTest::Test
   include MiniTestSetup
 end
@@ -60,7 +65,7 @@ end
 
 class Machines::Core
   def eval_package content, name
-    eval content, nil, "eval: #{name}"
+    eval content, nil, "lib/packages/#{name}.rb"
   end
 
   def queued_commands
@@ -107,3 +112,4 @@ def colored string, color
   string.sub!(/(\n|\r)$/, '')
   $terminal.color(string, color.to_sym) + ending.to_s
 end
+
