@@ -92,5 +92,6 @@ webserver:
   url: http://nginx.org/download/nginx-1.0.11.tar.gz
   src_path: /usr/local/src/nginx-1.0.11
   path: /usr/local/nginx
+  conf_path: conf
   servers_dir: conf/servers
 

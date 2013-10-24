@@ -6,6 +6,7 @@ package :dependencies
 package :timezone
 package :hosts
 package :base
+package :ack
 
 package :virtualbox_guest if $conf.machine.name == 'phil_desktop'
 

@@ -26,8 +26,9 @@ module Machines
       $conf.save('webapps', 'webapps.yml')
     end
 
-    # Loads application settings from webapps.yml and makes them available in $conf.webapps as an
-    # AppBuilder (bindable OpenStruct) so it can be used in ERB templates to generate config files
+    # Loads application settings from webapps.yml and makes them available in
+    # $conf.webapps as an AppBuilder (bindable OpenStruct) so it can be used
+    # in ERB templates to generate config files
     # @param [Array] apps Names of the apps to configure
     def load(apps)
       load_and_generate_passwords_for_webapps

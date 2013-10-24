@@ -131,7 +131,7 @@ module Machines
 
     def load_and_eval package_name
       if File.exists?(package_name)
-        eval(File.read(package_name), nil, "eval: #{package_name}")
+        eval(File.read(package_name), nil, package_name)
         true
       end
     end

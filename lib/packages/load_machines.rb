@@ -4,13 +4,18 @@ task :load_machines, 'Loads the machines.yml' do
   $conf.machines = AppConf.new
   $conf.load('machines.yml')
 
+  $passwords = AppConf.new
+  $passwords.machines = AppConf.new
+  $passwords.load('machines.gpg')
+
   machine = $conf.machine = $conf.machines[$conf.machine_name]
+  passwords = $passwords.machine = $passwords.machines[$conf.machine_name]
   raise ConfigError, "#{$conf.machine_name} does not match any machine in machines.yml" unless machine
   $conf.db_server = $conf.machines[machine.db_server]
 
-  if machine.root_pass.nil?
-    machine.root_pass = generate_password
-    $conf.save(:machines, 'machines.yml')
+  if passwords.root_pass.nil?
+    passwords.root_pass = generate_password
+    $passwords.save(:machines, 'machines.gpg')
   end
 
   $conf.user_home = "/home/#{machine.user}"

@@ -1,8 +1,8 @@
- require 'gpgme'
-irb(main):002:0> crypto = GPGME::Crypto.new password: 'pass'
-irb(main):003:0> crypto.encrypt 'Some text', symmetric: true
-irb(main):004:0> encrypted = crypto.encrypt 'Some text', symmetric: true
-irb(main):005:0> crypto.decrypt encrypted
+require 'gpgme'
+crypto = GPGME::Crypto.new password: 'pass'
+crypto.encrypt 'Some text', symmetric: true
+encrypted = crypto.encrypt 'Some text', symmetric: true
+crypto.decrypt encrypted
 
 
 TODO next
@@ -118,3 +118,4 @@ Design issues
 ----------------------------------------
 
 * Why is ssh and scp exposed in Command? Can we create a facade around it?
+

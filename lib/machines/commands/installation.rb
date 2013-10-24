@@ -113,7 +113,7 @@ module Machines
       # @option options [Optional String] :on branch to switch to
       # @option options [Optional String] :to specify the base dir to install to (name added)
       def github_clone name, options = {}
-        git_clone "https://github.com/#{from}/#{name}.git", to: options[:name], branch: options[:on], to: options[to:]
+        git_clone "https://github.com/#{from}/#{name}.git", to: options[:name], branch: options[:on], to: options[:to]
       end
 
       # Installs one or more packages using apt, deb or git clone and install.sh
