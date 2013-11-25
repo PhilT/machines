@@ -27,7 +27,7 @@ describe 'packages/dwm' do
       "SUDO   apt-get -q -y install gnome-themes-standard",
       "SUDO   apt-get -q -y install lxappearance",
       "SUDO   apt-get -q -y install pcmanfm",
-      "SUDO   apt-get -q -y install rxvt-unicode",
+      "SUDO   apt-get -q -y install rxvt-unicode-256color",
       "SUDO   apt-get -q -y install suckless-tools",
       "SUDO   apt-get -q -y install ttf-ubuntu-font-family",
       "SUDO   apt-get -q -y install ttf-mscorefonts-installer",

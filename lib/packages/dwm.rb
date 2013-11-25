@@ -16,7 +16,7 @@ task :xwindows, 'Install X, fonts, themes, tools, etc' do
     'gnome-themes-standard',      # Needed to theme GTK 3 apps
     'lxappearance',               # Set gtk themes, cursors and icons - Set to clearlooks
     'pcmanfm',                    # Lightweight File manager
-    'rxvt-unicode',               # Default Subtle console
+    'rxvt-unicode-256color',      # Default console
     'suckless-tools',             # Includes slock - Locks screen. Password unlocks - no prompt. Can be used with xautolock
     'ttf-ubuntu-font-family',     # The new ubuntu font
     'ttf-mscorefonts-installer',  # Microsoft fonts

@@ -1,6 +1,9 @@
 $LOAD_PATH << 'lib'
 
+gem 'minitest'
+
 require 'bundler/setup'
+require 'turn/autorun'
 require 'minitest/autorun'
 require 'mocha/setup'
 require 'stringio'
@@ -44,6 +47,8 @@ module MiniTestSetup
     super
   end
 end
+
+Turn.config
 
 class MiniTest::Test
   include MiniTestSetup
