@@ -31,7 +31,7 @@ module Machines
         ssh_options[:keys] = [$conf.machine.cloud.private_key_path]
       else
         username = $conf.machine.user
-        ssh_options[:password] = $conf.password
+        ssh_options[:password] = $passwords.password
       end
 
       if $conf.log_only
@@ -87,7 +87,7 @@ module Machines
 
     def init
       $exit_requested = false
-      $conf.passwords = []
+      $passwords.to_filter = []
       $conf.commands = []
       $conf.tasks = {}
       $conf.load('config.yml')

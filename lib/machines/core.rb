@@ -52,6 +52,10 @@ module Machines
       app_settings.load(apps)
     end
 
+    def load_passwords_file
+      password_manager.load_passwords
+    end
+
     # Loads the Machinesfile or a package
     def package name
       if name == 'Machinesfile'
@@ -127,6 +131,10 @@ module Machines
   private
     def app_settings
       @app_settings ||= AppSettings.new
+    end
+
+    def password_manager
+      @password_manager ||= PasswordManager.new
     end
 
     def load_and_eval package_name

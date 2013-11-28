@@ -49,7 +49,7 @@ describe Machines::Logger do
     end
 
     it 'does not show passwords' do
-      $conf.passwords = ['a_password', 'another password']
+      $passwords.to_filter = ['a_password', 'another password']
       Machines::Command.file.log 'something with a_password and another password in'
       $file.next.must_equal "something with ***** and ***** in\n"
     end

@@ -78,7 +78,7 @@ describe Machines::Command do
       end
 
       it 'successful sudo command to screen and file' do
-        $conf.password = 'userpass'
+        $passwords.password = 'userpass'
         @mock_ssh.stubs(:exec!).with("echo userpass | sudo -S bash -c 'export TERM=linux && check'").returns 'CHECK PASSED'
         subject.use_sudo
         subject.run
@@ -156,7 +156,7 @@ describe Machines::Command do
     end
 
     it 'wraps command execution in sudo with a password' do
-      $conf.password = 'userpass'
+      $passwords.password = 'userpass'
       @mock_ssh.expects(:exec!).with("echo userpass | sudo -S bash -c 'export TERM=linux && command'").returns "result"
 
       subject.use_sudo
@@ -171,7 +171,7 @@ describe Machines::Command do
     end
 
     it 'wraps check execution in sudo with a password' do
-      $conf.password = 'userpass'
+      $passwords.password = 'userpass'
       @mock_ssh.expects(:exec!).with("echo userpass | sudo -S bash -c 'export TERM=linux && check'").returns 'CHECK PASSED'
 
       subject.use_sudo

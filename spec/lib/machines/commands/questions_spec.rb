@@ -22,21 +22,21 @@ describe Machines::Commands::Questions do
       enter_password('type').must_equal 'pa55word'
     end
 
-    it 'adds to password list' do
+    it 'adds to password filter list' do
       enter_password('type')
-      $conf.passwords.must_equal ['pa55word']
+      $passwords.to_filter.must_equal ['pa55word']
     end
 
-    it 'does not add password less than 5 characters to password list' do
+    it 'does not add password less than 5 characters to password filter list' do
       stubs(:ask).returns 'pass'
       enter_password('type')
-      $conf.passwords.must_equal []
+      $passwords.to_filter.must_equal []
     end
 
     it 'does not add password if it is "password"' do
       stubs(:ask).returns 'password'
       enter_password('type')
-      $conf.passwords.must_equal []
+      $passwords.to_filter.must_equal []
     end
 
     it 'repeats until password and confirmation match' do
@@ -54,7 +54,7 @@ describe Machines::Commands::Questions do
 
     it 'password still added to list when not confirming' do
       enter_password('type', false)
-      $conf.passwords.must_equal ['pa55word']
+      $passwords.to_filter.must_equal ['pa55word']
     end
 
     it 'password still returned when not confirming' do
@@ -62,10 +62,9 @@ describe Machines::Commands::Questions do
     end
 
     it 'do not add to passwords list if not available' do
-      $conf.passwords = nil
+      $passwords.password = nil
       enter_password('type')
-      $conf.passwords.must_equal nil
+      $passwords.to_filter.must_equal nil
     end
   end
 end
-

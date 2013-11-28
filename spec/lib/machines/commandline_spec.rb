@@ -19,7 +19,7 @@ describe Commandline do
       $conf.machine = AppConf.new
       $conf.machine.address = 'target'
       $conf.machine.user = 'username'
-      $conf.password = 'userpass'
+      $passwords.password = 'userpass'
       Net::SCP.stubs(:new)
       @ssh_stub = stub('Net::SSH', :close => nil, :exec! => nil)
     end
@@ -242,7 +242,7 @@ describe Commandline do
       Command.console = nil
       Command.debug = nil
       subject.init
-      $conf.passwords.must_equal []
+      $passwords.to_filter.must_equal []
       $conf.commands.must_equal []
       $conf.tasks.must_equal({})
       $conf.timezone.must_equal 'GB'

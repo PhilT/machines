@@ -46,6 +46,3 @@ only :user => 'phil' do
 end
 
 package :finalise
-
-package :save_machines
-

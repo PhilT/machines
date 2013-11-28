@@ -55,9 +55,8 @@ module Machines
     end
 
     def blank_out_passwords message
-      $conf.passwords && $conf.passwords.any? ? message.gsub(/(#{($conf.passwords).join('|')})/, "*****") : message
+      $passwords.to_filter && $passwords.to_filter.any? ? message.gsub(/(#{($passwords.to_filter).join('|')})/, "*****") : message
     end
-
   end
 end
 

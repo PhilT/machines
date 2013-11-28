@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   s.rubyforge_project = 'machines'
 
   %w(
-    activesupport
     app_conf
     gpgme
     highline

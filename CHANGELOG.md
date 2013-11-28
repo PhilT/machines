@@ -1,5 +1,7 @@
 ## 0.6.0
 
+* Load and save passwords in a separate file
+* machines.yml is no longer saved (only passwords) (until EC2 work completed and IP addresses are generated)
 * Generate SSH keys (instead of copying - bad!)
 * Added use_local_ssh_id flag to machines.yml instead of generating one every time (for testing)
 * Configure Chrome/Chromium download directory

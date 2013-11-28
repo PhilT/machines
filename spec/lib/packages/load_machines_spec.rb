@@ -1,24 +1,51 @@
 require 'spec_helper'
 
 describe 'packages/load_machines' do
-  let(:settings) {
-    {'machines' => {'a_machine' => {'hostname' => 'something', 'user' => 'phil', 'address' => '1.2.3.4'}}}
-  }
+  let(:settings) { {'machines' => {'a_machine' => {'hostname' => 'something', 'user' => 'phil', 'address' => '1.2.3.4'}}} }
+  let(:passwords) { {'machines' => {'a_machine' => {'password' => 'secret', 'db_root_pass' => 'dbsecret'}}} }
 
   def save_settings
     File.open('machines.yml', 'w') {|f| f.puts settings.to_yaml }
+    File.open('machines.gpg', 'w') {|f| f.puts passwords.to_yaml }
   end
 
   before(:each) do
     $conf.machine_name = 'a_machine'
     $conf.from_hash('appsroots' => {'phil' => '/home/phil'})
     core.stubs(:load_app_settings)
+    core.stubs(:enter_password)
     core.stubs(:connect)
     core.stubs(:run_instance)
   end
 
+  describe 'master password' do
+    before { core.stubs(:say) }
+
+    it 'ask for password when passwords.gpg exists' do
+      core.expects(:enter_password).with('Master', false)
+      eval_package
+    end
+
+    it 'ask for and confirm new password when passwords.gpg does not exist' do
+      core.expects(:say).with(/Generating master password store/)
+      core.expects(:enter_password).with('Master')
+      eval_package
+    end
+  end
+
+  describe 'loading passwords.gpg' do
+    before { save_settings }
+
+    it 'sets $passwords.machines/machine/password' do
+      eval_package
+      $passwords.machines.a_machine.password.must_equal 'secret'
+      $passwords.machine.password.must_equal 'secret'
+      $passwords.password.must_equal 'secret'
+    end
+  end
+
   describe 'loading machines.yml' do
-    before(:each) do
+    before do
       save_settings
     end
 
@@ -79,12 +106,12 @@ describe 'packages/load_machines' do
     core.stubs(:generate_password).returns '1234'
     save_settings
     eval_package
-    $conf.machines.a_machine.root_pass.must_equal '1234'
+    $passwords.machine.root_pass.must_equal '1234'
   end
 
   it 'does not overwrite root_pass' do
     core.expects(:generate_password).never
-    settings['machines']['a_machine']['root_pass'] = 'something'
+    passwords['machines']['a_machine']['root_pass'] = 'something'
     save_settings
     eval_package
   end

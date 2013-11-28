@@ -4,9 +4,8 @@ task :load_machines, 'Loads the machines.yml' do
   $conf.machines = AppConf.new
   $conf.load('machines.yml')
 
-  $passwords = AppConf.new
+  $passwords = load_passwords_file
   $passwords.machines = AppConf.new
-  $passwords.load('machines.gpg')
 
   machine = $conf.machine = $conf.machines[$conf.machine_name]
   passwords = $passwords.machine = $passwords.machines[$conf.machine_name]
@@ -40,4 +39,3 @@ task :load_machines, 'Loads the machines.yml' do
 
   thread.join if thread
 end
-

@@ -1,4 +1,3 @@
-require 'gpgme'
 crypto = GPGME::Crypto.new password: 'pass'
 crypto.encrypt 'Some text', symmetric: true
 encrypted = crypto.encrypt 'Some text', symmetric: true

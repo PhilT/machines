@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Core do
-
   subject { Core.new }
 
   before do
@@ -271,7 +270,7 @@ describe Core do
 
   describe 'sudo' do
     it 'wraps a command in a sudo with password call' do
-      $conf.password = 'password'
+      $passwords.password = 'password'
       @command1.expects(:use_sudo)
       subject.sudo @command1
     end

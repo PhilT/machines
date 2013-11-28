@@ -1,9 +1,9 @@
 # Machines allows simple configuration of development, staging and production computers or images for ec2
-require 'active_support'
 require 'app_conf'
 require 'date'
 require 'erb'
 require 'fileutils'
+require 'gpgme'
 require 'highline/import'
 require 'net/ssh'
 require 'net/scp'
@@ -32,4 +32,4 @@ require 'machines/core'
 require 'machines/commandline'
 require 'machines/cloud_machine'
 require 'machines/help'
-
+require 'machines/security'

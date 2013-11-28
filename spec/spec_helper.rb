@@ -3,7 +3,6 @@ $LOAD_PATH << 'lib'
 gem 'minitest'
 
 require 'bundler/setup'
-require 'turn/autorun'
 require 'minitest/autorun'
 require 'mocha/setup'
 require 'stringio'
@@ -17,11 +16,12 @@ include Machines
 modules = %w(Checks Configuration Database FileOperations Installation Questions Services)
 modules.each { |m| include eval("Machines::Commands::#{m}") }
 
+
 module MiniTestSetup
   def before_setup
     super
     $conf.clear
-    $conf.passwords = []
+    $conf.passwords_to_filter = []
     $conf.commands = []
     $conf.tasks = {}
     $conf.application_dir = $application_dir
@@ -47,8 +47,6 @@ module MiniTestSetup
     super
   end
 end
-
-Turn.config
 
 class MiniTest::Test
   include MiniTestSetup
